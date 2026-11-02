@@ -1,0 +1,26 @@
+# Data (downloaded and processed) is never committed
+data/
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/playwright-report/
+frontend/test-results/
+frontend/node_modules/.tmp/
+
+# Editors and OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

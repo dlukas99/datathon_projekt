@@ -1,0 +1,24 @@
+# Development services: only the Valhalla walking router.
+# Tiles are built automatically from the Geofabrik extract on first start
+# (`make data` downloads it to data/raw/osm/). Tiles live in a named volume
+# because bind mounts on Windows do not allow the renames the builder needs.
+services:
+  valhalla:
+    image: ghcr.io/valhalla/valhalla-scripted:latest
+    container_name: prijepotpisa-valhalla-dev
+    ports:
+      - "8002:8002"
+    volumes:
+      - valhalla_tiles:/custom_files
+      - ../data/raw/osm/croatia-latest.osm.pbf:/custom_files/croatia-latest.osm.pbf:ro
+    environment:
+      - serve_tiles=True
+      - build_admins=False
+      - build_time_zones=False
+      - build_elevation=False
+      - use_tiles_ignore_pbf=True
+      - server_threads=4
+    restart: unless-stopped
+
+volumes:
+  valhalla_tiles:
