@@ -10,6 +10,8 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: { '/api': apiTarget },
+    // demo addresses are read from ../scripts/demo_addresses.json
+    fs: { allow: ['..'] },
   },
   preview: {
     port: 4173,

@@ -82,7 +82,7 @@ def flood() -> None:
         url="https://data.jrc.ec.europa.eu/dataset/1d128b6c-a4ee-4858-9e34-6210707f3c81",
         license="ODbL 1.0 prema katalogu JRC-a; CC BY 4.0 prema copyright.txt u mapi preuzimanja",
         retrieved_at=file_date(last),
-        data_date="2026-03-05 (v3.1.1)",
+        data_date="verzija 3.1.1 od 5. 3. 2026.",
     )
 
 
