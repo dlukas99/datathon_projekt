@@ -125,7 +125,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 
 ### Javni prijevoz
 - ZET GTFS: https://zet.hr/gtfs-scheduled/latest; licenca: Otvorena dozvola RH (https://www.zet.hr/odredbe/datoteke-u-gtfs-formatu/669). Dani prometa samo u `calendar_dates.txt`.
-- HŽPP GTFS: https://www.hzpp.hr/GTFS_files.zip (poveznica na Portalu, `…/Media/Default/GTFS/GTFS_files.zip`, vraća 404). Licenca nije navedena; opis skupa na Portalu kaže da se podaci objavljuju kako bi ih javnost mogla „koristiti za izradu aplikacija ili ostala istraživanja”. Vozni red vrijedi do 13. 12. 2026.
+- HŽPP GTFS: https://www.hzpp.hr/GTFS_files.zip (skup na Portalu: https://data.gov.hr/ckan/dataset/vozni-red-h-putni-kog-prijevoza-u-gtfs-obliku; poveznica na datoteku na Portalu, `…/Media/Default/GTFS/GTFS_files.zip`, vraća 404). Licenca nije navedena; opis skupa na Portalu kaže da se podaci objavljuju kako bi ih javnost mogla „koristiti za izradu aplikacija ili ostala istraživanja”. Vozni red vrijedi do 13. 12. 2026.
 - Autotrolej: https://data.gov.hr/ckan/dataset/at-vozni-redovi, vozni red radnim danom `http://e-usluge2.rijeka.hr/OpenData/ATvoznired-tjedan.json`; licenca CC BY 4.0. GTFS na `gt.autotrolej.hr` ima istekao TLS certifikat i ne koristi se.
 - Šibenik (Gradski parking) objavljuje GTFS bez navedene licence; ne koristi se.
 - Split, Osijek, Zadar, Pula i Dubrovnik nemaju javno dostupan GTFS: prikazuju se stajališta iz OSM-a s oznakom „bez voznog reda”.

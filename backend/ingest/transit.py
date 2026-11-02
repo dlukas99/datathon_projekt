@@ -40,7 +40,7 @@ GTFS_FEEDS = {
         "url": "https://www.hzpp.hr/GTFS_files.zip",
         "title": "HŽ Putnički prijevoz, vozni red u obliku GTFS",
         "publisher": "HŽ Putnički prijevoz d.o.o.",
-        "page": "https://data.gov.hr/ckan/dataset/hzpp-vozni-red",
+        "page": "https://data.gov.hr/ckan/dataset/vozni-red-h-putni-kog-prijevoza-u-gtfs-obliku",
         "license": "nije navedena; skup je objavljen na data.gov.hr radi izrade aplikacija",
     },
 }

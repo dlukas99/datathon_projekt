@@ -7,9 +7,11 @@ from typing import Annotated, Any, Literal
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 
+from app.assistant import AssistantReply, AssistantRequest, answer
 from app.geo import in_bbox
 from app.geocode import Suggestion, get_geocoder
 from app.layers import get_layers
+from app.live_sources import LiveSources, live_sources
 from app.models import Location, Report, SourceInfo
 from app.report import OutsideCroatia, build_report, locate, report_geojson
 from app.sources import manifest, source_info
@@ -95,3 +97,23 @@ def sources() -> list[SourceInfo]:
     """Svi izvori korišteni u obradi, s licencom i datumom preuzimanja."""
     ids = [*manifest(), "pvgis", "valhalla"]
     return [source_info(s) for s in ids]
+
+
+@app.get("/api/sources/live", tags=["izvori"], response_model=LiveSources)
+def sources_live() -> LiveSources:
+    """Datumi zadnje izmjene korištenih skupova uživo s Portala otvorenih podataka (CKAN)."""
+    return live_sources()
+
+
+@app.post("/api/assistant", tags=["asistent"], response_model=AssistantReply)
+def assistant(request: AssistantRequest) -> AssistantReply:
+    """Odgovor na pitanje o jednoj ili dvjema adresama, samo iz rezultata izračuna.
+
+    Pitanja se ne spremaju i ne bilježe.
+    """
+    for point in request.locations:
+        _check_point(point.lat, point.lon)
+    try:
+        return answer(request, build_report)
+    except OutsideCroatia as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
