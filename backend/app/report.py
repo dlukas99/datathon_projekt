@@ -55,7 +55,7 @@ def summary(categories: dict[str, Category]) -> list[str]:
     sentences = [categories["flood"].headline, categories["air"].headline]
     car_free = categories["car_free"]
     if car_free.status != "no_data":
-        sentences.append(car_free.headline.split(" Nedostaje:")[0])
+        sentences.append(car_free.headline.split(" Nedostaje:")[0].split(" Nije provjereno:")[0])
     return sentences
 
 

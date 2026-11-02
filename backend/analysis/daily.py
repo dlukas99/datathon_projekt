@@ -33,6 +33,16 @@ CAR_FREE_NEEDS: tuple[tuple[str, str], ...] = (
 )
 
 
+# Source shown when nothing was found (the layer that was searched).
+SEARCHED_SOURCE = {
+    "doctor": "hzzo_doctor",
+    "pediatrician": "hzzo_pediatrician",
+    "pharmacy": "hzzo_ljekarne",
+    "kindergarten": "mzom_vrtici",
+    "school": "mzom_skole",
+}
+
+
 def _value_for_nearest(cat: str, title: str, place: Place | None, router_ok: bool) -> Value:
     if place is None:
         return Value(
@@ -40,7 +50,7 @@ def _value_for_nearest(cat: str, title: str, place: Place | None, router_ok: boo
             label=title,
             value=None,
             display="nije pronađeno u krugu od 15 km",
-            source="osm",
+            source=SEARCHED_SOURCE.get(cat, "osm"),
             retrieved_at=None,
             kind="modelled",
         )
@@ -207,10 +217,21 @@ def transit_category(reach: Reach, has_timetables: bool) -> Category:
 def car_free_category(reach: Reach) -> Category:
     have: list[str] = []
     missing: list[str] = []
-    frequent = frequent_stops(reach)
+    unknown: list[str] = []
+    stops = reach.within("stop", WALK_LIMIT_MIN)
+    timetabled = [p for p in stops if _departures(p) >= 0]
     for cat, name in CAR_FREE_NEEDS:
-        ok = bool(frequent) if cat == "frequent_stop" else bool(reach.within(cat, WALK_LIMIT_MIN))
-        (have if ok else missing).append(name)
+        if cat == "frequent_stop":
+            if frequent_stops(reach):
+                have.append(name)
+            elif stops and not timetabled:
+                unknown.append(name)  # stops exist, but no open timetable to check
+            else:
+                missing.append(name)
+        elif reach.within(cat, WALK_LIMIT_MIN):
+            have.append(name)
+        else:
+            missing.append(name)
     n = len(have)
     total = len(CAR_FREE_NEEDS)
     if not reach.router_ok:
@@ -225,6 +246,44 @@ def car_free_category(reach: Reach) -> Category:
     headline = f"{n} od {total} svakodnevnih potreba dostupno je unutar 15 minuta hoda."
     if missing:
         headline += " Nedostaje: " + ", ".join(missing) + "."
+    if unknown:
+        headline += (
+            " Nije provjereno: " + ", ".join(unknown) + " (stajališta postoje, ali vozni red "
+            "nije dostupan u otvorenom obliku)."
+        )
+    values = [
+        Value(
+            key="needs_within_15min",
+            label="Svakodnevne potrebe unutar 15 minuta hoda",
+            value=n,
+            unit=f"od {total}",
+            display=f"{n} od {total}",
+            source="valhalla",
+            retrieved_at=None,
+            kind="modelled",
+        ),
+        Value(
+            key="needs_missing",
+            label="Nedostaje unutar 15 minuta hoda",
+            value=", ".join(missing) if missing else "ništa",
+            display=", ".join(missing) if missing else "ništa",
+            source="valhalla",
+            retrieved_at=None,
+            kind="modelled",
+        ),
+    ]
+    if unknown:
+        values.append(
+            Value(
+                key="needs_unknown",
+                label="Nije moguće provjeriti",
+                value=", ".join(unknown),
+                display=", ".join(unknown),
+                source="osm",
+                retrieved_at=None,
+                kind="modelled",
+            )
+        )
     return Category(
         id="car_free",
         group="car_free",
@@ -232,25 +291,5 @@ def car_free_category(reach: Reach) -> Category:
         status="info",
         status_label=label("info"),
         headline=headline,
-        values=[
-            Value(
-                key="needs_within_15min",
-                label="Svakodnevne potrebe unutar 15 minuta hoda",
-                value=n,
-                unit=f"od {total}",
-                display=f"{n} od {total}",
-                source="valhalla",
-                retrieved_at=None,
-                kind="modelled",
-            ),
-            Value(
-                key="needs_missing",
-                label="Nedostaje unutar 15 minuta hoda",
-                value=", ".join(missing) if missing else "ništa",
-                display=", ".join(missing) if missing else "ništa",
-                source="valhalla",
-                retrieved_at=None,
-                kind="modelled",
-            ),
-        ],
+        values=values,
     )

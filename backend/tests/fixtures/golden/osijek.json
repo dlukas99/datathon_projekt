@@ -1,0 +1,75 @@
+{
+  "location": {
+    "settlement": "Osijek",
+    "municipality": "Osijek",
+    "county": "Osječko-baranjska županija"
+  },
+  "categories": {
+    "flood": {
+      "status": "good",
+      "values": {
+        "flood_rp10_point": false,
+        "flood_rp10_100m": false,
+        "flood_rp100_point": false,
+        "flood_rp100_100m": false,
+        "flood_rp500_point": false,
+        "flood_rp500_100m": false
+      }
+    },
+    "air": {
+      "status": "bad",
+      "values": {
+        "pm25_annual": 16.3,
+        "no2_annual": 18.9
+      }
+    },
+    "green": {
+      "status": "warning",
+      "values": {
+        "tree_share_300m": 9.0,
+        "green_share_300m": 31.1,
+        "built_share_300m": 67.4,
+        "nearest_park": 2.0
+      }
+    },
+    "noise": {
+      "status": "info",
+      "values": {
+        "distance_road": 192,
+        "distance_rail": 577
+      }
+    },
+    "car_free": {
+      "status": "info",
+      "values": {
+        "needs_within_15min": 7,
+        "needs_missing": "ništa"
+      }
+    },
+    "transit": {
+      "status": "info",
+      "values": {
+        "stops_10min": 10
+      }
+    },
+    "daily": {
+      "status": "info",
+      "values": {
+        "nearest_kindergarten": 7.2,
+        "count15_kindergarten": 1,
+        "nearest_school": 9.9,
+        "count15_school": 1,
+        "nearest_doctor": 8.8,
+        "count15_doctor": 6,
+        "nearest_pediatrician": 9.6,
+        "count15_pediatrician": 1,
+        "nearest_pharmacy": 9.1,
+        "count15_pharmacy": 5,
+        "nearest_grocery": 1.2,
+        "count15_grocery": 8,
+        "nearest_playground": 4.5,
+        "count15_playground": 12
+      }
+    }
+  }
+}

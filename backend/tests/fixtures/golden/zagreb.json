@@ -1,0 +1,76 @@
+{
+  "location": {
+    "settlement": "Zagreb",
+    "municipality": "Grad Zagreb",
+    "county": "Grad Zagreb"
+  },
+  "categories": {
+    "flood": {
+      "status": "good",
+      "values": {
+        "flood_rp10_point": false,
+        "flood_rp10_100m": false,
+        "flood_rp100_point": false,
+        "flood_rp100_100m": false,
+        "flood_rp500_point": false,
+        "flood_rp500_100m": false
+      }
+    },
+    "air": {
+      "status": "bad",
+      "values": {
+        "pm25_annual": 18.3,
+        "no2_annual": 22.5
+      }
+    },
+    "green": {
+      "status": "warning",
+      "values": {
+        "tree_share_300m": 18.0,
+        "green_share_300m": 33.3,
+        "built_share_300m": 66.1,
+        "nearest_park": 0.4
+      }
+    },
+    "noise": {
+      "status": "info",
+      "values": {
+        "distance_road": 106,
+        "distance_rail": 345
+      }
+    },
+    "car_free": {
+      "status": "info",
+      "values": {
+        "needs_within_15min": 7,
+        "needs_missing": "ništa"
+      }
+    },
+    "transit": {
+      "status": "info",
+      "values": {
+        "stops_10min": 30,
+        "max_departures_per_hour": 32.2
+      }
+    },
+    "daily": {
+      "status": "info",
+      "values": {
+        "nearest_kindergarten": 9.5,
+        "count15_kindergarten": 6,
+        "nearest_school": 9.0,
+        "count15_school": 2,
+        "nearest_doctor": 7.6,
+        "count15_doctor": 5,
+        "nearest_pediatrician": 13.2,
+        "count15_pediatrician": 1,
+        "nearest_pharmacy": 4.3,
+        "count15_pharmacy": 10,
+        "nearest_grocery": 5.0,
+        "count15_grocery": 18,
+        "nearest_playground": 1.7,
+        "count15_playground": 18
+      }
+    }
+  }
+}

@@ -22,7 +22,7 @@ from ingest.common import download, file_date, processed_dir, raw_dir, record_so
 PBF_URL = "https://download.geofabrik.de/europe/croatia-latest.osm.pbf"
 
 GROCERY_SHOPS = {"supermarket", "convenience", "greengrocer"}
-MAJOR_ROADS = {"motorway", "trunk", "primary"}
+MAJOR_ROADS = {"motorway", "trunk", "primary", "secondary"}
 RAIL_EXCLUDED_SERVICE = {"yard", "siding", "spur", "crossover"}
 
 FILTER_KEYS = (

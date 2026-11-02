@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from app.config import get_settings
 
 _NUMBER_RE = re.compile(r"^\d+[a-z]?$")
+_GENERIC = {"ulica", "ul", "u"}
 _TRANSLIT = str.maketrans({"đ": "d", "Đ": "d"})
 
 
@@ -99,26 +100,34 @@ class Geocoder:
         )
 
     def _match_streets(self, street_q: str, place_q: str) -> list[tuple[int, int]]:
-        tokens = street_q.split()
+        # Official street names often omit "ulica" and first names ("Bana Jelačića"),
+        # so generic words are ignored and one of three or more words may be missing.
+        tokens = [t for t in street_q.split() if t not in _GENERIC] or street_q.split()
         if not tokens:
             return []
-        pool = self.by_token.get(tokens[0][:3], [])
+        key = max(tokens, key=len)
+        pool = self.by_token.get(key[:3], [])
         scored: list[tuple[int, int]] = []
         for i in pool:
             st = self.streets[i]
             if place_q and not st.place_norm.startswith(place_q):
                 continue
             words = st.street_norm.split()
-            if not all(any(w.startswith(t) for w in words) for t in tokens):
+            if not any(w.startswith(key) for w in words):
                 continue
+            matched = sum(1 for t in tokens if any(w.startswith(t) for w in words))
             if st.street_norm == street_q:
                 score = 0
-            elif st.street_norm.startswith(street_q):
+            elif matched == len(tokens) and st.street_norm.startswith(street_q):
                 score = 1
-            else:
+            elif matched == len(tokens):
                 score = 2
+            elif len(tokens) >= 3 and matched >= len(tokens) - 1:
+                score = 3
+            else:
+                continue
             scored.append((score, i))
-        scored.sort(key=lambda s: (s[0], len(self.streets[s[1]].street_norm)))
+        scored.sort(key=lambda s: (s[0], -len(self.streets[s[1]].numbers)))
         return scored
 
     def search(self, query: str, limit: int = 8) -> list[Suggestion]:

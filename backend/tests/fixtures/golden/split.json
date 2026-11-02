@@ -1,0 +1,76 @@
+{
+  "location": {
+    "settlement": "Split",
+    "municipality": "Split",
+    "county": "Splitsko-dalmatinska županija"
+  },
+  "categories": {
+    "flood": {
+      "status": "good",
+      "values": {
+        "flood_rp10_point": false,
+        "flood_rp10_100m": false,
+        "flood_rp100_point": false,
+        "flood_rp100_100m": false,
+        "flood_rp500_point": false,
+        "flood_rp500_100m": false
+      }
+    },
+    "air": {
+      "status": "warning",
+      "values": {
+        "pm25_annual": 9.7,
+        "no2_annual": 14.2
+      }
+    },
+    "green": {
+      "status": "warning",
+      "values": {
+        "tree_share_300m": 13.5,
+        "green_share_300m": 19.3,
+        "built_share_300m": 79.2,
+        "nearest_park": 0.2
+      }
+    },
+    "noise": {
+      "status": "info",
+      "values": {
+        "distance_road": 88,
+        "distance_rail": 1188
+      }
+    },
+    "car_free": {
+      "status": "info",
+      "values": {
+        "needs_within_15min": 6,
+        "needs_missing": "ništa",
+        "needs_unknown": "stajalište s barem jednim polaskom na sat radnim danom"
+      }
+    },
+    "transit": {
+      "status": "info",
+      "values": {
+        "stops_10min": 12
+      }
+    },
+    "daily": {
+      "status": "info",
+      "values": {
+        "nearest_kindergarten": 5.0,
+        "count15_kindergarten": 3,
+        "nearest_school": 10.9,
+        "count15_school": 1,
+        "nearest_doctor": 6.7,
+        "count15_doctor": 2,
+        "nearest_pediatrician": 27.4,
+        "count15_pediatrician": 0,
+        "nearest_pharmacy": 2.1,
+        "count15_pharmacy": 2,
+        "nearest_grocery": 3.1,
+        "count15_grocery": 11,
+        "nearest_playground": 4.0,
+        "count15_playground": 5
+      }
+    }
+  }
+}

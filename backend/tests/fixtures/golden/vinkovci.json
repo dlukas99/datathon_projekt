@@ -1,0 +1,76 @@
+{
+  "location": {
+    "settlement": "Vinkovci",
+    "municipality": "Vinkovci",
+    "county": "Vukovarsko-srijemska županija"
+  },
+  "categories": {
+    "flood": {
+      "status": "good",
+      "values": {
+        "flood_rp10_point": false,
+        "flood_rp10_100m": false,
+        "flood_rp100_point": false,
+        "flood_rp100_100m": false,
+        "flood_rp500_point": false,
+        "flood_rp500_100m": false
+      }
+    },
+    "air": {
+      "status": "bad",
+      "values": {
+        "pm25_annual": 18.2,
+        "no2_annual": 17.5
+      }
+    },
+    "green": {
+      "status": "warning",
+      "values": {
+        "tree_share_300m": 7.5,
+        "green_share_300m": 9.6,
+        "built_share_300m": 90.2,
+        "nearest_park": 1.8
+      }
+    },
+    "noise": {
+      "status": "info",
+      "values": {
+        "distance_road": 14,
+        "distance_rail": 1360
+      }
+    },
+    "car_free": {
+      "status": "info",
+      "values": {
+        "needs_within_15min": 6,
+        "needs_missing": "ništa",
+        "needs_unknown": "stajalište s barem jednim polaskom na sat radnim danom"
+      }
+    },
+    "transit": {
+      "status": "info",
+      "values": {
+        "stops_10min": 2
+      }
+    },
+    "daily": {
+      "status": "info",
+      "values": {
+        "nearest_kindergarten": 2.8,
+        "count15_kindergarten": 3,
+        "nearest_school": 4.0,
+        "count15_school": 2,
+        "nearest_doctor": 4.9,
+        "count15_doctor": 4,
+        "nearest_pediatrician": 19.4,
+        "count15_pediatrician": 0,
+        "nearest_pharmacy": 4.9,
+        "count15_pharmacy": 7,
+        "nearest_grocery": 3.5,
+        "count15_grocery": 12,
+        "nearest_playground": 4.1,
+        "count15_playground": 4
+      }
+    }
+  }
+}

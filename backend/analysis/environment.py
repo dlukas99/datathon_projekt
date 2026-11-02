@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import atexit
 import math
+import threading
 from dataclasses import dataclass
-from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
@@ -50,11 +51,28 @@ def _processed(name: str) -> Path:
     return get_settings().processed_dir / name
 
 
-@lru_cache(maxsize=16)
+_DATASETS: dict[Path, rasterio.io.DatasetReader] = {}
+_DATASETS_LOCK = threading.Lock()
+_READ_LOCK = threading.Lock()
+
+
 def _dataset(path: Path) -> rasterio.io.DatasetReader | None:
-    if not path.exists():
-        return None
-    return rasterio.open(path)
+    """Open each raster once; GDAL handles are closed explicitly at exit."""
+    with _DATASETS_LOCK:
+        ds = _DATASETS.get(path)
+        if ds is None:
+            if not path.exists():
+                return None
+            ds = rasterio.open(path)
+            _DATASETS[path] = ds
+        return ds
+
+
+@atexit.register
+def _close_datasets() -> None:
+    for ds in _DATASETS.values():
+        ds.close()
+    _DATASETS.clear()
 
 
 def _window_around(
@@ -78,7 +96,10 @@ def _window_around(
     rx = math.ceil(radius_m / m_per_px_x)
     ry = math.ceil(radius_m / m_per_px_y)
     window = Window(col - rx, row - ry, 2 * rx + 1, 2 * ry + 1)
-    data = ds.read(1, window=window, boundless=True, fill_value=ds.nodata or 0).astype(np.float64)
+    # GDAL dataset handles are not thread-safe; requests run in a thread pool.
+    with _READ_LOCK:
+        data = ds.read(1, window=window, boundless=True, fill_value=ds.nodata or 0)
+    data = data.astype(np.float64)
     yy, xx = np.mgrid[-ry : ry + 1, -rx : rx + 1]
     dist = np.hypot(xx * m_per_px_x, yy * m_per_px_y)
     inside = dist <= radius_m
@@ -449,6 +470,7 @@ NOISE_KINDS = {
     "motorway": "autocesta",
     "trunk": "brza cesta",
     "primary": "glavna cesta",
+    "secondary": "važnija cesta",
     "rail": "željeznička pruga",
 }
 
@@ -504,7 +526,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     headline = (
         "Procjena prema udaljenosti od prometnica: " + "; ".join(bits) + "."
         if bits
-        else "U krugu od 2 km nema autoceste, brze ili glavne ceste ni željezničke pruge."
+        else "U krugu od 2 km nema autoceste, brze, glavne ili važnije ceste ni željezničke pruge."
     )
     return Category(
         id="noise",
@@ -517,7 +539,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         links=links,
         notes=[
             "Ovo je procjena, a ne izmjerena razina buke: prikazana je samo udaljenost od "
-            "autocesta, brzih i glavnih cesta te pruga iz OpenStreetMapa.",
+            "autocesta, brzih, glavnih i važnijih cesta te pruga iz OpenStreetMapa.",
             "Strateške karte buke za veće gradove i glavne prometnice mogu se pogledati u "
             "pregledniku EEA-e. Svjetska zdravstvena organizacija preporučuje da buka "
             "cestovnog prometa bude ispod 53 dB Lden danju i 45 dB Lnight noću.",

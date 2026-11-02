@@ -1,0 +1,53 @@
+{
+  "_note": "Adrese javnih ustanova (gradske i općinske uprave, knjižnica). Naziv i adresa ustanove iz OpenStreetMapa (amenity=townhall/library), koordinate iz DGU adresa (geokoder aplikacije). Ne koristiti privatne adrese.",
+  "addresses": [
+    {
+      "id": "vinkovci",
+      "institution": "Grad Vinkovci (gradska uprava)",
+      "address": "Bana Jelačića 1, Vinkovci",
+      "lat": 45.288186,
+      "lon": 18.805681,
+      "source": "dgu_ad"
+    },
+    {
+      "id": "vinkovci-knjiznica",
+      "institution": "Gradska knjižnica Vinkovci",
+      "address": "Kralja Zvonimira 9, Vinkovci",
+      "lat": 45.290412,
+      "lon": 18.806029,
+      "source": "dgu_ad"
+    },
+    {
+      "id": "osijek",
+      "institution": "Grad Osijek (gradska uprava)",
+      "address": "Franje Kuhača 9, Osijek",
+      "lat": 45.55987,
+      "lon": 18.696326,
+      "source": "dgu_ad"
+    },
+    {
+      "id": "zagreb",
+      "institution": "Grad Zagreb (gradska uprava)",
+      "address": "Trg Stjepana Radića 1, Zagreb",
+      "lat": 45.801219,
+      "lon": 15.977114,
+      "source": "dgu_ad"
+    },
+    {
+      "id": "split",
+      "institution": "Grad Split (gradska uprava)",
+      "address": "Branimirova obala 17, Split",
+      "lat": 43.503528,
+      "lon": 16.42797,
+      "source": "dgu_ad"
+    },
+    {
+      "id": "nijemci",
+      "institution": "Općina Nijemci (općinska uprava)",
+      "address": "Trg kralja Tomislava 6, Nijemci",
+      "lat": 45.140273,
+      "lon": 19.034942,
+      "source": "dgu_ad"
+    }
+  ]
+}

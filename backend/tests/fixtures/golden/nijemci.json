@@ -1,0 +1,76 @@
+{
+  "location": {
+    "settlement": "Nijemci",
+    "municipality": "Nijemci",
+    "county": "Vukovarsko-srijemska županija"
+  },
+  "categories": {
+    "flood": {
+      "status": "good",
+      "values": {
+        "flood_rp10_point": false,
+        "flood_rp10_100m": false,
+        "flood_rp100_point": false,
+        "flood_rp100_100m": false,
+        "flood_rp500_point": false,
+        "flood_rp500_100m": false
+      }
+    },
+    "air": {
+      "status": "bad",
+      "values": {
+        "pm25_annual": 18.6,
+        "no2_annual": 16.5
+      }
+    },
+    "green": {
+      "status": "bad",
+      "values": {
+        "tree_share_300m": 20.5,
+        "green_share_300m": 44.1,
+        "built_share_300m": 47.7,
+        "nearest_park": 104.1
+      }
+    },
+    "noise": {
+      "status": "info",
+      "values": {
+        "distance_road": 23,
+        "distance_rail": null
+      }
+    },
+    "car_free": {
+      "status": "info",
+      "values": {
+        "needs_within_15min": 5,
+        "needs_missing": "park",
+        "needs_unknown": "stajalište s barem jednim polaskom na sat radnim danom"
+      }
+    },
+    "transit": {
+      "status": "info",
+      "values": {
+        "stops_10min": 4
+      }
+    },
+    "daily": {
+      "status": "info",
+      "values": {
+        "nearest_kindergarten": 12.3,
+        "count15_kindergarten": 1,
+        "nearest_school": 2.7,
+        "count15_school": 1,
+        "nearest_doctor": 4.1,
+        "count15_doctor": 1,
+        "nearest_pediatrician": null,
+        "count15_pediatrician": 0,
+        "nearest_pharmacy": 7.9,
+        "count15_pharmacy": 1,
+        "nearest_grocery": 0.6,
+        "count15_grocery": 2,
+        "nearest_playground": 112.1,
+        "count15_playground": 0
+      }
+    }
+  }
+}
