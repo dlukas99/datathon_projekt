@@ -119,6 +119,7 @@ def extract(pbf: Path) -> _Collector:
         .with_areas(osmium.filter.KeyFilter("leisure", "amenity", "shop", "addr:housenumber"))
         .with_filter(osmium.filter.KeyFilter(*FILTER_KEYS))
     )
+    obj: Any
     for obj in processor:
         tags = obj.tags
         if obj.is_node():

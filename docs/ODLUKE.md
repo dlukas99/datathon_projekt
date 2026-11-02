@@ -10,3 +10,5 @@ Jedna odluka po retku: datum, odluka, razlog.
 - 2026-11-02: Na Windowsima se `make` pokreće iz MSYS2 (`C:\msys64\usr\bin`). Razlog: Makefile koristi POSIX ljusku.
 - 2026-11-02: `CONTACT_EMAIL` se ne popunjava automatski; dok ga tim ne upiše, User-Agent je `PrijePotpisa/0.1 (+datathon prototype)`. Razlog: adresu e-pošte bira tim.
 - 2026-11-02: Tijekom razvoja `scripts/check_readme.py` namjerno pada zbog oznaka `AUTO:` u README-u; prolazi tek nakon revizije README-a (zadatak P1). Razlog: README se piše na kraju prema stvarnom stanju.
+- 2026-11-02: Uz statuse dobro, upozorenje, loše i nema podataka uveden je status „Bez ocjene” (info) za kategorije bez praga s izvorom (npr. sunce). Razlog: pravilo 4 zabranjuje pragove bez izvora, a vrijednost je i dalje korisna.
+- 2026-11-02: Brzina hoda 4,5 km/h (1,25 m/s) kao obrazložena pretpostavka: nešto sporije od zadane vrijednosti Valhalle za pješake (5,1 km/h), kako bi vremena bila realna i za starije osobe i roditelje s djecom. Razlog: CLAUDE.md, odjeljak 6.

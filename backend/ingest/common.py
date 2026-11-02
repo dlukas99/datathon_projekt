@@ -45,7 +45,7 @@ def _throttle(host: str, min_interval: float) -> None:
     _last_request[host] = time.monotonic()
 
 
-def download(url: str, dest: Path, *, min_interval: float = 1.0, retries: int = 3) -> Path:
+def download(url: str, dest: Path, *, min_interval: float = 1.0, retries: int = 5) -> Path:
     """Download `url` to `dest` unless it already exists. Returns `dest`."""
     if dest.exists() and dest.stat().st_size > 0:
         return dest
@@ -54,10 +54,17 @@ def download(url: str, dest: Path, *, min_interval: float = 1.0, retries: int = 
     host = httpx.URL(url).host
     for attempt in range(1, retries + 1):
         _throttle(host, min_interval)
+        # Resume a partial download when the server supports byte ranges.
+        offset = tmp.stat().st_size if tmp.exists() else 0
+        headers = {"Range": f"bytes={offset}-"} if offset else {}
         try:
-            with http_client() as client, client.stream("GET", url) as response:
+            with (
+                http_client() as client,
+                client.stream("GET", url, headers=headers) as response,
+            ):
                 response.raise_for_status()
-                with tmp.open("wb") as fh:
+                mode = "ab" if offset and response.status_code == 206 else "wb"
+                with tmp.open(mode) as fh:
                     for chunk in response.iter_bytes(1 << 20):
                         fh.write(chunk)
             tmp.replace(dest)
@@ -65,7 +72,7 @@ def download(url: str, dest: Path, *, min_interval: float = 1.0, retries: int = 
         except httpx.HTTPError:
             if attempt == retries:
                 raise
-            time.sleep(2**attempt)
+            time.sleep(5 * 2**attempt)
     return dest
 
 

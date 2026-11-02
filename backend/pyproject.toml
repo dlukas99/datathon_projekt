@@ -24,6 +24,7 @@ ingest = [
     "pandas>=2.2",
     "openpyxl>=3.1",
     "osmium>=4.3.2",
+    "xlrd>=2.0.2",
 ]
 dev = [
     "ruff>=0.8",
@@ -48,6 +49,8 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# Croatian text uses typographic quotes and dashes on purpose.
+ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.mypy]
 strict = true
