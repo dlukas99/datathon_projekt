@@ -1,0 +1,12 @@
+# Web: build the React app, then serve it with Caddy (HTTPS, /api proxy).
+FROM node:22-slim AS build
+WORKDIR /src/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend ./
+COPY scripts/demo_addresses.json /src/scripts/demo_addresses.json
+RUN npx vite build
+
+FROM caddy:2
+COPY deploy/Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /src/frontend/dist /srv

@@ -18,7 +18,7 @@ valhalla:
 	$(COMPOSE_DEV) up -d valhalla
 
 dev: valhalla
-	cd $(BACKEND) && uv run uvicorn app.main:app --reload --port 8000 & \
+	cd $(BACKEND) && uv run uvicorn app.main:app --reload --port 8000 --no-access-log & \
 	cd $(FRONTEND) && npm run dev; \
 	wait
 

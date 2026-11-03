@@ -2,9 +2,11 @@
 # Tiles are built automatically from the Geofabrik extract on first start
 # (`make data` downloads it to data/raw/osm/). Tiles live in a named volume
 # because bind mounts on Windows do not allow the renames the builder needs.
+name: prijepotpisa-dev
+
 services:
   valhalla:
-    image: ghcr.io/valhalla/valhalla-scripted:latest
+    image: ghcr.io/valhalla/valhalla-scripted:3.9.1
     container_name: prijepotpisa-valhalla-dev
     ports:
       - "8002:8002"
@@ -22,3 +24,4 @@ services:
 
 volumes:
   valhalla_tiles:
+    name: deploy_valhalla_tiles

@@ -1,0 +1,58 @@
+# Production: Caddy (HTTPS + built frontend), API and Valhalla.
+# Usage (from the repository root):
+#   DOMAIN=example.org docker compose -f deploy/docker-compose.yml up -d --build
+# Needs data/processed/ (from `make data` or scripts/upload_data.sh) and
+# data/raw/osm/croatia-latest.osm.pbf for the first Valhalla tile build.
+name: prijepotpisa
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      - CONTACT_EMAIL=${CONTACT_EMAIL:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-}
+    volumes:
+      # Writable: the API keeps the last good answer of the portal's CKAN API here.
+      - ../data/processed:/data/processed
+    depends_on:
+      - valhalla
+    restart: unless-stopped
+
+  valhalla:
+    image: ghcr.io/valhalla/valhalla-scripted:3.9.1
+    environment:
+      - serve_tiles=True
+      - build_admins=False
+      - build_time_zones=False
+      - build_elevation=False
+      - use_tiles_ignore_pbf=True
+      - server_threads=4
+    volumes:
+      - valhalla_tiles:/custom_files
+      - ../data/raw/osm/croatia-latest.osm.pbf:/custom_files/croatia-latest.osm.pbf:ro
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+  valhalla_tiles:
