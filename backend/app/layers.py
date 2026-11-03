@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pyarrow.parquet as pq
@@ -12,7 +13,6 @@ import shapely
 from numpy.typing import NDArray
 from shapely import STRtree
 from shapely.geometry.base import BaseGeometry
-from shapely.ops import transform as shp_transform
 
 from app.config import get_settings
 from app.geo import _TO_HTRS, to_htrs_arrays
@@ -92,15 +92,21 @@ def load_points(path: Path) -> dict[str, PointLayer]:
     return layers
 
 
-def _project(geom: BaseGeometry) -> BaseGeometry:
-    return shp_transform(_TO_HTRS.transform, geom)
+def _project_all(wkbs: list[bytes]) -> list[BaseGeometry]:
+    """WKB in EPSG:4326 -> geometries in EPSG:3765, vectorised."""
+
+    def to_htrs(x: NDArray[np.float64], y: NDArray[np.float64]) -> tuple[Any, Any]:
+        return _TO_HTRS.transform(x, y)
+
+    projected = shapely.transform(shapely.from_wkb(wkbs), to_htrs, interleaved=False)
+    return list(projected)
 
 
 def load_polygons(path: Path) -> PolygonLayer | None:
     if not path.exists():
         return None
     table = pq.read_table(path).to_pydict()
-    geoms = [_project(shapely.from_wkb(g)) for g in table["geometry"]]
+    geoms = _project_all(table["geometry"])
     return PolygonLayer(names=list(table["name"]), geoms=geoms, tree=STRtree(geoms))
 
 
@@ -108,7 +114,7 @@ def load_lines(path: Path) -> LineLayer | None:
     if not path.exists():
         return None
     table = pq.read_table(path).to_pydict()
-    geoms = [_project(shapely.from_wkb(g)) for g in table["geometry"]]
+    geoms = _project_all(table["geometry"])
     return LineLayer(
         kinds=list(table["kind"]), refs=list(table["ref"]), geoms=geoms, tree=STRtree(geoms)
     )

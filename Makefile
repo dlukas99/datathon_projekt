@@ -2,7 +2,11 @@
 
 BACKEND  := backend
 FRONTEND := frontend
-COMPOSE_DEV := docker compose -f deploy/docker-compose.dev.yml
+# `docker compose` (plugin) or the standalone `docker-compose`; the plugin is not
+# found under MSYS make on Windows, which sets its own HOME.
+COMPOSE := $(shell docker compose version >/dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
+COMPOSE_DEV := $(COMPOSE) -f deploy/docker-compose.dev.yml
+export PYTHONUTF8 := 1
 
 .PHONY: setup data dev valhalla test lint build e2e screenshots verify readme-check
 

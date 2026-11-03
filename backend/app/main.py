@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Annotated, Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query
@@ -19,7 +21,15 @@ from app.models import Location, Report, SourceInfo
 from app.report import OutsideCroatia, build_report, locate, report_geojson
 from app.sources import manifest, source_info
 
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    warm_up()
+    yield
+
+
 app = FastAPI(
+    lifespan=lifespan,
     title="Prije potpisa API",
     description=(
         "Okolišni pregled adrese u Hrvatskoj iz otvorenih podataka. Svaka vrijednost nosi "
@@ -36,7 +46,6 @@ Lat = Annotated[float, Query(ge=-90, le=90, description="Geografska širina (WGS
 Lon = Annotated[float, Query(ge=-180, le=180, description="Geografska dužina (WGS84)")]
 
 
-@app.on_event("startup")
 def warm_up() -> None:
     # Load in-memory indexes once so the first report is fast.
     get_geocoder()

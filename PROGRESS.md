@@ -1,33 +1,36 @@
 # Napredak
-Zadnje ažurirano: 2026-11-02 20:45
+Zadnje ažurirano: 2026-11-03 09:30
 
 ## P0
-- [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (lint, testovi, build i e2e s axeom prolaze; provjera README-a namjerno pada do revizije, vidi `docs/ODLUKE.md`.)
-- [ ] **Istraživanje izvora:** za svaki izvor iz odjeljka 5 provjeri dostupnost, URL, format, licencu i datum, isprobaj preuzimanje i zapiši u `docs/IZVORI_PODATAKA.md` sa statusom (radi, djelomično, ne radi) i odabranim rezervnim planom.
-- [ ] **Geokodiranje:** adrese (DGU, rezerva OSM), `GET /api/geocode?q=` s prijedlozima, naselje, općina i županija za točku (DGU granice). Pet demo adresa javnih ustanova u `scripts/demo_addresses.json` (Vinkovci, Osijek, Zagreb, Split i jedno manje naselje).
-- [ ] **Poplave:** JRC karte za povratna razdoblja 10, 100 i 500 godina, vrijednost na točki i u krugu od 100 m; poveznica na službeni preglednik Hrvatskih voda.
-- [ ] **Zrak:** EEA godišnje karte PM2,5 i NO2 (najnovija dostupna godina), usporedba s WHO 2021 i EU 2030.
-- [ ] **Toplina i zelenilo:** ESA WorldCover, udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park (OSM) u minutama hoda.
-- [ ] **Mreža hoda:** Valhalla u Dockeru s OSM izvatkom za Hrvatsku; izokrone od 5, 10 i 15 minuta; vrijeme hoda do točaka.
-- [ ] **Svakodnevne potrebe:** vrtići (registar Ministarstva, geokodirani), osnovne škole, obiteljski liječnici i pedijatri (HZZO), ljekarne, trgovine namirnicama, igrališta (OSM): najbliži i broj unutar 15 minuta hoda.
-- [ ] **Javni prijevoz:** stajališta unutar 10 minuta hoda i polasci po satu radnim danom iz GTFS-a (ZET, Autotrolej, HŽPP); drugdje stajališta iz OSM-a s oznakom „bez voznog reda”.
-- [ ] **Sunce:** JRC PVGIS API, godišnja proizvodnja u kWh po kWp uz optimalni nagib; predmemorija po zaokruženim koordinatama.
-- [ ] **API izvještaja:** `GET /api/report?lat=&lon=` sa svim kategorijama i poljima iz pravila 2, i isti izvještaj kao GeoJSON (`format=geojson`); OpenAPI dostupan na `/api/docs`.
-- [ ] **Sučelje:** naslovnica (pretraga i odabir profila), izvještaj (okolišni pregled prvi, karta s izokronama, život bez auta, svakodnevni život, izvori), mobilni prikaz.
-- [ ] **Usporedba:** `/usporedi?a=…&b=…`, dvije adrese jedna uz drugu.
-- [ ] **Testovi:** zlatni testovi izvještaja za demo adrese, e2e glavnog toka (Playwright) i axe bez nalaza.
+- [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
+- [x] **Istraživanje izvora:** svi izvori iz odjeljka 5 provjereni su stvarnim preuzimanjem 2. 11. 2026. i zapisani u `docs/IZVORI_PODATAKA.md` sa statusom i rezervnim planom. Buka EEA-e ne koristi se jer licenca nije otvorena (rezervni plan: OSM).
+- [x] **Geokodiranje:** vlastiti geokoder nad 1.683.411 DGU adresa (`GET /api/geocode`), naselje, grad ili općina i županija iz DGU upravnih jedinica (`/api/reverse`); šest demo adresa javnih ustanova (Vinkovci ×2, Osijek, Zagreb, Split, Nijemci) u `scripts/demo_addresses.json`.
+- [x] **Poplave:** JRC v3.1.1 za 10, 100 i 500 godina, na točki i u krugu od 100 m; status prema scenarijima Hrvatskih voda i Direktive 2007/60/EZ; poveznica na `preglednik.voda.hr`.
+- [x] **Zrak:** EEA karte PM2,5 i NO2 za 2024. (validirane, lipanj 2026.), usporedba s WHO 2021 (5/10 µg/m³) i EU 2030 (10/20 µg/m³).
+- [x] **Toplina i zelenilo:** ESA WorldCover u krugu od 300 m (drveće, zelenilo, izgrađeno) i najbliži OSM park u minutama hoda; status prema pravilu 3-30-300.
+- [x] **Mreža hoda:** Valhalla 3.9.1 u Dockeru (pločice za Hrvatsku za oko 3 min, imenovani volumen); izokrone od 5, 10 i 15 min i jedna matrica vremena hoda po izvještaju, pri 4,5 km/h.
+- [x] **Svakodnevne potrebe:** vrtići (MZOM + Zagreb + OSM), škole (MZOM + Zagreb + OSM), liječnici i pedijatri (HZZO), ljekarne (HZZO + OSM), trgovine, igrališta i reciklaža; registri geokodirani s 86–95 % uspjeha; najbliže i broj unutar 15 min.
+- [x] **Javni prijevoz:** ZET i HŽPP GTFS i Autotrolej JSON (4.047 stajališta s polascima na sat od 6 do 20 h radnim danom), drugdje OSM stajališta „bez voznog reda”.
+- [x] **Sunce:** PVGIS 5.3, kWh po kWp i optimalni nagib; predmemorija po koordinatama zaokruženima na 0,01°; upit u pozadini (najviše 6 s čekanja), zagrijavanje demo adresa pri pokretanju.
+- [x] **API izvještaja:** `GET /api/report` (JSON i `format=geojson`), svaka vrijednost sa `source`, `retrieved_at` i `kind`; OpenAPI na `/api/docs`; izvještaj traje oko 1 s.
+- [x] **Sučelje:** naslovnica (pretraga, profili, primjeri), izvještaj (okolišni pregled prvi, karta s izokronama i tekstualnim ekvivalentom, život bez auta, svakodnevni život, izvori), mobilni prikaz od 320 px, tamna tema.
+- [x] **Usporedba:** `/usporedi?a=…&b=…` s tablicom kategorija jedna uz drugu i asistentom za dvije adrese.
+- [x] **Testovi:**
+  - backend (pytest, 57 testova): zlatni testovi za 6 demo adresa, pragovi, API ugovor, 20 pitanja asistenta, PVGIS;
+  - frontend: Vitest;
+  - Playwright e2e (32 testa): glavni tok, profil, asistent, usporedba, pogreška, 320 px, axe bez nalaza na 5 stranica × 2 teme × 2 uređaja.
 
 ## P1
-- [ ] **Buka:** strateške karte buke (EEA, podaci prijavljeni prema direktivi o buci okoliša) gdje postoje; drugdje udaljenost od glavnih cesta i pruga (OSM) s oznakom „procjena”.
-- [ ] **Asistent:** OpenAI-kompatibilni API iz `.env` (`LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL`) s alatima nad vlastitim API-jem; bez ključa jednostavna pravila; brojke isključivo iz predložaka; dvadesetak testnih pitanja u `docs/ASISTENT.md` s očekivanim odgovorima.
-- [ ] **Reciklaža:** OSM i općinski skupovi s Portala preko CKAN API-ja (pretraga, spajanje, uklanjanje duplikata); nalazi u `docs/KVALITETA_PODATAKA.md`.
-- [ ] **Profili:** obitelj s djecom, umirovljenik, student, rad od kuće i vlastiti; mijenjaju redoslijed i naglasak.
-- [ ] **Ispis i dijeljenje:** CSS za ispis; stanje izvještaja u URL-u.
-- [ ] **Stranica „Izvori”:** datumi osvježavanja uživo preko CKAN API-ja data.gov.hr i nalazi o kvaliteti podataka.
-- [ ] **Postavljanje:** `deploy/docker-compose.yml` (backend, Valhalla, Caddy s izgrađenim frontendom), `docs/DEPLOY.md`, skripta za prijenos obrađenih podataka na poslužitelj.
-- [ ] **Dokumentacija:** `docs/ARHITEKTURA.md` (s tehničkim, organizacijskim i pravnim preduvjetima), `docs/METODOLOGIJA.md`, `docs/PRISTUPACNOST.md`, `docs/KVALITETA_PODATAKA.md`, `docs/VIDEO_SCENARIJ.md`, `docs/PREDAJA.md`.
-- [ ] **Snimke zaslona:** `make screenshots` (Playwright) u `docs/images/`, uključene u README.
-- [ ] **Revizija README-a:** odjeljak 11.
+- [x] **Buka:** EEA karte nisu otvorene licence (samo poveznica); procjena prema udaljenosti od autocesta, glavnih i važnijih cesta te pruga iz OSM-a, oznaka „procjena”.
+- [x] **Asistent:** `POST /api/assistant`; OpenAI-kompatibilni model samo za namjeru i kategorije, bez ključa pravila; odgovori iz predložaka; 20 testnih pitanja u `docs/ASISTENT.md` (sva prolaze).
+- [x] **Reciklaža:** CKAN pretraga 33 općinska skupa, 11 s koordinatama (45 točaka), spojeno s 2.071 OSM točkom; nalazi u `docs/KVALITETA_PODATAKA.md`.
+- [x] **Profili:** obitelj s djecom, umirovljenik, student, rad od kuće i vlastiti; mijenjaju samo redoslijed i naglasak (provjereno e2e testom).
+- [x] **Ispis i dijeljenje:** CSS za ispis, stanje izvještaja (koordinate, adresa, profil) u URL-u, kopiranje poveznice, preuzimanje GeoJSON-a.
+- [x] **Stranica „Izvori”:** datumi zadnje izmjene uživo preko CKAN API-ja (`/api/sources/live`, jedan upit, predmemorija i zadnji dobar odgovor), svi izvori s licencama i nalazi o kvaliteti.
+- [x] **Postavljanje:** `deploy/docker-compose.yml` (Caddy s frontendom, API, Valhalla), `docs/DEPLOY.md`, `scripts/upload_data.sh`; lokalno provjereno na `https://localhost`.
+- [x] **Dokumentacija:** `docs/ARHITEKTURA.md`, `docs/METODOLOGIJA.md`, `docs/PRISTUPACNOST.md`, `docs/KVALITETA_PODATAKA.md`, `docs/VIDEO_SCENARIJ.md`, `docs/PREDAJA.md`, uz `docs/IZVORI_PODATAKA.md`, `docs/ASISTENT.md` i `docs/ODLUKE.md`.
+- [x] **Snimke zaslona:** `make screenshots` snima 7 slika u `docs/images/` (naslovnica, izvještaj, život bez auta, mobitel u tamnoj temi, usporedba, asistent, izvori); uključene u README.
+- [x] **Revizija README-a:** tvrdnje usklađene s kodom i podacima; primjer sa stvarnim izračunom (Vinkovci i Nijemci); stvarni nalazi o kvaliteti i ograničenja; `scripts/check_readme.py` prolazi.
 
 ## P2
 - [ ] **Požari:** EFFIS opožarene površine, samo ako se preuzimaju bez računa.
@@ -35,6 +38,15 @@ Zadnje ažurirano: 2026-11-02 20:45
 - [ ] **Izvoz PDF-a** izvještaja.
 
 ## Odustano
+- Strateške karte buke EEA-e: licenca je ograničena na istraživanje i neprofitnu upotrebu (nije otvorena); koristi se rezervni plan (udaljenost od prometnica iz OSM-a).
+- GTFS Autotroleja (`gt.autotrolej.hr`): istekao TLS certifikat; zamijenjen JSON voznim redom s Portala (CC BY 4.0).
+- GTFS Šibenika: bez navedene licence i bez objave na Portalu.
 
 ## Za ljude
 - Upisati `CONTACT_EMAIL` u `.env` (ide u User-Agent prema izvorima podataka).
+- Imena tima, mentora i visokog učilišta u README (`TODO(tim)`).
+- Javni repozitorij na GitHubu i push grane `main`.
+- Poslužitelj, domena i postavljanje prema `docs/DEPLOY.md`; demo URL u README (`TODO(ljudi)`).
+- Po želji ključ za jezični model (`LLM_*`).
+- Snimanje videa prema `docs/VIDEO_SCENARIJ.md` i poveznica u README.
+- Slanje rješenja e-poštom na open.data@mpudt.hr do 9. 11. 2026. u 24:00 (popis u `docs/PREDAJA.md`).
