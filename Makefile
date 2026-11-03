@@ -33,10 +33,10 @@ lint:
 build:
 	cd $(FRONTEND) && npm run build
 
-e2e:
+e2e: build
 	cd $(FRONTEND) && npx playwright test
 
-screenshots:
+screenshots: build
 	cd $(FRONTEND) && npx playwright test --config playwright.screenshots.config.ts
 
 readme-check:

@@ -49,7 +49,7 @@ def _query(lat: float, lon: float) -> SolarResult:
             PVGIS_URL,
             params=params,
             headers={"User-Agent": get_settings().user_agent},
-            timeout=20.0,
+            timeout=8.0,
         )
         response.raise_for_status()
         data = response.json()
