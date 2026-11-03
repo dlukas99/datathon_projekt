@@ -18,6 +18,7 @@ const DAILY_ORDER = [
   'pharmacy',
   'grocery',
   'playground',
+  'recycling',
 ]
 
 export function sourceMap(report: Report): SourceMap {
@@ -227,6 +228,10 @@ export function ReportView({ report, focus }: { report: Report; focus: string[] 
           <p key={s}>{s}</p>
         ))}
       </section>
+      <p className="disclaimer">
+        Informativni alat iz otvorenih podataka, a ne službena procjena.{' '}
+        <Link to="/o-alatu">Kako računamo i koji su pragovi</Link>
+      </p>
 
       <section className="section" aria-labelledby="env-title">
         <h2 id="env-title">Okolišni pregled</h2>

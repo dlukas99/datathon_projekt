@@ -69,7 +69,9 @@
         "nearest_grocery": 5.2,
         "count15_grocery": 5,
         "nearest_playground": 3.6,
-        "count15_playground": 2
+        "count15_playground": 2,
+        "nearest_recycling": 152.5,
+        "count15_recycling": 0
       }
     }
   }

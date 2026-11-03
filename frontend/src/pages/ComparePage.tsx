@@ -8,7 +8,16 @@ import { comparePath, parsePoint, type Point, reportPath } from '../lib/urls'
 import { LoadingReport, placeLine, ReportError } from './ReportPage'
 
 const ROWS = ['flood', 'air', 'green', 'noise', 'solar', 'car_free', 'transit']
-const DAILY = ['kindergarten', 'school', 'doctor', 'pediatrician', 'pharmacy', 'grocery', 'playground']
+const DAILY = [
+  'kindergarten',
+  'school',
+  'doctor',
+  'pediatrician',
+  'pharmacy',
+  'grocery',
+  'playground',
+  'recycling',
+]
 
 function useReport(point: Point | null) {
   return useQuery({

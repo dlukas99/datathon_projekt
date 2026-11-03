@@ -59,6 +59,7 @@ export const FOCUS_OPTIONS: { id: string; label: string }[] = [
   { id: 'pharmacy', label: 'Ljekarna' },
   { id: 'grocery', label: 'Trgovina namirnicama' },
   { id: 'playground', label: 'Igralište' },
+  { id: 'recycling', label: 'Reciklaža' },
 ]
 
 const DEFAULT_PROFILE = PROFILES[0] as Profile

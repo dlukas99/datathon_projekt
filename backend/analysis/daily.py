@@ -19,6 +19,7 @@ DAILY_ITEMS: tuple[tuple[str, str, str], ...] = (
     ("pharmacy", "Ljekarna", "najbliža ljekarna"),
     ("grocery", "Trgovina namirnicama", "najbliža trgovina namirnicama"),
     ("playground", "Igralište", "najbliže igralište"),
+    ("recycling", "Reciklaža (spremnici ili dvorište)", "najbliže mjesto za odvojeno odlaganje"),
 )
 
 # The seven needs of the car-free check (CLAUDE.md, section 6).
@@ -40,6 +41,7 @@ SEARCHED_SOURCE = {
     "pharmacy": "hzzo_ljekarne",
     "kindergarten": "mzom_vrtici",
     "school": "mzom_skole",
+    "recycling": "osm",
 }
 
 
@@ -133,8 +135,8 @@ def daily_category(reach: Reach) -> Category:
         values=values,
         places=places,
         notes=[
-            "Trgovine i igrališta dolaze iz OpenStreetMapa, koji izvan gradova nije potpun: "
-            "„nije pronađeno” može značiti i da objekt nije ucrtan.",
+            "Trgovine, igrališta i većina mjesta za reciklažu dolaze iz OpenStreetMapa, koji "
+            "izvan gradova nije potpun: „nije pronađeno” može značiti i da objekt nije ucrtan.",
         ],
     )
 

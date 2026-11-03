@@ -28,6 +28,7 @@ export const PLACE_COLORS: Record<string, string> = {
   school: '#7a52b3',
   playground: '#2a9d8f',
   stop: '#2f5fa8',
+  recycling: '#6b7d2a',
 }
 
 export const PLACE_NAMES: Record<string, string> = {
@@ -40,6 +41,7 @@ export const PLACE_NAMES: Record<string, string> = {
   school: 'osnovna škola',
   playground: 'igralište',
   stop: 'stajalište',
+  recycling: 'reciklaža',
 }
 
 function placesGeojson(places: Place[]): GeoJSON.FeatureCollection {

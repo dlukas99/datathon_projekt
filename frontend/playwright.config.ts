@@ -1,11 +1,14 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const baseURL = process.env.E2E_BASE_URL ?? 'http://localhost:4173'
+// E2E_BASE_URL points the tests at an already running deployment; otherwise the
+// backend (port 8000) and the built frontend (`vite preview`, port 4173) are started.
+const external = process.env.E2E_BASE_URL
+const baseURL = external ?? 'http://localhost:4173'
 
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 60_000,
-  expect: { timeout: 20_000 },
+  timeout: 90_000,
+  expect: { timeout: 30_000 },
   retries: 0,
   workers: 2,
   reporter: [['list']],
@@ -14,12 +17,22 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
   ],
-  webServer: process.env.E2E_BASE_URL
+  webServer: external
     ? undefined
-    : {
-        command: 'npm run preview',
-        url: baseURL,
-        reuseExistingServer: true,
-        timeout: 60_000,
-      },
+    : [
+        {
+          command: 'uv run uvicorn app.main:app --port 8000',
+          cwd: '../backend',
+          url: 'http://localhost:8000/api/health',
+          reuseExistingServer: true,
+          timeout: 120_000,
+          env: { PYTHONUTF8: '1' },
+        },
+        {
+          command: 'npm run preview',
+          url: baseURL,
+          reuseExistingServer: true,
+          timeout: 60_000,
+        },
+      ],
 })

@@ -81,8 +81,14 @@ def build() -> pd.DataFrame:
         official = reg[reg["category"] == category]
         frames.append(_far_from(extra, official, OSM_DEDUP_M)[cols])
 
-    for category in ("grocery", "playground", "recycling"):
+    for category in ("grocery", "playground"):
         frames.append(osm[osm["category"] == category][cols])
+
+    recycling_path = d / "recycling.parquet"  # municipal datasets + OSM, ingest/recycling.py
+    if recycling_path.exists():
+        frames.append(pd.read_parquet(recycling_path)[cols])
+    else:
+        frames.append(osm[osm["category"] == "recycling"][cols])
 
     transit_path = d / "transit_stops.parquet"
     timetabled = pd.read_parquet(transit_path) if transit_path.exists() else pd.DataFrame()

@@ -39,6 +39,7 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
     "pharmacy": ("ljekarn", "apotek"),
     "grocery": ("trgovin", "ducan", "namirnic", "supermarket", "market"),
     "playground": ("igralist",),
+    "recycling": ("reciklaz", "otpad", "zeleni otok", "kontejner"),
 }
 DAILY_KEYS = {
     "kindergarten",
