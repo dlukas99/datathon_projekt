@@ -33,7 +33,7 @@ Zadnje ažurirano: 2026-11-03 10:30
 - [x] **Revizija README-a:** tvrdnje usklađene s kodom i podacima; primjer sa stvarnim izračunom (Vinkovci i Nijemci); stvarni nalazi o kvaliteti i ograničenja; `scripts/check_readme.py` prolazi.
 
 ## P2
-- [x] **Požari:** EFFIS opožarene površine preko javnog WFS-a bez računa (1.030 površina od 2016.), kategorija „Požari raslinja” (krug od 2 km, bez ocjene).
+- [x] **Požari:** EFFIS opožarene površine preko javnog WFS-a bez računa (1.030 površina od 2016.), kategorija „Požari raslinja” (krug od 2 km, status „Informacija”).
 - [ ] **Procjena auto-kilometara i CO2:** samo s citiranim faktorima emisije i jasno opisanim pretpostavkama.
 - [ ] **Izvoz PDF-a** izvještaja.
 

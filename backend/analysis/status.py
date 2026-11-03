@@ -9,7 +9,7 @@ STATUS_LABELS: dict[Status, str] = {
     "warning": "Upozorenje",
     "bad": "Loše",
     "no_data": "Nema podataka",
-    "info": "Bez ocjene",
+    "info": "Informacija",
 }
 
 

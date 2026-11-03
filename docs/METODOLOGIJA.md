@@ -5,7 +5,7 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 ## Načela
 
 1. **Apsolutno značenje ispred relativnog ranga.** Pregled kaže, na primjer, „lokacija je u modeliranom poplavnom području za povratno razdoblje od 100 godina”, a ne „rizik iznad prosjeka”.
-2. **Svaka kategorija ima status** prema pragu s izvorom: dobro, upozorenje, loše ili nema podataka. Kategorije za koje ne postoji općeprihvaćen prag (sunce, buka kao procjena, život bez auta, javni prijevoz, svakodnevni život) imaju status „Bez ocjene” i prikazuju samo podatak. „Nema podataka” se uvijek prikazuje; kategorija se nikad tiho ne izostavlja.
+2. **Svaka kategorija ima status** prema pragu s izvorom: dobro, upozorenje, loše ili nema podataka. Kategorije za koje ne postoji općeprihvaćen prag (sunce, buka kao procjena, život bez auta, javni prijevoz, svakodnevni život) imaju status „Informacija” i prikazuju samo podatak, bez ocjene. „Nema podataka” se uvijek prikazuje; kategorija se nikad tiho ne izostavlja.
 3. **Nema skupne ocjene.** Kategorije se ne zbrajaju ni ne ponderiraju. Profil korisnika (obitelj s djecom, umirovljenik, student, rad od kuće, vlastiti) mijenja samo redoslijed i naglasak kartica, nikad vrijednosti ni statuse.
 4. **Svaka vrijednost ima izvor, datum preuzimanja i vrstu.** Vrste su:
    - `measured` (izmjereno): vrijednost iz mjerenja, voznog reda ili službenog registra;
@@ -69,7 +69,7 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 
 - **Podaci:** autoceste, brze, glavne i važnije ceste (`highway=motorway|trunk|primary|secondary`) i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa.
 - **Izračun:** zračna udaljenost do najbliže ceste i najbliže pruge, do 2 km.
-- **Status:** „Bez ocjene”, vrsta „procjena”. Za udaljenost od prometnice ne postoji prag s izvorom koji bi je pretvorio u razinu buke.
+- **Status:** „Informacija”, vrsta „procjena”. Za udaljenost od prometnice ne postoji prag s izvorom koji bi je pretvorio u razinu buke.
 - **Kontekst:** smjernice WHO-a za buku okoliša u europskoj regiji (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
@@ -77,14 +77,14 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 
 - **Podaci:** EFFIS (Copernicus European Forest Fire Information System), opožarene površine kartirane iz satelitskih snimaka MODIS, sloj `ms:modis.ba.poly` preuzet preko javnog WFS-a za Hrvatsku (1.030 površina od 2016.). Skupno preuzimanje traži račun, a WFS ne.
 - **Izračun:** opožarene površine čiji poligon dodiruje krug od 2 km oko točke: broj, godine, najbliža (udaljenost do ruba) i najveća (ha).
-- **Status:** „Bez ocjene”, jer za broj prošlih požara ne postoji prag s izvorom. Prošli požari pokazuju izloženost, a ne predviđaju buduće.
+- **Status:** „Informacija”, jer za broj prošlih požara ne postoji prag s izvorom. Prošli požari pokazuju izloženost, a ne predviđaju buduće.
 - **Ograničenja:** satelitsko kartiranje ne bilježi sve manje požare; podaci počinju 2016.
 
 ## Sunce na krovu
 
 - **Podaci:** JRC PVGIS 5.3, `PVcalc`, snaga 1 kWp, gubici sustava 14 % (zadana vrijednost PVGIS-a), optimalni nagib i azimut, baza zračenja PVGIS-SARAH3 (2005.–2023.).
 - **Vrijednost:** `E_y`, prosječna godišnja proizvodnja u kWh za 1 kWp.
-- **Status:** „Bez ocjene”.
+- **Status:** „Informacija”.
 - **Ograničenja:** ne uzima u obzir sjenu susjednih zgrada i drveća ni stvarni nagib i orijentaciju krova. Rezultat se predmemorira po koordinatama zaokruženima na 0,01°.
 
 ## Mreža hoda

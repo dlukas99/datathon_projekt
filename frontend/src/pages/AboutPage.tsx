@@ -90,7 +90,7 @@ export function AboutPage() {
                   (OpenStreetMap).
                 </td>
                 <td>
-                  Bez ocjene. Strateške karte buke EEA-e nisu otvorene licence pa se samo
+                  Informacija (nema službenog praga). Strateške karte buke EEA-e nisu otvorene licence pa se samo
                   povezuju. Smjernica WHO-a (2018.): cestovni promet ispod 53 dB Lden.
                 </td>
               </tr>
@@ -100,12 +100,12 @@ export function AboutPage() {
                   Opožarene površine u krugu od 2 km od 2016. iz europskog sustava EFFIS
                   (satelitsko kartiranje).
                 </td>
-                <td>Bez ocjene. Prošli požari pokazuju izloženost, a ne predviđaju buduće.</td>
+                <td>Informacija (nema službenog praga). Prošli požari pokazuju izloženost, a ne predviđaju buduće.</td>
               </tr>
               <tr>
                 <th scope="row">Sunce na krovu</th>
                 <td>JRC PVGIS 5.3: godišnja proizvodnja za 1 kW snage uz optimalni nagib i 14 % gubitaka.</td>
-                <td>Bez ocjene.</td>
+                <td>Informacija (nema službenog praga).</td>
               </tr>
               <tr>
                 <th scope="row">Život bez auta</th>
@@ -113,7 +113,7 @@ export function AboutPage() {
                   Koliko od sedam svakodnevnih potreba je unutar 15 minuta hoda po mreži ulica
                   (Valhalla nad OpenStreetMapom, 4,5 km/h).
                 </td>
-                <td>Bez ocjene; prikazuje se „X od 7” i što nedostaje.</td>
+                <td>Informacija; prikazuje se „X od 7” i što nedostaje.</td>
               </tr>
               <tr>
                 <th scope="row">Javni prijevoz</th>
@@ -121,7 +121,7 @@ export function AboutPage() {
                   Stajališta unutar 10 minuta hoda; prosječan broj polazaka na sat od 6 do 20 sati
                   radnim danom iz voznih redova ZET-a, HŽPP-a i Autotroleja.
                 </td>
-                <td>Bez ocjene. Drugdje stajališta iz OpenStreetMapa „bez voznog reda”.</td>
+                <td>Informacija. Drugdje stajališta iz OpenStreetMapa „bez voznog reda”.</td>
               </tr>
             </tbody>
           </table>

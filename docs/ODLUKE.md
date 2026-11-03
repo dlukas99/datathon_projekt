@@ -23,3 +23,4 @@ Jedna odluka po retku: datum, odluka, razlog.
 - 2026-11-03: Pristupni zapisi su isključeni (uvicorn `--no-access-log`, Caddy `output discard`). Razlog: koordinate u upitu otkrivaju adresu, a CLAUDE.md zabranjuje spremanje adresa.
 - 2026-11-03: Požari (P2) iz EFFIS-ova javnog WFS-a umjesto skupnog preuzimanja. Razlog: skupno preuzimanje traži račun (HTTP 403), a CLAUDE.md dopušta požare samo bez računa.
 - 2026-11-03: Redizajn sučelja: izvor, datum i vrsta svake vrijednosti prikazuju se na klik („Detalji i izvor”) umjesto stalno, a popis izvora izvještaja je sklopljen na dnu. Ikone iz `lucide-react` (ISC). Razlog: čitljivost za običnog korisnika; provenijencija ostaje dostupna uz svaku vrijednost (pravilo 2).
+- 2026-11-03: Status bez praga s izvorom preimenovan iz „Bez ocjene” u „Informacija” i prikazan neutralno (sivo, bez točke u boji). Razlog: „Bez ocjene” je djelovalo kao da nešto nedostaje; značenje i pravila 4 i 12 ostaju ista.

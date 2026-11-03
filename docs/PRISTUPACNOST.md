@@ -28,7 +28,7 @@ Iz axe provjere izuzet je samo `canvas` karte (MapLibre), jer je karta slika bez
 | Pretraga adrese | kombinirani okvir prema uzorku WAI-ARIA 1.2 (`role="combobox"`, `aria-expanded`, `aria-activedescendant`, `listbox`/`option`); broj prijedloga najavljuje se u području `aria-live` |
 | Ciljevi dodira | najmanje 44 × 44 px (gumbi, poveznice u izborniku, odabir profila, prijedlozi) |
 | Kontrast | boje teksta i statusa provjerene axe-om u obje teme (≥ 4,5:1) |
-| Status nikad samo bojom | svaka oznaka statusa ima riječ („Dobro”, „Upozorenje”, „Loše”, „Nema podataka”, „Bez ocjene”) i točku u boji |
+| Status nikad samo bojom | svaka oznaka statusa ima riječ („Dobro”, „Upozorenje”, „Loše”, „Nema podataka”, „Informacija”); ocjene imaju i točku u boji |
 | Karta | nije jedini nositelj informacije: uz kartu je tekstualni popis onoga što je na 5, 10 i 15 minuta hoda i legenda, a ispod tablica najbližih ustanova; `<figure>` s opisom za čitače zaslona |
 | Tablice | `<caption>`, zaglavlja s `scope` |
 | Tamna tema | gumb „Tamna tema” (`aria-pressed`); početno prema postavci sustava (`prefers-color-scheme`); izbor se pamti u pregledniku |
