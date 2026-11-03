@@ -7,7 +7,7 @@ import { fetchReport, type Report } from '../lib/api'
 import { comparePath, parsePoint, type Point, reportPath } from '../lib/urls'
 import { LoadingReport, placeLine, ReportError } from './ReportPage'
 
-const ROWS = ['flood', 'air', 'green', 'noise', 'solar', 'car_free', 'transit']
+const ROWS = ['flood', 'air', 'green', 'noise', 'fire', 'solar', 'car_free', 'transit']
 const DAILY = [
   'kindergarten',
   'school',

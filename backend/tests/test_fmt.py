@@ -11,6 +11,7 @@ def test_minutes_and_metres() -> None:
     assert fmt.minutes(7.6) == "8 min"
     assert fmt.metres(1260) == "1,3 km"
     assert fmt.metres(234) == "230 m"
+    assert fmt.metres(999.6) == "1,0 km"
 
 
 def test_plural() -> None:

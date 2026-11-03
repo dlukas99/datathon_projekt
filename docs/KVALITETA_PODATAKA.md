@@ -49,6 +49,7 @@ Neuspjeli zapisi ne prikazuju se. U njihovoj blizini pregled pokazuje sljedeću 
 | Hrvatske vode, karte poplava | Licenca nije navedena; dostupni su preglednik i WMS, pa karte samo povezujemo. |
 | EEA strateške karte buke | Hrvatska je uključena, ali je licenca ograničena na istraživanje i neprofitnu upotrebu; ne koristimo ih. |
 | JRC karte poplava | Katalog i README navode ODbL 1.0, a `copyright.txt` CC BY 4.0. |
+| EFFIS opožarene površine | Skupno preuzimanje (`effis_layer.zip`) vraća HTTP 403 jer traži račun; javni WFS radi bez računa. |
 
 ## Reciklažna dvorišta i zeleni otoci (CKAN)
 

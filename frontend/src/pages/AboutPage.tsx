@@ -95,6 +95,14 @@ export function AboutPage() {
                 </td>
               </tr>
               <tr>
+                <th scope="row">Požari raslinja</th>
+                <td>
+                  Opožarene površine u krugu od 2 km od 2016. iz europskog sustava EFFIS
+                  (satelitsko kartiranje).
+                </td>
+                <td>Bez ocjene. Prošli požari pokazuju izloženost, a ne predviđaju buduće.</td>
+              </tr>
+              <tr>
                 <th scope="row">Sunce na krovu</th>
                 <td>JRC PVGIS 5.3: godišnja proizvodnja za 1 kW snage uz optimalni nagib i 14 % gubitaka.</td>
                 <td>Bez ocjene.</td>

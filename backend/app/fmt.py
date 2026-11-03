@@ -19,9 +19,10 @@ def minutes(value: float | None) -> str:
 def metres(value: float | None) -> str:
     if value is None:
         return "nepoznato"
-    if value >= 1000:
+    rounded = round(value / 10) * 10
+    if rounded >= 1000:
         return f"{num(value / 1000, 1)} km"
-    return f"{num(round(value / 10) * 10)} m"
+    return f"{num(rounded)} m"
 
 
 def plural(n: int, one: str, few: str, many: str) -> str:

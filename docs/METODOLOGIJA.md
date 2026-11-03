@@ -73,6 +73,13 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 - **Kontekst:** smjernice WHO-a za buku okoliša u europskoj regiji (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
+## Požari raslinja
+
+- **Podaci:** EFFIS (Copernicus European Forest Fire Information System), opožarene površine kartirane iz satelitskih snimaka MODIS, sloj `ms:modis.ba.poly` preuzet preko javnog WFS-a za Hrvatsku (1.030 površina od 2016.). Skupno preuzimanje traži račun, a WFS ne.
+- **Izračun:** opožarene površine čiji poligon dodiruje krug od 2 km oko točke: broj, godine, najbliža (udaljenost do ruba) i najveća (ha).
+- **Status:** „Bez ocjene”, jer za broj prošlih požara ne postoji prag s izvorom. Prošli požari pokazuju izloženost, a ne predviđaju buduće.
+- **Ograničenja:** satelitsko kartiranje ne bilježi sve manje požare; podaci počinju 2016.
+
 ## Sunce na krovu
 
 - **Podaci:** JRC PVGIS 5.3, `PVcalc`, snaga 1 kWp, gubici sustava 14 % (zadana vrijednost PVGIS-a), optimalni nagib i azimut, baza zračenja PVGIS-SARAH3 (2005.–2023.).

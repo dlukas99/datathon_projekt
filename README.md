@@ -26,6 +26,7 @@ Korisnik upiše adresu i, po želji, odabere tko je: obitelj s djecom, umirovlje
    - **zrak:** godišnje koncentracije PM2,5 i NO2 za 2024. uspoređene sa smjernicama Svjetske zdravstvene organizacije i graničnim vrijednostima EU-a za 2030.;
    - **toplina i zelenilo:** udio drveća, zelenih i izgrađenih površina u krugu od 300 m te najbliži park u minutama hoda, prema pravilu 3-30-300;
    - **buka:** procjena prema udaljenosti od autocesta, glavnih i važnijih cesta te pruga, jasno označena kao procjena, uz poveznicu na strateške karte buke EEA-e;
+   - **požari raslinja:** opožarene površine u krugu od 2 km od 2016. (Copernicus EFFIS);
    - **sunce na krovu:** procijenjena godišnja proizvodnja solarne elektrane po kilovatu snage (JRC PVGIS).
 2. **Život bez auta:**
    - što je na 5, 10 i 15 minuta hoda po stvarnoj mreži ulica (karta s izokronama i isti popis u tekstu);
@@ -70,7 +71,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 ## Funkcionalnosti
 
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera)
-- okolišni pregled: poplave, zrak, toplina i zelenilo, buka, sunčev potencijal
+- okolišni pregled: poplave, zrak, toplina i zelenilo, buka, požari raslinja, sunčev potencijal
 - izokrone hoda od 5, 10 i 15 minuta po mreži ulica i pješačkih staza
 - svakodnevne potrebe i javni prijevoz s minutama hoda
 - profili korisnika koji mijenjaju redoslijed i naglasak
@@ -86,7 +87,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 ## Izvori otvorenih podataka
 
-Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 28 skupova podataka i PVGIS API.
+Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 30 skupova podataka i PVGIS API.
 
 | Izvor | Podaci | Primjena |
 |---|---|---|
@@ -101,6 +102,7 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | ESA WorldCover | pokrov tla, 10 m | zelenilo, drveće, izgrađenost |
 | EEA (direktiva o buci okoliša) | strateške karte buke | samo poveznica (licenca nije otvorena) |
 | JRC PVGIS | sunčev potencijal (API) | sunce na krovu |
+| Copernicus EFFIS | opožarene površine (WFS) | požari raslinja |
 | ZET, HŽPP (GTFS), Autotrolej (JSON, data.gov.hr) | vozni redovi | polasci na sat |
 | OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža | mreža hoda, svakodnevne potrebe, procjena buke |
 | Općine i gradovi (data.gov.hr) | reciklažna dvorišta i zeleni otoci (11 skupova s koordinatama) | reciklaža |
@@ -135,7 +137,7 @@ flowchart LR
   API -.-> LLM[Jezični model<br/>opcionalno]
   J[Preuzimanje i obrada<br/>make data] --> D
   S1[DGU, DZS, Ministarstvo, HZZO,<br/>gradovi i općine<br/>data.gov.hr] --> J
-  S2[JRC, EEA, ESA WorldCover] --> J
+  S2[JRC, EEA, ESA WorldCover, EFFIS] --> J
   S3[OpenStreetMap, GTFS] --> J
   S3 --> V
 ```
@@ -210,9 +212,9 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 | Kriterij | Kako ga rješenje ispunjava |
 |---|---|
-| Upotreba otvorenih podataka | 28 skupova podataka i PVGIS API; izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
+| Upotreba otvorenih podataka | 30 skupova podataka i PVGIS API; izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
 | Povezivanje javno dostupnih podataka | adresa se povezuje s upravnim jedinicama, popisom stanovništva, rasterskim okolišnim slojevima, mrežom ulica, registrima ustanova (geokodiranim nad adresama DGU-a) i voznim redovima |
-| Relevantnost rješenja | poplave, kvaliteta zraka, buka, zelenilo i toplina, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
+| Relevantnost rješenja | poplave, kvaliteta zraka, buka, zelenilo i toplina, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
 | Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, asistent čije brojke dolaze iz predložaka |
 | Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |
@@ -247,7 +249,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - strateške karte buke ako postanu dostupne pod otvorenom licencom
 - vozni redovi ostalih gradskih prijevoznika (GTFS)
 - ugradnja u oglasnike nekretnina preko API-ja
-- dodatni slojevi: opožarene površine (EFFIS), toplinski stres, kvaliteta vode za piće
+- dodatni slojevi: toplinski stres, kvaliteta vode za piće
 - usporedba više od dviju adresa
 
 ## Licenca i atribucija

@@ -6,13 +6,14 @@ import sys
 import time
 from collections.abc import Callable
 
-from ingest import dgu, dzs, osm, pois, rasters, recycling, registries, transit
+from ingest import dgu, dzs, effis, osm, pois, rasters, recycling, registries, transit
 
 STEPS: list[tuple[str, Callable[[], None]]] = [
     ("OpenStreetMap", osm.run),
     ("DGU adrese i upravne jedinice", dgu.run),
     ("DZS Popis 2021. po naseljima", dzs.run),
     ("Rasteri (JRC, EEA, ESA WorldCover)", rasters.run),
+    ("EFFIS opožarene površine", effis.run),
     ("Vozni redovi", transit.run),
     ("Registri (MZOM, HZZO, Grad Zagreb)", registries.run),
     ("Reciklaža (općinski skupovi s Portala i OSM)", recycling.run),

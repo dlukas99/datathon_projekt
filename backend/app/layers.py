@@ -121,10 +121,34 @@ def load_lines(path: Path) -> LineLayer | None:
 
 
 @dataclass
+class BurntLayer:
+    dates: list[str]
+    areas: list[float]
+    communes: list[str]
+    geoms: list[BaseGeometry]  # in EPSG:3765
+    tree: STRtree
+
+
+def load_burnt(path: Path) -> BurntLayer | None:
+    if not path.exists():
+        return None
+    table = pq.read_table(path).to_pydict()
+    geoms = _project_all(table["geometry"])
+    return BurntLayer(
+        dates=list(table["fire_date"]),
+        areas=[float(a) for a in table["area_ha"]],
+        communes=list(table["commune"]),
+        geoms=geoms,
+        tree=STRtree(geoms),
+    )
+
+
+@dataclass
 class Layers:
     points: dict[str, PointLayer]
     parks: PolygonLayer | None
     noise_lines: LineLayer | None
+    burnt: BurntLayer | None = None
 
     def category(self, name: str) -> PointLayer:
         return self.points.get(name) or _empty_points()
@@ -137,4 +161,5 @@ def get_layers() -> Layers:
         points=load_points(d / "pois.parquet"),
         parks=load_polygons(d / "osm_parks.parquet"),
         noise_lines=load_lines(d / "osm_noise_lines.parquet"),
+        burnt=load_burnt(d / "effis_burnt.parquet"),
     )

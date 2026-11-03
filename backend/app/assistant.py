@@ -30,6 +30,7 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
     "green": ("zelen", "drve", "park", "hlad", "vruc", "toplin", "vrucin"),
     "noise": ("buk", "bucn", "promet", "pruga", "autocest"),
     "solar": ("sunc", "solar", "panel", "fotonapon", "elektran"),
+    "fire": ("pozar", "opozar", "vatr", "gorjel"),
     "car_free": ("bez auta", "pjesice", "pjeske", "hodanj", "automobil", "auto "),
     "transit": ("autobus", "tramvaj", "vlak", "prijevoz", "stajalis", "polaz", "zeljeznic"),
     "kindergarten": ("vrtic", "jaslic"),
@@ -113,6 +114,11 @@ EXPLANATIONS: dict[str, str] = {
         "Provjeravamo sedam svakodnevnih potreba unutar 15 minuta hoda po stvarnoj mreži "
         "ulica, brzinom od 4,5 km/h: trgovinu namirnicama, ljekarnu, obiteljskog liječnika, "
         "vrtić, osnovnu školu, park i stajalište s barem jednim polaskom na sat radnim danom."
+    ),
+    "fire": (
+        "Opožarene površine dolaze iz europskog sustava EFFIS, koji ih kartira iz satelitskih "
+        "snimaka od 2016. Prikazujemo požare u krugu od 2 km. Prošli požari pokazuju "
+        "izloženost, ali ne predviđaju buduće."
     ),
     "transit": (
         "Broj polazaka na sat prosjek je od 6 do 20 sati za jedan radni dan iz voznih redova "

@@ -548,3 +548,98 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
             "cestovnog prometa bude ispod 53 dB Lden danju i 45 dB Lnight noću.",
         ],
     )
+
+
+# --- Wildfires (burnt areas) ---------------------------------------------------------------
+
+FIRE_RADIUS_M = 2000.0
+EFFIS_VIEWER = "https://forest-fire.emergency.copernicus.eu/apps/effis_current_situation/"
+
+
+def fire_category(lon: float, lat: float, layers: Layers) -> Category:
+    burnt = layers.burnt
+    links = [Link(label="Požari u stvarnom vremenu (EFFIS)", url=EFFIS_VIEWER)]
+    if burnt is None:
+        return Category(
+            id="fire",
+            group="environment",
+            title="Požari raslinja",
+            status="no_data",
+            status_label=label("no_data"),
+            headline="Podaci o opožarenim površinama nisu dostupni.",
+            links=links,
+        )
+    x, y = to_htrs(lon, lat)
+    origin = Point(x, y)
+    hits = []
+    for i in burnt.tree.query(origin.buffer(FIRE_RADIUS_M), predicate="intersects"):
+        idx = int(i)
+        hits.append((burnt.dates[idx], burnt.areas[idx], float(burnt.geoms[idx].distance(origin))))
+    hits.sort(key=lambda h: h[0], reverse=True)
+    src = "effis"
+    when = retrieved_at(src)
+    values = [
+        Value(
+            key="burnt_areas_2km",
+            label="Opožarene površine u krugu od 2 km",
+            value=len(hits),
+            display=str(len(hits)),
+            source=src,
+            retrieved_at=when,
+            kind="measured",
+        )
+    ]
+    if hits:
+        nearest = min(hits, key=lambda h: h[2])
+        largest = max(hits, key=lambda h: h[1])
+        values.append(
+            Value(
+                key="burnt_nearest_m",
+                label="Najbliža opožarena površina",
+                value=round(nearest[2]),
+                unit="m",
+                display=(
+                    "na samoj lokaciji"
+                    if nearest[2] == 0
+                    else f"{fmt.metres(nearest[2])} ({nearest[0][:4]}.)"
+                ),
+                source=src,
+                retrieved_at=when,
+                kind="measured",
+            )
+        )
+        values.append(
+            Value(
+                key="burnt_largest_ha",
+                label="Najveća opožarena površina u krugu od 2 km",
+                value=round(largest[1]),
+                unit="ha",
+                display=f"{fmt.num(largest[1])} ha ({largest[0][:4]}.)",
+                source=src,
+                retrieved_at=when,
+                kind="measured",
+            )
+        )
+        years = sorted({h[0][:4] for h in hits})
+        n = len(hits)
+        verb = fmt.plural(n, "zabilježena je", "zabilježene su", "zabilježeno je")
+        noun = fmt.plural(n, "opožarena površina", "opožarene površine", "opožarenih površina")
+        headline = (
+            f"U krugu od 2 km satelitom {verb} {n} {noun} ({', '.join(y + '.' for y in years)})."
+        )
+    else:
+        headline = "U krugu od 2 km satelitom nije zabilježena nijedna opožarena površina od 2016."
+    return Category(
+        id="fire",
+        group="environment",
+        title="Požari raslinja",
+        status="info",
+        status_label=label("info"),
+        headline=headline,
+        values=values,
+        links=links,
+        notes=[
+            "Opožarene površine kartira EFFIS iz satelitskih snimaka od 2016.; manji požari "
+            "mogu nedostajati. Prošli požari pokazuju izloženost, a ne predviđaju buduće.",
+        ],
+    )

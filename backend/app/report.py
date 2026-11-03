@@ -9,6 +9,7 @@ from typing import Any
 from analysis.daily import car_free_category, daily_category, transit_category
 from analysis.environment import (
     air_category,
+    fire_category,
     flood_category,
     green_category,
     noise_category,
@@ -101,6 +102,7 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         "air": air_category(lon, lat),
         "green": green_category(lon, lat, reach.nearest("park")),
         "noise": noise_category(lon, lat, layers),
+        "fire": fire_category(lon, lat, layers),
         "solar": solar,
         "car_free": car_free_category(reach),
         "transit": transit_category(reach, has_timetables),

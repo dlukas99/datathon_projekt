@@ -49,6 +49,7 @@ export const FOCUS_OPTIONS: { id: string; label: string }[] = [
   { id: 'air', label: 'Kvaliteta zraka' },
   { id: 'green', label: 'Toplina i zelenilo' },
   { id: 'noise', label: 'Buka' },
+  { id: 'fire', label: 'Požari raslinja' },
   { id: 'solar', label: 'Sunce na krovu' },
   { id: 'car_free', label: 'Život bez auta' },
   { id: 'transit', label: 'Javni prijevoz' },

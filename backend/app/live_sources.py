@@ -25,6 +25,7 @@ CACHE_SECONDS = 3600
 CKAN_DATASETS: dict[str, str] = {
     "dgu_ad": "adrese-inspire",
     "dgu_au": "upravne-jedinice-inspire",
+    "dzs_popis": "statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021",
     "mzom_vrtici": "djecji-vrtici",
     "mzom_skole": "osnovne-skole",
     "zg_vrtici": "geoportal-djecji-vrtici",

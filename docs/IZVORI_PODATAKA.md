@@ -17,6 +17,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 | Zelenilo | ESA WorldCover 10 m 2021 v200 | radi | CC BY 4.0 | drveće, zelene i izgrađene površine |
 | Buka | EEA, strateške karte buke (END 2022) | ne koristi se | ograničena (istraživanje i neprofitna upotreba) | rezervni plan: udaljenost od prometnica (OSM) |
 | Sunce | JRC PVGIS 5.3 API | radi | slobodna upotreba uz navođenje izvora | kWh po kWp godišnje |
+| Požari | EFFIS opožarene površine (Copernicus) | radi (WFS) | CC BY 4.0 | opožarene površine u krugu od 2 km |
 | Mreža hoda | OpenStreetMap (Geofabrik) + Valhalla | radi | ODbL 1.0 | izokrone i vremena hoda |
 | Vrtići | MZOM, Registar dječjih vrtića | djelomično | Otvorena dozvola RH | vrtići (geokodirani) |
 | Vrtići, Zagreb | Grad Zagreb, Geoportal dječji vrtići | radi | CC BY 4.0 | vrtići u Zagrebu s koordinatama |
@@ -99,6 +100,11 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 - Ograničenja: 30 zahtjeva u sekundi po IP adresi; pozivi iz preglednika (AJAX) nisu dopušteni, pa poziva poslužitelj i predmemorira rezultat po koordinatama zaokruženima na 0,01°.
 - Uvjeti: podaci su besplatni za javnu upotrebu uz navođenje izvora („PVGIS © European Communities, 2001-2026”).
 - Rezervni plan: izostaviti uz napomenu (sučelje prikazuje „Nema podataka” ako servis ne odgovori).
+
+### EFFIS: opožarene površine
+- WFS: `https://maps.effis.emergency.copernicus.eu/effis`, sloj `ms:modis.ba.poly`, filtar `COUNTRY = HR`, izlaz GeoJSON (EPSG:4326). 1.030 poligona od 2016. Polja: `FIREDATE`, `AREA_HA`, `COMMUNE`, udjeli pokrova tla.
+- Skupno preuzimanje (`effis_layer.zip`) vraća HTTP 403 (traži račun) i ne koristi se.
+- Licenca: CC BY 4.0 (https://forest-fire.emergency.copernicus.eu/about-effis/data-license).
 
 ### OpenStreetMap i Valhalla
 - Izvadak: https://download.geofabrik.de/europe/croatia-latest.osm.pbf (≈ 201 MB).

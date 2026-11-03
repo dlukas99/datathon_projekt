@@ -39,6 +39,12 @@
         "distance_rail": 577
       }
     },
+    "fire": {
+      "status": "info",
+      "values": {
+        "burnt_areas_2km": 0
+      }
+    },
     "car_free": {
       "status": "info",
       "values": {
