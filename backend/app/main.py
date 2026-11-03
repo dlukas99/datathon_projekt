@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import json
 from typing import Annotated, Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 
+from app import pvgis
 from app.assistant import AssistantReply, AssistantRequest, answer
+from app.config import REPO_ROOT
 from app.geo import in_bbox
 from app.geocode import Suggestion, get_geocoder
 from app.layers import get_layers
@@ -38,6 +41,10 @@ def warm_up() -> None:
     # Load in-memory indexes once so the first report is fast.
     get_geocoder()
     get_layers()
+    demo = REPO_ROOT / "scripts" / "demo_addresses.json"
+    if demo.exists():
+        points = json.loads(demo.read_text(encoding="utf-8"))["addresses"]
+        pvgis.warm([(p["lat"], p["lon"]) for p in points])
 
 
 @app.get("/api/health", tags=["sustav"])

@@ -54,6 +54,7 @@ export interface Location {
   settlement: string | null
   municipality: string | null
   county: string | null
+  population: Value | null
 }
 
 export interface SourceInfo {

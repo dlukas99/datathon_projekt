@@ -38,7 +38,7 @@ Neuspjeli zapisi ne prikazuju se. U njihovoj blizini pregled pokazuje sljedeću 
 |---|---|
 | DGU Adrese INSPIRE | `Address.gml` je jedan redak od 2,6 GB; bez strujnog čitanja ga nije moguće obraditi. Adrese nemaju poveznicu na JLS, samo na naselje. ISO metapodaci navode format SHP, a isporučuje se GML. Javni WFS je isključen. |
 | DGU Upravne jedinice | Poveznice na nadređenu jedinicu (`upperLevelUnit`) postoje u GML-u, ali ih GDAL ne izlaže, pa smo hijerarhiju izveli prostorno. |
-| DZS Popis 2021. po naseljima | Tablica nema šifre naselja ni JLS-a, samo nazive; spajanje s DGU naseljima moguće je samo po imenu. |
+| DZS Popis 2021. po naseljima | Tablica nema šifre naselja ni JLS-a, samo nazive; spajanje s DGU naseljima moguće je samo po imenu grada ili općine i naselja. Spojeno je 6.633 od 6.759 DGU naselja (98,1 %); za ostala se broj stanovnika ne prikazuje. |
 | MZOM Registar dječjih vrtića | Bez koordinata i identifikatora. Stupac `Zupanija` ima suvišne razmake. Posljednja izmjena na Portalu 15. 4. 2026. |
 | MZOM Osnovne škole | Bez koordinata. Naziv stupca `Župnija` (umjesto „Županija”). Stupac `Ravnatelj` sadrži osobna imena (ne prikazujemo ih). Velika i mala slova u adresama nisu ujednačena. |
 | HZZO ordinacije | Tablice u XLSX-u s dvostrukim zaglavljem; 81 tim opće medicine nema ulicu. Datoteke sadrže imena liječnika; prikazujemo samo adresu ordinacije. Licenca nije navedena. |

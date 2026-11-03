@@ -498,7 +498,10 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         if group not in nearest or d < nearest[group][0]:
             nearest[group] = (d, kind)
     values: list[Value] = []
-    for group, title in (("road", "Najbliža glavna cesta"), ("rail", "Najbliža pruga")):
+    for group, title in (
+        ("road", "Najbliža autocesta, glavna ili važnija cesta"),
+        ("rail", "Najbliža pruga"),
+    ):
         found = nearest.get(group)
         values.append(
             Value(

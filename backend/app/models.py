@@ -64,6 +64,9 @@ class Location(BaseModel):
     settlement: str | None = None
     municipality: str | None = None
     county: str | None = None
+    population: Value | None = Field(
+        default=None, description="Broj stanovnika naselja (Popis 2021.)"
+    )
     in_croatia: bool = True
 
 

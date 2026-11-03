@@ -15,11 +15,11 @@ from analysis.environment import (
 )
 from analysis.solar import solar_category
 from analysis.walking import compute_reach
-from app import valhalla
+from app import fmt, valhalla
 from app.admin import get_admin
 from app.layers import get_layers
-from app.models import Category, Location, Report, SourceInfo
-from app.sources import source_info
+from app.models import Category, Location, Report, SourceInfo, Value
+from app.sources import retrieved_at, source_info
 
 DISCLAIMER = (
     "Prije potpisa informativni je alat izrađen iz otvorenih podataka i modela. Nije službena "
@@ -40,6 +40,18 @@ def locate(lat: float, lon: float, label: str | None = None) -> Location:
     place = admin.lookup(lon, lat) if admin else None
     if admin is not None and place is None:
         raise OutsideCroatia("Lokacija nije u Hrvatskoj.")
+    population = None
+    if place is not None and place.population is not None:
+        population = Value(
+            key="settlement_population",
+            label=f"Stanovnika u naselju {place.settlement}",
+            value=place.population,
+            unit="stanovnika",
+            display=f"{fmt.num(place.population)} stanovnika (Popis 2021.)",
+            source="dzs_popis",
+            retrieved_at=retrieved_at("dzs_popis"),
+            kind="measured",
+        )
     return Location(
         lat=round(lat, 6),
         lon=round(lon, 6),
@@ -47,6 +59,7 @@ def locate(lat: float, lon: float, label: str | None = None) -> Location:
         settlement=place.settlement if place else None,
         municipality=place.municipality if place else None,
         county=place.county if place else None,
+        population=population,
     )
 
 
@@ -101,6 +114,8 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         for p in cat.places:
             if p.source not in used:
                 used.append(p.source)
+    if location.population is not None:
+        used.append("dzs_popis")
     for extra in ("dgu_au", "valhalla"):
         if extra not in used:
             used.append(extra)

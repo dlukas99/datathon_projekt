@@ -364,6 +364,17 @@ export function ReportPage() {
         <div>
           <h1>{label ?? `${lat.toFixed(5)}, ${lon.toFixed(5)}`}</h1>
           {report && <p className="place-line">{placeLine(report)}</p>}
+          {report?.location.population && (
+            <p className="place-line">
+              Naselje {report.location.settlement}: {report.location.population.display}{' '}
+              <SourceMeta
+                source={report.location.population.source}
+                retrievedAt={report.location.population.retrieved_at}
+                kind={report.location.population.kind}
+                sources={sourceMap(report)}
+              />
+            </p>
+          )}
           {report && (
             <p className="place-line">
               Izračunato {formatDate(report.generated_at)} · profil: {getProfile(profile).label}

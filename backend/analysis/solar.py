@@ -12,14 +12,20 @@ PVGIS_TOOL = "https://re.jrc.ec.europa.eu/pvg_tools/en/"
 def solar_category(lat: float, lon: float) -> Category:
     try:
         result = pvgis.yearly_output(lat, lon)
-    except pvgis.SolarUnavailable:
+    except pvgis.SolarUnavailable as exc:
+        headline = (
+            "Servis PVGIS Europske komisije sporo odgovara; osvježite stranicu za nekoliko "
+            "sekundi i procjena će se prikazati."
+            if isinstance(exc, pvgis.SolarPending)
+            else "Servis PVGIS trenutačno nije dostupan, pa procjenu nije moguće prikazati."
+        )
         return Category(
             id="solar",
             group="environment",
             title="Sunce na krovu",
             status="no_data",
             status_label=label("no_data"),
-            headline="Servis PVGIS trenutačno nije dostupan, pa procjenu nije moguće prikazati.",
+            headline=headline,
             links=[Link(label="PVGIS (JRC)", url=PVGIS_TOOL)],
         )
     kwh = result.kwh_per_kwp_year
