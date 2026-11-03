@@ -45,11 +45,11 @@ export function Assistant({ points }: { points: Point[] }) {
 
   const suggested = points.length > 1 ? SUGGESTED_TWO : SUGGESTED_ONE
   return (
-    <section className="section card no-print" aria-labelledby={`${id}-title`}>
+    <section className="assistant card no-print" aria-labelledby={`${id}-title`}>
       <h2 id={`${id}-title`}>Pitajte asistenta</h2>
-      <p className="search-hint">
-        Asistent odgovara samo iz izračuna za {points.length > 1 ? 'ove adrese' : 'ovu adresu'}. Brojke
-        dolaze iz predložaka, ne iz jezičnog modela. Ne daje savjete o kupnji. Pitanja se ne spremaju.
+      <p className="hint">
+        Odgovara samo iz izračuna za {points.length > 1 ? 'ove adrese' : 'ovu adresu'}, bez savjeta
+        o kupnji. Pitanja se ne spremaju.
       </p>
       <div className="assistant-log" aria-live="polite">
         {turns.map((t, i) => (

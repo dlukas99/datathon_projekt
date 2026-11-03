@@ -22,3 +22,4 @@ Jedna odluka po retku: datum, odluka, razlog.
 - 2026-11-03: Broj stanovnika naselja (DZS, Popis 2021.) spaja se s DGU naseljima po imenu grada ili općine i naselja (98,1 % naselja), jer tablica DZS-a nema šifre. Razlog: jedini način spajanja; nespojena naselja ne prikazuju broj.
 - 2026-11-03: Pristupni zapisi su isključeni (uvicorn `--no-access-log`, Caddy `output discard`). Razlog: koordinate u upitu otkrivaju adresu, a CLAUDE.md zabranjuje spremanje adresa.
 - 2026-11-03: Požari (P2) iz EFFIS-ova javnog WFS-a umjesto skupnog preuzimanja. Razlog: skupno preuzimanje traži račun (HTTP 403), a CLAUDE.md dopušta požare samo bez računa.
+- 2026-11-03: Redizajn sučelja: izvor, datum i vrsta svake vrijednosti prikazuju se na klik („Detalji i izvor”) umjesto stalno, a popis izvora izvještaja je sklopljen na dnu. Ikone iz `lucide-react` (ISC). Razlog: čitljivost za običnog korisnika; provenijencija ostaje dostupna uz svaku vrijednost (pravilo 2).

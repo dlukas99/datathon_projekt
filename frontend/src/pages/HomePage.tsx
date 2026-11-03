@@ -1,15 +1,36 @@
+import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { AddressSearch } from '../components/AddressSearch'
+import { CategoryIcon } from '../components/Icons'
 import { ProfilePicker } from '../components/ProfilePicker'
 import type { Suggestion } from '../lib/api'
-import { reportPath } from '../lib/urls'
+import { comparePath, reportPath } from '../lib/urls'
 import demo from '../../../scripts/demo_addresses.json'
+
+const STEPS: { icon: string; title: string; text: string }[] = [
+  {
+    icon: 'flood',
+    title: 'Okoliš',
+    text: 'Poplave, zrak, zelenilo i vrućine, buka, požari i sunce na krovu.',
+  },
+  {
+    icon: 'car_free',
+    title: 'Život bez auta',
+    text: 'Što je na 5, 10 i 15 minuta hoda i koliko često vozi javni prijevoz.',
+  },
+  {
+    icon: 'kindergarten',
+    title: 'Svakodnevica',
+    text: 'Vrtić, škola, liječnik, ljekarna i trgovina, u minutama hoda.',
+  },
+]
 
 export function HomePage() {
   const navigate = useNavigate()
   const [profile, setProfile] = useState('opci')
   const [custom, setCustom] = useState<string[]>([])
+  const [first, second] = demo.addresses
 
   function open(s: Suggestion) {
     void navigate(reportPath(s.lat, s.lon, s.label, profile, custom))
@@ -18,13 +39,11 @@ export function HomePage() {
   return (
     <>
       <section className="hero" aria-labelledby="home-title">
-        <h1 id="home-title">Kakav je okoliš oko kuće ili stana koji kupujete?</h1>
+        <h1 id="home-title">Kakav je okoliš oko doma koji kupujete?</h1>
         <p className="lead">
-          Za bilo koju adresu u Hrvatskoj: poplave, kvaliteta zraka, toplina i zelenilo, buka i
-          sunce na krovu, a zatim što je dostupno pješice. Iz otvorenih podataka, s izvorom i
-          datumom uz svaku brojku.
+          Upišite adresu i saznajte ono što oglas ne kaže, iz otvorenih podataka.
         </p>
-        <div className="card">
+        <div className="search-card">
           <AddressSearch onSelect={open} label="Adresa ili naselje" inputId="home-search" />
           <ProfilePicker
             profile={profile}
@@ -33,62 +52,50 @@ export function HomePage() {
             onCustom={setCustom}
           />
         </div>
-      </section>
-
-      <section className="section" aria-labelledby="demo-title">
-        <h2 id="demo-title">Primjeri</h2>
-        <p className="section-intro">Isprobajte na adresama javnih ustanova:</p>
-        <ul className="demo-list">
-          {demo.addresses.map((d) => (
-            <li key={d.id}>
-              <Link to={reportPath(d.lat, d.lon, d.address, profile, custom)}>
-                {d.institution}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <p style={{ marginTop: '1rem' }}>
-          <Link
-            className="button secondary"
-            to={`/usporedi?a=${String(demo.addresses[0]?.lat)},${String(demo.addresses[0]?.lon)}&la=${encodeURIComponent(demo.addresses[0]?.address ?? '')}&b=${String(demo.addresses[1]?.lat)},${String(demo.addresses[1]?.lon)}&lb=${encodeURIComponent(demo.addresses[1]?.address ?? '')}`}
-          >
-            Primjer usporedbe dviju adresa
-          </Link>
-        </p>
-      </section>
-
-      <section className="section features" aria-labelledby="what-title">
-        <h2 id="what-title">Što dobivate</h2>
-        <div className="grid">
-          <div className="card">
-            <h3>1. Okolišni pregled</h3>
-            <p>
-              Je li lokacija u modeliranom poplavnom području, kakav je zrak u usporedbi sa
-              smjernicama Svjetske zdravstvene organizacije i EU-a, koliko je drveća i zelenila,
-              koliko su blizu prometnice i koliko struje bi dala sunčana elektrana na krovu.
-            </p>
-          </div>
-          <div className="card">
-            <h3>2. Život bez auta</h3>
-            <p>
-              Što je na 5, 10 i 15 minuta hoda po stvarnoj mreži ulica, stajališta javnog
-              prijevoza s brojem polazaka i koliko svakodnevnih potreba pokrivate pješice.
-            </p>
-          </div>
-          <div className="card">
-            <h3>3. Svakodnevni život</h3>
-            <p>
-              Najbliži vrtić, osnovna škola, obiteljski liječnik, pedijatar, ljekarna, trgovina i
-              igralište, s minutama hoda.
-            </p>
-          </div>
+        <div className="examples">
+          <span className="examples-label" id="demo-title">
+            Primjeri:
+          </span>
+          <ul className="example-list" aria-labelledby="demo-title">
+            {demo.addresses.map((d) => (
+              <li key={d.id}>
+                <Link to={reportPath(d.lat, d.lon, d.address, profile, custom)}>
+                  {d.institution.replace(/ \(.*\)$/, '')}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-        <p className="disclaimer">
-          Informativni alat, a ne službena procjena. Svaka kategorija ima vlastito značenje i
-          prag s izvorom; nema skupne ocjene sa skrivenim težinama. Više u odjeljku{' '}
-          <Link to="/o-alatu">O alatu</Link>.
-        </p>
+        {first && second && (
+          <p className="compare-cta">
+            <Link
+              to={comparePath(
+                { lat: first.lat, lon: first.lon, label: first.address },
+                { lat: second.lat, lon: second.lon, label: second.address },
+              )}
+            >
+              Ili usporedite dvije adrese <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </p>
+        )}
       </section>
+
+      <section className="steps" aria-label="Što dobivate">
+        {STEPS.map((s) => (
+          <div key={s.title} className="step">
+            <span className="step-icon">
+              <CategoryIcon id={s.icon} size={22} />
+            </span>
+            <h2>{s.title}</h2>
+            <p>{s.text}</p>
+          </div>
+        ))}
+      </section>
+
+      <p className="fine-print center">
+        Informativni alat, a ne službena procjena. Uz svaku brojku su izvor i datum.{' '}
+        <Link to="/o-alatu">Kako računamo</Link>
+      </p>
     </>
   )
 }

@@ -38,7 +38,10 @@ test('main flow: search an address and read the report, environment first', asyn
   await expect(page.getByRole('heading', { name: 'Život bez auta' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Svakodnevni život' })).toBeVisible()
   await expect(page.getByText(/od 7 svakodnevnih potreba/).first()).toBeVisible()
-  await expect(page.getByText('Izvor:').first()).toBeVisible()
+  // Provenance is one click away on every card.
+  const floodCard = page.locator('article[data-category="flood"]')
+  await floodCard.getByText('Detalji i izvor').click()
+  await expect(floodCard.getByText(/Izvor:/)).toBeVisible()
   await expect(page.getByText(/informativni alat/i).first()).toBeVisible()
 })
 

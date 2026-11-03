@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { MapPin, Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router'
 import { AboutPage } from './pages/AboutPage'
@@ -70,30 +71,35 @@ function Layout() {
         Preskoči na sadržaj
       </a>
       <header className="site-header">
-        <div className="container">
+        <div className="container header-row">
           <NavLink to="/" className="brand" aria-label="Prije potpisa, naslovnica">
-            <span className="brand-mark" aria-hidden="true" />
-            Prije potpisa
+            <span className="brand-mark" aria-hidden="true">
+              <MapPin size={16} strokeWidth={2.25} />
+            </span>
+            <span className="brand-name">Prije potpisa</span>
           </NavLink>
           <nav className="site-nav" aria-label="Glavna navigacija">
             <ul>
               <li>
-                <NavLink to="/" end>
-                  Pretraga
-                </NavLink>
-              </li>
-              <li>
                 <NavLink to="/usporedi">Usporedi</NavLink>
-              </li>
-              <li>
-                <NavLink to="/izvori">Izvori</NavLink>
               </li>
               <li>
                 <NavLink to="/o-alatu">O alatu</NavLink>
               </li>
               <li>
-                <button type="button" className="theme-toggle" onClick={toggleTheme} aria-pressed={theme === 'dark'}>
-                  Tamna tema
+                <button
+                  type="button"
+                  className="theme-toggle"
+                  onClick={toggleTheme}
+                  aria-pressed={theme === 'dark'}
+                  aria-label="Tamna tema"
+                  title="Tamna tema"
+                >
+                  {theme === 'dark' ? (
+                    <Sun size={18} aria-hidden="true" />
+                  ) : (
+                    <Moon size={18} aria-hidden="true" />
+                  )}
                 </button>
               </li>
             </ul>
@@ -114,18 +120,28 @@ function Layout() {
         </div>
       </main>
       <footer className="site-footer">
-        <div className="container">
+        <div className="container footer-row">
           <p>
-            Prije potpisa informativni je alat izrađen iz otvorenih podataka za Datathon Portala
-            otvorenih podataka 2026. Nije službena procjena rizika. U hitnoj situaciji nazovite 112.
+            Prije potpisa · informativni alat iz otvorenih podataka, nije službena procjena. U
+            hitnoj situaciji nazovite 112.
           </p>
-          <p>
-            Podaci: Državna geodetska uprava, Ministarstvo znanosti, obrazovanja i mladih, HZZO,
-            Grad Zagreb, Grad Rijeka, ZET, HŽPP, JRC, EEA, ESA WorldCover, © suradnici
-            OpenStreetMapa (ODbL). Podloga karte: OpenFreeMap, OpenMapTiles. Potpun popis na
-            stranici <NavLink to="/izvori">Izvori</NavLink>.
+          <nav aria-label="Podnožje">
+            <ul>
+              <li>
+                <NavLink to="/izvori">Izvori podataka</NavLink>
+              </li>
+              <li>
+                <NavLink to="/o-alatu">Kako računamo</NavLink>
+              </li>
+              <li>
+                <a href="/api/docs">API</a>
+              </li>
+            </ul>
+          </nav>
+          <p className="footer-small">
+            © suradnici OpenStreetMapa (ODbL) · podloga karte OpenFreeMap, OpenMapTiles · kod
+            EUPL-1.2 · adrese i pitanja se ne spremaju
           </p>
-          <p>Kod je objavljen pod licencom EUPL-1.2. Upisane adrese i pitanja ne spremaju se.</p>
         </div>
       </footer>
     </>
