@@ -226,6 +226,39 @@ def flood_category(lon: float, lat: float) -> Category:
             "Lokacija nije u modeliranom području riječnih poplava ni za povratno razdoblje "
             "od 500 godina."
         )
+    # Translate the return period into the chance of at least one such flood during
+    # a 30-year housing loan: 1 - (1 - 1/T)^30.
+    zone_rp = next((r.rp for r in readings if r.depth_at_point is not None), None)
+    near_rp = next((r.rp for r in readings if r.max_depth_100m is not None), None)
+    rp_for_chance = zone_rp or near_rp
+    if rp_for_chance is not None:
+        chance = flood_chance(rp_for_chance)
+        where = "na adresi" if zone_rp else "u krugu od 100 m"
+        values.insert(
+            0,
+            Value(
+                key="flood_30y_probability",
+                label=f"Vjerojatnost barem jedne poplave {where} u 30 godina",
+                value=round(chance * 100),
+                unit="%",
+                display=f"oko {fmt.num(round(chance * 100))} %",
+                source=src,
+                retrieved_at=when,
+                kind="modelled",
+                note=(
+                    f"Za povratno razdoblje od {rp_for_chance} godina: 1 − (1 − 1/"
+                    f"{rp_for_chance})³⁰. Trideset godina je uobičajeno trajanje stambenog kredita."
+                ),
+            ),
+        )
+        headline += (
+            f" To znači oko {fmt.num(round(chance * 100))} % vjerojatnosti da u 30 godina "
+            f"(trajanje stambenog kredita) {where} bude barem jedna takva poplava."
+        )
+    notes.append(
+        "Povratno razdoblje od 100 godina ne znači poplavu jednom u sto godina, nego 1 % "
+        "vjerojatnosti svake godine; tijekom 30 godina to je oko 26 %."
+    )
     return Category(
         id="flood",
         group="environment",
@@ -237,6 +270,11 @@ def flood_category(lon: float, lat: float) -> Category:
         links=links,
         notes=notes,
     )
+
+
+def flood_chance(return_period: int, years: int = 30) -> float:
+    """Probability of at least one flood of this return period within `years`."""
+    return 1.0 - (1.0 - 1.0 / return_period) ** years
 
 
 # --- Air quality ------------------------------------------------------------------------
