@@ -85,7 +85,7 @@ function Layout() {
             <ul>
               <li>
                 <NavLink to="/pronadi">
-                  Pronađi<span className="nav-long"> mjesto</span>
+                  Pronađi<span className="nav-long">mjesto</span>
                 </NavLink>
               </li>
               <li>
