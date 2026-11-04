@@ -52,6 +52,21 @@ code .
 
 Otvorit će se novi prozor VS Codea s projektom. U njemu otvorite novi terminal (Terminal → New Terminal); sve sljedeće naredbe pokreću se iz korijena projekta (mapa `datathon_projekt`).
 
+Odmah uključite zaštitu od slučajnog pusha na `main` (jednom po klonu):
+
+```powershell
+git config core.hooksPath .githooks
+```
+
+Ta naredba ne ispisuje ništa. Od tada git odbija svaki `git push` na granu `main` (više u odjeljku 7).
+
+Postavite i svoje ime i e-poštu za commitove (ako to već niste napravili na ovom računalu):
+
+```powershell
+git config --global user.name "Ime Prezime"
+git config --global user.email "vas@email.com"
+```
+
 ---
 
 ## 3. Postavke (`.env`)
@@ -157,38 +172,146 @@ Na Linuxu, Macu ili Windowsima s MSYS2 sve gore radi i preko Makefilea: `make se
 
 ---
 
-## 7. Rad u vlastitoj grani
+## 7. Rad u vlastitoj grani (obavezno pročitati)
 
-Nikad ne radite izravno na `main`. Za svaki zadatak napravite granu:
+### Zašto grane
+
+- **`main`** je glavna verzija projekta. Ona se predaje i mora uvijek raditi.
+- **Grana** (branch) je vaša privatna kopija za jedan zadatak. U njoj možete slobodno mijenjati, griješiti i commitati, a `main` ostaje netaknut.
+- Kad je zadatak gotov, na GitHubu otvorite **pull request** (PR): zahtjev da se vaša grana spoji u `main`. Vlasnik repozitorija (dlukas99) ga pregleda i spoji.
+
+**Zlatno pravilo: nikad ne commitajte i ne pushajte izravno na `main`.** Zaštita iz koraka 2 (`git config core.hooksPath .githooks`) odbije svaki push na `main` i ispiše što napraviti. Ako je niste uključili, uključite je sada.
+
+### Kako znati na kojoj ste grani
+
+- U VS Codeu **dolje lijevo** u statusnoj traci piše ime grane (npr. `main` ili `dorada-karte`).
+- Ili u terminalu:
 
 ```powershell
-git checkout main
-git pull
-git checkout -b ime-zadatka        # npr. dorada-karte
+git branch --show-current
 ```
 
-Radite, pa spremite promjene:
+Ako piše `main`, **ne mijenjajte kod** dok ne napravite granu.
+
+### Rad na jednom zadatku, korak po korak
+
+**1. Osvježite `main`** prije nego počnete, da radite na najnovijoj verziji:
+
+```powershell
+git switch main
+git pull
+```
+
+Očekivano: `Already up to date.` ili popis novih promjena.
+
+**2. Napravite svoju granu.** Ime neka kaže što radite: mala slova, crtice, bez razmaka i dijakritika, npr. `dorada-karte`, `fix-pretraga`, `docs-video`:
+
+```powershell
+git switch -c dorada-karte
+```
+
+Očekivano: `Switched to a new branch 'dorada-karte'`. Dolje lijevo u VS Codeu sada piše `dorada-karte`.
+
+**3. Radite i spremajte promjene (commit).** Pogledajte što ste promijenili:
+
+```powershell
+git status
+```
+
+Dodajte promjene i spremite ih s porukom:
 
 ```powershell
 git add .
-git commit -m "feat: kratak opis promjene"
-git push -u origin ime-zadatka
+git commit -m "feat: veća karta na mobitelu"
 ```
 
-Zatim na GitHubu (https://github.com/dlukas99/datathon_projekt) otvorite **Pull request** iz svoje grane prema `main`. Nakon pregleda grana se spaja.
+Poruke počnite s:
+- `feat:` za novu stvar,
+- `fix:` za popravak,
+- `docs:` za dokumentaciju.
 
-Pravila:
-- Poruke commita pišite u obliku `feat: …`, `fix: …` ili `docs: …`.
-- **Ne commitajte** `.env` ni mapu `data\` (git ih ionako ignorira).
-- Prije svakog `git push` pokrenite provjere iz koraka 8.
-- Kad netko spoji promjene u `main`, osvježite svoju granu:
+Commitajte često, nakon svake manje gotove cjeline.
+
+**4. Prije slanja pokrenite provjere** iz koraka 8. Sve mora proći.
+
+**5. Pošaljite granu na GitHub (push).** Prvi put za tu granu:
 
 ```powershell
-git checkout main
+git push -u origin dorada-karte
+```
+
+Svaki sljedeći put na istoj grani dovoljno je:
+
+```powershell
+git push
+```
+
+**6. Otvorite pull request:**
+1. Otvorite https://github.com/dlukas99/datathon_projekt. Pojavit će se žuta traka „dorada-karte had recent pushes” s gumbom **Compare & pull request**. Kliknite ga.
+2. Provjerite da piše **base: `main`** ← **compare: `dorada-karte`**.
+3. Upišite naslov i kratko što ste napravili i kako ste provjerili.
+4. Kliknite **Create pull request** i javite vlasniku repozitorija.
+
+Dok PR čeka, možete nastaviti raditi na istoj grani (`git commit` pa `git push`); PR se sam osvježi.
+
+**7. Nakon što je PR spojen**, vratite se na `main`, povucite novu verziju i obrišite staru granu:
+
+```powershell
+git switch main
 git pull
-git checkout ime-zadatka
+git branch -d dorada-karte
+```
+
+Za sljedeći zadatak ponovite od koraka 1 s novom granom.
+
+### Kad netko drugi promijeni `main` dok radite
+
+Da vaša grana ima najnovije promjene (i da kasnije ne bude sukoba):
+
+```powershell
+git switch main
+git pull
+git switch dorada-karte
 git merge main
 ```
+
+Ako git javi **CONFLICT**, iste je retke mijenjalo dvoje ljudi:
+1. U VS Codeu otvorite datoteke označene slovom **C** (Source Control panel, Ctrl+Shift+G). Vidjet ćete obje verzije s gumbima **Accept Current Change**, **Accept Incoming Change** i **Accept Both Changes**.
+2. Odaberite što treba ostati i spremite datoteku.
+3. Završite spajanje:
+
+```powershell
+git add .
+git commit -m "merge: main u dorada-karte"
+```
+
+Ako niste sigurni, ne pogađajte: pitajte vlasnika repozitorija prije commita.
+
+### Ako ste nešto zabrljali
+
+| Situacija | Što napraviti |
+|---|---|
+| Promijenili ste kod, a još ste na `main` (niste commitali) | `git switch -c nova-grana`. Promjene idu s vama u novu granu, a `main` ostaje čist. |
+| Commitali ste na `main`, ali **niste pushali** | Napravite granu s tim commitom: `git branch spas-grana`. Vratite lokalni `main` na stanje s GitHuba: `git reset --hard origin/main`. Nastavite u grani: `git switch spas-grana`. |
+| Push na `main` javlja „STOP: push na granu main nije dopušten” | Zaštita radi kako treba. Postupite kao u retku iznad, zatim `git push -u origin spas-grana` i otvorite PR. |
+| Želite odbaciti sve nespremljene promjene u jednoj datoteci | `git restore putanja/do/datoteke` (nepovratno briše te promjene). |
+| Ne znate u kojem ste stanju | `git status` i `git log --oneline -5`. Pošaljite ispis vlasniku repozitorija. |
+
+### Isto to bez terminala (VS Code)
+
+- **Grana:** klik na ime grane dolje lijevo → **Create new branch…** → upišite ime.
+- **Commit:** Source Control panel (Ctrl+Shift+G) → upišite poruku → **Commit** (kvačica). Ako pita za „stage all changes”, odaberite **Yes**.
+- **Push:** gumb **Publish Branch** (prvi put) ili **Sync Changes**.
+- Prije commita uvijek pogledajte ime grane dolje lijevo.
+
+### Za vlasnika repozitorija (dlukas99, jednom)
+
+Najsigurnija zaštita je na samom GitHubu: **Settings → Branches → Add branch protection rule** (ili **Rules → Rulesets**):
+1. Za **Branch name pattern** upišite `main`.
+2. Uključite **Require a pull request before merging**.
+3. Spremite.
+
+Tada GitHub odbije svaki izravni push na `main`, bez obzira na lokalne postavke. Kolegu dodajte pod **Settings → Collaborators → Add people**.
 
 ---
 

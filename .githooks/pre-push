@@ -1,0 +1,16 @@
+#!/bin/sh
+# Blocks direct pushes to main: changes go to main only through a pull request.
+# Enable once per clone: git config core.hooksPath .githooks
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "" >&2
+    echo "STOP: push na granu main nije dopušten." >&2
+    echo "Napravite svoju granu i pushajte nju:" >&2
+    echo "  git switch -c ime-grane" >&2
+    echo "  git push -u origin ime-grane" >&2
+    echo "Zatim na GitHubu otvorite Pull request. Vidi docs/RAZVOJ.md, odjeljak 7." >&2
+    echo "" >&2
+    exit 1
+  fi
+done
+exit 0
