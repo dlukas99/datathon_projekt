@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Check, CircleHelp, Download, Printer, Scale, Share2, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { Assistant } from '../components/Assistant'
 import {
@@ -274,7 +274,15 @@ function Actions({ report }: { report: Report }) {
   )
 }
 
-export function ReportView({ report, focus }: { report: Report; focus: string[] }) {
+export function ReportView({
+  report,
+  focus,
+  onPick,
+}: {
+  report: Report
+  focus: string[]
+  onPick?: (lat: number, lon: number) => void
+}) {
   const sources = useMemo(() => sourceMap(report), [report])
   const byId = Object.fromEntries(report.categories.map((c) => [c.id, c]))
   const environment = orderByFocus(
@@ -349,7 +357,14 @@ export function ReportView({ report, focus }: { report: Report; focus: string[] 
           )}
         </div>
         <div className="map-wrap">
-          <ReportMap report={report} places={mapPlaces} />
+          <div>
+            <ReportMap report={report} places={mapPlaces} onPick={onPick} />
+            {onPick && (
+              <p className="muted-note no-print">
+                Kliknite na kartu ili povucite oznaku za izvještaj na drugoj točki.
+              </p>
+            )}
+          </div>
           <WalkLegend places={mapPlaces} />
         </div>
         {!report.isochrones && (
@@ -412,6 +427,7 @@ export function ReportPage() {
   const lat = Number(params.get('lat'))
   const lon = Number(params.get('lon'))
   const label = params.get('adresa')
+  const pointKind = params.get('tip')
   const profile = params.get('profil') ?? 'opci'
   const custom = params.get('vazno')
   const customIds = (custom ?? '').split(',').filter(Boolean)
@@ -434,6 +450,18 @@ export function ReportPage() {
     setParams(next, { replace: true })
   }
 
+  const pickPoint = useCallback(
+    (newLat: number, newLon: number) => {
+      const next = new URLSearchParams(params)
+      next.set('lat', newLat.toFixed(6))
+      next.set('lon', newLon.toFixed(6))
+      next.delete('adresa')
+      next.set('tip', 'karta')
+      setParams(next)
+    },
+    [params, setParams],
+  )
+
   if (!valid) {
     return <ReportError error={new ApiError('Nedostaju koordinate lokacije.', 400)} />
   }
@@ -443,13 +471,21 @@ export function ReportPage() {
     <>
       <header className="report-header">
         <p className="eyebrow">Pregled adrese</p>
-        <h1>{label ?? `${lat.toFixed(5)}, ${lon.toFixed(5)}`}</h1>
+        <h1>{label ?? (pointKind === 'karta' ? 'Odabrana točka' : `${lat.toFixed(5)}, ${lon.toFixed(5)}`)}</h1>
         {report && (
           <p className="place-line">
             {placeLine(report)}
             {report.location.population && (
               <> · {report.location.population.display}</>
             )}
+          </p>
+        )}
+        {(pointKind === 'naselje' || pointKind === 'ulica') && (
+          <p className="notice">
+            Prikazano je {pointKind === 'naselje' ? 'središte naselja' : 'sredina ulice'}. Vrijednosti
+            na vašoj adresi mogu se razlikovati: za točan izvještaj upišite ulicu i kućni broj ili
+            kliknite na kartu.{' '}
+            <Link to="/">Nova pretraga</Link>
           </p>
         )}
         <div className="report-tools no-print">
@@ -483,7 +519,7 @@ export function ReportPage() {
       {query.isError && <ReportError error={query.error} />}
       {report && (
         <>
-          <ReportView report={report} focus={focus} />
+          <ReportView report={report} focus={focus} onPick={pickPoint} />
           <Assistant points={[{ lat: report.location.lat, lon: report.location.lon, label }]} />
           <SourcesList report={report} />
           <p className="fine-print">

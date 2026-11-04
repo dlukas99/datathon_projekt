@@ -6,9 +6,13 @@ export function reportPath(
   label: string | null,
   profile: string,
   custom: string[] = [],
+  kind: 'address' | 'street' | 'settlement' | 'map' = 'address',
 ): string {
   const params = new URLSearchParams({ lat: lat.toFixed(6), lon: lon.toFixed(6) })
   if (label) params.set('adresa', label)
+  if (kind === 'settlement') params.set('tip', 'naselje')
+  if (kind === 'street') params.set('tip', 'ulica')
+  if (kind === 'map') params.set('tip', 'karta')
   if (profile !== 'opci') params.set('profil', profile)
   if (profile === 'vlastiti' && custom.length > 0) params.set('vazno', custom.join(','))
   return `/izvjestaj?${params.toString()}`

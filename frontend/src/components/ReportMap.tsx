@@ -59,7 +59,15 @@ function currentTheme(): 'light' | 'dark' {
   return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
 }
 
-export function ReportMap({ report, places }: { report: Report; places: Place[] }) {
+export function ReportMap({
+  report,
+  places,
+  onPick,
+}: {
+  report: Report
+  places: Place[]
+  onPick?: (lat: number, lon: number) => void
+}) {
   const container = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -126,13 +134,22 @@ export function ReportMap({ report, places }: { report: Report; places: Place[] 
         },
       })
     })
-    new maplibregl.Marker({ color: '#1d2321' })
+    const marker = new maplibregl.Marker({ color: '#1d2321', draggable: Boolean(onPick) })
       .setLngLat([report.location.lon, report.location.lat])
       .addTo(map)
+    if (onPick) {
+      marker.on('dragend', () => {
+        const p = marker.getLngLat()
+        onPick(p.lat, p.lng)
+      })
+      map.on('click', (e) => {
+        onPick(e.lngLat.lat, e.lngLat.lng)
+      })
+    }
     return () => {
       map.remove()
     }
-  }, [report, places])
+  }, [report, places, onPick])
 
   return (
     <figure style={{ margin: 0 }}>

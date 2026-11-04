@@ -51,7 +51,7 @@ export function HomePage() {
   const [first, second] = demo.addresses
 
   function open(s: Suggestion) {
-    void navigate(reportPath(s.lat, s.lon, s.label, profile, custom))
+    void navigate(reportPath(s.lat, s.lon, s.label, profile, custom, s.kind))
   }
 
   return (

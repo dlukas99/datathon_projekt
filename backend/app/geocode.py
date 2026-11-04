@@ -204,7 +204,10 @@ def get_geocoder() -> Geocoder:
                     lat=round(float(t["lat"][i]), 6),
                     lon=round(float(t["lon"][i]), 6),
                     kind="settlement",
-                    source=str(t["source"][i]),
+                    # Centre from the OSM place node when matched (ingest/centers.py).
+                    source="osm"
+                    if t.get("center_source", [""] * len(t["name"]))[i] == "osm_place"
+                    else str(t["source"][i]),
                 )
             )
         settlements.sort(key=lambda s: len(s.label))

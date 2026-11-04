@@ -45,6 +45,16 @@ test('main flow: search an address and read the report, environment first', asyn
   await expect(page.getByText(/informativni alat/i).first()).toBeVisible()
 })
 
+test('settlement search opens its centre and says so', async ({ page }) => {
+  await page.goto('/')
+  const search = page.getByRole('combobox', { name: 'Adresa ili naselje' })
+  await search.fill('Vinkovci')
+  await expect(page.getByRole('option', { name: /Vinkovci.*naselje/ })).toBeVisible()
+  await search.press('ArrowDown')
+  await search.press('Enter')
+  await expect(page.getByText(/Prikazano je središte naselja/)).toBeVisible()
+})
+
 test('profile changes order, not values', async ({ page }) => {
   await page.goto(`${reportUrl}&profil=rad-od-kuce`)
   const cards = page.locator('section[aria-labelledby="env-title"] article')
