@@ -1,6 +1,6 @@
 # Upute za razvoj: od praznog računala do aplikacije koja radi
 
-Ova uputa vodi korak po korak kroz pokretanje projekta „Prije potpisa” na vlastitom računalu (Windows 10/11) i rad u vlastitoj grani. Naredbe su pisane za **PowerShell u VS Codeu** (Terminal → New Terminal).
+Ova uputa vodi korak po korak kroz pokretanje projekta „Dobro mjesto” na vlastitom računalu (Windows 10/11) i rad u vlastitoj grani. Naredbe su pisane za **PowerShell u VS Codeu** (Terminal → New Terminal).
 
 Treba vam oko **1 sat** prvi put: veći dio je čekanje na preuzimanje podataka.
 

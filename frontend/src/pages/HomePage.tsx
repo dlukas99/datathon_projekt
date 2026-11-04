@@ -5,8 +5,26 @@ import { AddressSearch } from '../components/AddressSearch'
 import { CategoryIcon } from '../components/Icons'
 import { ProfilePicker } from '../components/ProfilePicker'
 import type { Suggestion } from '../lib/api'
+import { BRAND } from '../lib/brand'
 import { comparePath, reportPath } from '../lib/urls'
 import demo from '../../../scripts/demo_addresses.json'
+
+type Demo = (typeof demo.addresses)[number] | undefined
+
+const ENTRIES: { icon: string; title: string; text: string; to: (a: Demo, b: Demo) => string }[] = [
+  {
+    icon: 'compare',
+    title: 'Usporedi dvije lokacije',
+    text: 'Dvije adrese jedna uz drugu, kategoriju po kategoriju.',
+    to: (a, b) =>
+      a && b
+        ? comparePath(
+            { lat: a.lat, lon: a.lon, label: a.address },
+            { lat: b.lat, lon: b.lon, label: b.address },
+          )
+        : '/usporedi',
+  },
+]
 
 const STEPS: { icon: string; title: string; text: string }[] = [
   {
@@ -39,11 +57,13 @@ export function HomePage() {
   return (
     <>
       <section className="hero" aria-labelledby="home-title">
-        <h1 id="home-title">Kakav je okoliš oko doma koji kupujete?</h1>
+        <h1 id="home-title">Kako je živjeti ovdje?</h1>
         <p className="lead">
-          Upišite adresu i saznajte ono što oglas ne kaže, iz otvorenih podataka.
+          {BRAND.tagline}: poplave, zrak, zelenilo, promet i sve što vam treba na dohvat ruke, iz
+          otvorenih podataka.
         </p>
         <div className="search-card">
+          <h2 className="entry-title">Provjeri adresu</h2>
           <AddressSearch onSelect={open} label="Adresa ili naselje" inputId="home-search" />
           <ProfilePicker
             profile={profile}
@@ -66,18 +86,21 @@ export function HomePage() {
             ))}
           </ul>
         </div>
-        {first && second && (
-          <p className="compare-cta">
-            <Link
-              to={comparePath(
-                { lat: first.lat, lon: first.lon, label: first.address },
-                { lat: second.lat, lon: second.lon, label: second.address },
-              )}
-            >
-              Ili usporedite dvije adrese <ArrowRight size={16} aria-hidden="true" />
-            </Link>
-          </p>
-        )}
+      </section>
+
+      <section className="entries" aria-label="Drugi načini">
+        {ENTRIES.map((e) => (
+          <Link key={e.title} className="entry-card" to={e.to(first, second)}>
+            <span className="step-icon">
+              <CategoryIcon id={e.icon} size={22} />
+            </span>
+            <span className="entry-text">
+              <span className="entry-heading">{e.title}</span>
+              <span className="entry-desc">{e.text}</span>
+            </span>
+            <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        ))}
       </section>
 
       <section className="steps" aria-label="Što dobivate">

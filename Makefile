@@ -1,4 +1,4 @@
-# Prije potpisa: developer commands. Requires GNU make, uv, Node.js 22+ and Docker.
+# Dobro mjesto: developer commands. Requires GNU make, uv, Node.js 22+ and Docker.
 
 BACKEND  := backend
 FRONTEND := frontend

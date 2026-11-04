@@ -76,7 +76,7 @@ for (const theme of ['light', 'dark'] as const) {
   test.describe(`accessibility (${theme})`, () => {
     test.use({ colorScheme: theme })
     const pages: [string, string, string][] = [
-      ['home', '/', 'Kakav je okoliš'],
+      ['home', '/', 'Kako je živjeti ovdje'],
       ['report', reportUrl, first.address],
       ['compare', compareUrl, 'Usporedba dviju adresa'],
       ['sources', '/izvori', 'Izvori podataka'],

@@ -16,14 +16,14 @@ from analysis.environment import (
 )
 from analysis.solar import solar_category
 from analysis.walking import compute_reach
-from app import fmt, valhalla
+from app import brand, fmt, valhalla
 from app.admin import get_admin
 from app.layers import get_layers
 from app.models import Category, Location, Report, SourceInfo, Value
 from app.sources import retrieved_at, source_info
 
 DISCLAIMER = (
-    "Prije potpisa informativni je alat izrađen iz otvorenih podataka i modela. Nije službena "
+    f"{brand.NAME} informativni je alat izrađen iz otvorenih podataka i modela. Nije službena "
     "procjena rizika, geodetski ni građevinski pregled i ne zamjenjuje karte i upozorenja "
     "nadležnih tijela (Hrvatske vode, DHMZ, civilna zaštita). Način izračuna opisan je u "
     "metodologiji."

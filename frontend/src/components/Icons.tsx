@@ -5,6 +5,8 @@ import {
   Flame,
   Footprints,
   Pill,
+  Scale,
+  Search,
   Recycle,
   School,
   Shapes,
@@ -35,6 +37,8 @@ const ICONS: Record<string, LucideIcon> = {
   grocery: ShoppingBasket,
   playground: Shapes,
   recycling: Recycle,
+  compare: Scale,
+  find: Search,
 }
 
 /** Decorative icon for a category; the text next to it always carries the meaning. */

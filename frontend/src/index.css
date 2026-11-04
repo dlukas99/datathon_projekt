@@ -1,4 +1,4 @@
-/* Prije potpisa: calm and minimal. Colours meet WCAG 2.2 AA in both themes. */
+/* Calm and minimal. Colours meet WCAG 2.2 AA in both themes. */
 
 :root {
   color-scheme: light;
@@ -461,6 +461,52 @@ select {
   border-radius: 24px;
   padding: 1.5rem;
   box-shadow: var(--shadow);
+}
+
+.entry-title {
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.entries {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  max-width: 760px;
+  margin: 1rem auto 0;
+}
+
+.entry-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 44px;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.entry-card:hover {
+  border-color: var(--accent);
+}
+
+.entry-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.entry-heading {
+  font-weight: 700;
+}
+
+.entry-desc {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .examples {

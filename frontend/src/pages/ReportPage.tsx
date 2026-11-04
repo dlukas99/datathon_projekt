@@ -21,6 +21,7 @@ import {
   type Place,
   type Report,
 } from '../lib/api'
+import { BRAND } from '../lib/brand'
 import { formatDate } from '../lib/format'
 import { focusList, orderByFocus, PROFILES } from '../lib/profiles'
 import { comparePath } from '../lib/urls'
@@ -396,7 +397,7 @@ export function SourcesList({ report }: { report: Report }) {
         ))}
       </ul>
       <p className="muted-note">
-        <a href={geojsonUrl(loc.lat, loc.lon)} download="prije-potpisa.geojson">
+        <a href={geojsonUrl(loc.lat, loc.lon)} download={`${BRAND.fileSlug}.geojson`}>
           <Download size={16} aria-hidden="true" /> Preuzmi ovaj pregled kao GeoJSON
         </a>
         {' · '}

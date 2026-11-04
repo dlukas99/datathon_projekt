@@ -1,11 +1,12 @@
 import { Link } from 'react-router'
+import { BRAND } from '../lib/brand'
 
 export function AboutPage() {
   return (
     <>
       <h1>O alatu i metodologiji</h1>
       <p className="lead">
-        Prije potpisa spaja otvorene podatke o okolišu, prostoru i uslugama u jedan pregled za
+        {BRAND.name} spaja otvorene podatke o okolišu, prostoru i uslugama u jedan pregled za
         jednu adresu. Namijenjen je kupcima i najmoprimcima koji žele znati više prije nego što
         potpišu ugovor.
       </p>

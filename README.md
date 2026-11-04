@@ -1,4 +1,4 @@
-# Prije potpisa
+# Dobro mjesto
 
 **Okolišni pregled kuće ili stana prije kupnje: poplave, zrak, toplina i zelenilo, buka, sunce na krovu i život bez auta, za bilo koju adresu u Hrvatskoj, iz otvorenih podataka.**
 
@@ -269,4 +269,4 @@ Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic). Asistent u
 
 ## Ograničenje odgovornosti
 
-Prije potpisa informativni je alat izrađen na Datathonu Portala otvorenih podataka 2026. Procjene se temelje na otvorenim podacima i modelima i nisu službena procjena. U hitnoj situaciji nazovite 112.
+Dobro mjesto informativni je alat izrađen na Datathonu Portala otvorenih podataka 2026. Procjene se temelje na otvorenim podacima i modelima i nisu službena procjena. U hitnoj situaciji nazovite 112.

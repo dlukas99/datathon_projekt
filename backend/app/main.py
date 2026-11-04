@@ -10,7 +10,7 @@ from typing import Annotated, Any, Literal
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 
-from app import pvgis
+from app import brand, pvgis
 from app.assistant import AssistantReply, AssistantRequest, answer
 from app.config import REPO_ROOT
 from app.geo import in_bbox
@@ -30,9 +30,9 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(
     lifespan=lifespan,
-    title="Prije potpisa API",
+    title=f"{brand.NAME} API",
     description=(
-        "Okolišni pregled adrese u Hrvatskoj iz otvorenih podataka. Svaka vrijednost nosi "
+        f"{brand.TAGLINE}, iz otvorenih podataka. Svaka vrijednost nosi "
         "izvor (`source`), datum preuzimanja izvora (`retrieved_at`) i vrstu (`kind`: "
         "`measured`, `modelled` ili `estimate`). Informativni alat, nije službena procjena."
     ),

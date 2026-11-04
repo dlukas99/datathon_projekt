@@ -55,7 +55,7 @@ Zadnje ažurirano: 2026-11-03 10:30
 Plan 4. 11. 2026. Upute tima imaju prednost pred CLAUDE.md gdje se razlikuju (naziv i svrha, skupni skor); odstupanja se bilježe u `docs/ODLUKE.md`. Nakon svake stavke: `make verify`, commit, push.
 
 Redoslijed (procjena):
-1. [ ] Naziv i tri ulaza na naslovnici; naziv na jednom mjestu u kodu (1,5 h)
+1. [x] Naziv i tri ulaza na naslovnici; naziv na jednom mjestu u kodu (1,5 h)
 2. [ ] Središte naselja iz OSM `place` čvorova; poruka o središtu; klik na kartu i pomična oznaka (1,5 h)
 3. [ ] Zrak: stupnjevana skala prema međuciljevima WHO-a, crveno samo za visoko; WHO i EU kao informacija (1 h)
 4. [ ] Promet u blizini umjesto „Buke”: opisne rečenice i pojasevi udaljenosti s izvorom (0,5 h)

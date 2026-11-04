@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MapPin, Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router'
+import { BRAND } from './lib/brand'
 import { AboutPage } from './pages/AboutPage'
 import { ComparePage } from './pages/ComparePage'
 import { HomePage } from './pages/HomePage'
@@ -46,17 +47,18 @@ function useTheme(): [Theme, () => void] {
 }
 
 const TITLES: Record<string, string> = {
-  '/': 'Prije potpisa: okolišni pregled adrese',
-  '/izvjestaj': 'Izvještaj za adresu · Prije potpisa',
-  '/usporedi': 'Usporedba dviju adresa · Prije potpisa',
-  '/izvori': 'Izvori podataka · Prije potpisa',
-  '/o-alatu': 'O alatu i metodologiji · Prije potpisa',
+  '/': `${BRAND.name}: ${BRAND.tagline}`,
+  '/izvjestaj': `Izvještaj za adresu · ${BRAND.name}`,
+  '/usporedi': `Usporedba dviju lokacija · ${BRAND.name}`,
+  '/pronadi': `Pronađi mjesto za život · ${BRAND.name}`,
+  '/izvori': `Izvori podataka · ${BRAND.name}`,
+  '/o-alatu': `O alatu i metodologiji · ${BRAND.name}`,
 }
 
 function TitleAndFocus() {
   const { pathname } = useLocation()
   useEffect(() => {
-    document.title = TITLES[pathname] ?? 'Prije potpisa'
+    document.title = TITLES[pathname] ?? BRAND.name
     document.getElementById('main')?.focus({ preventScroll: true })
     window.scrollTo(0, 0)
   }, [pathname])
@@ -72,11 +74,11 @@ function Layout() {
       </a>
       <header className="site-header">
         <div className="container header-row">
-          <NavLink to="/" className="brand" aria-label="Prije potpisa, naslovnica">
+          <NavLink to="/" className="brand" aria-label={`${BRAND.name}, naslovnica`}>
             <span className="brand-mark" aria-hidden="true">
               <MapPin size={16} strokeWidth={2.25} />
             </span>
-            <span className="brand-name">Prije potpisa</span>
+            <span className="brand-name">{BRAND.name}</span>
           </NavLink>
           <nav className="site-nav" aria-label="Glavna navigacija">
             <ul>
@@ -122,7 +124,7 @@ function Layout() {
       <footer className="site-footer">
         <div className="container footer-row">
           <p>
-            Prije potpisa · informativni alat iz otvorenih podataka, nije službena procjena. U
+            {BRAND.name} · informativni alat iz otvorenih podataka, nije službena procjena. U
             hitnoj situaciji nazovite 112.
           </p>
           <nav aria-label="Podnožje">

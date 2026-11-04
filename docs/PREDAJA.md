@@ -46,7 +46,7 @@ Redoslijed je važan; uz svaku stavku je preporučeni rok.
 8. **Završna provjera** (9. 11. do 18:00):
    - `make verify` na čistom klonu s pripremljenim podacima;
    - `python scripts/check_readme.py` ispisuje preostale oznake `TODO(tim)` i `TODO(ljudi)`; sve trebaju biti zamijenjene.
-9. **Slanje e-pošte** (9. 11., najkasnije do 24:00) na **open.data@mpudt.hr**, s naslovom npr. „Datathon 2026 – izazov B – Prije potpisa”. Sadržaj:
+9. **Slanje e-pošte** (9. 11., najkasnije do 24:00) na **open.data@mpudt.hr**, s naslovom npr. „Datathon 2026 – izazov B – Dobro mjesto”. Sadržaj:
    - naziv rješenja i izazov (B: Okoliš i održivi prostor);
    - imena članova tima, mentora i visokog učilišta;
    - poveznica na javni repozitorij;
