@@ -50,3 +50,25 @@ Zadnje ažurirano: 2026-11-03 10:30
 - Po želji ključ za jezični model (`LLM_*`).
 - Snimanje videa prema `docs/VIDEO_SCENARIJ.md` i poveznica u README.
 - Slanje rješenja e-poštom na open.data@mpudt.hr do 9. 11. 2026. u 24:00 (popis u `docs/PREDAJA.md`).
+
+## P3 – proširenje
+Plan 4. 11. 2026. Upute tima imaju prednost pred CLAUDE.md gdje se razlikuju (naziv i svrha, skupni skor); odstupanja se bilježe u `docs/ODLUKE.md`. Nakon svake stavke: `make verify`, commit, push.
+
+Redoslijed (procjena):
+1. [ ] Naziv i tri ulaza na naslovnici; naziv na jednom mjestu u kodu (1,5 h)
+2. [ ] Središte naselja iz OSM `place` čvorova; poruka o središtu; klik na kartu i pomična oznaka (1,5 h)
+3. [ ] Zrak: stupnjevana skala prema međuciljevima WHO-a, crveno samo za visoko; WHO i EU kao informacija (1 h)
+4. [ ] Promet u blizini umjesto „Buke”: opisne rečenice i pojasevi udaljenosti s izvorom (0,5 h)
+5. [ ] Razumljiv rizik: vjerojatnost barem jedne poplave u 30 godina (0,5 h)
+6. [ ] Skor za život: podskorovi po kategoriji u backendu, vidljive i podesive težine po profilu, rečenica što podiže i spušta (2 h)
+7. [ ] Pronađi mjesto za život: unaprijed izračunati profili naselja, deterministički rang, forma; jezični model samo za pretvaranje pitanja u filtre (3 h)
+8. [ ] Poveznice na oglase: Njuškalo s filtrima i rezervnim poveznicama; Index Oglasi i Nekretnine.hr samo rezervno ako se struktura ne potvrdi (1 h)
+9. [ ] Validacija zraka uz službene postaje (Zagreb, Osijek, Požega, po 4 lokacije) (1,5 h)
+10. [ ] ML: model za godišnji NO2/PM2,5 na postajama, leave-one-station-out, usporedba s EEA; u aplikaciju samo ako je bolji (2 h)
+11. [ ] Dokumentacija, scenarij videa, snimke zaslona (1 h)
+
+Ako ponestane vremena, režem ovim redom:
+- ML ostaje samo evaluacija u `docs/ML.md`;
+- tumačenje slobodnog pitanja jezičnim modelom u tražilici mjesta (ostaje forma);
+- usporedba zraka s ostatkom RH;
+- Index Oglasi i Nekretnine.hr samo kao rezervna poveznica.
