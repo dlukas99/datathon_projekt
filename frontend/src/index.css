@@ -958,6 +958,115 @@ details summary {
   margin: 0;
 }
 
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.score-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 88px;
+  padding: 0.5rem;
+  border-radius: 20px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+:root:not([data-theme='dark']) a.score-badge {
+  color: var(--accent-contrast);
+}
+
+.score-badge-number {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-badge-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.life-score-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.life-score-number {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1;
+}
+
+.life-score-number span {
+  font-size: 1rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.weights {
+  border: 0;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.weights legend {
+  font-weight: 650;
+  margin-bottom: 0.5rem;
+}
+
+.weight-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 7rem;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+}
+
+.weight-row label {
+  font-weight: 550;
+  display: flex;
+  flex-direction: column;
+}
+
+.weight-sub,
+.weight-value {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.weight-row input[type='range'] {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--accent);
+}
+
+@media (width <= 560px) {
+  .weight-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .weight-value {
+    grid-column: 1 / -1;
+    margin-top: -0.5rem;
+  }
+}
+
 .notice {
   margin: 0.75rem 0 0;
   padding: 0.75rem 1rem;

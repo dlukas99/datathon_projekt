@@ -59,7 +59,7 @@ export function ProfilePicker({
             </label>
           ))}
         </div>
-        <p className="hint">Profil mijenja samo redoslijed i naglasak, nikad vrijednosti.</p>
+        <p className="hint">Profil mijenja redoslijed i težine u skoru, nikad vrijednosti.</p>
       </fieldset>
       {profile === 'vlastiti' && <FocusPicker custom={custom} onCustom={onCustom} />}
     </>

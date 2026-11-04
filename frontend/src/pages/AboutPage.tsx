@@ -19,8 +19,9 @@ export function AboutPage() {
         <h2 id="principles">Načela</h2>
         <ul>
           <li>
-            Svaka kategorija ima vlastito, razumljivo značenje. Nema skupne ocjene sa skrivenim
-            težinama.
+            Svaka kategorija ima vlastito, razumljivo značenje. „Skor za život” je prosjek
+            podskorova kategorija s vidljivim i podesivim težinama; nijedna težina nije skrivena,
+            a vrijednosti kategorija se ne mijenjaju.
           </li>
           <li>
             Svaka vrijednost ima izvor, datum i vrstu: <strong>izmjereno</strong> (mjerenje,
@@ -28,8 +29,8 @@ export function AboutPage() {
             <strong>procjena</strong> (zamjenski podatak).
           </li>
           <li>
-            Profil (obitelj, umirovljenik, student, rad od kuće ili vlastiti) mijenja samo
-            redoslijed i naglasak, nikad vrijednosti.
+            Profil (obitelj, umirovljenik, student, rad od kuće ili vlastiti) mijenja redoslijed,
+            naglasak i težine u skoru, nikad vrijednosti.
           </li>
           <li>„Nema podataka” uvijek se prikazuje; kategorija se nikad tiho ne izostavlja.</li>
           <li>

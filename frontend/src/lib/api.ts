@@ -62,6 +62,7 @@ export interface Category {
   notes: string[]
   links: Link[]
   scales?: Scale[]
+  subscore?: number | null
 }
 
 export interface Location {
