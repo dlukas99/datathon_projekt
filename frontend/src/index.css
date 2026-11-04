@@ -214,6 +214,10 @@ a {
   font-weight: 500;
 }
 
+.nav-long {
+  margin-left: 0.25em;
+}
+
 .site-nav a:hover {
   background: var(--surface-2);
 }

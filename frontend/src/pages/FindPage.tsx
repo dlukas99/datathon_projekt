@@ -204,7 +204,7 @@ export function FindPage() {
           <>
             <h2>
               {search.data.results.length > 0
-                ? `Najbolje ${String(search.data.results.length)} od ${String(search.data.matching)} naselja`
+                ? `Najbolje ${String(search.data.results.length)} od ${search.data.matching.toLocaleString('hr-HR')} naselja`
                 : 'Nijedno naselje ne ispunjava sve uvjete'}
             </h2>
             <p className="section-intro">{search.data.criteria.join(' · ')}</p>
