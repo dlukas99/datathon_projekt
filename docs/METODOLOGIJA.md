@@ -32,6 +32,7 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 | Dobro | ni točka ni okolica od 100 m nisu ni u jednom modeliranom području |
 
 - **Izvor praga:** podjela na poplave velike, srednje (povratno razdoblje 100 godina) i male vjerojatnosti preuzeta je iz opisa karata opasnosti od poplava Hrvatskih voda (Zakon o vodama, karte 2019.), objavljenog na Portalu otvorenih podataka. Isti scenariji propisani su člankom 6. stavkom 3. Direktive 2007/60/EZ o procjeni i upravljanju rizicima od poplava („floods with a medium probability (likely return period ≥ 100 years)”).
+- **Razumljiv prikaz rizika:** ako je adresa (ili okolica od 100 m) u modeliranom području, povratno razdoblje T pretvara se u vjerojatnost barem jedne takve poplave u 30 godina, uobičajenom trajanju stambenog kredita: P = 1 − (1 − 1/T)³⁰. To je oko 96 % za T = 10, 26 % za T = 100 i 6 % za T = 500. Pretpostavka je da su godine međusobno neovisne, uz godišnju vjerojatnost 1/T, što je definicija povratnog razdoblja. Službena oznaka povratnog razdoblja uvijek se prikazuje uz vjerojatnost.
 - **Ograničenja:** karte JRC-a modeliraju samo riječne poplave većih vodotoka. Ne obuhvaćaju bujice, poplave mora, oborinske vode ni lokalne nasipe. Lokacija izvan modeliranog područja ne znači da rizika nema. Uz svaki izvještaj nalazi se poveznica na službeni preglednik Hrvatskih voda.
 
 ## Kvaliteta zraka

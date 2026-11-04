@@ -76,6 +76,7 @@ function sharedSource(values: Value[]): Value | null {
 
 // The one number people look for first in each category.
 const KEY_VALUE: Record<string, string> = {
+  flood: 'flood_30y_probability',
   green: 'tree_share_300m',
   noise: 'distance_road',
   fire: 'burnt_areas_2km',

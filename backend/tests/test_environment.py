@@ -61,3 +61,9 @@ def test_flood_status(monkeypatch: pytest.MonkeyPatch) -> None:
 )
 def test_traffic_bands_follow_hei_zone(distance: float, band: str, status: str) -> None:
     assert environment.traffic_band(distance) == (band, status)
+
+
+def test_flood_chance_over_a_30_year_loan() -> None:
+    assert round(environment.flood_chance(100) * 100) == 26
+    assert round(environment.flood_chance(10) * 100) == 96
+    assert round(environment.flood_chance(500) * 100) == 6
