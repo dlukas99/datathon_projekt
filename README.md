@@ -1,6 +1,6 @@
 # Dobro mjesto
 
-**Okolišni pregled kuće ili stana prije kupnje: poplave, zrak, toplina i zelenilo, buka, sunce na krovu i život bez auta, za bilo koju adresu u Hrvatskoj, iz otvorenih podataka.**
+**Okoliš i svakodnevni život za svaku adresu u Hrvatskoj: poplave, zrak, zelenilo, promet, požari i sunce, sve što vam treba na dohvat ruke, i prijedlog mjesta za život, iz otvorenih podataka.**
 
 Datathon Portala otvorenih podataka 2026 · Izazov B: Okoliš i održivi prostor
 Tim: TODO(tim) · Mentor: TODO(tim) · Visoko učilište: TODO(tim)
@@ -13,34 +13,46 @@ Tim: TODO(tim) · Mentor: TODO(tim) · Visoko učilište: TODO(tim)
 
 ## Problem
 
-Kupnja kuće ili stana najveća je financijska odluka većine ljudi. Pri odabiru se gleda cijena, kvadratura i lokacija. Okolišne rizike i ovisnost o autu ljudi najčešće otkriju tek kad usele: da je kuća u poplavnom području, da je zrak lošiji nego što su mislili, da nema hlada ni zelenila, da se do vrtića i trgovine ne može bez auta.
+Gdje živjeti najveća je odluka većine ljudi, bilo da kupuju, unajmljuju ili tek razmišljaju o selidbi. Pri odabiru se gleda cijena, kvadratura i lokacija. Okolišne rizike i ovisnost o autu ljudi najčešće otkriju tek kad usele: da je kuća u poplavnom području, da je zrak lošiji nego što su mislili, da nema hlada ni zelenila, da se do vrtića i trgovine ne može bez auta.
 
-Ti podaci postoje, ali su rasuti po različitim institucijama i formatima: karte poplava, karte kvalitete zraka, satelitski pokrov tla, registri vrtića i ordinacija, vozni redovi. Prosječnom kupcu nisu ni razumljivi ni usporedivi.
+Ti podaci postoje, ali su rasuti po različitim institucijama i formatima: karte poplava, karte kvalitete zraka, satelitski pokrov tla, registri vrtića i ordinacija, vozni redovi. Prosječnom čovjeku nisu ni razumljivi ni usporedivi.
 
 ## Rješenje
 
-Korisnik upiše adresu i, po želji, odabere tko je: obitelj s djecom, umirovljenik, student, netko tko radi od kuće ili vlastiti izbor. Dobiva pregled u tri dijela:
+Naslovnica ima tri ulaza:
+
+1. **Provjeri adresu:** kako je živjeti na određenoj adresi.
+2. **Pronađi mjesto za život:** aplikacija predlaže naselja prema onome što vam treba.
+3. **Usporedi dvije lokacije:** dvije adrese jedna uz drugu.
+
+Izvještaj za adresu ima tri dijela:
 
 1. **Okolišni pregled** (prvi ekran):
-   - **poplave:** nalazi li se lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, s poveznicom na službene karte Hrvatskih voda;
-   - **zrak:** godišnje koncentracije PM2,5 i NO2 za 2024. uspoređene sa smjernicama Svjetske zdravstvene organizacije i graničnim vrijednostima EU-a za 2030.;
-   - **toplina i zelenilo:** udio drveća, zelenih i izgrađenih površina u krugu od 300 m te najbliži park u minutama hoda, prema pravilu 3-30-300;
-   - **buka:** procjena prema udaljenosti od autocesta, glavnih i važnijih cesta te pruga, jasno označena kao procjena, uz poveznicu na strateške karte buke EEA-e;
+   - **poplave:** je li lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, razumljivo izraženo kao vjerojatnost barem jedne poplave u 30 godina (trajanje stambenog kredita), s poveznicom na službene karte Hrvatskih voda;
+   - **zrak:** godišnji PM2,5 i NO2 na mirnoj, stupnjevanoj ljestvici (vrlo niska, niska, umjerena, visoka) s granicama Svjetske zdravstvene organizacije i EU-a;
+   - **toplina i zelenilo:** udio drveća, zelenih i izgrađenih površina u krugu od 300 m i najbliži park, prema pravilu 3-30-300;
+   - **promet u blizini:** udaljenost od autocesta, glavnih i važnijih cesta i pruga s opisnim rečenicama i pojasevima 300/500 m (procjena, ne mjerenje buke);
    - **požari raslinja:** opožarene površine u krugu od 2 km od 2016. (Copernicus EFFIS);
-   - **sunce na krovu:** procijenjena godišnja proizvodnja solarne elektrane po kilovatu snage (JRC PVGIS).
+   - **sunce na krovu:** procijenjena godišnja proizvodnja solarne elektrane po kilovatu (JRC PVGIS).
 2. **Život bez auta:**
-   - što je na 5, 10 i 15 minuta hoda po stvarnoj mreži ulica (karta s izokronama i isti popis u tekstu);
-   - stajališta javnog prijevoza s brojem polazaka na sat iz voznih redova ZET-a, HŽPP-a i Autotroleja;
+   - što je na 5, 10 i 15 minuta hoda po stvarnoj mreži ulica;
+   - stajališta s brojem polazaka na sat iz voznih redova ZET-a, HŽPP-a i Autotroleja;
    - koliko od sedam svakodnevnih potreba lokacija pokriva bez auta.
-3. **Svakodnevni život:** najbliži vrtić, osnovna škola, obiteljski liječnik, pedijatar, ljekarna, trgovina namirnicama, igralište i mjesto za reciklažu, s minutama hoda i brojem unutar 15 minuta.
+3. **Svakodnevni život:** najbliži vrtić, škola, liječnik, pedijatar, ljekarna, trgovina, igralište i mjesto za reciklažu, s minutama hoda.
 
-Dvije adrese mogu se usporediti jedna uz drugu. Pregled se može ispisati, podijeliti poveznicom ili preuzeti kao GeoJSON. Asistent odgovara na pitanja poput „Je li ova kuća u poplavnom području?” ili „Mogu li ovdje živjeti bez auta?”.
+**Skor za život** (0–100) sažima sve kategorije s težinama odabranog profila (obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti). Težine su vidljive i podesive, a uz skor piše što ga najviše podiže i spušta.
 
-Svaka brojka ima izvor, datum preuzimanja i vrstu (izmjereno, modelirano ili procjena). Brojke računa backend iz podataka, a ne jezični model. Rješenje ne daje jednu skupnu ocjenu sa skrivenim težinama: svaka kategorija ima vlastito, razumljivo značenje. Odabrani profil mijenja samo redoslijed i naglasak, nikad činjenice.
+**Ostalo:**
+- Točka se može odabrati i klikom na kartu ili povlačenjem oznake.
+- Za upisano naselje prikazuje se njegovo stvarno središte, uz napomenu da za točan izvještaj treba upisati adresu.
+- Gumb „Pogledaj oglase” otvara pretragu oglasa za to mjesto. Aplikacija samo slaže poveznicu i ne prikazuje oglase.
+- Asistent odgovara na pitanja poput „Je li ova kuća u poplavnom području?”.
+
+Svaka brojka ima izvor, datum i vrstu (izmjereno, modelirano ili procjena). Brojke računa backend iz podataka, a ne jezični model.
 
 ## Primjer
 
-Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izračunato 3. 11. 2026. iz podataka preuzetih 1.–2. 11. 2026.:
+Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izračunato 4. 11. 2026. iz podataka preuzetih 1.–4. 11. 2026.:
 - kvaliteta zraka: EEA karta za 2024.;
 - pokrov tla: ESA WorldCover 2021.;
 - poplave: JRC v3.1.1;
@@ -50,32 +62,36 @@ Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izrač
 |---|---|---|
 | Naselje | Vinkovci, 28.111 stanovnika (Popis 2021.) | Nijemci, 1.330 stanovnika (Popis 2021.) |
 | Poplave | **Dobro:** izvan modeliranih područja za 10, 100 i 500 godina, i u krugu od 100 m | **Dobro:** isto |
-| Zrak (godišnji prosjek 2024.) | **Loše:** PM2,5 18,2 µg/m³ (WHO 5, EU 2030. 10), NO2 17,5 µg/m³ | **Loše:** PM2,5 18,6 µg/m³, NO2 16,5 µg/m³ |
+| Zrak (godišnji prosjek 2024.) | **Umjerena** razina: PM2,5 18,2 µg/m³ (unutar današnje granice EU-a od 25, iznad granice za 2030. od 10), NO2 17,5 µg/m³ (niska) | **Umjerena**: PM2,5 18,6 µg/m³, NO2 16,5 µg/m³ |
 | Toplina i zelenilo (300 m) | **Upozorenje:** drveće 7 %, izgrađeno 90 %; park 2 min hoda | **Loše:** drveće 20 %; najbliži park udaljen 6,1 km |
-| Buka (procjena) | važnija cesta 10 m, pruga 1,4 km | važnija cesta 20 m |
+| Promet u blizini | **Blizu prometnice:** važnija cesta 10 m; pruga 1,4 km | **Blizu prometnice:** važnija cesta 20 m |
 | Sunce na krovu | oko 1.251 kWh po kWp godišnje, nagib 37° | oko 1.245 kWh po kWp godišnje, nagib 36° |
 | Život bez auta | 6 od 7 potreba unutar 15 min; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
 | Najbliži vrtić / škola / liječnik | 3 / 4 / 5 min hoda | 12 / 3 / 4 min hoda |
-| Pedijatar | 19 min hoda | nije pronađen u krugu od 15 km |
+| Skor za život (profil „Općenito”) | 67 | 60 |
 
-Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (Vinkovci) i `GET /api/report?lat=45.140273&lon=19.034942` (Nijemci). Svih šest demo adresa (Vinkovci, Osijek, Zagreb, Split, Nijemci) nalazi se u [scripts/demo_addresses.json](scripts/demo_addresses.json), a njihovi rezultati provjeravaju se zlatnim testovima.
+Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (Vinkovci) i `GET /api/report?lat=45.140273&lon=19.034942` (Nijemci). Svih šest demo adresa nalazi se u [scripts/demo_addresses.json](scripts/demo_addresses.json), a njihovi rezultati provjeravaju se zlatnim testovima.
 
 ![Usporedba dviju adresa](docs/images/usporedba.png)
 
 ## Za koga
 
-- **Kupci i najmoprimci** koji biraju između više lokacija.
-- **Obitelji s djecom i starije osobe**, kojima su blizina vrtića, škole, liječnika i ljekarne te javni prijevoz važni koliko i sama kuća.
-- **Oglasnici nekretnina, agencije i banke**, koji pregled mogu ugraditi preko otvorenog API-ja.
+- **Svi koji biraju gdje živjeti:** kupci, najmoprimci i oni koji razmišljaju o selidbi.
+- **Obitelji s djecom i starije osobe**, kojima su vrtić, škola, liječnik, ljekarna i javni prijevoz važni koliko i sama kuća.
+- **Gradovi, agencije, banke i oglasnici**, koji pregled mogu ugraditi preko otvorenog API-ja.
 
 ## Funkcionalnosti
 
-- pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera)
-- okolišni pregled: poplave, zrak, toplina i zelenilo, buka, požari raslinja, sunčev potencijal
+- pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
+- odabir točke klikom na kartu ili povlačenjem oznake
+- **Pronađi mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
+- **Skor za život** s vidljivim i podesivim težinama po profilu
+- poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
+- okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak na stupnjevanoj ljestvici, toplina i zelenilo, promet u blizini, požari raslinja, sunčev potencijal
 - izokrone hoda od 5, 10 i 15 minuta po mreži ulica i pješačkih staza
 - svakodnevne potrebe i javni prijevoz s minutama hoda
 - profili korisnika koji mijenjaju redoslijed i naglasak
-- usporedba dviju adresa
+- usporedba dviju lokacija
 - asistent na hrvatskom koji odgovara samo iz rezultata izračuna (s jezičnim modelom ili bez njega)
 - ispis, dijeljenje poveznicom (stanje izvještaja je u URL-u) i preuzimanje GeoJSON-a
 - stranica „Izvori”: datumi osvježavanja uživo preko CKAN API-ja Portala otvorenih podataka i nalazi o kvaliteti podataka
@@ -87,7 +103,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 ## Izvori otvorenih podataka
 
-Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 30 skupova podataka i PVGIS API.
+Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 31 skup podataka (uz službene mjerne postaje zraka za provjeru) i PVGIS API. Oglasnici nisu izvori podataka, nego samo vanjske poveznice.
 
 | Izvor | Podaci | Primjena |
 |---|---|---|
@@ -99,12 +115,13 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | JRC | karte opasnosti od riječnih poplava za Europu | poplave |
 | Hrvatske vode | karte opasnosti od poplava | poveznica na službeni preglednik |
 | EEA | interpolirane karte kvalitete zraka 2024. | PM2,5 i NO2 |
+| EEA Air Quality Download Service | mjerenja službenih postaja RH 2024. | provjera karte zraka i ML evaluacija |
 | ESA WorldCover | pokrov tla, 10 m | zelenilo, drveće, izgrađenost |
 | EEA (direktiva o buci okoliša) | strateške karte buke | samo poveznica (licenca nije otvorena) |
 | JRC PVGIS | sunčev potencijal (API) | sunce na krovu |
 | Copernicus EFFIS | opožarene površine (WFS) | požari raslinja |
 | ZET, HŽPP (GTFS), Autotrolej (JSON, data.gov.hr) | vozni redovi | polasci na sat |
-| OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža | mreža hoda, svakodnevne potrebe, procjena buke |
+| OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža, središta naselja | mreža hoda, svakodnevne potrebe, promet u blizini, središte naselja |
 | Općine i gradovi (data.gov.hr) | reciklažna dvorišta i zeleni otoci (11 skupova s koordinatama) | reciklaža |
 | Portal otvorenih podataka | CKAN API | pretraga skupova i datumi osvježavanja uživo |
 
@@ -216,12 +233,12 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 |---|---|
 | Upotreba otvorenih podataka | 30 skupova podataka i PVGIS API; izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
 | Povezivanje javno dostupnih podataka | adresa se povezuje s upravnim jedinicama, popisom stanovništva, rasterskim okolišnim slojevima, mrežom ulica, registrima ustanova (geokodiranim nad adresama DGU-a) i voznim redovima |
-| Relevantnost rješenja | poplave, kvaliteta zraka, buka, zelenilo i toplina, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
+| Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i toplina, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
-| Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, asistent čije brojke dolaze iz predložaka |
+| Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Pronađi mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
 | Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |
 | Tehnička arhitektura i integracijski potencijal | REST i OpenAPI, GeoJSON, INSPIRE i GTFS na ulazu, opisani tehnički, organizacijski i pravni preduvjeti za uvođenje, Docker Compose |
-| Dojam rješenja | jedna adresa, jedan pregled; okolišni pregled na prvom ekranu; usporedba dviju adresa; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
+| Dojam rješenja | tri jasna ulaza (adresa, pronađi mjesto, usporedba); okolišni pregled na prvom ekranu; Skor za život s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
 | Prezentacija rješenja | video u trajanju do 3 minute: TODO(ljudi) (scenarij: [docs/VIDEO_SCENARIJ.md](docs/VIDEO_SCENARIJ.md)) |
 
 ## Privatnost i sigurnost
@@ -236,7 +253,11 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - Ovo je informativni alat, a ne službena procjena rizika, geodetski ni građevinski pregled. Ne zamjenjuje karte i upozorenja Hrvatskih voda, DHMZ-a i civilne zaštite.
 - Karte poplava su modelirane i obuhvaćaju samo riječne poplave većih vodotoka (bez bujica i poplava mora). Lokacija izvan modeliranog područja ne znači da rizika nema.
 - Kvaliteta zraka prikazuje se kao godišnji prosjek modelirane karte na mreži od 1 km, a ne kao mjerenje na samoj adresi.
-- Buka je samo procjena prema udaljenosti od prometnica: strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
+- „Promet u blizini” je procjena prema udaljenosti od prometnica, a ne mjerenje buke: strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
+- Karta zraka prikazuje pozadinsku razinu; uz prometne ulice NO2 može biti znatno viši (provjera uz službene postaje u [docs/METODOLOGIJA.md](docs/METODOLOGIJA.md)). ML model nije ušao u aplikaciju jer nije bio bolji za obje tvari ([docs/ML.md](docs/ML.md)).
+- „Pronađi mjesto za život” računa za središte naselja s najmanje 200 stanovnika, bez sunca na krovu; za konkretnu adresu treba otvoriti izvještaj.
+- Skor za život koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
+- Njuškalo blokira automatsku provjeru poveznica, pa su kategorije i slugovi mjesta osim provjerenog primjera označeni TODO(verify) u `config/listings.json`; za neprovjerena mjesta poveznica vodi na pretragu kategorije s filtrima.
 - Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
 - Registri bez koordinata geokodirani su s 86–95 % uspjeha. Neuspjeli zapisi se ne prikazuju, a za vrtiće, škole i ljekarne dopunjuju se OpenStreetMapom.
 - HZZO-ovi popisi i vozni red HŽPP-a nemaju navedenu licencu; koriste se uz obrazloženje u [docs/ODLUKE.md](docs/ODLUKE.md).
@@ -246,13 +267,13 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 ## Daljnji razvoj
 
-- odabir točke klikom na kartu i lokacija iz preglednika
 - obavijest kad se za odabranu lokaciju promijeni službena karta opasnosti od poplava
+- model NO2 na razini ulice uz gradske mjerne mreže i podatke o prometnom opterećenju ([docs/ML.md](docs/ML.md))
 - strateške karte buke ako postanu dostupne pod otvorenom licencom
 - vozni redovi ostalih gradskih prijevoznika (GTFS)
-- ugradnja u oglasnike nekretnina preko API-ja
+- provjereno mapiranje mjesta za poveznice na oglasnike, u dogovoru s oglasnicima
+- ugradnja u oglasnike nekretnina i gradske portale preko API-ja
 - dodatni slojevi: toplinski stres, kvaliteta vode za piće
-- usporedba više od dviju adresa
 
 ## Licenca i atribucija
 

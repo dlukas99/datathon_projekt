@@ -17,6 +17,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
+import httpx
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -31,6 +32,7 @@ from analysis.environment import (
     noise_category,
 )
 from analysis.walking import compute_reach
+from app.config import get_settings
 from app.layers import get_layers
 from app.models import Category
 from ingest.common import processed_dir, record_source
@@ -86,6 +88,13 @@ def profile(row: dict[str, Any]) -> dict[str, Any]:
 
 
 def run(workers: int = 4) -> None:
+    try:
+        httpx.get(f"{get_settings().valhalla_url}/status", timeout=5).raise_for_status()
+    except httpx.HTTPError as exc:
+        raise RuntimeError(
+            "Valhalla ne radi: pokrenite je (docker compose -f deploy/docker-compose.dev.yml "
+            "up -d) pa ponovite `uv run python -m ingest.settlement_profiles`."
+        ) from exc
     d = processed_dir()
     settlements = pd.read_parquet(d / "settlements.parquet")
     population = pd.read_parquet(d / "settlement_population.parquet")

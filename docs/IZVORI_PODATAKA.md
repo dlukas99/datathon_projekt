@@ -14,6 +14,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 | Poplave | JRC, karte opasnosti od riječnih poplava (CEMS-EFAS) v3.1.1 | radi | ODbL 1.0 / CC BY 4.0 (vidi napomenu) | dubina vode za povratna razdoblja 10, 100 i 500 godina |
 | Poplave (službeno) | Hrvatske vode, karte opasnosti od poplava 2019. | samo poveznica | nije navedena | poveznica na preglednik |
 | Zrak | EEA, interpolirane karte kvalitete zraka 2024., 1 km | radi | CC BY 4.0 | PM2,5 i NO2 |
+| Zrak (provjera) | EEA Air Quality Download Service, službene postaje RH 2024. (E1a) | radi | uvjeti EEA-e, TODO(verify) | provjera karte i ML evaluacija |
 | Zelenilo | ESA WorldCover 10 m 2021 v200 | radi | CC BY 4.0 | drveće, zelene i izgrađene površine |
 | Buka | EEA, strateške karte buke (END 2022) | ne koristi se | ograničena (istraživanje i neprofitna upotreba) | rezervni plan: udaljenost od prometnica (OSM) |
 | Sunce | JRC PVGIS 5.3 API | radi | slobodna upotreba uz navođenje izvora | kWh po kWp godišnje |
@@ -150,3 +151,15 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 - Direktiva (EU) 2024/2881 (CELEX 32024L2881), Prilog I., tablica 1: granične vrijednosti od 1. 1. 2030. — godišnje PM2,5 10 µg/m³, NO2 20 µg/m³.
 - WHO Environmental Noise Guidelines for the European Region (2018): https://iris.who.int/handle/10665/279952 — cestovni promet 53 dB Lden, 45 dB Lnight.
 - Pravilo 3-30-300: Konijnendijk, C. C. (2023). Evidence-based guidelines for greener, healthier, more resilient neighbourhoods: Introducing the 3–30–300 rule. Journal of Forestry Research 34, 821–830. https://doi.org/10.1007/s11676-022-01523-z
+
+### EEA Air Quality Download Service: službene mjerne postaje
+- API: `POST https://eeadmz1-downloads-api-appservice.azurewebsites.net/ParquetFile/urls` sa `countries: ["HR"]`, `pollutants: ["PM2.5", "NO2"]`, `dataset: 2` (verificirani podaci E1a), 2024. godina; jedna parquet datoteka po mjernom mjestu.
+- Metapodaci mjernih mjesta (koordinate, vrsta i područje postaje): `https://discomap.eea.europa.eu/App/AQViewer/download?fqn=Airquality_Dissem.b2g.measurements&f=csv`.
+- Podatke prijavljuje ministarstvo nadležno za zaštitu okoliša (namespace `aqd.azo.hr`). Licenca: uvjeti ponovne upotrebe EEA-e, TODO(verify) točan naziv licence.
+- Upotreba: samo provjera karte zraka i ML evaluacija (`docs/METODOLOGIJA.md`, `docs/ML.md`); vrijednosti postaja ne prikazuju se u izvještaju.
+
+### Središta naselja (OpenStreetMap)
+- OSM čvorovi `place=city|town|village|hamlet|suburb|isolated_dwelling|locality` iz istog izvatka; čvor se koristi kad mu je ime jednako imenu DGU naselja i nalazi se unutar njegova poligona (6.536 od 6.759 naselja).
+
+### Oglasnici (vanjske poveznice, ne izvori podataka)
+- Njuškalo, Index Oglasi i Nekretnine.hr. Aplikacija samo slaže poveznicu na pretragu (`config/listings.json`); ne dohvaća, ne parsira i ne prikazuje oglase. Njuškalo i Nekretnine.hr odbijaju automatske zahtjeve, pa poveznice nisu automatski provjerene.
