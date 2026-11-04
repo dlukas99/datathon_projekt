@@ -17,7 +17,7 @@
       }
     },
     "air": {
-      "status": "bad",
+      "status": "info",
       "values": {
         "pm25_annual": 16.3,
         "no2_annual": 18.9

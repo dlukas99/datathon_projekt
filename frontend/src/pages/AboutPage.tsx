@@ -68,9 +68,9 @@ export function AboutPage() {
                 <th scope="row">Kvaliteta zraka</th>
                 <td>Godišnji prosjek PM2,5 i NO2 iz interpoliranih karata EEA-e za 2024. (1 km).</td>
                 <td>
-                  Dobro: do smjernice WHO-a iz 2021. (PM2,5 5 µg/m³, NO2 10 µg/m³). Upozorenje: do
-                  granične vrijednosti EU-a od 2030. (PM2,5 10 µg/m³, NO2 20 µg/m³, Direktiva
-                  (EU) 2024/2881). Loše: iznad toga.
+                  Ljestvica: vrlo niska do smjernice WHO-a (PM2,5 5, NO2 10 µg/m³), niska do
+                  granice EU-a za 2030. (10 i 20), umjerena do granice EU-a koja vrijedi danas
+                  (25 i 40, Direktiva (EU) 2024/2881), visoka iznad toga.
                 </td>
               </tr>
               <tr>

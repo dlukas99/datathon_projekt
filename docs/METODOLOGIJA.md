@@ -38,16 +38,21 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 
 - **Podaci:** EEA interpolirane karte godišnjih prosjeka PM2,5 i NO2 za 2024. (validirane, objavljene 29. 5. 2026.), mreža od 1 km.
 - **Izračun:** vrijednost ćelije u kojoj je točka.
-- **Pragovi:**
+- **Stupnjevana ljestvica** (od 4. 11. 2026.): umjesto ocjene „prolazi ili ne prolazi” prema smjernici WHO-a, koju premašuje gotovo cijela Hrvatska, vrijednost se smješta na ljestvicu s četiri razine. Granice razina su službene vrijednosti:
 
-| Onečišćujuća tvar | Dobro (do smjernice WHO-a 2021) | Upozorenje (do granične vrijednosti EU-a od 2030.) | Loše |
+| Razina (status) | PM2,5, godišnji prosjek | NO2, godišnji prosjek | Granica |
 |---|---|---|---|
-| PM2,5, godišnji prosjek | ≤ 5 µg/m³ | ≤ 10 µg/m³ | > 10 µg/m³ |
-| NO2, godišnji prosjek | ≤ 10 µg/m³ | ≤ 20 µg/m³ | > 20 µg/m³ |
+| vrlo niska (dobro) | ≤ 5 µg/m³ | ≤ 10 µg/m³ | smjernica WHO-a 2021 |
+| niska (dobro) | ≤ 10 µg/m³ | ≤ 20 µg/m³ | granična vrijednost EU-a od 2030. |
+| umjerena (informacija, neutralno) | ≤ 25 µg/m³ | ≤ 40 µg/m³ | granična vrijednost EU-a koja vrijedi danas |
+| visoka (loše) | > 25 µg/m³ | > 40 µg/m³ | iznad današnje granične vrijednosti EU-a |
+
+Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije je viša od dviju razina (PM2,5, NO2). Uz svaku vrijednost tekstom se navodi odnos prema smjernici WHO-a i granicama EU-a, a na kartici je ljestvica s oznakama tih granica.
 
 - **Izvori pragova:**
   - WHO global air quality guidelines (2021), tablica 0.1: godišnja smjernica PM2,5 5 µg/m³ i NO2 10 µg/m³. https://iris.who.int/handle/10665/345329
   - Direktiva (EU) 2024/2881 o kvaliteti zraka i čišćem zraku za Europu, Prilog I., odjeljak 1., tablica 1: granične vrijednosti koje se moraju postići do 1. 1. 2030. su godišnje PM2,5 10 µg/m³ i NO2 20 µg/m³. CELEX 32024L2881.
+  - Ista direktiva, Prilog I.: granične vrijednosti koje se moraju postići do 11. 12. 2026. su godišnje PM2,5 25 µg/m³ i NO2 40 µg/m³; iste vrijednosti propisuje i dosadašnja Direktiva 2008/50/EZ. To je „granica koja vrijedi danas”.
 - Status kategorije je lošiji od dvaju statusa (PM2,5 i NO2).
 - **Ograničenja:** karta je modelirana procjena godišnjeg prosjeka na mreži od 1 km, a ne mjerenje na adresi. Prema EEA-i ne smije se koristiti za službenu provjeru usklađenosti. Uz izvještaj je poveznica na mjerenja u stvarnom vremenu (iszz.azo.hr).
 

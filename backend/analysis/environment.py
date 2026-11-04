@@ -20,7 +20,7 @@ from app import fmt
 from app.config import get_settings
 from app.geo import to_htrs
 from app.layers import Layers
-from app.models import Category, Link, Place, Status, Value
+from app.models import Category, Link, Place, Scale, ScaleBand, ScaleMarker, Status, Value
 from app.sources import retrieved_at
 
 # --- Thresholds (sources in docs/METODOLOGIJA.md) -----------------------------------------
@@ -255,55 +255,101 @@ def read_air(lon: float, lat: float, pollutant: str, year: int = 2024) -> float 
     return value
 
 
+# Graded scale, calmer than a pass/fail against WHO: the band limits are the WHO
+# guideline, the EU limit from 2030 and the EU limit in force today
+# (Directive (EU) 2024/2881, Annex I; WHO AQG 2021, Table 0.1).
+AIR_BANDS: dict[str, list[tuple[float | None, str, Status]]] = {
+    "pm25": [
+        (5.0, "vrlo niska", "good"),
+        (10.0, "niska", "good"),
+        (25.0, "umjerena", "info"),
+        (None, "visoka", "bad"),
+    ],
+    "no2": [
+        (10.0, "vrlo niska", "good"),
+        (20.0, "niska", "good"),
+        (40.0, "umjerena", "info"),
+        (None, "visoka", "bad"),
+    ],
+}
+EU_NOW = {"pm25": 25.0, "no2": 40.0}  # EU limit values in force until the 2030 limits apply
+
+
+def air_band(pollutant: str, value: float) -> tuple[str, Status]:
+    for upto, name, status in AIR_BANDS[pollutant]:
+        if upto is None or value <= upto:
+            return name, status
+    raise ValueError(pollutant)
+
+
 def _air_status(pollutant: str, value: float) -> Status:
-    if value <= WHO_2021[pollutant]:
-        return "good"
-    if value <= EU_2030[pollutant]:
-        return "warning"
-    return "bad"
+    return air_band(pollutant, value)[1]
 
 
-_STATUS_ORDER: dict[Status, int] = {"good": 0, "info": 0, "warning": 1, "bad": 2, "no_data": -1}
+_STATUS_ORDER: dict[Status, int] = {"good": 0, "info": 1, "warning": 2, "bad": 3, "no_data": -1}
+_BAND_ORDER = ["vrlo niska", "niska", "umjerena", "visoka"]
+
+
+def _compare_sentence(name: str, pollutant: str, value: float) -> str:
+    who, eu30, now = WHO_2021[pollutant], EU_2030[pollutant], EU_NOW[pollutant]
+    if value <= who:
+        return f"{name} je unutar smjernice WHO-a ({fmt.num(who)} µg/m³)."
+    if value <= eu30:
+        return (
+            f"{name} je unutar granične vrijednosti EU-a za 2030. ({fmt.num(eu30)} µg/m³), "
+            f"ali iznad strože smjernice WHO-a ({fmt.num(who)} µg/m³)."
+        )
+    if value <= now:
+        return (
+            f"{name} je unutar granične vrijednosti EU-a koja vrijedi danas "
+            f"({fmt.num(now)} µg/m³), "
+            f"a iznad buduće granice za 2030. ({fmt.num(eu30)} µg/m³)."
+        )
+    return f"{name} je iznad granične vrijednosti EU-a koja vrijedi danas ({fmt.num(now)} µg/m³)."
 
 
 def air_category(lon: float, lat: float) -> Category:
     values: list[Value] = []
-    statuses: list[Status] = []
-    parts: list[str] = []
+    scales: list[Scale] = []
+    bands: list[tuple[str, Status]] = []
+    compare: list[str] = []
     for pollutant in ("pm25", "no2"):
         value = read_air(lon, lat, pollutant)
         name = POLLUTANT_NAMES[pollutant]
         src = f"eea_{pollutant}"
         if value is None:
             continue
-        st = _air_status(pollutant, value)
-        statuses.append(st)
-        who, eu = WHO_2021[pollutant], EU_2030[pollutant]
+        band, status = air_band(pollutant, value)
+        bands.append((band, status))
+        compare.append(_compare_sentence(name, pollutant, value))
         values.append(
             Value(
                 key=f"{pollutant}_annual",
                 label=f"{name}, godišnji prosjek 2024.",
                 value=round(value, 1),
                 unit="µg/m³",
-                display=f"{fmt.num(value, 1)} µg/m³",
+                display=f"{fmt.num(value, 1)} µg/m³ ({band})",
                 source=src,
                 retrieved_at=retrieved_at(src),
                 kind="modelled",
-                note=(
-                    f"Smjernica WHO-a (2021): {fmt.num(who)} µg/m³; "
-                    f"granična vrijednost EU-a od 2030.: {fmt.num(eu)} µg/m³."
-                ),
+                note=compare[-1],
             )
         )
-        if st == "good":
-            parts.append(f"{name} je unutar smjernice WHO-a")
-        elif st == "warning":
-            parts.append(
-                f"{name} je iznad smjernice WHO-a, ali unutar granične vrijednosti EU-a "
-                "koja vrijedi od 2030. godine"
+        scales.append(
+            Scale(
+                key=pollutant,
+                label=f"{name}, godišnji prosjek",
+                unit="µg/m³",
+                value=round(value, 1),
+                band=band,
+                bands=[ScaleBand(upto=u, label=n, status=st) for u, n, st in AIR_BANDS[pollutant]],
+                markers=[
+                    ScaleMarker(value=WHO_2021[pollutant], label="WHO"),
+                    ScaleMarker(value=EU_2030[pollutant], label="EU 2030."),
+                    ScaleMarker(value=EU_NOW[pollutant], label="EU danas"),
+                ],
             )
-        else:
-            parts.append(f"{name} je iznad granične vrijednosti EU-a koja vrijedi od 2030. godine")
+        )
     links = [
         Link(
             label="Kvaliteta zraka u stvarnom vremenu (Ministarstvo zaštite okoliša)",
@@ -320,18 +366,21 @@ def air_category(lon: float, lat: float) -> Category:
             headline="Podaci o kvaliteti zraka za ovu lokaciju nisu dostupni.",
             links=links,
         )
-    status = max(statuses, key=lambda s: _STATUS_ORDER[s])
-    headline = "Prema modeliranoj karti za 2024. godinu, " + "; ".join(parts) + "."
+    worst = max(bands, key=lambda b: _BAND_ORDER.index(b[0]))
+    headline = f"Razina onečišćenja zraka je {worst[0]} (godišnji prosjek, karta EEA-e za 2024.)."
     return Category(
         id="air",
         group="environment",
         title="Kvaliteta zraka",
-        status=status,
-        status_label=label(status),
+        status=worst[1],
+        status_label=worst[0].capitalize(),
         headline=headline,
         values=values,
         links=links,
+        scales=scales,
         notes=[
+            "Ljestvica: vrlo niska do smjernice WHO-a, niska do granične vrijednosti EU-a za "
+            "2030., umjerena do granične vrijednosti EU-a koja vrijedi danas, visoka iznad nje.",
             "Karta EEA-e procjena je godišnjeg prosjeka na mreži od 1 km, izrađena iz mjerenja "
             "i modela. Nije mjerenje na samoj adresi i ne služi za službenu provjeru "
             "usklađenosti s graničnim vrijednostima.",

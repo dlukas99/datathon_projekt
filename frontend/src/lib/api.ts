@@ -34,6 +34,22 @@ export interface Place {
   detail: string | null
 }
 
+export interface ScaleBand {
+  upto: number | null
+  label: string
+  status: Status
+}
+
+export interface Scale {
+  key: string
+  label: string
+  unit: string
+  value: number
+  band: string
+  bands: ScaleBand[]
+  markers: { value: number; label: string }[]
+}
+
 export interface Category {
   id: string
   group: Group
@@ -45,6 +61,7 @@ export interface Category {
   places: Place[]
   notes: string[]
   links: Link[]
+  scales?: Scale[]
 }
 
 export interface Location {
