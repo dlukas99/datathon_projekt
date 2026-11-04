@@ -9,10 +9,20 @@ from typing import Annotated, Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
 
 from app import brand, pvgis
 from app.assistant import AssistantReply, AssistantRequest, answer
 from app.config import REPO_ROOT
+from app.finder import (
+    FindOptions,
+    FindRequest,
+    FindResponse,
+    ParseUnavailable,
+    find,
+    options,
+    parse_question,
+)
 from app.geo import in_bbox
 from app.geocode import Suggestion, get_geocoder
 from app.layers import get_layers
@@ -133,3 +143,28 @@ def assistant(request: AssistantRequest) -> AssistantReply:
         return answer(request, build_report)
     except OutsideCroatia as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/find/options", tags=["pronađi mjesto"], response_model=FindOptions)
+def find_options() -> FindOptions:
+    """Županije, broj obuhvaćenih naselja i je li dostupan jezični model."""
+    return options()
+
+
+@app.post("/api/find", tags=["pronađi mjesto"], response_model=FindResponse)
+def find_places(request: FindRequest) -> FindResponse:
+    """Najbolja naselja prema filtrima i Skoru za život; deterministički izračun."""
+    return find(request)
+
+
+class ParseQuestion(BaseModel):
+    question: str = Field(min_length=3, max_length=300)
+
+
+@app.post("/api/find/parse", tags=["pronađi mjesto"], response_model=FindRequest)
+def find_parse(body: ParseQuestion) -> FindRequest:
+    """Slobodno pitanje u filtre (samo ako je postavljen jezični model). Pitanje se ne sprema."""
+    try:
+        return parse_question(body.question)
+    except ParseUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

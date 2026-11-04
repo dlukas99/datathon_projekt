@@ -193,6 +193,75 @@ export async function askAssistant(
   return handle<AssistantReply>(response)
 }
 
+export interface FindRequest {
+  profile: string
+  weights?: Record<string, number> | null
+  county: string | null
+  size: 'any' | 'village' | 'town' | 'city'
+  must: (
+    | 'kindergarten'
+    | 'school'
+    | 'doctor'
+    | 'pediatrician'
+    | 'pharmacy'
+    | 'grocery'
+    | 'park'
+    | 'transit'
+  )[]
+  max_air: 'any' | 'niska' | 'umjerena'
+  avoid_flood: boolean
+  limit: number
+}
+
+export interface FindResult {
+  code: string
+  name: string
+  municipality: string
+  county: string
+  population: number
+  lat: number
+  lon: number
+  score: number | null
+  reasons: string[]
+  facts: string[]
+}
+
+export interface FindResponse {
+  matching: number
+  searched: number
+  criteria: string[]
+  results: FindResult[]
+  note: string
+}
+
+export interface FindOptions {
+  counties: string[]
+  settlements: number
+  min_population: number
+  llm: boolean
+}
+
+export function fetchFindOptions(signal?: AbortSignal): Promise<FindOptions> {
+  return getJson<FindOptions>('/api/find/options', {}, signal)
+}
+
+async function postJson<T>(path: string, body: unknown): Promise<T> {
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  return handle<T>(response)
+}
+
+export function findPlaces(request: FindRequest): Promise<FindResponse> {
+  return postJson<FindResponse>('/api/find', request)
+}
+
+export function parseFindQuestion(question: string): Promise<Partial<FindRequest>> {
+  return postJson<Partial<FindRequest>>('/api/find/parse', { question })
+}
+
 export function geojsonUrl(lat: number, lon: number): string {
   return `/api/report?lat=${String(lat)}&lon=${String(lon)}&format=geojson`
 }

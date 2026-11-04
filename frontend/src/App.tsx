@@ -5,6 +5,7 @@ import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router
 import { BRAND } from './lib/brand'
 import { AboutPage } from './pages/AboutPage'
 import { ComparePage } from './pages/ComparePage'
+import { FindPage } from './pages/FindPage'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ReportPage } from './pages/ReportPage'
@@ -83,9 +84,14 @@ function Layout() {
           <nav className="site-nav" aria-label="Glavna navigacija">
             <ul>
               <li>
-                <NavLink to="/usporedi">Usporedi</NavLink>
+                <NavLink to="/pronadi">
+                  Pronađi<span className="nav-long"> mjesto</span>
+                </NavLink>
               </li>
               <li>
+                <NavLink to="/usporedi">Usporedi</NavLink>
+              </li>
+              <li className="nav-about">
                 <NavLink to="/o-alatu">O alatu</NavLink>
               </li>
               <li>
@@ -115,6 +121,7 @@ function Layout() {
             <Route path="/" element={<HomePage />} />
             <Route path="/izvjestaj" element={<ReportPage />} />
             <Route path="/usporedi" element={<ComparePage />} />
+            <Route path="/pronadi" element={<FindPage />} />
             <Route path="/izvori" element={<SourcesPage />} />
             <Route path="/o-alatu" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} />

@@ -13,6 +13,12 @@ type Demo = (typeof demo.addresses)[number] | undefined
 
 const ENTRIES: { icon: string; title: string; text: string; to: (a: Demo, b: Demo) => string }[] = [
   {
+    icon: 'find',
+    title: 'Pronađi mjesto za život',
+    text: 'Zadajte što vam treba, a aplikacija predlaže naselja s razlozima.',
+    to: () => '/pronadi',
+  },
+  {
     icon: 'compare',
     title: 'Usporedi dvije lokacije',
     text: 'Dvije adrese jedna uz drugu, kategoriju po kategoriju.',
