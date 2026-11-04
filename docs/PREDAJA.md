@@ -34,11 +34,7 @@ Redoslijed je važan; uz svaku stavku je preporučeni rok.
 1. **Imena tima, mentora i visokog učilišta** (do 6. 11.): upisati u `README.md` umjesto oznaka `TODO(tim)`.
 2. **`CONTACT_EMAIL`** (do 6. 11.): upisati u `.env` i na poslužitelju. Adresa ide u User-Agent prema izvorima podataka.
 3. **Javni repozitorij na GitHubu** (do 6. 11.):
-   - napraviti repozitorij (npr. `prije-potpisa`), dodati `origin` i pushati granu `main`:
-     ```bash
-     git remote add origin git@github.com:KORISNIK/prije-potpisa.git
-     git push -u origin main
-     ```
+   - kod je na https://github.com/dlukas99/datathon_projekt (grana `main`); repozitorij treba postaviti kao **javni** (Settings → General → Danger Zone → Change visibility) prije predaje;
    - provjeriti da u repozitoriju nema `.env` ni mape `data/` (u `.gitignore` su).
 4. **Poslužitelj i domena** (do 7. 11.): prema `docs/DEPLOY.md`.
    - Treba Linux s Dockerom, 2 vCPU, 4 GB RAM-a i 10 GB diska, te domena s DNS zapisom na poslužitelj.

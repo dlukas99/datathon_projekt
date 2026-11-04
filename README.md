@@ -167,6 +167,8 @@ make verify              # lint, tipovi, testovi, build, e2e i pristupačnost
 
 Pri prvom pokretanju (`make dev` ili `make valhalla`) Valhalla oko 3 minute gradi pločice iz OSM izvatka.
 
+Detaljna uputa korak po korak za Windows i VS Code, bez `make`a, s radom u granama: [docs/RAZVOJ.md](docs/RAZVOJ.md).
+
 Produkcija:
 
 ```bash
