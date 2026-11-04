@@ -1,0 +1,36 @@
+{
+  "_note": "Poveznice na pretrage oglasa. Aplikacija samo slaže URL; nikad ne dohvaća, ne parsira i ne prikazuje oglase. Provjereno: struktura Njuškala iz primjera tima (prodaja-kuca, bebrina-bebrina, price[max], livingArea[max]). Automatska provjera ostalih slugova nije moguća jer Njuškalo blokira automatski pristup; označeno TODO(verify).",
+  "providers": [
+    {
+      "id": "njuskalo",
+      "label": "Njuškalo",
+      "base": "https://www.njuskalo.hr",
+      "categories": {
+        "house-sale": { "path": "prodaja-kuca", "verified": true },
+        "flat-sale": { "path": "prodaja-stanova", "verified": false, "todo": "TODO(verify)" },
+        "house-rent": { "path": "iznajmljivanje-kuca", "verified": false, "todo": "TODO(verify)" },
+        "flat-rent": { "path": "iznajmljivanje-stanova", "verified": false, "todo": "TODO(verify)" }
+      },
+      "locations": {
+        "Bebrina|Bebrina": "bebrina-bebrina"
+      },
+      "filters": {
+        "price_max": "price[max]",
+        "area_max": "livingArea[max]"
+      }
+    },
+    {
+      "id": "index",
+      "label": "Index Oglasi",
+      "fallback": "https://www.index.hr/oglasi/nekretnine",
+      "verified": true
+    },
+    {
+      "id": "nekretnine",
+      "label": "Nekretnine.hr",
+      "fallback": "https://www.nekretnine.hr/",
+      "verified": false,
+      "todo": "TODO(verify): stranica odbija automatske zahtjeve (403), pa poveznica nije provjerena"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import {
   findPlaces,
   parseFindQuestion,
 } from '../lib/api'
+import { ListingLinks } from '../components/ListingLinks'
 import { PROFILES } from '../lib/profiles'
 import { reportPath } from '../lib/urls'
 
@@ -239,6 +240,7 @@ export function FindPage() {
                     >
                       Otvori izvještaj
                     </Link>
+                    <ListingLinks place={r.name} municipality={r.municipality} />
                   </div>
                 </li>
               ))}

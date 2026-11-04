@@ -11,6 +11,7 @@ import {
   StatusBadge,
 } from '../components/CategoryCard'
 import { CategoryIcon } from '../components/Icons'
+import { ListingLinks } from '../components/ListingLinks'
 import { FocusPicker } from '../components/ProfilePicker'
 import { ISOCHRONE_COLORS, PLACE_COLORS, PLACE_NAMES, ReportMap } from '../components/ReportMap'
 import {
@@ -269,6 +270,9 @@ function Actions({ report }: { report: Report }) {
         <Printer size={18} aria-hidden="true" />
         Ispiši
       </button>
+      {loc.settlement && (
+        <ListingLinks place={loc.settlement} municipality={loc.municipality ?? loc.settlement} />
+      )}
       <span className="copied" role="status" aria-live="polite">
         {copied}
       </span>
