@@ -1067,6 +1067,76 @@ details summary {
   }
 }
 
+.lead.left {
+  margin-left: 0;
+  text-align: left;
+}
+
+.find-ask {
+  margin-bottom: 1rem;
+}
+
+.find-ask label {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.find-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+.find-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.find-flood {
+  margin: 1rem 0;
+}
+
+.find-results {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.find-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.find-head h3 {
+  display: inline;
+  font-size: 1.3rem;
+}
+
+.find-rank {
+  color: var(--muted);
+  font-weight: 700;
+  margin-right: 0.4rem;
+}
+
+.find-reasons {
+  font-weight: 600;
+  margin: 0.75rem 0 0;
+}
+
+.score-badge.small {
+  min-width: 64px;
+  min-height: 64px;
+  border-radius: 16px;
+}
+
+.score-badge.small .score-badge-number {
+  font-size: 1.5rem;
+}
+
 .notice {
   margin: 0.75rem 0 0;
   padding: 0.75rem 1rem;
@@ -1495,7 +1565,12 @@ details summary {
   }
 
   .site-nav a {
-    padding: 0 0.6rem;
+    padding: 0 0.55rem;
+  }
+
+  .nav-long,
+  .nav-about {
+    display: none;
   }
 }
 

@@ -73,6 +73,18 @@ test('life score has visible, adjustable weights', async ({ page }) => {
   await expect(section.getByRole('button', { name: 'Vrati težine profila' })).toBeVisible()
 })
 
+test('find a place to live ranks settlements with reasons', async ({ page }) => {
+  await page.goto('/pronadi')
+  await page.getByLabel('Područje').selectOption({ label: 'Vukovarsko-srijemska županija' })
+  await page.getByRole('checkbox', { name: 'Vrtić' }).check()
+  await page.getByRole('button', { name: 'Predloži mjesta' }).click()
+  const results = page.locator('.find-results > li')
+  await expect(results.first()).toBeVisible()
+  await expect(results.first().getByText(/Najjače:/)).toBeVisible()
+  await results.first().getByRole('link', { name: 'Otvori izvještaj' }).click()
+  await expect(page.getByText(/Prikazano je središte naselja/)).toBeVisible()
+})
+
 test('assistant answers from the report', async ({ page }) => {
   await page.goto(reportUrl)
   await page.getByRole('button', { name: 'Je li ova kuća u poplavnom području?' }).click()
@@ -101,6 +113,7 @@ for (const theme of ['light', 'dark'] as const) {
       ['report', reportUrl, first.address],
       ['compare', compareUrl, 'Usporedba dviju adresa'],
       ['sources', '/izvori', 'Izvori podataka'],
+      ['find', '/pronadi', 'Gdje bih mogao živjeti'],
       ['about', '/o-alatu', 'O alatu i metodologiji'],
     ]
     for (const [name, url, heading] of pages) {
