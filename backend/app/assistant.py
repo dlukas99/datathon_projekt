@@ -101,9 +101,10 @@ EXPLANATIONS: dict[str, str] = {
         "javna zelena površina do 300 m od kuće. Drveće ljeti ublažava vrućine."
     ),
     "noise": (
-        "Za buku nemamo otvorene mjerne karte za cijelu Hrvatsku, pa prikazujemo procjenu: "
-        "udaljenost od autocesta, glavnih i važnijih cesta te pruga. Što je prometnica bliže, "
-        "to je buka vjerojatnije veća."
+        "Buku ne mjerimo: otvorene karte buke za cijelu Hrvatsku ne postoje. Prikazujemo "
+        "udaljenost od autocesta, glavnih i važnijih cesta te pruga. Do 300 m od velike "
+        "prometnice buka i ispušni plinovi obično su najizraženiji, a dalje od 500 m utjecaj "
+        "je slab (pregled istraživanja Health Effects Institutea, 2010.)."
     ),
     "solar": (
         "Procjena dolazi iz alata PVGIS Europske komisije: koliko bi kilovatsati godišnje "

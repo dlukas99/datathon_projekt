@@ -33,7 +33,7 @@
       }
     },
     "noise": {
-      "status": "info",
+      "status": "warning",
       "values": {
         "distance_road": 88,
         "distance_rail": 1188

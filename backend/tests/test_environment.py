@@ -48,3 +48,16 @@ def test_flood_status(monkeypatch: pytest.MonkeyPatch) -> None:
     near.append(FloodReading(500, None, 1.0))
     assert _flood(monkeypatch, near) == "warning"
     assert _flood(monkeypatch, None) == "no_data"
+
+
+@pytest.mark.parametrize(
+    ("distance", "band", "status"),
+    [
+        (10, "Blizu prometnice", "warning"),
+        (300, "Blizu prometnice", "warning"),
+        (450, "Rub zone prometa", "info"),
+        (800, "Podalje od prometnica", "good"),
+    ],
+)
+def test_traffic_bands_follow_hei_zone(distance: float, band: str, status: str) -> None:
+    assert environment.traffic_band(distance) == (band, status)

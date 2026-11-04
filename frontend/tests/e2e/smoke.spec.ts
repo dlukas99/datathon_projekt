@@ -32,7 +32,7 @@ test('main flow: search an address and read the report, environment first', asyn
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Franje Kuhača 9, Osijek')
   const sections = page.locator('main h2:not(.visually-hidden)')
   await expect(sections.first()).toHaveText('Okolišni pregled')
-  for (const title of ['Poplave', 'Kvaliteta zraka', 'Toplina i zelenilo', 'Buka', 'Sunce na krovu']) {
+  for (const title of ['Poplave', 'Kvaliteta zraka', 'Toplina i zelenilo', 'Promet u blizini', 'Sunce na krovu']) {
     await expect(page.getByRole('heading', { level: 3, name: title })).toBeVisible()
   }
   await expect(page.getByRole('heading', { name: 'Život bez auta' })).toBeVisible()
