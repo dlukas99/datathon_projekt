@@ -25,6 +25,7 @@ ingest = [
     "openpyxl>=3.1",
     "osmium>=4.3.2",
     "xlrd>=2.0.2",
+    "scikit-learn>=1.9.1",
 ]
 dev = [
     "ruff>=0.8",
@@ -58,7 +59,7 @@ python_version = "3.12"
 packages = ["app", "ingest", "analysis"]
 
 [[tool.mypy.overrides]]
-module = ["rasterio.*", "shapely.*", "pyproj.*", "geopandas.*", "pyogrio.*", "pyarrow.*", "osmium.*", "openpyxl.*"]
+module = ["sklearn.*", "rasterio.*", "shapely.*", "pyproj.*", "geopandas.*", "pyogrio.*", "pyarrow.*", "osmium.*", "openpyxl.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
