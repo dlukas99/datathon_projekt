@@ -166,6 +166,19 @@ npm run dev
 
 Zaustavljanje: u terminalima 2 i 3 pritisnite **Ctrl+C**, a Valhallu zaustavite naredbom `docker compose -f deploy/docker-compose.dev.yml down`. Pločice ostaju spremljene, pa sljedeće pokretanje traje nekoliko sekundi.
 
+### Profili naselja (jednom, nakon što Valhalla radi)
+
+Korak „Profili naselja” iz koraka 5 treba Valhallu, a ona treba OSM izvadak iz istog koraka. Zato ga pri prvom pokretanju preskočite i pokrenite tek kad Valhalla radi (oko 5 minuta):
+
+```powershell
+cd backend
+$env:PYTHONUTF8 = "1"
+uv run python -m ingest.settlement_profiles
+cd ..
+```
+
+Bez tog koraka sve radi osim stranice „Pronađi mjesto”.
+
 ### Ako imate `make`
 
 Na Linuxu, Macu ili Windowsima s MSYS2 sve gore radi i preko Makefilea: `make setup`, `make data`, `make dev`, `make verify`. Na običnim Windowsima `make` ne postoji, pa koristite naredbe iz ove upute. Rezultat je isti.

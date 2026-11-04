@@ -1,16 +1,16 @@
 # Pristupačnost
 
-Cilj je WCAG 2.2 razine AA. Provjera je automatska (axe-core u Playwrightu) i ručna, prema popisu u nastavku.
+Cilj je WCAG 2.2 razine AA. Provjera je automatska (axe-core u Playwrightu); ono što još nije provjereno navedeno je na kraju.
 
 ## Automatske provjere
 
 `make e2e` (dio `make verify`) pokreće `frontend/tests/e2e/smoke.spec.ts`:
 
 - **axe-core** s oznakama `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` i `wcag22aa`:
-  - na svim stranicama: naslovnica, izvještaj, usporedba, izvori i „O alatu”;
+  - na svim stranicama: naslovnica, izvještaj, usporedba, „Pronađi mjesto”, izvori i „O alatu”;
   - u svijetloj i tamnoj temi;
   - na desktopu (Desktop Chrome) i mobitelu (Pixel 7);
-  - ukupno 20 provjera, a sve moraju biti bez nalaza.
+  - ukupno 24 provjere, a sve moraju biti bez nalaza.
 - **Bez vodoravnog pomicanja** na širini od 320 px (naslovnica, izvještaj, usporedba).
 - **Glavni tok tipkovnicom:** pretraga, strelica dolje i Enter do izvještaja.
 

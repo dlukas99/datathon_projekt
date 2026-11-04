@@ -65,7 +65,7 @@ Redoslijed (procjena):
 8. [x] Poveznice na oglase: Njuškalo s filtrima i rezervnim poveznicama; Index Oglasi i Nekretnine.hr samo rezervno ako se struktura ne potvrdi (1 h)
 9. [x] Validacija zraka uz službene postaje (Zagreb, Osijek, Požega, po 4 lokacije) (1,5 h)
 10. [x] ML: model za godišnji NO2/PM2,5 na postajama, leave-one-station-out, usporedba s EEA; u aplikaciju samo ako je bolji (2 h)
-11. [ ] Dokumentacija, scenarij videa, snimke zaslona (1 h)
+11. [x] Dokumentacija, scenarij videa, snimke zaslona (1 h)
 
 Ako ponestane vremena, režem ovim redom:
 - ML ostaje samo evaluacija u `docs/ML.md`;

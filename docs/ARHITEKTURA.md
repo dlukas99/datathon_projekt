@@ -51,6 +51,9 @@ Rješenje ima dva dijela:
 | `transit.py` | ZET i HŽPP GTFS, Autotrolej JSON | `transit_stops.parquet` s polascima na sat |
 | `registries.py` | MZOM, HZZO, Grad Zagreb | `registry_pois.parquet` (geokodirano nad DGU adresama), `geocoding_report.json` |
 | `recycling.py` | CKAN pretraga općinskih skupova + OSM | `recycling.parquet`, `recycling_ckan.json` |
+| `centers.py` | OSM čvorovi `place` | stvarna središta naselja u `settlements.parquet` |
+| `stations.py` | EEA Air Quality Download Service | `stations_2024.parquet`: godišnji prosjeci službenih postaja |
+| `settlement_profiles.py` | sve gore (treba Valhallu) | `settlement_profiles.parquet`: profil središta 2.347 naselja za tražilicu |
 | `pois.py` | sve gore | `pois.parquet`: jedan sloj točaka s prednošću službenih izvora |
 | `common.py` | — | pristojno preuzimanje (User-Agent, razmak između zahtjeva, ponavljanje, nastavak prekinutog preuzimanja) i `manifest.json` s izvorom, licencom i datumom preuzimanja |
 
@@ -74,8 +77,17 @@ Rješenje ima dva dijela:
 | `GET /api/reverse?lat=&lon=` | naselje, grad ili općina, županija |
 | `GET /api/report?lat=&lon=[&format=geojson]` | cijeli izvještaj; svaka vrijednost ima `source`, `retrieved_at` i `kind` |
 | `POST /api/assistant` | asistent nad izvještajem (vidi [ASISTENT.md](ASISTENT.md)) |
+| `GET /api/find/options`, `POST /api/find` | Pronađi mjesto za život: filtri i deterministički rang naselja |
+| `POST /api/find/parse` | slobodno pitanje u filtre (samo uz jezični model) |
 | `GET /api/sources` | svi izvori s licencom i datumom |
 | `GET /api/sources/live` | datumi zadnje izmjene skupova uživo s Portala (CKAN) |
+
+### Zajednička konfiguracija (`config/`)
+
+- `profiles.json`: profili i težine za Skor za život; čitaju ga i backend (`app/profiles.py`) i frontend.
+- `listings.json`: slaganje poveznica na oglasnike (samo URL, bez dohvaćanja).
+
+Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti skor koriste izvještaj i tražilica mjesta.
 
 ### Frontend (`frontend/`)
 
