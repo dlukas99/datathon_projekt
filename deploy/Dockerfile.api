@@ -14,6 +14,7 @@ COPY backend/analysis ./analysis
 COPY backend/ingest ./ingest
 # Demo addresses: PVGIS answers for them are fetched at start-up.
 COPY scripts/demo_addresses.json /scripts/demo_addresses.json
+COPY config /config
 RUN uv sync --frozen --no-default-groups
 RUN useradd --create-home appuser
 USER appuser

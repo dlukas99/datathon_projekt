@@ -1,0 +1,58 @@
+{
+  "_note": "Profili i težine za Skor za život. Jedan izvor za frontend (src/lib/profiles.ts) i backend (app/profiles.py). Težine 0–3; 0 znači da se kategorija ne računa.",
+  "categories": [
+    { "id": "flood", "label": "Poplave" },
+    { "id": "air", "label": "Kvaliteta zraka" },
+    { "id": "green", "label": "Toplina i zelenilo" },
+    { "id": "noise", "label": "Promet u blizini" },
+    { "id": "fire", "label": "Požari raslinja" },
+    { "id": "solar", "label": "Sunce na krovu" },
+    { "id": "car_free", "label": "Život bez auta" },
+    { "id": "transit", "label": "Javni prijevoz" },
+    { "id": "daily", "label": "Svakodnevni život" }
+  ],
+  "profiles": [
+    {
+      "id": "opci",
+      "label": "Općenito",
+      "description": "Uravnoteženo: sve kategorije važne, požari i sunce nešto manje.",
+      "focus": [],
+      "weights": { "flood": 2, "air": 2, "green": 2, "noise": 2, "fire": 1, "solar": 1, "car_free": 2, "transit": 2, "daily": 2 }
+    },
+    {
+      "id": "obitelj",
+      "label": "Obitelj s djecom",
+      "description": "Naglasak na zraku, poplavama, zelenilu, vrtiću, školi, pedijatru i igralištu.",
+      "focus": ["air", "green", "flood", "kindergarten", "school", "pediatrician", "playground", "car_free"],
+      "weights": { "flood": 3, "air": 3, "green": 2, "noise": 2, "fire": 1, "solar": 1, "car_free": 2, "transit": 1, "daily": 3 }
+    },
+    {
+      "id": "umirovljenik",
+      "label": "Umirovljenik",
+      "description": "Naglasak na vrućinama, liječniku, ljekarni i javnom prijevozu.",
+      "focus": ["green", "air", "doctor", "pharmacy", "transit", "grocery", "car_free"],
+      "weights": { "flood": 2, "air": 2, "green": 3, "noise": 2, "fire": 1, "solar": 1, "car_free": 2, "transit": 3, "daily": 2 }
+    },
+    {
+      "id": "student",
+      "label": "Student",
+      "description": "Naglasak na javnom prijevozu i životu bez auta.",
+      "focus": ["transit", "car_free", "grocery", "air", "noise"],
+      "weights": { "flood": 1, "air": 1, "green": 1, "noise": 1, "fire": 1, "solar": 0, "car_free": 3, "transit": 3, "daily": 1 }
+    },
+    {
+      "id": "rad-od-kuce",
+      "label": "Rad od kuće",
+      "description": "Naglasak na mirnom okruženju, zelenilu i suncu na krovu.",
+      "focus": ["noise", "green", "solar", "air", "grocery"],
+      "weights": { "flood": 2, "air": 2, "green": 3, "noise": 3, "fire": 1, "solar": 2, "car_free": 1, "transit": 1, "daily": 1 }
+    },
+    {
+      "id": "vlastiti",
+      "label": "Vlastiti",
+      "description": "Sami odaberite što vam je važno.",
+      "focus": [],
+      "weights": { "flood": 2, "air": 2, "green": 2, "noise": 2, "fire": 1, "solar": 1, "car_free": 2, "transit": 2, "daily": 2 }
+    }
+  ]
+}

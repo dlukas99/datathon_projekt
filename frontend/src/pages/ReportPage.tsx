@@ -23,7 +23,9 @@ import {
 } from '../lib/api'
 import { BRAND } from '../lib/brand'
 import { formatDate } from '../lib/format'
-import { focusList, orderByFocus, PROFILES } from '../lib/profiles'
+import { focusList, getProfile, orderByFocus, profileWeights, PROFILES } from '../lib/profiles'
+import { decodeWeights, encodeWeights, lifeScore } from '../lib/score'
+import { LifeScore, ScoreBadge } from '../components/LifeScore'
 import { comparePath } from '../lib/urls'
 
 const DAILY_ORDER = [
@@ -432,6 +434,8 @@ export function ReportPage() {
   const custom = params.get('vazno')
   const customIds = (custom ?? '').split(',').filter(Boolean)
   const focus = focusList(profile, custom)
+  const customWeights = decodeWeights(params.get('tezine'))
+  const weights = { ...profileWeights(profile), ...(customWeights ?? {}) }
   const valid =
     Number.isFinite(lat) && Number.isFinite(lon) && params.has('lat') && params.has('lon')
 
@@ -447,6 +451,7 @@ export function ReportPage() {
     else next.set('profil', id)
     if (id === 'vlastiti' && ids.length > 0) next.set('vazno', ids.join(','))
     else next.delete('vazno')
+    if (id !== profile) next.delete('tezine')
     setParams(next, { replace: true })
   }
 
@@ -467,11 +472,30 @@ export function ReportPage() {
   }
 
   const report = query.data
+  const score = report ? lifeScore(report.categories, weights) : null
+
+  function setWeight(id: string, value: number) {
+    const next = new URLSearchParams(params)
+    next.set('tezine', encodeWeights({ ...weights, [id]: value }))
+    setParams(next, { replace: true })
+  }
+
+  function resetWeights() {
+    const next = new URLSearchParams(params)
+    next.delete('tezine')
+    setParams(next, { replace: true })
+  }
+
   return (
     <>
       <header className="report-header">
+        <div className="title-row">
+          <div>
         <p className="eyebrow">Pregled adrese</p>
         <h1>{label ?? (pointKind === 'karta' ? 'Odabrana točka' : `${lat.toFixed(5)}, ${lon.toFixed(5)}`)}</h1>
+          </div>
+          {score && <ScoreBadge result={score} />}
+        </div>
         {report && (
           <p className="place-line">
             {placeLine(report)}
@@ -520,6 +544,17 @@ export function ReportPage() {
       {report && (
         <>
           <ReportView report={report} focus={focus} onPick={pickPoint} />
+          {score && (
+            <LifeScore
+              categories={report.categories}
+              weights={weights}
+              result={score}
+              profileLabel={getProfile(profile).label}
+              customised={customWeights !== null}
+              onWeight={setWeight}
+              onReset={resetWeights}
+            />
+          )}
           <Assistant points={[{ lat: report.location.lat, lon: report.location.lon, label }]} />
           <SourcesList report={report} />
           <p className="fine-print">

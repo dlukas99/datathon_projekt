@@ -62,6 +62,17 @@ test('profile changes order, not values', async ({ page }) => {
   await expect(cards.first().getByText('Važno za odabrani profil')).toBeVisible()
 })
 
+test('life score has visible, adjustable weights', async ({ page }) => {
+  await page.goto(reportUrl)
+  const section = page.locator('#skor')
+  await expect(section.getByRole('heading', { name: 'Skor za život' })).toBeVisible()
+  await expect(section.getByText(/Najviše (podiže|spušta)/)).toBeVisible()
+  const slider = section.getByRole('slider', { name: /Poplave/ })
+  await slider.fill('0')
+  await expect(page).toHaveURL(/tezine=/)
+  await expect(section.getByRole('button', { name: 'Vrati težine profila' })).toBeVisible()
+})
+
 test('assistant answers from the report', async ({ page }) => {
   await page.goto(reportUrl)
   await page.getByRole('button', { name: 'Je li ova kuća u poplavnom području?' }).click()

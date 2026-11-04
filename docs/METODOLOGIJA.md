@@ -6,7 +6,7 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 
 1. **Apsolutno značenje ispred relativnog ranga.** Pregled kaže, na primjer, „lokacija je u modeliranom poplavnom području za povratno razdoblje od 100 godina”, a ne „rizik iznad prosjeka”.
 2. **Svaka kategorija ima status** prema pragu s izvorom: dobro, upozorenje, loše ili nema podataka. Kategorije za koje ne postoji općeprihvaćen prag (sunce, buka kao procjena, život bez auta, javni prijevoz, svakodnevni život) imaju status „Informacija” i prikazuju samo podatak, bez ocjene. „Nema podataka” se uvijek prikazuje; kategorija se nikad tiho ne izostavlja.
-3. **Nema skupne ocjene.** Kategorije se ne zbrajaju ni ne ponderiraju. Profil korisnika (obitelj s djecom, umirovljenik, student, rad od kuće, vlastiti) mijenja samo redoslijed i naglasak kartica, nikad vrijednosti ni statuse.
+3. **Skupna ocjena samo s vidljivim težinama.** Kategorije se prikazuju zasebno; „Skor za život” (odjeljak niže) je ponderirani prosjek s vidljivim i podesivim težinama. Profil mijenja redoslijed, naglasak i težine, nikad vrijednosti ni statuse.
 4. **Svaka vrijednost ima izvor, datum preuzimanja i vrstu.** Vrste su:
    - `measured` (izmjereno): vrijednost iz mjerenja, voznog reda ili službenog registra;
    - `modelled` (modelirano): izračun modelom (karte poplava i zraka, satelitski pokrov tla, vrijeme hoda po mreži);
@@ -140,6 +140,28 @@ Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije
   - Radni dan je prva srijeda od dana obrade za koju postoji promet (`calendar.txt` i `calendar_dates.txt`).
 - Prikazuje se najveći broj polazaka na sat od svih stajališta unutar 10 minuta hoda.
 - **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
+
+## Skor za život
+
+Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je svjesno odstupanje od načela „bez skupne ocjene”, dopušteno jer su težine vidljive i podesive (vidi [ODLUKE.md](ODLUKE.md)). Vrijednosti i statusi kategorija se ne mijenjaju.
+
+- **Podskor kategorije (0–100), `backend/analysis/score.py`:**
+
+| Kategorija | Pravilo | Osnova |
+|---|---|---|
+| Poplave | dobro 100, upozorenje 50, loše 0 | scenariji Hrvatskih voda i Direktive 2007/60/EZ |
+| Kvaliteta zraka | vrlo niska 100, niska 80, umjerena 50, visoka 10 (viša od razina PM2,5 i NO2) | WHO 2021 i granice EU-a |
+| Toplina i zelenilo | do 60 bodova za udio drveća (30 % = puni bodovi) i 40 bodova za park do 300 m (20 do 600 m) | pravilo 3-30-300 |
+| Promet u blizini | podalje 100, rub zone 60, blizu 25 | HEI 2010 (300/500 m) |
+| Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
+| Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
+| Život bez auta | broj potreba od 7 × 100 / 7 | — |
+| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema podskora | naša normalizacija |
+| Svakodnevni život | udio vrsta ustanova unutar 15 minuta hoda | — |
+
+- **Skor:** ponderirani prosjek podskorova; kategorije bez podskora (nema podataka ili nepoznat vozni red) se preskaču. Težine 0–3 po profilu nalaze se u `config/profiles.json` (jedan izvor za backend i frontend) i mogu se mijenjati klizačima; prilagođene težine spremaju se u URL.
+- **Objašnjenje:** „najviše podiže” i „najviše spušta” su kategorije s najvećim pozitivnim, odnosno negativnim doprinosom: težina × (podskor − skor).
+- **Ograničenje:** skor je pomoć pri usporedbi, a ne ocjena kvalitete života. Normalizacije označene kao „naše” nisu službeni pragovi.
 
 ## Asistent
 

@@ -60,7 +60,7 @@ Redoslijed (procjena):
 3. [x] Zrak: stupnjevana skala prema međuciljevima WHO-a, crveno samo za visoko; WHO i EU kao informacija (1 h)
 4. [x] Promet u blizini umjesto „Buke”: opisne rečenice i pojasevi udaljenosti s izvorom (0,5 h)
 5. [x] Razumljiv rizik: vjerojatnost barem jedne poplave u 30 godina (0,5 h)
-6. [ ] Skor za život: podskorovi po kategoriji u backendu, vidljive i podesive težine po profilu, rečenica što podiže i spušta (2 h)
+6. [x] Skor za život: podskorovi po kategoriji u backendu, vidljive i podesive težine po profilu, rečenica što podiže i spušta (2 h)
 7. [ ] Pronađi mjesto za život: unaprijed izračunati profili naselja, deterministički rang, forma; jezični model samo za pretvaranje pitanja u filtre (3 h)
 8. [ ] Poveznice na oglase: Njuškalo s filtrima i rezervnim poveznicama; Index Oglasi i Nekretnine.hr samo rezervno ako se struktura ne potvrdi (1 h)
 9. [ ] Validacija zraka uz službene postaje (Zagreb, Osijek, Požega, po 4 lokacije) (1,5 h)

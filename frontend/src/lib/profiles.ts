@@ -1,4 +1,6 @@
-// A profile changes only the order and emphasis of categories, never the values.
+// A profile changes the order, emphasis and Skor za život weights, never the values.
+import shared from '../../../config/profiles.json'
+
 
 export type ProfileId = 'opci' | 'obitelj' | 'umirovljenik' | 'student' | 'rad-od-kuce' | 'vlastiti'
 
@@ -8,41 +10,18 @@ export interface Profile {
   description: string
   // Category ids and daily item keys, most important first.
   focus: string[]
+  // Skor za život weights per category, 0–3.
+  weights: Record<string, number>
 }
 
-export const PROFILES: Profile[] = [
-  { id: 'opci', label: 'Općenito', description: 'Bez posebnog naglaska.', focus: [] },
-  {
-    id: 'obitelj',
-    label: 'Obitelj s djecom',
-    description: 'Naglasak na zraku, zelenilu, vrtiću, školi, pedijatru i igralištu.',
-    focus: ['air', 'green', 'flood', 'kindergarten', 'school', 'pediatrician', 'playground', 'car_free'],
-  },
-  {
-    id: 'umirovljenik',
-    label: 'Umirovljenik',
-    description: 'Naglasak na vrućinama, liječniku, ljekarni i javnom prijevozu.',
-    focus: ['green', 'air', 'doctor', 'pharmacy', 'transit', 'grocery', 'car_free'],
-  },
-  {
-    id: 'student',
-    label: 'Student',
-    description: 'Naglasak na javnom prijevozu i životu bez auta.',
-    focus: ['transit', 'car_free', 'grocery', 'air', 'noise'],
-  },
-  {
-    id: 'rad-od-kuce',
-    label: 'Rad od kuće',
-    description: 'Naglasak na buci, zelenilu i suncu na krovu.',
-    focus: ['noise', 'green', 'solar', 'air', 'grocery'],
-  },
-  {
-    id: 'vlastiti',
-    label: 'Vlastiti',
-    description: 'Sami odaberite što vam je važno.',
-    focus: [],
-  },
-]
+// Profiles and their Skor za život weights live in config/profiles.json (shared with the backend).
+export const PROFILES: Profile[] = shared.profiles.map((p) => ({ ...p, id: p.id as ProfileId }))
+
+export const SCORE_CATEGORIES: { id: string; label: string }[] = shared.categories
+
+export function profileWeights(id: string | null): Record<string, number> {
+  return { ...getProfile(id).weights }
+}
 
 export const FOCUS_OPTIONS: { id: string; label: string }[] = [
   { id: 'flood', label: 'Poplave' },

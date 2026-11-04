@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from typing import Any
 
+from analysis import score
 from analysis.daily import car_free_category, daily_category, transit_category
 from analysis.environment import (
     air_category,
@@ -108,6 +109,7 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         "transit": transit_category(reach, has_timetables),
         "daily": daily_category(reach),
     }
+    score.attach(cats.values())
     used: list[str] = []
     for cat in cats.values():
         for v in cat.values:
