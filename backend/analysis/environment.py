@@ -422,6 +422,9 @@ def air_category(lon: float, lat: float) -> Category:
             "Karta EEA-e procjena je godišnjeg prosjeka na mreži od 1 km, izrađena iz mjerenja "
             "i modela. Nije mjerenje na samoj adresi i ne služi za službenu provjeru "
             "usklađenosti s graničnim vrijednostima.",
+            "Karta prikazuje pozadinsku razinu: uz prometne ulice NO2 može biti znatno viši "
+            "(u našoj provjeri prometne postaje u Zagrebu i Osijeku mjerile su 5–17 µg/m³ više "
+            "od karte). Vidi i kategoriju „Promet u blizini”.",
         ],
     )
 

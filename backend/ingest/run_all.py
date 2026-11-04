@@ -17,6 +17,7 @@ from ingest import (
     recycling,
     registries,
     settlement_profiles,
+    stations,
     transit,
 )
 
@@ -27,6 +28,7 @@ STEPS: list[tuple[str, Callable[[], None]]] = [
     ("Središta naselja (OSM place)", centers.run),
     ("Rasteri (JRC, EEA, ESA WorldCover)", rasters.run),
     ("EFFIS opožarene površine", effis.run),
+    ("Službene mjerne postaje zraka (EEA)", stations.run),
     ("Vozni redovi", transit.run),
     ("Registri (MZOM, HZZO, Grad Zagreb)", registries.run),
     ("Reciklaža (općinski skupovi s Portala i OSM)", recycling.run),
