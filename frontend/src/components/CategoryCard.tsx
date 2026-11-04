@@ -2,6 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import type { Category, SourceInfo, Status, Value } from '../lib/api'
 import { formatDate, KIND_HELP, KIND_LABELS } from '../lib/format'
 import { CategoryIcon } from './Icons'
+import { ScaleBar } from './ScaleBar'
 
 export function StatusBadge({ status, label }: { status: Status; label: string }) {
   return <span className={`status status-${status}`}>{label}</span>
@@ -75,7 +76,6 @@ function sharedSource(values: Value[]): Value | null {
 
 // The one number people look for first in each category.
 const KEY_VALUE: Record<string, string> = {
-  air: 'pm25_annual',
   green: 'tree_share_300m',
   noise: 'distance_road',
   fire: 'burnt_areas_2km',
@@ -206,6 +206,7 @@ export function CategoryCard({
           <span className="key-label">{key.label}</span>
         </p>
       )}
+      {category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
       <p className="headline">{category.headline}</p>
       <MoreDetails category={category} sources={sources} />
     </article>

@@ -44,6 +44,31 @@ class Place(BaseModel):
     detail: str | None = None
 
 
+class ScaleBand(BaseModel):
+    """One band of a graded scale: values up to `upto` (None = no upper limit)."""
+
+    upto: float | None
+    label: str
+    status: Status
+
+
+class ScaleMarker(BaseModel):
+    value: float
+    label: str
+
+
+class Scale(BaseModel):
+    """A value placed on a graded scale with sourced reference marks."""
+
+    key: str
+    label: str
+    unit: str
+    value: float
+    band: str
+    bands: list[ScaleBand]
+    markers: list[ScaleMarker] = []
+
+
 class Category(BaseModel):
     id: str
     group: Literal["environment", "car_free", "daily"]
@@ -55,6 +80,7 @@ class Category(BaseModel):
     places: list[Place] = []
     notes: list[str] = []
     links: list[Link] = []
+    scales: list[Scale] = []
 
 
 class Location(BaseModel):

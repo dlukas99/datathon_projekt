@@ -5,19 +5,23 @@ from analysis.environment import FloodReading
 
 
 @pytest.mark.parametrize(
-    ("pollutant", "value", "status"),
+    ("pollutant", "value", "band", "status"),
     [
-        ("pm25", 5.0, "good"),
-        ("pm25", 5.1, "warning"),
-        ("pm25", 10.0, "warning"),
-        ("pm25", 10.1, "bad"),
-        ("no2", 10.0, "good"),
-        ("no2", 20.0, "warning"),
-        ("no2", 20.5, "bad"),
+        ("pm25", 5.0, "vrlo niska", "good"),
+        ("pm25", 10.0, "niska", "good"),
+        ("pm25", 18.2, "umjerena", "info"),
+        ("pm25", 25.0, "umjerena", "info"),
+        ("pm25", 25.1, "visoka", "bad"),
+        ("no2", 10.0, "vrlo niska", "good"),
+        ("no2", 20.0, "niska", "good"),
+        ("no2", 40.0, "umjerena", "info"),
+        ("no2", 40.5, "visoka", "bad"),
     ],
 )
-def test_air_status_uses_who_and_eu_thresholds(pollutant: str, value: float, status: str) -> None:
-    assert environment._air_status(pollutant, value) == status
+def test_air_bands_follow_who_and_eu_limits(
+    pollutant: str, value: float, band: str, status: str
+) -> None:
+    assert environment.air_band(pollutant, value) == (band, status)
 
 
 def _flood(monkeypatch: pytest.MonkeyPatch, readings: list[FloodReading] | None) -> str:

@@ -17,7 +17,7 @@
       }
     },
     "air": {
-      "status": "warning",
+      "status": "good",
       "values": {
         "pm25_annual": 9.7,
         "no2_annual": 14.2

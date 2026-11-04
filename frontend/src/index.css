@@ -684,6 +684,91 @@ select {
   margin: 0.5rem 0 0.25rem;
 }
 
+/* Graded scale (air) */
+
+.scale {
+  margin: 0.6rem 0 1.4rem;
+  font-size: 0.85rem;
+}
+
+.scale-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.scale-head strong {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.scale-bar {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.scale-seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.scale-seg:first-child {
+  border-radius: 999px 0 0 999px;
+}
+
+.scale-seg:last-of-type {
+  border-radius: 0 999px 999px 0;
+}
+
+.seg-good {
+  background: color-mix(in srgb, var(--good) 45%, transparent);
+}
+
+.seg-info {
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
+}
+
+.seg-warning {
+  background: color-mix(in srgb, var(--warning) 55%, transparent);
+}
+
+.seg-bad {
+  background: color-mix(in srgb, var(--bad) 55%, transparent);
+}
+
+.scale-tick {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: var(--muted);
+}
+
+.scale-tick-label {
+  position: absolute;
+  top: 12px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.scale-pin {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text);
+  border: 2px solid var(--surface);
+  transform: translate(-50%, -50%);
+}
+
 /* Status: colour and words, never colour alone */
 
 .status {
