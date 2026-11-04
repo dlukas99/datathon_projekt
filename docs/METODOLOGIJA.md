@@ -70,12 +70,21 @@ Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije
 - **Status:** dobro ako su ispunjena oba uvjeta (drveće ≥ 30 % u krugu od 300 m i park na zračnoj udaljenosti ≤ 300 m), upozorenje ako je ispunjen jedan, loše ako nije nijedan.
 - **Ograničenja:** WorldCover mjeri pokrov tla iz satelita i ne razlikuje javne od privatnih vrtova. OSM parkovi su izvan gradova nepotpuni. Dio pravila „3 stabla vidljiva s prozora” ne može se izračunati iz otvorenih podataka.
 
-## Buka (procjena)
+## Promet u blizini (procjena; ranije „Buka”)
 
 - **Podaci:** autoceste, brze, glavne i važnije ceste (`highway=motorway|trunk|primary|secondary`) i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa.
-- **Izračun:** zračna udaljenost do najbliže ceste i najbliže pruge, do 2 km.
-- **Status:** „Informacija”, vrsta „procjena”. Za udaljenost od prometnice ne postoji prag s izvorom koji bi je pretvorio u razinu buke.
-- **Kontekst:** smjernice WHO-a za buku okoliša u europskoj regiji (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
+- **Izračun:** zračna udaljenost do najbliže takve ceste i najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”.
+- **Pojasevi:**
+
+| Udaljenost od ceste | Oznaka | Status |
+|---|---|---|
+| do 300 m | Blizu prometnice | upozorenje |
+| 300–500 m | Rub zone prometa | informacija |
+| više od 500 m | Podalje od prometnica | dobro |
+
+- **Izvor pojaseva:** Health Effects Institute (2010.), *Traffic-Related Air Pollution: A Critical Review of the Literature on Emissions, Exposure, and Health Effects*, Special Report 17. Zona najjačeg utjecaja prometa je približno 300 do 500 m od autoceste ili velike prometnice, a dalje koncentracije padaju na pozadinsku razinu.
+- **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
+- **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
 ## Požari raslinja

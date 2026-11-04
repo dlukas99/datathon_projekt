@@ -513,7 +513,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
     )
 
 
-# --- Noise (estimate) ------------------------------------------------------------------
+# --- Traffic nearby (proxy for traffic noise and exhaust) ---------------------------------
 
 NOISE_KINDS = {
     "motorway": "autocesta",
@@ -522,16 +522,43 @@ NOISE_KINDS = {
     "secondary": "važnija cesta",
     "rail": "željeznička pruga",
 }
+# HEI (2010), Special Report 17: traffic pollution is highest within roughly 300 to 500 m
+# of a major road and falls to background levels beyond that.
+TRAFFIC_BANDS: list[tuple[float | None, str, Status]] = [
+    (300.0, "Blizu prometnice", "warning"),
+    (500.0, "Rub zone prometa", "info"),
+    (None, "Podalje od prometnica", "good"),
+]
+
+
+def traffic_band(distance_m: float) -> tuple[str, Status]:
+    for upto, name, status in TRAFFIC_BANDS:
+        if upto is None or distance_m <= upto:
+            return name, status
+    raise ValueError(distance_m)
+
+
+def _traffic_sentence(kind: str, distance: float) -> str:
+    road = NOISE_KINDS[kind].capitalize()
+    where = f"{road} je {fmt.metres(distance)} od adrese"
+    if distance <= 300:
+        return (
+            f"{where}, unutar 300 m, gdje su buka i ispušni plinovi prometa obično najizraženiji."
+        )
+    if distance <= 500:
+        return f"{where}, na rubu zone od 300 do 500 m u kojoj se utjecaj prometa smanjuje."
+    return f"{where}; na toj udaljenosti utjecaj prometa obično je slab."
 
 
 def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     lines = layers.noise_lines
     links = [Link(label="Strateške karte buke (EEA, preglednik)", url=EEA_NOISE_VIEWER)]
+    title = "Promet u blizini"
     if lines is None:
         return Category(
             id="noise",
             group="environment",
-            title="Buka",
+            title=title,
             status="no_data",
             status_label=label("no_data"),
             headline="Podaci o prometnicama nisu dostupni.",
@@ -547,7 +574,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         if group not in nearest or d < nearest[group][0]:
             nearest[group] = (d, kind)
     values: list[Value] = []
-    for group, title in (
+    for group, value_label in (
         ("road", "Najbliža autocesta, glavna ili važnija cesta"),
         ("rail", "Najbliža pruga"),
     ):
@@ -555,7 +582,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         values.append(
             Value(
                 key=f"distance_{group}",
-                label=title,
+                label=value_label,
                 value=round(found[0]) if found else None,
                 unit="m",
                 display=(
@@ -570,31 +597,43 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         )
     road = nearest.get("road")
     rail = nearest.get("rail")
-    bits = []
-    if road:
-        bits.append(f"{NOISE_KINDS[road[1]]} je udaljena {fmt.metres(road[0])}")
-    if rail:
-        bits.append(f"pruga je udaljena {fmt.metres(rail[0])}")
-    headline = (
-        "Procjena prema udaljenosti od prometnica: " + "; ".join(bits) + "."
-        if bits
-        else "U krugu od 2 km nema autoceste, brze, glavne ili važnije ceste ni željezničke pruge."
+    distance = road[0] if road else 2000.0
+    band, status = traffic_band(distance)
+    sentences = [
+        _traffic_sentence(road[1], road[0])
+        if road
+        else "U krugu od 2 km nema autoceste, brze, glavne ni važnije ceste."
+    ]
+    if rail and rail[0] <= 500:
+        sentences.append(f"Željeznička pruga je {fmt.metres(rail[0])} od adrese.")
+    scale = Scale(
+        key="road_distance",
+        label="Udaljenost od velike prometnice",
+        unit="m",
+        value=round(min(distance, 2000.0)),
+        band=band.lower(),
+        bands=[ScaleBand(upto=u, label=n.lower(), status=st) for u, n, st in TRAFFIC_BANDS],
+        markers=[ScaleMarker(value=300, label="300 m"), ScaleMarker(value=500, label="500 m")],
     )
     return Category(
         id="noise",
         group="environment",
-        title="Buka",
-        status="info",
-        status_label=label("info"),
-        headline=headline[0].upper() + headline[1:],
+        title=title,
+        status=status,
+        status_label=band,
+        headline=" ".join(sentences),
         values=values,
         links=links,
+        scales=[scale],
         notes=[
-            "Ovo je procjena, a ne izmjerena razina buke: prikazana je samo udaljenost od "
-            "autocesta, brzih, glavnih i važnijih cesta te pruga iz OpenStreetMapa.",
-            "Strateške karte buke za veće gradove i glavne prometnice mogu se pogledati u "
-            "pregledniku EEA-e. Svjetska zdravstvena organizacija preporučuje da buka "
-            "cestovnog prometa bude ispod 53 dB Lden danju i 45 dB Lnight noću.",
+            "Ne mjerimo buku: ovo je procjena prema udaljenosti od autocesta, brzih, glavnih i "
+            "važnijih cesta te pruga iz OpenStreetMapa.",
+            "Pojasevi slijede pregled istraživanja Health Effects Institutea (2010.): "
+            "onečišćenje od prometa najveće je unutar približno 300 do 500 m od velike "
+            "prometnice, a dalje pada na pozadinsku razinu.",
+            "Strateške karte buke za veće gradove mogu se pogledati u pregledniku EEA-e. "
+            "Svjetska zdravstvena organizacija preporučuje da buka cestovnog prometa bude "
+            "ispod 53 dB Lden danju i 45 dB Lnight noću.",
         ],
     )
 

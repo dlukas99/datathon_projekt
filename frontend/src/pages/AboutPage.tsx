@@ -85,14 +85,15 @@ export function AboutPage() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">Buka</th>
+                <th scope="row">Promet u blizini</th>
                 <td>
-                  Procjena: udaljenost od autocesta, brzih, glavnih i važnijih cesta te pruga
-                  (OpenStreetMap).
+                  Udaljenost od autocesta, brzih, glavnih i važnijih cesta te pruga
+                  (OpenStreetMap). Ne mjerimo buku; to je zamjenski pokazatelj.
                 </td>
                 <td>
-                  Informacija (nema službenog praga). Strateške karte buke EEA-e nisu otvorene licence pa se samo
-                  povezuju. Smjernica WHO-a (2018.): cestovni promet ispod 53 dB Lden.
+                  Do 300 m: blizu prometnice; 300–500 m: rub zone prometa; dalje: podalje od
+                  prometnica (zona utjecaja prometa prema pregledu Health Effects Institutea,
+                  2010.).
                 </td>
               </tr>
               <tr>
