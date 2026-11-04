@@ -57,6 +57,55 @@ Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije
 - Status kategorije je lošiji od dvaju statusa (PM2,5 i NO2).
 - **Ograničenja:** karta je modelirana procjena godišnjeg prosjeka na mreži od 1 km, a ne mjerenje na adresi. Prema EEA-i ne smije se koristiti za službenu provjeru usklađenosti. Uz izvještaj je poveznica na mjerenja u stvarnom vremenu (iszz.azo.hr).
 
+### Provjera uz službene mjerne postaje (studeni 2026.)
+
+Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosjekom najbliže službene postaje u 2024. godini.
+
+- **Mjerenja:** verificirani podaci (E1a) iz EEA Air Quality Download Service za Hrvatsku. Prijavljuje ih ministarstvo nadležno za zaštitu okoliša (`aqd.azo.hr`).
+- **Godišnji prosjek** je srednja vrijednost valjanih satnih ili dnevnih mjerenja (`ingest/stations.py`).
+- **Postaje:** u 2024. ima 16 postaja s NO2 i 18 s PM2,5, s pokrivenošću od 77 do 100 % godine.
+- **Lokacije:** središte grada i tri osnovne škole unutar 4 km, odabrane što dalje jedna od druge (javne ustanove).
+- **Ponavljanje:** `uv run python -m analysis.validation`.
+
+| Grad | Lokacija | Tvar | Aplikacija (EEA karta) | Najbliža postaja (vrsta) | Udaljenost | Postaja, prosjek 2024. | Razlika | Zaključak |
+|---|---|---|---|---|---|---|---|---|
+| Zagreb | središte (Zagreb) | PM2,5 | 18,0 | ZAGREB PPI PM2,5 - Ksaverska cesta (pozadinska) | 2,4 km | 13,9 | 4,1 | karta viša od mjerenja |
+| Zagreb | središte (Zagreb) | NO2 | 24,2 | ZAGREB-1 (prometna) | 1,4 km | 38,0 | -13,8 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Zagreb | OSNOVNA ŠKOLA KUSTOŠIJA | PM2,5 | 17,9 | ZAGREB PPI PM2,5 - Ksaverska cesta (pozadinska) | 4,7 km | 13,9 | 4,0 | karta viša od mjerenja |
+| Zagreb | OSNOVNA ŠKOLA KUSTOŠIJA | NO2 | 21,3 | ZAGREB-1 (prometna) | 4,0 km | 38,0 | -16,7 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Zagreb | OSNOVNA ŠKOLA ZAPRUĐE | PM2,5 | 19,1 | ZAGREB PPI PM2,5 - Ksaverska cesta (pozadinska) | 6,1 km | 13,9 | 5,2 | karta viša od mjerenja |
+| Zagreb | OSNOVNA ŠKOLA ZAPRUĐE | NO2 | 24,3 | ZAGREB-3 (pozadinska) | 2,0 km | 28,4 | -4,1 | karta niža od mjerenja |
+| Zagreb | OSNOVNA ŠKOLA ANTUNA GUSTAVA MATOŠA | PM2,5 | 18,1 | ZAGREB PPI PM2,5 - Ksaverska cesta (pozadinska) | 4,1 km | 13,9 | 4,2 | karta viša od mjerenja |
+| Zagreb | OSNOVNA ŠKOLA ANTUNA GUSTAVA MATOŠA | NO2 | 23,3 | ZAGREB-1 (prometna) | 4,5 km | 38,0 | -14,6 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Osijek | središte (Osijek) | PM2,5 | 16,3 | OSIJEK-2 PPI PM2,5 (pozadinska) | 2,8 km | 15,6 | 0,7 | dobro slaganje |
+| Osijek | središte (Osijek) | NO2 | 18,9 | OSIJEK-1 (prometna) | 0,5 km | 23,5 | -4,7 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Osijek | Osnovna škola Retfala | PM2,5 | 16,5 | OSIJEK-2 PPI PM2,5 (pozadinska) | 6,6 km | 15,6 | 0,9 | dobro slaganje |
+| Osijek | Osnovna škola Retfala | NO2 | 18,2 | OSIJEK-1 (prometna) | 4,1 km | 23,5 | -5,3 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Osijek | Osnovna škola Ljudevita Gaja | PM2,5 | 16,1 | OSIJEK-2 PPI PM2,5 (pozadinska) | 0,1 km | 15,6 | 0,5 | dobro slaganje |
+| Osijek | Osnovna škola Ljudevita Gaja | NO2 | 17,9 | OSIJEK-1 (prometna) | 2,4 km | 23,5 | -5,6 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Osijek | Osnovna škola Grigor Vitez | PM2,5 | 16,2 | OSIJEK-2 PPI PM2,5 (pozadinska) | 1,8 km | 15,6 | 0,5 | dobro slaganje |
+| Osijek | Osnovna škola Grigor Vitez | NO2 | 18,3 | OSIJEK-1 (prometna) | 1,7 km | 23,5 | -5,2 | karta niža: postaja je uz promet, karta prikazuje pozadinu |
+| Požega | središte (Požega) | PM2,5 | 18,9 | SLAVONSKI BROD-1 (pozadinska) | 31,5 km | 25,2 | -6,3 | postaja je daleko, usporedba je samo okvirna |
+| Požega | središte (Požega) | NO2 | 13,4 | SLAVONSKI BROD-1 (pozadinska) | 31,5 km | 14,1 | -0,7 | postaja je daleko, usporedba je samo okvirna |
+| Požega | Osnovna škola Dobriša Cesarić | PM2,5 | 18,8 | SLAVONSKI BROD-1 (pozadinska) | 31,9 km | 25,2 | -6,4 | postaja je daleko, usporedba je samo okvirna |
+| Požega | Osnovna škola Dobriša Cesarić | NO2 | 15,4 | SLAVONSKI BROD-1 (pozadinska) | 31,9 km | 14,1 | 1,3 | postaja je daleko, usporedba je samo okvirna |
+| Požega | Osnovna škola Julija Kempfa | PM2,5 | 18,8 | SLAVONSKI BROD-1 (pozadinska) | 31,6 km | 25,2 | -6,4 | postaja je daleko, usporedba je samo okvirna |
+| Požega | Osnovna škola Julija Kempfa | NO2 | 15,4 | SLAVONSKI BROD-1 (pozadinska) | 31,6 km | 14,1 | 1,3 | postaja je daleko, usporedba je samo okvirna |
+| Požega | Katolička Osnovna škola U Požegi | PM2,5 | 18,9 | SLAVONSKI BROD-1 (pozadinska) | 31,4 km | 25,2 | -6,3 | postaja je daleko, usporedba je samo okvirna |
+| Požega | Katolička Osnovna škola U Požegi | NO2 | 13,4 | SLAVONSKI BROD-1 (pozadinska) | 31,4 km | 14,1 | -0,7 | postaja je daleko, usporedba je samo okvirna |
+
+**Zaključci:**
+- **PM2,5:**
+  - U Osijeku se karta i pozadinska postaja slažu unutar 1 µg/m³.
+  - U Zagrebu je karta oko 4–5 µg/m³ viša od jedine verificirane postaje za PM2,5 (Ksaverska cesta, pozadinska, na sjevernom rubu grada).
+  - Razina na ljestvici (umjerena) se ni u jednom slučaju ne mijenja.
+- **NO2:**
+  - Karta je 5–17 µg/m³ niža od prometnih postaja (Zagreb-1, Osijek-1). To je očekivano: karta EEA-e procjenjuje pozadinsku razinu na mreži od 1 km, a prometne postaje mjere uz samu ulicu.
+  - Od pozadinske postaje Zagreb-3 karta je niža za 4 µg/m³.
+  - Zato kartica zraka napominje da uz prometne ulice NO2 može biti znatno viši, a kategorija „Promet u blizini” to pokazuje zasebno.
+- **Požega** nema službenu postaju. Najbliža je Slavonski Brod-1 na 31 km, pa je usporedba samo okvirna.
+- **Ograničenje provjere:** EEA karte izrađene su i uz pomoć istih postaja, pa ovo nije potpuno neovisna provjera. Pokazuje ipak kako se karta ponaša uz pozadinske, a kako uz prometne postaje.
+
 ## Toplina i zelenilo
 
 - **Podaci:** ESA WorldCover 2021 v200 (10 m) i parkovi iz OpenStreetMapa (`leisure=park`).
