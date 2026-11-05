@@ -1,36 +1,42 @@
 {
-  "_note": "Poveznice na pretrage oglasa. Aplikacija samo slaže URL; nikad ne dohvaća, ne parsira i ne prikazuje oglase. Provjereno: struktura Njuškala iz primjera tima (prodaja-kuca, bebrina-bebrina, price[max], livingArea[max]). Automatska provjera ostalih slugova nije moguća jer Njuškalo blokira automatski pristup; označeno TODO(verify).",
-  "providers": [
-    {
-      "id": "njuskalo",
+  "_note": "Poveznice na pretrage oglasa. Aplikacija samo slaže URL; nikad ne dohvaća, ne parsira i ne prikazuje oglase. Formati su ručno provjereni u pregledniku 5. 11. 2026. (Split, stan, kupnja, do 50.000 €, do 70 m²); kategorija s \"verified\": false nije provjerena. municipality_slugs: iznimke sluga grada ili općine (ključ je naziv iz DGU upravnih jedinica). kind_labels: kako se vrsta zove u sažetku kad kategorija oglasnika nije opća (Nekretnine.hr nema opću kategoriju kuća; prodaja-kuce vraća 404). UUID-ovi lokacija za Index Oglasi su u listing_locations.json.",
+  "providers": {
+    "njuskalo": {
       "label": "Njuškalo",
       "base": "https://www.njuskalo.hr",
       "categories": {
+        "flat-sale": { "path": "prodaja-stanova", "verified": true },
         "house-sale": { "path": "prodaja-kuca", "verified": true },
-        "flat-sale": { "path": "prodaja-stanova", "verified": false, "todo": "TODO(verify)" },
-        "house-rent": { "path": "iznajmljivanje-kuca", "verified": false, "todo": "TODO(verify)" },
-        "flat-rent": { "path": "iznajmljivanje-stanova", "verified": false, "todo": "TODO(verify)" }
+        "flat-rent": { "path": "iznajmljivanje-stanova", "verified": false },
+        "house-rent": { "path": "iznajmljivanje-kuca", "verified": false }
       },
-      "locations": {
-        "Bebrina|Bebrina": "bebrina-bebrina"
-      },
-      "filters": {
-        "price_max": "price[max]",
-        "area_max": "livingArea[max]"
-      }
+      "params": { "price_max": "price[max]", "area_max": "livingArea[max]" },
+      "municipality_slugs": { "Grad Zagreb": "zagreb" }
     },
-    {
-      "id": "index",
+    "index": {
       "label": "Index Oglasi",
-      "fallback": "https://www.index.hr/oglasi/nekretnine",
-      "verified": true
+      "base": "https://www.index.hr/oglasi/nekretnine",
+      "categories": {
+        "flat-sale": { "path": "prodaja-stanova", "verified": true },
+        "house-sale": { "path": "prodaja-kuca", "verified": true },
+        "flat-rent": { "path": "najam-stanova", "verified": true },
+        "house-rent": { "path": "najam-kuca", "verified": true }
+      },
+      "params": { "price_max": "priceTo", "area_max": "areaTo" },
+      "search_defaults": { "module": "nekretnine", "sortOption": 4 }
     },
-    {
-      "id": "nekretnine",
+    "nekretnine": {
       "label": "Nekretnine.hr",
-      "fallback": "https://www.nekretnine.hr/",
-      "verified": false,
-      "todo": "TODO(verify): stranica odbija automatske zahtjeve (403), pa poveznica nije provjerena"
+      "base": "https://www.nekretnine.hr",
+      "categories": {
+        "flat-sale": { "path": "prodaja-stanovi", "verified": true },
+        "house-sale": { "path": "prodaja-samostojeca-kuce", "verified": true },
+        "flat-rent": { "path": "najam-stanovi", "verified": true },
+        "house-rent": { "path": "najam-samostojeca-kuce", "verified": true }
+      },
+      "params": { "price_max": "prezzoMassimo", "area_max": "superficieMassima" },
+      "municipality_slugs": { "Grad Zagreb": "zagreb" },
+      "kind_labels": { "house": "samostojeća kuća" }
     }
-  ]
+  }
 }
