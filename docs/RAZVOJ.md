@@ -155,6 +155,14 @@ uv run uvicorn app.main:app --reload --port 8000 --no-access-log
 
 Provjera: http://localhost:8000/api/health vraća `{"status":"ok"}`, a opis API-ja je na http://localhost:8000/api/docs.
 
+**Ako Windows blokira backend** (greška 4551 ili „DLL load failed … Application Control policy”), pokrenite backend u Dockeru umjesto terminala 2. Radi isto, na istom portu 8000:
+
+```powershell
+docker compose -f deploy/docker-compose.dev.yml up -d --build
+```
+
+Ova naredba pokreće i Valhallu i API. Nakon promjene Python koda ponovite je da se slika izgradi s novim kodom.
+
 ### Terminal 3: frontend
 
 ```powershell
@@ -402,6 +410,7 @@ Pravila projekta (npr. nikad izmišljeni podaci, svaka brojka ima izvor) nalaze 
 | `uv`, `node` ili `docker` „is not recognized” | Zatvorite i ponovno otvorite VS Code (terminal ne vidi nove programe). Ako ne pomogne, ponovno pokrenite računalo. |
 | `UnicodeEncodeError` ili čudni znakovi umjesto č, ć, ž | Prije Python naredbi pokrenite `$env:PYTHONUTF8 = "1"` (vrijedi za taj terminal). |
 | `os error 4551` / „An Application Control policy has blocked this file” | Windows (Smart App Control) blokira Python koji je preuzeo uv. Instalirajte **Python 3.12** s https://www.python.org/downloads/ pa u mapi `backend` napravite okruženje na njemu: `Remove-Item -Recurse -Force .venv`, zatim `$env:UV_PYTHON_PREFERENCE = "only-system"` i `uv sync --python 3.12`. Varijablu `UV_PYTHON_PREFERENCE` postavljajte u svakom novom terminalu prije `uv` naredbi. |
+| „DLL load failed … An Application Control policy has blocked this file” pri pokretanju backenda | Smart App Control blokira biblioteke (npr. rasterio). Pokrenite backend u Dockeru: `docker compose -f deploy/docker-compose.dev.yml up -d --build` (odjeljak 6). |
 | `docker: ... cannot find the file specified` / `daemon is not running` | Docker Desktop nije pokrenut. Pokrenite ga i pričekajte „Engine running”. |
 | Valhalla se ne pokreće ili `/status` ne odgovara | Pogledajte zapis: `docker logs prijepotpisa-valhalla-dev`. Prvi put gradi pločice oko 3 minute. Ako je pokrenuta prije koraka 5, zaustavite je (`... down`), napravite korak 5 i pokrenite ponovno. |
 | U izvještaju „Mreža hoda trenutačno nije dostupna” | Valhalla ne radi ili još gradi pločice (vidi gore). Ostale kategorije rade i bez nje. |

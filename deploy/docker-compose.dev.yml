@@ -1,7 +1,12 @@
-# Development services: only the Valhalla walking router.
+# Development services: the Valhalla walking router and, optionally, the API.
 # Tiles are built automatically from the Geofabrik extract on first start
 # (`make data` downloads it to data/raw/osm/). Tiles live in a named volume
 # because bind mounts on Windows do not allow the renames the builder needs.
+#
+# The `api` service runs the backend in Linux. Use it on Windows machines where
+# Smart App Control blocks the Python libraries (error 4551):
+#   docker compose -f deploy/docker-compose.dev.yml up -d --build
+# The frontend (`npm run dev`, port 5173) then talks to it on port 8000.
 name: prijepotpisa-dev
 
 services:
@@ -20,6 +25,25 @@ services:
       - build_elevation=False
       - use_tiles_ignore_pbf=True
       - server_threads=4
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    container_name: prijepotpisa-api-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - VALHALLA_URL=http://valhalla:8002
+      - CONTACT_EMAIL=${CONTACT_EMAIL:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-}
+    volumes:
+      - ../data/processed:/data/processed
+    depends_on:
+      - valhalla
     restart: unless-stopped
 
 volumes:
