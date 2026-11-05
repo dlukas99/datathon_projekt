@@ -140,7 +140,9 @@ def save(data: dict[str, Any], path: Path = OUTPUT) -> None:
         "index_oglasi": dict(sorted(data.get("index_oglasi", {}).items())),
         "index_oglasi_not_found": sorted(set(data.get("index_oglasi_not_found", []))),
     }
-    path.write_text(json.dumps(ordered, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    text = json.dumps(ordered, ensure_ascii=False, indent=2) + "\n"
+    # LF on every OS, as in the repository (.gitattributes).
+    path.write_text(text, encoding="utf-8", newline="\n")
 
 
 def run(*, offline: bool = False) -> int:
