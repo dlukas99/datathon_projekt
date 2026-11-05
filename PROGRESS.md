@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-03 10:30
+Zadnje ažurirano: 2026-11-05 23:00
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -66,6 +66,7 @@ Redoslijed (procjena):
 9. [x] Validacija zraka uz službene postaje (Zagreb, Osijek, Požega, po 4 lokacije) (1,5 h)
 10. [x] ML: model za godišnji NO2/PM2,5 na postajama, leave-one-station-out, usporedba s EEA; u aplikaciju samo ako je bolji (2 h)
 11. [x] Dokumentacija, scenarij videa, snimke zaslona (1 h)
+12. [x] Popravak poveznica na oglasnike (5. 11.): Njuškalo, Index Oglasi i Nekretnine.hr otvaraju pretragu s mjestom, vrstom, kupnjom ili najmom, cijenom i površinom; Index treba UUID mjesta, zasad upisan za 7 lokacija (`config/listing_locations.json`), ostalo čeka odluku o pokretanju `ingest.listing_locations`.
 
 Ako ponestane vremena, režem ovim redom:
 - ML ostaje samo evaluacija u `docs/ML.md`;
