@@ -327,6 +327,43 @@ def _air_status(pollutant: str, value: float) -> Status:
 _STATUS_ORDER: dict[Status, int] = {"good": 0, "info": 1, "warning": 2, "bad": 3, "no_data": -1}
 _BAND_ORDER = ["vrlo niska", "niska", "umjerena", "visoka"]
 
+# The card rates the air itself, so "low pollution" never reads as "low quality". The
+# levels above stay the keys used by the score and the settlement finder.
+AIR_RATINGS: dict[str, str] = {
+    "vrlo niska": "Vrlo dobar",
+    "niska": "Dobar",
+    "umjerena": "Umjeren",
+    "visoka": "Loš",
+}
+AIR_SENTENCES: dict[str, str] = {
+    "vrlo niska": (
+        "Kroz godinu je zrak ovdje vrlo čist: prosjek onečišćenja unutar je preporuke "
+        "Svjetske zdravstvene organizacije."
+    ),
+    "niska": (
+        "Kroz godinu je zrak ovdje uglavnom čist: prosjek onečišćenja unutar je granice EU-a "
+        "za 2030., ali iznad strože preporuke Svjetske zdravstvene organizacije."
+    ),
+    "umjerena": (
+        "Kroz godinu je zrak ovdje umjereno onečišćen: prosjek je unutar granice EU-a koja "
+        "vrijedi danas, ali iznad strože granice za 2030."
+    ),
+    "visoka": (
+        "Kroz godinu je zrak ovdje onečišćen: prosjek je iznad granične vrijednosti EU-a "
+        "koja vrijedi danas."
+    ),
+}
+
+
+def air_level(cat: Category) -> str | None:
+    """The worse of the PM2.5 and NO2 levels ("vrlo niska" to "visoka"), or None."""
+    levels = [s.band for s in cat.scales if s.band in _BAND_ORDER]
+    return max(levels, key=_BAND_ORDER.index) if levels else None
+
+
+def _pair(limits: dict[str, float]) -> str:
+    return f"PM2,5 {fmt.num(limits['pm25'])} µg/m³, NO2 {fmt.num(limits['no2'])} µg/m³"
+
 
 def _compare_sentence(name: str, pollutant: str, value: float) -> str:
     who, eu30, now = WHO_2021[pollutant], EU_2030[pollutant], EU_NOW[pollutant]
@@ -366,7 +403,7 @@ def air_category(lon: float, lat: float) -> Category:
                 label=f"{name}, godišnji prosjek 2024.",
                 value=round(value, 1),
                 unit="µg/m³",
-                display=f"{fmt.num(value, 1)} µg/m³ ({band})",
+                display=f"{fmt.num(value, 1)} µg/m³ ({band} razina)",
                 source=src,
                 retrieved_at=retrieved_at(src),
                 kind="modelled",
@@ -376,7 +413,7 @@ def air_category(lon: float, lat: float) -> Category:
         scales.append(
             Scale(
                 key=pollutant,
-                label=f"{name}, godišnji prosjek",
+                label=f"Razina onečišćenja {name}, godišnji prosjek",
                 unit="µg/m³",
                 value=round(value, 1),
                 band=band,
@@ -405,20 +442,22 @@ def air_category(lon: float, lat: float) -> Category:
             links=links,
         )
     worst = max(bands, key=lambda b: _BAND_ORDER.index(b[0]))
-    headline = f"Razina onečišćenja zraka je {worst[0]} (godišnji prosjek, karta EEA-e za 2024.)."
     return Category(
         id="air",
         group="environment",
         title="Kvaliteta zraka",
         status=worst[1],
-        status_label=worst[0].capitalize(),
-        headline=headline,
+        status_label=AIR_RATINGS[worst[0]],
+        headline=AIR_SENTENCES[worst[0]],
         values=values,
         links=links,
         scales=scales,
         notes=[
-            "Ljestvica: vrlo niska do smjernice WHO-a, niska do granične vrijednosti EU-a za "
-            "2030., umjerena do granične vrijednosti EU-a koja vrijedi danas, visoka iznad nje.",
+            "Ocjena je lošija od ocjena za PM2,5 i NO2 (godišnji prosjek, karta EEA-e za "
+            f"2024.): vrlo dobar do smjernice Svjetske zdravstvene organizacije "
+            f"({_pair(WHO_2021)}), dobar do granične vrijednosti EU-a za 2030. "
+            f"({_pair(EU_2030)}), umjeren do granične vrijednosti EU-a koja vrijedi danas "
+            f"({_pair(EU_NOW)}), loš iznad nje.",
             "Karta EEA-e procjena je godišnjeg prosjeka na mreži od 1 km, izrađena iz mjerenja "
             "i modela. Nije mjerenje na samoj adresi i ne služi za službenu provjeru "
             "usklađenosti s graničnim vrijednostima.",

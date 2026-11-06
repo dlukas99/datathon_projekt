@@ -26,6 +26,7 @@ from analysis import score
 from analysis.daily import car_free_category, daily_category, transit_category
 from analysis.environment import (
     air_category,
+    air_level,
     fire_category,
     flood_category,
     green_category,
@@ -69,7 +70,7 @@ def profile(row: dict[str, Any]) -> dict[str, Any]:
         "lat": lat,
         "router_ok": reach.router_ok,
         "flood_status": cats["flood"].status,
-        "air_band": cats["air"].status_label.lower(),
+        "air_band": air_level(cats["air"]) or cats["air"].status_label.lower(),
         "pm25": _value(cats["air"], "pm25_annual"),
         "no2": _value(cats["air"], "no2_annual"),
         "tree_share": _value(cats["green"], "tree_share_300m"),

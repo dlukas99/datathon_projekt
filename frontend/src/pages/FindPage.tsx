@@ -152,8 +152,8 @@ export function FindPage() {
               }}
             >
               <option value="any">Bilo koji</option>
-              <option value="umjerena">Najviše umjereno onečišćen</option>
-              <option value="niska">Nisko onečišćen ili bolje</option>
+              <option value="umjerena">Umjeren ili bolji</option>
+              <option value="niska">Dobar ili bolji</option>
             </select>
           </label>
         </div>

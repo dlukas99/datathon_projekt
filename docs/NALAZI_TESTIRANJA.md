@@ -9,7 +9,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 | 3 | Gornji izbornik zbunjuje | početni ekran nema stavku u izborniku; „Pronađi mjesto” zvuči kao pretraga | lako do srednje | planirano |
 | 4 | Informacija o internetu | podaci HAKOM-a postoje, ali nisu objavljeni pod otvorenom licencom | ovisi o vanjskim podacima | samo izvještaj |
 | 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | planirano |
-| 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | planirano |
+| 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | napravljeno |
 | 7 | Sumnja na netočne podatke o zelenilu | podaci su u redu, ali nije objašnjeno što se broji; „toplina” se ne mjeri | lako; bolji izvori ovise o vanjskim podacima | planirano |
 | 8 | Asistent uvijek daje isti odgovor | bez ključa za jezični model pitanje bez prepoznate teme dobiva uvijek isti sažetak | srednje; jezični model ovisi o ključu | planirano |
 
@@ -137,6 +137,12 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
   Europski indeks kvalitete zraka (EEA) ne koristi se: od revizije 2024. računa se iz satnih koncentracija i opisuje kratkotrajan rizik, a naše karte su godišnji prosjeci.
 - **Procjena:** lako.
 - **Rizici:** mijenjaju se oznaka i rečenica u zlatnim testovima; status i podskor ostaju isti.
+- **Stanje: napravljeno.**
+  - Kartica pokazuje ocjenu (npr. „Umjeren”) i jednu rečenicu, na primjer: „Kroz godinu je zrak ovdje umjereno onečišćen: prosjek je unutar granice EU-a koja vrijedi danas, ali iznad strože granice za 2030.”
+  - Ljestvice, brojke, izvor i objašnjenje ocjene su u „Detalji i izvor”.
+  - Razine onečišćenja ostale su ključevi za skor i tražilicu mjesta; skor sada razinu čita iz ljestvica, a ne iz natpisa.
+  - Filtar zraka u „Predloži mjesto” nudi „Umjeren ili bolji” i „Dobar ili bolji”.
+  - Za šest demo adresa statusi i podskorovi su isti kao prije (Split 80, ostale 50).
 
 ## 7. Toplina i zelenilo: sumnja na netočne podatke
 

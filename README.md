@@ -29,7 +29,7 @@ Izvještaj za adresu ima tri dijela:
 
 1. **Okolišni pregled** (prvi ekran):
    - **poplave:** je li lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, razumljivo izraženo kao vjerojatnost barem jedne poplave u 30 godina (trajanje stambenog kredita), s poveznicom na službene karte Hrvatskih voda;
-   - **zrak:** godišnji PM2,5 i NO2 na mirnoj, stupnjevanoj ljestvici (vrlo niska, niska, umjerena, visoka) s granicama Svjetske zdravstvene organizacije i EU-a;
+   - **zrak:** jedna ocjena (vrlo dobar, dobar, umjeren, loš) i rečenica o tome što znači kroz godinu; godišnji PM2,5 i NO2 s granicama Svjetske zdravstvene organizacije i EU-a u detaljima;
    - **toplina i zelenilo:** udio drveća, zelenih i izgrađenih površina u krugu od 300 m i najbliži park, prema pravilu 3-30-300;
    - **promet u blizini:** udaljenost od autocesta, glavnih i važnijih cesta i pruga s opisnim rečenicama i pojasevima 300/500 m (procjena, ne mjerenje buke);
    - **požari raslinja:** opožarene površine u krugu od 2 km od 2016. (Copernicus EFFIS);

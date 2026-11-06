@@ -41,14 +41,17 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 - **Izračun:** vrijednost ćelije u kojoj je točka.
 - **Stupnjevana ljestvica** (od 4. 11. 2026.): umjesto ocjene „prolazi ili ne prolazi” prema smjernici WHO-a, koju premašuje gotovo cijela Hrvatska, vrijednost se smješta na ljestvicu s četiri razine. Granice razina su službene vrijednosti:
 
-| Razina (status) | PM2,5, godišnji prosjek | NO2, godišnji prosjek | Granica |
-|---|---|---|---|
-| vrlo niska (dobro) | ≤ 5 µg/m³ | ≤ 10 µg/m³ | smjernica WHO-a 2021 |
-| niska (dobro) | ≤ 10 µg/m³ | ≤ 20 µg/m³ | granična vrijednost EU-a od 2030. |
-| umjerena (informacija, neutralno) | ≤ 25 µg/m³ | ≤ 40 µg/m³ | granična vrijednost EU-a koja vrijedi danas |
-| visoka (loše) | > 25 µg/m³ | > 40 µg/m³ | iznad današnje granične vrijednosti EU-a |
+| Razina onečišćenja (status) | Ocjena zraka na kartici | PM2,5, godišnji prosjek | NO2, godišnji prosjek | Granica |
+|---|---|---|---|---|
+| vrlo niska (dobro) | Vrlo dobar | ≤ 5 µg/m³ | ≤ 10 µg/m³ | smjernica WHO-a 2021 |
+| niska (dobro) | Dobar | ≤ 10 µg/m³ | ≤ 20 µg/m³ | granična vrijednost EU-a od 2030. |
+| umjerena (informacija, neutralno) | Umjeren | ≤ 25 µg/m³ | ≤ 40 µg/m³ | granična vrijednost EU-a koja vrijedi danas |
+| visoka (loše) | Loš | > 25 µg/m³ | > 40 µg/m³ | iznad današnje granične vrijednosti EU-a |
 
-Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije je viša od dviju razina (PM2,5, NO2). Uz svaku vrijednost tekstom se navodi odnos prema smjernici WHO-a i granicama EU-a, a na kartici je ljestvica s oznakama tih granica.
+Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije je viša od dviju razina (PM2,5, NO2).
+
+- **Prikaz** (od 6. 11. 2026.): kartica pokazuje ocjenu zraka bojom i riječju i jednu rečenicu o tome što ona znači kroz godinu. Ocjena govori o zraku, a ne o onečišćenju, pa „niska razina onečišćenja” više ne izgleda kao „niska kvaliteta”. Brojke, odnos prema smjernici WHO-a i granicama EU-a te ljestvice s oznakama granica nalaze se u „Detalji i izvor”.
+- **Zašto ne Europski indeks kvalitete zraka:** indeks EEA-e od revizije 2024. računa se iz satnih koncentracija i opisuje kratkotrajni rizik, pa se ne smije primijeniti na godišnje prosjeke (ETC HE Report 2024/17). Za godišnje prosjeke vrijede smjernica WHO-a i granične vrijednosti EU-a.
 
 - **Izvori pragova:**
   - WHO global air quality guidelines (2021), tablica 0.1: godišnja smjernica PM2,5 5 µg/m³ i NO2 10 µg/m³. https://iris.who.int/handle/10665/345329

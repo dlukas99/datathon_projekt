@@ -17,6 +17,7 @@ import pandas as pd
 from pydantic import BaseModel, Field, ValidationError
 
 from analysis import score
+from analysis.environment import AIR_RATINGS
 from app import fmt
 from app.config import get_settings
 from app.profiles import load as load_profiles
@@ -121,7 +122,7 @@ def _criteria(req: FindRequest) -> list[str]:
     if req.must:
         out.append("pješice do 15 min: " + ", ".join(NEED_LABELS[n] for n in req.must))
     if req.max_air != "any":
-        out.append(f"zrak: najviše razina „{req.max_air}”")
+        out.append(f"zrak: {AIR_RATINGS[req.max_air].lower()} ili bolji")
     if req.avoid_flood:
         out.append("izvan modeliranih poplavnih područja")
     return out
@@ -137,7 +138,8 @@ def _facts(row: pd.Series) -> list[str]:
         facts.append("Modelirano poplavno područje je blizu središta.")
     if pd.notna(row["pm25"]):
         facts.append(
-            f"Zrak: razina {row['air_band']} (PM2,5 {fmt.num(float(row['pm25']), 1)} µg/m³)."
+            f"Zrak: {AIR_RATINGS.get(row['air_band'], row['air_band']).lower()} "
+            f"(PM2,5 {fmt.num(float(row['pm25']), 1)} µg/m³)."
         )
     if pd.notna(row["needs_15min"]):
         facts.append(f"Pješice do 15 min: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")
