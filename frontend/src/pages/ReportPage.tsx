@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Check, CircleHelp, Download, Printer, Scale, Share2, X } from 'lucide-react'
+import { Check, CircleHelp, Download, MapPin, Printer, Scale, Share2, X } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { Assistant } from '../components/Assistant'
@@ -13,7 +13,7 @@ import {
 import { CategoryIcon } from '../components/Icons'
 import { ListingLinks } from '../components/ListingLinks'
 import { FocusPicker } from '../components/ProfilePicker'
-import { ISOCHRONE_COLORS, PLACE_COLORS, PLACE_NAMES, ReportMap } from '../components/ReportMap'
+import { type WalkFocus, WalkMap } from '../components/WalkMap'
 import {
   ApiError,
   type Category,
@@ -23,7 +23,8 @@ import {
   type Report,
 } from '../lib/api'
 import { BRAND } from '../lib/brand'
-import { formatDate } from '../lib/format'
+import { formatDate, wholeMinutes } from '../lib/format'
+import { categoryStats } from '../lib/places'
 import { focusList, getProfile, orderByFocus, profileWeights, PROFILES } from '../lib/profiles'
 import { decodeWeights, encodeWeights, lifeScore } from '../lib/score'
 import { LifeScore, ScoreBadge } from '../components/LifeScore'
@@ -90,10 +91,15 @@ function DailyList({
   category,
   sources,
   focus,
+  places,
+  onShow,
 }: {
   category: Category
   sources: SourceMap
   focus: string[]
+  /** Places on the map; a row whose nearest place is there opens its walking route. */
+  places: Place[]
+  onShow: (place: Place) => void
 }) {
   const rows = orderByFocus(DAILY_ORDER, (k) => k, focus)
   const byKey = Object.fromEntries(category.values.map((v) => [v.key, v]))
@@ -106,8 +112,9 @@ function DailyList({
           if (!nearest) return null
           const minutes = nearest.unit === 'min' && typeof nearest.value === 'number'
           const name = nearest.display.match(/\(([^)]*)\)\s*$/)?.[1]
-          return (
-            <li key={key} className={focus.includes(key) ? 'focused' : undefined}>
+          const place = minutes ? categoryStats(places, key).nearest : null
+          const content = (
+            <>
               <span className="daily-icon">
                 <CategoryIcon id={key} />
               </span>
@@ -120,11 +127,36 @@ function DailyList({
                     : ''}
                 </span>
               </span>
-              <span className={`daily-time${minutes ? '' : ' muted'}`}>
-                {minutes
-                  ? `${String(Math.max(1, Math.round(nearest.value as number)))} min`
-                  : nearest.display.replace(/\s*\(.*\)$/, '')}
+              <span className="daily-end">
+                <span className={`daily-time${minutes ? '' : ' muted'}`}>
+                  {minutes
+                    ? `${String(wholeMinutes(nearest.value as number))} min`
+                    : nearest.display.replace(/\s*\(.*\)$/, '')}
+                </span>
+                {place && (
+                  <span className="daily-show no-print">
+                    <MapPin size={14} aria-hidden="true" />
+                    Prikaži na karti
+                  </span>
+                )}
               </span>
+            </>
+          )
+          return (
+            <li key={key} className={focus.includes(key) ? 'focused' : undefined}>
+              {place ? (
+                <button
+                  type="button"
+                  className="daily-row"
+                  onClick={() => {
+                    onShow(place)
+                  }}
+                >
+                  {content}
+                </button>
+              ) : (
+                <div className="daily-row">{content}</div>
+              )}
             </li>
           )
         })}
@@ -186,51 +218,6 @@ function NeedsChecklist({ carFree }: { carFree: Category }) {
   )
 }
 
-function WalkLegend({ places }: { places: Place[] }) {
-  const bands = [5, 10, 15].map((limit) => {
-    const counts: Record<string, number> = {}
-    for (const p of places) {
-      if (p.walk_minutes !== null && p.walk_minutes <= limit && p.category in PLACE_NAMES) {
-        counts[p.category] = (counts[p.category] ?? 0) + 1
-      }
-    }
-    return { limit, counts }
-  })
-  const present = Object.keys(PLACE_NAMES).filter((c) => places.some((p) => p.category === c))
-  return (
-    <div className="walk-legend">
-      <h3>Pješice za</h3>
-      <ul className="legend">
-        {bands.map(({ limit, counts }) => (
-          <li key={limit}>
-            <span
-              className="legend-swatch"
-              style={{ background: ISOCHRONE_COLORS[limit] }}
-              aria-hidden="true"
-            />
-            <strong>{limit} min</strong>
-            <span className="legend-text">
-              {Object.keys(counts).length === 0
-                ? 'ništa od prikazanog'
-                : Object.entries(counts)
-                    .map(([cat, n]) => `${PLACE_NAMES[cat] ?? cat} ${String(n)}`)
-                    .join(' · ')}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <ul className="dots">
-        {present.map((cat) => (
-          <li key={cat}>
-            <span className="dot" style={{ background: PLACE_COLORS[cat] }} aria-hidden="true" />
-            {PLACE_NAMES[cat]}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
 function Actions({ report }: { report: Report }) {
   const [copied, setCopied] = useState('')
   const loc = report.location
@@ -284,10 +271,14 @@ export function ReportView({
   report,
   focus,
   onPick,
+  walkFocus,
+  onWalkFocus,
 }: {
   report: Report
   focus: string[]
   onPick?: (lat: number, lon: number) => void
+  walkFocus: WalkFocus | null
+  onWalkFocus: (focus: WalkFocus | null) => void
 }) {
   const sources = useMemo(() => sourceMap(report), [report])
   const byId = Object.fromEntries(report.categories.map((c) => [c.id, c]))
@@ -300,7 +291,7 @@ export function ReportView({
   const transit = byId.transit
   const daily = byId.daily
   const mapPlaces = useMemo(
-    () => report.categories.flatMap((c) => c.places).filter((p) => p.walk_minutes !== null),
+    () => report.nearby_places.filter((p) => p.walk_minutes !== null),
     [report],
   )
   const needs = carFree?.values.find((v) => v.key === 'needs_within_15min')
@@ -355,24 +346,27 @@ export function ReportView({
               )}
               <NeedsChecklist carFree={carFree} />
               <p className="headline">{carFree.headline}</p>
-              <MoreDetails category={carFree} sources={sources} />
+              <MoreDetails category={carFree} sources={sources}>
+                <p className="route-note">
+                  Pješački put na karti računa se tek kad ga zatražite, istim usmjerivačem i
+                  istom brzinom hoda (4,5 km/h) kao vremena u izvještaju. Rute: Valhalla, podaci
+                  © suradnici OpenStreetMapa.
+                </p>
+              </MoreDetails>
             </article>
           )}
           {transit && (
             <CategoryCard category={transit} sources={sources} focused={focus.includes('transit')} />
           )}
         </div>
-        <div className="map-wrap">
-          <div>
-            <ReportMap report={report} places={mapPlaces} onPick={onPick} />
-            {onPick && (
-              <p className="muted-note no-print">
-                Kliknite na kartu ili povucite oznaku za izvještaj na drugoj točki.
-              </p>
-            )}
-          </div>
-          <WalkLegend places={mapPlaces} />
-        </div>
+        <WalkMap
+          report={report}
+          places={mapPlaces}
+          sources={sources}
+          onPick={onPick}
+          focus={walkFocus}
+          onFocus={onWalkFocus}
+        />
         {!report.isochrones && (
           <p className="muted-note">Karta hoda trenutačno nije dostupna.</p>
         )}
@@ -383,7 +377,15 @@ export function ReportView({
           <h2 id="daily-title">Svakodnevni život</h2>
           <p className="section-intro">{daily.headline}</p>
           <div className="card">
-            <DailyList category={daily} sources={sources} focus={focus} />
+            <DailyList
+              category={daily}
+              sources={sources}
+              focus={focus}
+              places={mapPlaces}
+              onShow={(place) => {
+                onWalkFocus({ category: place.category, place, reveal: true })
+              }}
+            />
           </div>
         </section>
       )}
@@ -459,6 +461,10 @@ export function ReportPage() {
     setParams(next, { replace: true })
   }
 
+  // The walking route on the map. A new report point removes the route; if a category was
+  // chosen, the route to its nearest place is drawn again for the new point.
+  const [walkFocus, setWalkFocus] = useState<WalkFocus | null>(null)
+
   const pickPoint = useCallback(
     (newLat: number, newLon: number) => {
       const next = new URLSearchParams(params)
@@ -466,9 +472,10 @@ export function ReportPage() {
       next.set('lon', newLon.toFixed(6))
       next.delete('adresa')
       next.set('tip', 'karta')
+      setWalkFocus((current) => current && { category: current.category, place: null })
       setParams(next)
     },
-    [params, setParams],
+    [params, setParams, setWalkFocus],
   )
 
   if (!valid) {
@@ -547,7 +554,13 @@ export function ReportPage() {
       {query.isError && <ReportError error={query.error} />}
       {report && (
         <>
-          <ReportView report={report} focus={focus} onPick={pickPoint} />
+          <ReportView
+            report={report}
+            focus={focus}
+            onPick={pickPoint}
+            walkFocus={walkFocus}
+            onWalkFocus={setWalkFocus}
+          />
           {score && (
             <LifeScore
               categories={report.categories}
