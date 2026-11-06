@@ -31,6 +31,8 @@ test('report desktop', async ({ page }) => {
   await page.screenshot({ path: `${OUT}/izvjestaj.png`, fullPage: true })
   await page.locator('.map-wrap').scrollIntoViewIfNeeded()
   await settle(page)
+  // The section is taller than the window: keep the sticky header out of the picture.
+  await page.addStyleTag({ content: '.site-header { position: static !important; }' })
   await page.locator('section[aria-labelledby="carfree-title"]').screenshot({
     path: `${OUT}/zivot-bez-auta.png`,
   })

@@ -1309,72 +1309,276 @@ details summary {
   background: var(--nodata-bg);
 }
 
+/* Walking map: full content width, legend and route details below it */
+
 .map-wrap {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   margin-top: 1rem;
+  scroll-margin-top: 5rem;
+}
+
+.map-figure {
+  margin: 0;
+}
+
+.map-frame {
+  position: relative;
 }
 
 .map {
   width: 100%;
-  height: 440px;
+  height: clamp(420px, 65vh, 720px);
   border-radius: var(--radius);
   border: 1px solid var(--border);
   overflow: hidden;
 }
 
-.walk-legend h3 {
-  font-size: 1rem;
+/* Full screen keeps the route details on top of the map. MapLibre uses the pseudo class
+   where the browser has no full-screen API (iPhone). */
+.map-frame:fullscreen,
+.map-frame.maplibregl-pseudo-fullscreen {
+  background: var(--bg);
 }
 
-.legend {
+.map-frame:fullscreen .map,
+.map-frame.maplibregl-pseudo-fullscreen .map {
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Above the map attribution (two lines on a phone), which must stay readable. */
+.map-frame:fullscreen .route-panel,
+.map-frame.maplibregl-pseudo-fullscreen .route-panel {
+  position: absolute;
+  z-index: 3;
+  left: 0.75rem;
+  bottom: 3.5rem;
+  width: min(26rem, calc(100% - 1.5rem));
+  margin: 0;
+  box-shadow: 0 4px 24px rgb(0 0 0 / 25%);
+}
+
+.button.small {
+  padding: 0 0.9rem;
+  font-size: 0.9rem;
+}
+
+.route-panel {
+  margin-top: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.route-panel p {
+  margin: 0;
+}
+
+.route-panel .button-row {
+  margin-top: 0.4rem;
+}
+
+.route-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.route-title {
+  font-weight: 650;
+  font-size: 1.05rem;
+}
+
+.route-summary strong {
+  font-size: 1.15rem;
+}
+
+.route-status {
+  color: var(--muted);
+}
+
+.route-error {
+  color: var(--bad);
+}
+
+.route-panel .value-meta {
+  font-size: 0.8rem;
+}
+
+.walk-legend {
+  margin-top: 0.75rem;
+}
+
+.walk-legend .muted-note {
+  margin: 0.25rem 0 0;
+}
+
+.legend-title {
+  font-size: 1rem;
+  margin: 1.1rem 0 0.5rem;
+}
+
+.iso-legend {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.6rem;
+  gap: 0.5rem 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   font-size: 0.92rem;
 }
 
-.legend li {
-  display: grid;
-  grid-template-columns: auto auto 1fr;
+.iso-legend li {
+  display: flex;
   align-items: baseline;
-  gap: 0 0.5rem;
+  gap: 0.5rem;
 }
 
 .legend-text {
-  grid-column: 2 / 4;
   color: var(--muted);
 }
 
 .legend-swatch {
   display: inline-block;
+  flex-shrink: 0;
   width: 0.9rem;
   height: 0.9rem;
   border-radius: 4px;
-  grid-row: span 2;
-  align-self: center;
-}
-
-.dots {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.9rem;
-  list-style: none;
-  padding: 0;
-  margin: 1.25rem 0 0;
-  font-size: 0.85rem;
-  color: var(--muted);
+  transform: translateY(0.1rem);
 }
 
 .dot {
   display: inline-block;
-  width: 0.65rem;
-  height: 0.65rem;
+  flex-shrink: 0;
+  width: 0.7rem;
+  height: 0.7rem;
   border-radius: 50%;
-  margin-right: 0.35rem;
+  box-shadow: 0 0 0 1.5px var(--surface);
+}
+
+.place-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.place-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.35rem 0.95rem;
+  border: 1px solid var(--border);
+  /* not a pill: on a phone the text can wrap to two lines */
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.place-chip:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+/* Pressed: a check mark and a thicker border, not only colour. */
+.place-chip[aria-pressed='true'] {
+  border: 2px solid var(--accent);
+  padding: calc(0.35rem - 1px) calc(0.95rem - 1px);
+  background: var(--accent-soft);
+}
+
+.place-chip:disabled {
+  cursor: not-allowed;
+  background: var(--surface-2);
+}
+
+.place-chip-name {
+  font-weight: 600;
+}
+
+.place-chip-meta {
+  color: var(--muted);
+}
+
+.chip-check {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.route-note {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+/* Map popup in the app's colours (light and dark); .map-frame outranks maplibre-gl.css,
+   which is bundled after this file. */
+/* above the zoom and full-screen buttons, so they never cover the close button */
+.map-frame .maplibregl-popup {
+  z-index: 3;
+}
+
+.map-frame .maplibregl-popup-content {
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 2.2rem 0.8rem 0.9rem;
+  box-shadow: 0 4px 18px rgb(0 0 0 / 22%);
+  font: inherit;
+}
+
+.map-frame .maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.map-frame .maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.map-frame .maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: var(--surface);
+}
+
+.map-frame .maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.map-frame .maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.map-frame .maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: var(--surface);
+}
+
+.map-frame .maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--surface);
+}
+
+.map-frame .maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--surface);
+}
+
+.map-frame .maplibregl-popup-close-button {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.3rem;
+  color: var(--text);
+  border-radius: 0 var(--radius-sm) 0 0;
+}
+
+.map-popup {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.map-popup span {
+  color: var(--muted);
+}
+
+.map-popup .button {
+  margin-top: 0.3rem;
 }
 
 .muted-note {
@@ -1389,15 +1593,51 @@ details summary {
 }
 
 .daily-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  padding: 0.7rem 0;
   border-bottom: 1px solid var(--border);
 }
 
 .daily-list li:last-child {
   border-bottom: 0;
+}
+
+.daily-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.7rem 0;
+}
+
+/* A row with a place on the map opens its walking route. */
+button.daily-row {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+button.daily-row:hover .daily-show {
+  text-decoration: underline;
+}
+
+.daily-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.daily-show {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .daily-list li.focused .daily-label::after {
@@ -1647,7 +1887,7 @@ details summary {
 
 @media (width <= 760px) {
   .steps,
-  .map-wrap,
+  .iso-legend,
   .compare-grid {
     grid-template-columns: 1fr;
   }
@@ -1657,7 +1897,7 @@ details summary {
   }
 
   .map {
-    height: 320px;
+    height: 380px;
   }
 
   .compare-table tbody th {

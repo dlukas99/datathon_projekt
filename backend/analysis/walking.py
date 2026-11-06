@@ -50,6 +50,14 @@ class Reach:
         places = self.places.get(category, [])
         return places[0] if places else None
 
+    def nearby(self, minutes: float, nearest: int = NEAREST_FALLBACK) -> list[Place]:
+        """Every place within `minutes` and at least the `nearest` closest of each kind."""
+        result: list[Place] = []
+        for category, places in self.places.items():
+            # places are sorted by walking time, so the ones within reach come first
+            result.extend(places[: max(len(self.within(category, minutes)), nearest)])
+        return result
+
 
 def _sort_key(p: Place) -> tuple[int, float]:
     if p.walk_minutes is not None:

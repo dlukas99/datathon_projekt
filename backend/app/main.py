@@ -11,7 +11,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from app import brand, pvgis
+from app import brand, pvgis, valhalla
 from app.assistant import AssistantReply, AssistantRequest, answer
 from app.config import REPO_ROOT
 from app.finder import (
@@ -27,9 +27,10 @@ from app.geo import in_bbox
 from app.geocode import Suggestion, get_geocoder
 from app.layers import get_layers
 from app.live_sources import LiveSources, live_sources
-from app.models import Location, Report, SourceInfo
+from app.models import Location, Report, RouteFeature, SourceInfo
 from app.report import OutsideCroatia, build_report, locate, report_geojson
 from app.sources import manifest, source_info
+from app.walk_route import TooFar, walk_route
 
 
 @asynccontextmanager
@@ -115,6 +116,37 @@ def report(
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     if format == "geojson":
         return JSONResponse(report_geojson(result), media_type="application/geo+json")
+    return result
+
+
+ROUTE_UNAVAILABLE = "Put trenutačno nije moguće izračunati. Pokušajte ponovno."
+
+
+@app.get(
+    "/api/route",
+    tags=["izvještaj"],
+    response_model=RouteFeature,
+    responses={
+        404: {"description": "Usmjerivač nije pronašao pješački put"},
+        503: {"description": "Usmjerivač trenutačno ne odgovara"},
+    },
+)
+def route(from_lat: Lat, from_lon: Lon, to_lat: Lat, to_lon: Lon) -> RouteFeature:
+    """Pješački put po ulicama i stazama od točke izvještaja do mjesta na karti (GeoJSON).
+
+    Isti usmjerivač (Valhalla), profil i brzina hoda kao izokrone i vremena u izvještaju.
+    Računa se samo na zahtjev i ne sprema se.
+    """
+    _check_point(from_lat, from_lon)
+    _check_point(to_lat, to_lon)
+    try:
+        result = walk_route((from_lat, from_lon), (to_lat, to_lon))
+    except TooFar as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except (valhalla.RouterUnavailable, ValueError, KeyError) as exc:
+        raise HTTPException(status_code=503, detail=ROUTE_UNAVAILABLE) from exc
+    if result is None:
+        raise HTTPException(status_code=404, detail="Pješački put do ovog mjesta nije pronađen.")
     return result
 
 

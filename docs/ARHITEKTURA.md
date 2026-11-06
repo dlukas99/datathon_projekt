@@ -75,7 +75,8 @@ Rješenje ima dva dijela:
 |---|---|
 | `GET /api/geocode?q=` | prijedlozi adresa, ulica i naselja |
 | `GET /api/reverse?lat=&lon=` | naselje, grad ili općina, županija |
-| `GET /api/report?lat=&lon=[&format=geojson]` | cijeli izvještaj; svaka vrijednost ima `source`, `retrieved_at` i `kind` |
+| `GET /api/report?lat=&lon=[&format=geojson]` | cijeli izvještaj; svaka vrijednost ima `source`, `retrieved_at` i `kind`; `nearby_places` su mjesta za kartu |
+| `GET /api/route?from_lat=&from_lon=&to_lat=&to_lon=` | pješački put između dviju točaka kao GeoJSON `Feature` (`LineString`) s duljinom, minutama, brzinom hoda i izvorom; samo na zahtjev, ništa se ne sprema |
 | `POST /api/assistant` | asistent nad izvještajem (vidi [ASISTENT.md](ASISTENT.md)) |
 | `GET /api/find/options`, `POST /api/find` | Pronađi mjesto za život: filtri i deterministički rang naselja |
 | `POST /api/find/parse` | slobodno pitanje u filtre (samo uz jezični model) |
@@ -93,7 +94,8 @@ Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti sko
 ### Frontend (`frontend/`)
 
 - React 19, TypeScript (strict), Vite, React Router, TanStack Query.
-- MapLibre GL JS s podlogom OpenFreeMap (svijetla i tamna).
+- MapLibre GL JS s podlogom OpenFreeMap (svijetla i tamna; mijenja se s temom bez gubitka slojeva).
+- Pješački putevi na karti (`frontend/src/lib/route.ts`): jedan klijent za cijelu aplikaciju sprema rute u memoriju po polazištu i cilju zaokruženima na 5 decimala. Šalje najviše jedan zahtjev u sekundi, prekida prethodni zahtjev kad se odabere drugo mjesto (`AbortController`) i odustaje nakon 8 s. Backend pita isti Valhalla kao za izokrone; Valhalla nije javno izložena.
 - Font Inter (OFL) poslužuje se iz vlastitog builda.
 - Stanje izvještaja (koordinate, adresa, profil) je u URL-u, pa se svaka stranica može podijeliti ili ispisati.
 

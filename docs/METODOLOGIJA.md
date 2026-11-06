@@ -157,7 +157,16 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Brzina hoda:** 4,5 km/h (1,25 m/s). To je obrazložena pretpostavka, nešto sporija od zadane vrijednosti Valhalle (5,1 km/h, `src/sif/pedestriancost.cc`), kako bi vremena bila realna i za starije osobe i roditelje s djecom (vidi [ODLUKE.md](ODLUKE.md)).
 - **Izokrone:** 5, 10 i 15 minuta.
 - **Vremena hoda:** jedan poziv matrice `sources_to_targets` po izvještaju. Kandidati su sve ustanove unutar 1.300 m zračne udaljenosti, a izvan toga tri najbliže unutar 15 km. 15 minuta pri 4,5 km/h je 1.125 m mrežom, što nikad nije kraće od zračne udaljenosti, pa krug od 1.300 m sadrži sve ustanove unutar 15 minuta.
+- **Mjesta na karti** (`nearby_places` u izvještaju): sva mjesta do 15 minuta hoda i tri najbliža svake vrste, s vremenom hoda iz iste matrice. Iz njih su brojevi „unutar 15 min” i najbliže vrijeme u legendi karte.
+- **Pješački put do mjesta** (`GET /api/route`) računa se samo kad ga korisnik zatraži, istim usmjerivačem, profilom i brzinom kao izokrone i matrica. Duljina je duljina puta po mreži, a minute su vrijeme usmjerivača, ne duljina podijeljena brzinom (vidi tablicu ispod). Uz put se prikazuje vrijeme mjesta iz izvještaja, isti broj kao u popisu „Svakodnevni život”. Točke udaljene više od 20 km zračno se ne usmjeravaju. Ako put nije moguće izračunati, prikazuje se poruka i zračna udaljenost; ravna crta se ne crta.
 - Ako usmjerivač ne odgovara, prikazuje se zračna udaljenost s oznakom „procjena”, a kategorije koje ovise o hodu prikazuju „Nema podataka”.
+
+Valhalla na pojedinim mjestima mreže dodaje vrijeme hoda, pa je duljina puta podijeljena brzinom kraća od vremena u izvještaju. Mjereno na 435 mjesta oko šest demo adresa (6. 11. 2026.):
+
+| Način | Odstupanje od vremena u izvještaju | Drukčija cijela minuta |
+|---|---|---|
+| vrijeme rute iz Valhalle | najviše 0,13 min (8 s) | 15 mjesta, sve uz granicu zaokruživanja |
+| duljina / 4,5 km/h | medijan 0,1 min (oko demo adrese u Splitu 0,5 min), najviše 1,5 min | 97 mjesta |
 
 ## Svakodnevne potrebe
 

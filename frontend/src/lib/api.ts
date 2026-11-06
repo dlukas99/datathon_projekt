@@ -97,6 +97,8 @@ export interface Report {
   summary: string[]
   categories: Category[]
   isochrones: { type: 'FeatureCollection'; features: IsochroneFeature[] } | null
+  /** Places for the map: all within 15 minutes and the three nearest of each kind. */
+  nearby_places: Place[]
   sources: SourceInfo[]
   disclaimer: string
 }
