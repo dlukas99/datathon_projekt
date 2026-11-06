@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from analysis import score
-from analysis.daily import car_free_category, daily_category, transit_category
+from analysis.daily import WALK_LIMIT_MIN, car_free_category, daily_category, transit_category
 from analysis.environment import (
     air_category,
     fire_category,
@@ -110,6 +110,7 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         "daily": daily_category(reach),
     }
     score.attach(cats.values())
+    nearby = reach.nearby(WALK_LIMIT_MIN)
     used: list[str] = []
     for cat in cats.values():
         for v in cat.values:
@@ -118,6 +119,9 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         for p in cat.places:
             if p.source not in used:
                 used.append(p.source)
+    for p in nearby:
+        if p.source not in used:
+            used.append(p.source)
     if location.population is not None:
         used.append("dzs_popis")
     for extra in ("dgu_au", "valhalla"):
@@ -130,6 +134,7 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         summary=summary(cats),
         categories=list(cats.values()),
         isochrones=iso,
+        nearby_places=nearby,
         sources=sources,
         disclaimer=DISCLAIMER,
     )

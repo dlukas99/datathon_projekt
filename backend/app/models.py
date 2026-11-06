@@ -117,5 +117,33 @@ class Report(BaseModel):
     isochrones: dict[str, Any] | None = Field(
         default=None, description="GeoJSON FeatureCollection of 5, 10 and 15 minute walks"
     )
+    nearby_places: list[Place] = Field(
+        default=[],
+        description=(
+            "Mjesta za kartu: sva do 15 minuta hoda i tri najbliža svake vrste, s vremenom hoda"
+        ),
+    )
     sources: list[SourceInfo]
     disclaimer: str
+
+
+class LineString(BaseModel):
+    type: Literal["LineString"] = "LineString"
+    coordinates: list[tuple[float, float]] = Field(description="[lon, lat] u WGS84")
+
+
+class RouteProperties(BaseModel):
+    distance_m: float = Field(description="Duljina puta po mreži ulica i staza, u metrima")
+    walk_minutes: float = Field(description="Vrijeme hoda u minutama, kao u izvještaju")
+    walking_speed_kmh: float
+    source: str
+    retrieved_at: str | None
+    kind: Kind
+
+
+class RouteFeature(BaseModel):
+    """A walking route as a GeoJSON Feature."""
+
+    type: Literal["Feature"] = "Feature"
+    geometry: LineString
+    properties: RouteProperties
