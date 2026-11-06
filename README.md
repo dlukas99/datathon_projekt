@@ -89,6 +89,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
 - okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak na stupnjevanoj ljestvici, toplina i zelenilo, promet u blizini, požari raslinja, sunčev potencijal
 - izokrone hoda od 5, 10 i 15 minuta po mreži ulica i pješačkih staza
+- pješački put po ulicama do najbližeg vrtića, škole, ljekarne ili druge ustanove, s minutama i duljinom; otvara se iz legende karte, s točke na karti ili iz popisa „Svakodnevni život”
 - svakodnevne potrebe i javni prijevoz s minutama hoda
 - profili korisnika koji mijenjaju redoslijed i naglasak
 - usporedba dviju lokacija
@@ -160,7 +161,7 @@ flowchart LR
 ```
 
 - **Obrada podataka** jednom preuzima i priprema nacionalne slojeve. Odgovor za adresu zato ne ovisi o dostupnosti izvora u trenutku upita. Cijela obrada pokreće se naredbom `make data`.
-- **Mreža hoda** računa se u Valhalli, otvorenom usmjerivaču nad OpenStreetMapom. Jedan izvještaj šalje jedan upit matrice za sve ustanove i jedan upit izokrona; izmjereno trajanje izvještaja je oko 1 s.
+- **Mreža hoda** računa se u Valhalli, otvorenom usmjerivaču nad OpenStreetMapom. Jedan izvještaj šalje jedan upit matrice za sve ustanove i jedan upit izokrona; izmjereno trajanje izvještaja je oko 1 s. Pješački put do pojedinog mjesta računa se tek na klik, istim usmjerivačem i istom brzinom hoda.
 - **API** je REST s OpenAPI opisom (`/api/docs`). Svaka vrijednost u odgovoru nosi izvor, datum i vrstu (izmjereno, modelirano ili procjena).
 - **Asistent** je opcionalan i koristi bilo koji model preko OpenAI-kompatibilnog API-ja. Bez modela pitanja razumiju jednostavna pravila. Brojke uvijek dolaze iz predložaka.
 

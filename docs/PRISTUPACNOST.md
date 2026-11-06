@@ -13,6 +13,7 @@ Cilj je WCAG 2.2 razine AA. Provjera je automatska (axe-core u Playwrightu); ono
   - ukupno 24 provjere, a sve moraju biti bez nalaza.
 - **Bez vodoravnog pomicanja** na širini od 320 px (naslovnica, izvještaj, usporedba).
 - **Glavni tok tipkovnicom:** pretraga, strelica dolje i Enter do izvještaja.
+- **Pješački put:** gumb vrste mjesta i redak popisa „Svakodnevni život” crtaju put, Esc ga uklanja, a axe se pokreće i dok su podaci o putu otvoreni.
 
 Iz axe provjere izuzet je samo `canvas` karte (MapLibre), jer je karta slika bez vlastitog teksta; njezin sadržaj naveden je u tekstu uz kartu (vidi „Karta”).
 
@@ -29,7 +30,8 @@ Iz axe provjere izuzet je samo `canvas` karte (MapLibre), jer je karta slika bez
 | Ciljevi dodira | najmanje 44 × 44 px (gumbi, poveznice u izborniku, odabir profila, prijedlozi) |
 | Kontrast | boje teksta i statusa provjerene axe-om u obje teme (≥ 4,5:1) |
 | Status nikad samo bojom | svaka oznaka statusa ima riječ („Dobro”, „Upozorenje”, „Loše”, „Nema podataka”, „Informacija”); ocjene imaju i točku u boji |
-| Karta | nije jedini nositelj informacije: uz kartu je tekstualni popis onoga što je na 5, 10 i 15 minuta hoda i legenda, a ispod tablica najbližih ustanova; `<figure>` s opisom za čitače zaslona |
+| Karta | nije jedini nositelj informacije: ispod karte je tekstualni popis onoga što je na 5, 10 i 15 minuta hoda i, za svaku vrstu mjesta, broj unutar 15 minuta i najbliže vrijeme, a ispod toga popis najbližih ustanova; `<figure>` s opisom za čitače zaslona; kontrole karte i oblačić na hrvatskom |
+| Pješački put | do puta se dolazi tipkovnicom bez karte: gumbi vrsta mjesta (pravi `<button>` s `aria-pressed`; uključeni ima kvačicu i deblji rub, ne samo boju) i retci popisa „Svakodnevni život”. Rezultat („Pješački put do odredišta …: 31 minuta, 2,4 kilometra.”) najavljuje područje `role="status"`. Esc uklanja put. Nakon „Ukloni put” fokus ostaje na gumbu vrste, a nakon klika u popisu prelazi na podatke o putu. Vrsta bez podataka je onemogućen gumb s tekstom „nema podataka u blizini” |
 | Tablice | `<caption>`, zaglavlja s `scope` |
 | Tamna tema | gumb „Tamna tema” (`aria-pressed`); početno prema postavci sustava (`prefers-color-scheme`); izbor se pamti u pregledniku |
 | Smanjene animacije | `prefers-reduced-motion` gasi animacije |

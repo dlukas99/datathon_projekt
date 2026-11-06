@@ -110,7 +110,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 ### OpenStreetMap i Valhalla
 - Izvadak: https://download.geofabrik.de/europe/croatia-latest.osm.pbf (≈ 201 MB).
 - Licenca: ODbL 1.0, © suradnici OpenStreetMapa.
-- Usmjerivač: Valhalla 3.9.1 (`ghcr.io/valhalla/valhalla-scripted:3.9.1`, MIT), pješački profil uz brzinu 4,5 km/h.
+- Usmjerivač: Valhalla 3.9.1 (`ghcr.io/valhalla/valhalla-scripted:3.9.1`, MIT), pješački profil uz brzinu 4,5 km/h. Isti usmjerivač računa i pješački put do mjesta na karti (`GET /api/route`, samo na zahtjev); karta ga navodi u atribuciji („Izokrone i rute: Valhalla, © OpenStreetMap”).
 - Oznake: trgovine `shop=supermarket|convenience|greengrocer`; igrališta `leisure=playground`; parkovi `leisure=park`; ljekarne `amenity=pharmacy`; liječnici `amenity=doctors`; vrtići `amenity=kindergarten`; škole `amenity=school`; reciklaža `amenity=recycling`; stajališta `highway=bus_stop`, `public_transport=platform` + `bus=yes`, `railway=tram_stop|halt|station`; prometnice `highway=motorway|trunk|primary`, pruge `railway=rail`.
 
 ### MZOM: Registar dječjih vrtića i osnovne škole
