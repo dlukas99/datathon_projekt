@@ -185,7 +185,7 @@ EXPLANATIONS: dict[str, str] = {
     ),
     "noise": (
         "Buku ne mjerimo: otvorene karte buke za cijelu Hrvatsku ne postoje. Prikazujemo "
-        "udaljenost od autocesta, glavnih i važnijih cesta te pruga. Do 300 m od velike "
+        "udaljenost od autocesta, brzih, državnih i županijskih cesta te pruga. Do 300 m od velike "
         "prometnice buka i ispušni plinovi obično su najizraženiji, a dalje od 500 m utjecaj "
         "je slab (pregled istraživanja Health Effects Institutea, 2010.)."
     ),

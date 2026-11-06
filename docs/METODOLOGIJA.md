@@ -105,7 +105,7 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **NO2:**
   - Karta je 5–17 µg/m³ niža od prometnih postaja (Zagreb-1, Osijek-1). To je očekivano: karta EEA-e procjenjuje pozadinsku razinu na mreži od 1 km, a prometne postaje mjere uz samu ulicu.
   - Od pozadinske postaje Zagreb-3 karta je niža za 4 µg/m³.
-  - Zato kartica zraka napominje da uz prometne ulice NO2 može biti znatno viši, a kategorija „Promet u blizini” to pokazuje zasebno.
+  - Zato kartica zraka napominje da uz prometne ulice NO2 može biti znatno viši, a kategorija „Udaljenost od prometnica” to pokazuje zasebno.
 - **Požega** nema službenu postaju. Najbliža je Slavonski Brod-1 na 31 km, pa je usporedba samo okvirna.
 - **Ograničenje provjere:** EEA karte izrađene su i uz pomoć istih postaja, pa ovo nije potpuno neovisna provjera. Pokazuje ipak kako se karta ponaša uz pozadinske, a kako uz prometne postaje.
 
@@ -125,10 +125,22 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Provjera (6. 11. 2026.):** za pet središta naselja (Split, Osijek, Požega, Nijemci, Hvar) udio drveća iz WorldCovera (11–33 %) uspoređen je s ortofotom DGU-a iz 2023. i s kartom gustoće krošanja Copernicus HRL 2018 (EEA). Brojke su ispravno izračunate i odgovaraju ortofotu; HRL daje još manje vrijednosti (1–11 %). Detalji su u [NALAZI_TESTIRANJA.md](NALAZI_TESTIRANJA.md).
 - **Ograničenja:** WorldCover mjeri pokrov tla iz satelita i ne razlikuje javne od privatnih vrtova. U rezoluciji 10 m ne razlikuje pojedinačna stabla u dvorištima i uz ulice kad je oko njih izgrađeno, pa je udio drveća u gusto izgrađenim središtima vjerojatno nešto veći. OSM parkovi su izvan gradova nepotpuni. Dio pravila „3 stabla vidljiva s prozora” ne može se izračunati iz otvorenih podataka.
 
-## Promet u blizini (procjena; ranije „Buka”)
+## Udaljenost od prometnica (procjena; ranije „Promet u blizini” i „Buka”)
 
-- **Podaci:** autoceste, brze, glavne i važnije ceste (`highway=motorway|trunk|primary|secondary`) i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa.
-- **Izračun:** zračna udaljenost do najbliže takve ceste i najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”.
+- **Podaci:** ceste `highway=motorway|trunk|primary|secondary` i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa. Ostale ulice se ne broje.
+- **Vrsta ceste** prema hrvatskim pravilima označavanja u OSM-u (wiki „Croatia/Ceste”):
+
+| OSM | U izvještaju | Primjer |
+|---|---|---|
+| `motorway` | autocesta i oznaka | autocesta A1 |
+| `trunk` | brza cesta i oznaka | brza cesta D1 |
+| `primary` s oznakom D | državna cesta i oznaka | državna cesta D8 |
+| `primary` bez oznake D | glavna cesta | |
+| `secondary` s četveroznamenkastom oznakom | županijska cesta (Ž i oznaka) | županijska cesta Ž2001 |
+| `secondary` bez oznake | županijska ili glavna gradska cesta (bivše županijske ceste u gradovima) | |
+
+  U podacima 19.042 dionice `primary` imaju oznaku D, a 16.463 dionice `secondary` županijsku oznaku; 3.910 dionica `secondary` nema oznaku, uglavnom u gradovima.
+- **Izračun:** zračna udaljenost od lokacije (adrese ili središta naselja) do najbliže točke osi takve ceste i do najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”. Za središta naselja udaljenost je često 0 m jer OSM čvor naselja leži na samoj cesti; za adresu uz cestu nekoliko je metara (točka adrese je na zgradi).
 - **Pojasevi:**
 
 | Udaljenost od ceste | Oznaka | Status |
@@ -140,6 +152,8 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Izvor pojaseva:** Health Effects Institute (2010.), *Traffic-Related Air Pollution: A Critical Review of the Literature on Emissions, Exposure, and Health Effects*, Special Report 17. Zona najjačeg utjecaja prometa je približno 300 do 500 m od autoceste ili velike prometnice, a dalje koncentracije padaju na pozadinsku razinu.
 - **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
 - **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
+- **Smjer podskora:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
+- **Popis „Predloži mjesto” i izvještaj:** popis računa za središte naselja, a izvještaj za odabranu adresu, pa se brojke mogu razlikovati (Split: središte 530 m od državne ceste, adresa uz tu cestu nekoliko metara).
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
 ## Požari raslinja
@@ -215,7 +229,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 | Poplave | dobro 100, upozorenje 50, loše 0 | scenariji Hrvatskih voda i Direktive 2007/60/EZ |
 | Kvaliteta zraka | vrlo niska 100, niska 80, umjerena 50, visoka 10 (viša od razina PM2,5 i NO2) | WHO 2021 i granice EU-a |
 | Zelenilo i hlad | do 60 bodova za udio drveća (30 % = puni bodovi) i 40 bodova za park do 300 m (20 do 600 m) | pravilo 3-30-300 |
-| Promet u blizini | podalje 100, rub zone 60, blizu 25 | HEI 2010 (300/500 m) |
+| Udaljenost od prometnica | podalje 100, rub zone 60, blizu 25 (veći broj znači manje prometa) | HEI 2010 (300/500 m) |
 | Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
 | Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
 | Život bez auta | broj potreba od 7 × 100 / 7 | — |

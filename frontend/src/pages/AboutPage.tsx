@@ -88,9 +88,9 @@ export function AboutPage() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">Promet u blizini</th>
+                <th scope="row">Udaljenost od prometnica</th>
                 <td>
-                  Udaljenost od autocesta, brzih, glavnih i važnijih cesta te pruga
+                  Zračna udaljenost od lokacije do autocesta, brzih, državnih i županijskih cesta te pruga
                   (OpenStreetMap). Ne mjerimo buku; to je zamjenski pokazatelj.
                 </td>
                 <td>

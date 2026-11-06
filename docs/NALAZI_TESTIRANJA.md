@@ -8,7 +8,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 | 2 | Pretraga ne pronalazi neke ulice i kućne brojeve | slovo uz kućni broj gubilo se pri obradi; upit bez zareza, s poštanskim brojem ili gradom umjesto naselja nije se prepoznavao | srednje do teško | planirano |
 | 3 | Gornji izbornik zbunjuje | početni ekran nema stavku u izborniku; „Pronađi mjesto” zvuči kao pretraga | lako do srednje | napravljeno |
 | 4 | Informacija o internetu | podaci HAKOM-a postoje, ali nisu objavljeni pod otvorenom licencom | ovisi o vanjskim podacima | samo izvještaj |
-| 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | planirano |
+| 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | napravljeno |
 | 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | napravljeno |
 | 7 | Sumnja na netočne podatke o zelenilu | podaci su u redu, ali nije objašnjeno što se broji; „toplina” se ne mjeri | lako; bolji izvori ovise o vanjskim podacima | napravljeno (bez novih izvora) |
 | 8 | Asistent uvijek daje isti odgovor | bez ključa za jezični model pitanje bez prepoznate teme dobiva uvijek isti sažetak | srednje; jezični model ovisi o ključu | napravljeno bez modela; model je prijedlog |
@@ -128,13 +128,24 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
 - **Od čega i do čega se mjeri:** zračna udaljenost od točke izvještaja do najbliže točke osi ceste, ne do čvora. Točka je adresa ili središte naselja, ovisno o tome što je otvoreno.
 - **Kako se udaljenost pretvara u skor:** do 300 m daje 25, od 300 do 500 m 60, a dalje od 500 m 100 (pojasevi prema pregledu HEI-ja iz 2010.). **100/100 znači „daleko od velikih prometnica”**, a smjer je isti u svim kategorijama: više je povoljnije.
 - **Zašto se popis i kartica razlikuju:** popis „Predloži mjesto” računa za središte naselja (OSM čvor `place`), a izvještaj za odabranu adresu. Za Split središte je 530 m od najbliže državne ceste (podskor 100), a adresa uz tu cestu može biti 10 m od nje. Obje brojke su točne, ali za različite točke. Zbunjuje i naziv: „Promet u blizini (100/100)” zvuči kao mnogo prometa.
-- **Je li „10 m” stvarno:** točke adresa DGU-a leže na zgradi, a zgrada uz cestu udaljena je od osi ceste nekoliko metara (pola kolnika i nogostup). Za središta naselja često je 0 m jer OSM čvor `place` leži na samoj cesti (Osijek, Zadar). Provjera na adresama javnih ustanova: vidi stanje točke.
+- **Je li „10 m” stvarno:** točke adresa DGU-a leže na zgradi, a zgrada uz cestu udaljena je od osi ceste nekoliko metara (pola kolnika i nogostup). Za središta naselja često je 0 m jer OSM čvor `place` leži na samoj cesti (Osijek, Zadar). Provjereno na ortofotu DGU-a 2023. za dvije javne ustanove:
+  - Grad Vinkovci, Bana Jelačića 1: 13,9 m od osi županijske ceste Ž4290, prikazano „10 m”;
+  - Općina Nijemci, Trg kralja Tomislava 6: 22,8 m od Ž4224, prikazano „20 m”.
+
+  U oba slučaja točka je na zgradi, a cesta prolazi ispred nje. Brojka je stvarna, nije greška.
 - **Prijedlog:**
   - vrste cesta iz oznaka: „autocesta A1”, „brza cesta”, „državna cesta D8”, „županijska cesta Ž2001”, a dionica bez oznake je „županijska ili glavna gradska cesta”;
   - tekst „od lokacije” umjesto „od adrese”, jer točka može biti i središte naselja;
   - kategorija se zove „Udaljenost od prometnica”: tada 100/100 znači „daleko”, a podnaslov kaže koje se ceste broje.
 - **Procjena:** srednje.
 - **Rizici:** promjena naziva kategorije mijenja tekstove u zlatnim testovima, profilima i dokumentaciji. Vrijednosti, pojasevi i podskorovi ostaju isti.
+- **Stanje: napravljeno.**
+  - Kategorija se zove „Udaljenost od prometnica”.
+  - Vrijednost kaže koja je cesta, npr. „10 m (županijska cesta Ž4290)” ili „190 m (državna cesta D518)”.
+  - Rečenica kaže „od lokacije”.
+  - Napomena objašnjava od čega se mjeri, koje se ceste broje i da veći podskor znači manje prometa.
+  - U popisu „Predloži mjesto” sada piše „Najjače: Udaljenost od prometnica (100/100)”.
+  - Za šest demo adresa statusi i podskorovi su isti kao prije.
 
 ## 6. Prikaz kvalitete zraka je prekompliciran
 

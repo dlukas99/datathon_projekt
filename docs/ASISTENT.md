@@ -39,7 +39,7 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 4 | Ima li puno prašine i smoga? | report | zrak | isto kao 3 |
 | 5 | Ima li dovoljno drveća i hlada ljeti? | report | zelenilo i hlad | udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park |
 | 6 | Koliko je daleko najbliži park? | report | zelenilo i hlad | najbliži park u minutama hoda i zračna udaljenost |
-| 7 | Je li bučno zbog prometa? | report | promet u blizini | udaljenost od najbliže važnije ceste i pruge, označena kao procjena |
+| 7 | Je li bučno zbog prometa? | report | udaljenost od prometnica | udaljenost od najbliže autoceste, brze, državne ili županijske ceste (s oznakom, npr. D8) i pruge, označena kao procjena |
 | 8 | Isplate li se solarni paneli na krovu? | report | sunce | kWh po kWp godišnje i optimalni nagib iz PVGIS-a (bez savjeta o isplativosti) |
 | 9 | Mogu li ovdje živjeti bez auta? | report | život bez auta | „X od 7” potreba unutar 15 minuta hoda i popis onoga što nedostaje ili nije provjereno |
 | 10 | Ima li autobus ili tramvaj u blizini? | report | javni prijevoz | broj stajališta unutar 10 minuta hoda; najviše polazaka na sat gdje postoji vozni red |
@@ -61,7 +61,7 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 26 | Ima li ovdje optički internet? | no_data | — | „O internetu i mobilnom signalu nemamo podatke.” |
 | 27 | Gdje je najbliža srednja škola? | no_data | škola | da podataka o srednjim školama nema, i najbliža osnovna škola |
 | 28 | Koliko ima stanovnika? | report | — | broj stanovnika naselja iz Popisa 2021. |
-| 29 | Je li ulica tiha? | report | promet u blizini | isto kao 7 |
+| 29 | Je li ulica tiha? | report | udaljenost od prometnica | isto kao 7 |
 | 30 | Što mislite o ovome? | unknown | — | „Ovo pitanje ne razumijem …” i popis tema |
 
 Za usporedbu dviju adresa provjereno je i:

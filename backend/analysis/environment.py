@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import atexit
 import math
+import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -463,7 +464,7 @@ def air_category(lon: float, lat: float) -> Category:
             "usklađenosti s graničnim vrijednostima.",
             "Karta prikazuje pozadinsku razinu: uz prometne ulice NO2 može biti znatno viši "
             "(u našoj provjeri prometne postaje u Zagrebu i Osijeku mjerile su 5–17 µg/m³ više "
-            "od karte). Vidi i kategoriju „Promet u blizini”.",
+            "od karte). Vidi i kategoriju „Udaljenost od prometnica”.",
         ],
     )
 
@@ -602,15 +603,9 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
     )
 
 
-# --- Traffic nearby (proxy for traffic noise and exhaust) ---------------------------------
+# --- Distance from major roads (proxy for traffic noise and exhaust) ---------------------
 
-NOISE_KINDS = {
-    "motorway": "autocesta",
-    "trunk": "brza cesta",
-    "primary": "glavna cesta",
-    "secondary": "važnija cesta",
-    "rail": "željeznička pruga",
-}
+NOISE_TITLE = "Udaljenost od prometnica"
 # HEI (2010), Special Report 17: traffic pollution is highest within roughly 300 to 500 m
 # of a major road and falls to background levels beyond that.
 TRAFFIC_BANDS: list[tuple[float | None, str, Status]] = [
@@ -618,6 +613,25 @@ TRAFFIC_BANDS: list[tuple[float | None, str, Status]] = [
     (500.0, "Rub zone prometa", "info"),
     (None, "Podalje od prometnica", "good"),
 ]
+_COUNTY_REF = re.compile(r"\d{4}")
+
+
+def road_name(kind: str, ref: str) -> str:
+    """Croatian road class from OSM tags (wiki "Croatia/Ceste"): motorway is an autocesta,
+    trunk a brza cesta, primary a državna cesta (ref D…), secondary a županijska cesta
+    (four-digit ref, no prefix in OSM) or a former one inside a city (no ref)."""
+    first = (ref or "").split(";")[0].strip()
+    if kind == "rail":
+        return "željeznička pruga"
+    if kind == "motorway":
+        return f"autocesta {first}" if first.startswith("A") else "autocesta"
+    if kind == "trunk":
+        return f"brza cesta {first}" if first[:1] in ("A", "D") else "brza cesta"
+    if kind == "primary":
+        return f"državna cesta {first}" if first.startswith("D") else "glavna cesta"
+    if _COUNTY_REF.fullmatch(first):
+        return f"županijska cesta Ž{first}"
+    return "županijska ili glavna gradska cesta" if not first else "važnija cesta"
 
 
 def traffic_band(distance_m: float) -> tuple[str, Status]:
@@ -627,9 +641,8 @@ def traffic_band(distance_m: float) -> tuple[str, Status]:
     raise ValueError(distance_m)
 
 
-def _traffic_sentence(kind: str, distance: float) -> str:
-    road = NOISE_KINDS[kind].capitalize()
-    where = f"{road} je {fmt.metres(distance)} od adrese"
+def _traffic_sentence(road: str, distance: float) -> str:
+    where = f"{road[:1].upper()}{road[1:]} je {fmt.metres(distance)} od lokacije"
     if distance <= 300:
         return (
             f"{where}, unutar 300 m, gdje su buka i ispušni plinovi prometa obično najizraženiji."
@@ -642,12 +655,11 @@ def _traffic_sentence(kind: str, distance: float) -> str:
 def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     lines = layers.noise_lines
     links = [Link(label="Strateške karte buke (EEA, preglednik)", url=EEA_NOISE_VIEWER)]
-    title = "Promet u blizini"
     if lines is None:
         return Category(
             id="noise",
             group="environment",
-            title=title,
+            title=NOISE_TITLE,
             status="no_data",
             status_label=label("no_data"),
             headline="Podaci o prometnicama nisu dostupni.",
@@ -661,10 +673,10 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         group = "rail" if kind == "rail" else "road"
         d = float(lines.geoms[int(i)].distance(origin))
         if group not in nearest or d < nearest[group][0]:
-            nearest[group] = (d, kind)
+            nearest[group] = (d, road_name(kind, lines.refs[int(i)]))
     values: list[Value] = []
     for group, value_label in (
-        ("road", "Najbliža autocesta, glavna ili važnija cesta"),
+        ("road", "Najbliža autocesta, brza, državna ili županijska cesta"),
         ("rail", "Najbliža pruga"),
     ):
         found = nearest.get(group)
@@ -674,11 +686,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
                 label=value_label,
                 value=round(found[0]) if found else None,
                 unit="m",
-                display=(
-                    f"{fmt.metres(found[0])} ({NOISE_KINDS[found[1]]})"
-                    if found
-                    else "dalje od 2 km"
-                ),
+                display=f"{fmt.metres(found[0])} ({found[1]})" if found else "dalje od 2 km",
                 source="osm",
                 retrieved_at=retrieved_at("osm"),
                 kind="estimate",
@@ -691,10 +699,10 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     sentences = [
         _traffic_sentence(road[1], road[0])
         if road
-        else "U krugu od 2 km nema autoceste, brze, glavne ni važnije ceste."
+        else "U krugu od 2 km nema autoceste, brze, državne ni županijske ceste."
     ]
     if rail and rail[0] <= 500:
-        sentences.append(f"Željeznička pruga je {fmt.metres(rail[0])} od adrese.")
+        sentences.append(f"Željeznička pruga je {fmt.metres(rail[0])} od lokacije.")
     scale = Scale(
         key="road_distance",
         label="Udaljenost od velike prometnice",
@@ -707,7 +715,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     return Category(
         id="noise",
         group="environment",
-        title=title,
+        title=NOISE_TITLE,
         status=status,
         status_label=band,
         headline=" ".join(sentences),
@@ -715,11 +723,15 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         links=links,
         scales=[scale],
         notes=[
-            "Ne mjerimo buku: ovo je procjena prema udaljenosti od autocesta, brzih, glavnih i "
-            "važnijih cesta te pruga iz OpenStreetMapa.",
+            "Ne mjerimo buku: ovo je procjena prema zračnoj udaljenosti od lokacije (adrese ili "
+            "središta naselja) do osi najbliže autoceste, brze, državne ili županijske ceste "
+            "(u gradovima i bivše županijske ceste, danas glavne gradske ulice) te pruge iz "
+            "OpenStreetMapa. Ostale ulice se ne broje.",
             "Pojasevi slijede pregled istraživanja Health Effects Institutea (2010.): "
             "onečišćenje od prometa najveće je unutar približno 300 do 500 m od velike "
             "prometnice, a dalje pada na pozadinsku razinu.",
+            "U Skoru za život veći broj znači manje prometa: 100 je dalje od 500 m od velike "
+            "prometnice, 60 od 300 do 500 m, a 25 do 300 m.",
             "Strateške karte buke za veće gradove mogu se pogledati u pregledniku EEA-e. "
             "Svjetska zdravstvena organizacija preporučuje da buka cestovnog prometa bude "
             "ispod 53 dB Lden danju i 45 dB Lnight noću.",
