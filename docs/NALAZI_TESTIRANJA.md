@@ -11,7 +11,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 | 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | planirano |
 | 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | napravljeno |
 | 7 | Sumnja na netočne podatke o zelenilu | podaci su u redu, ali nije objašnjeno što se broji; „toplina” se ne mjeri | lako; bolji izvori ovise o vanjskim podacima | napravljeno (bez novih izvora) |
-| 8 | Asistent uvijek daje isti odgovor | bez ključa za jezični model pitanje bez prepoznate teme dobiva uvijek isti sažetak | srednje; jezični model ovisi o ključu | planirano |
+| 8 | Asistent uvijek daje isti odgovor | bez ključa za jezični model pitanje bez prepoznate teme dobiva uvijek isti sažetak | srednje; jezični model ovisi o ključu | napravljeno bez modela; model je prijedlog |
 
 Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
 
@@ -228,6 +228,13 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
 
   Uz pretpostavku od oko 5.000 tokena ulaza (izvještaj i upute) i 300 tokena odgovora, jedno pitanje stoji oko 0,00065 $ s Haikuom, 0,013 $ sa Sonnetom i 0,026 $ s Opusom. To je procjena, a ne izmjereni trošak. Izbor modela je vaša odluka.
 - **Procjena:** srednje; jezični model ovisi o ključu i odobrenju.
+- **Stanje: napravljeno bez jezičnog modela.**
+  - **Nove namjere:** opće pitanje (sažetak), tema bez podataka (iskren odgovor i srodna kategorija) i nerazumljivo pitanje („Ovo pitanje ne razumijem” i popis tema).
+  - **Broj stanovnika** odgovara se iz izvještaja.
+  - **Nove ključne riječi:** „tiho”, „mirno”, „cesta”, „ambulanta”, „dom zdravlja”.
+  - Za temu bez podataka i za nerazumljivo pitanje izvještaj se ne računa, pa je odgovor odmah gotov.
+  - **Testovi:** 15 novih (ukupno 38 za asistenta), uključujući provjeru da različita pitanja dobivaju različite odgovore. U `docs/ASISTENT.md` su pitanja 21–30.
+  - Integracija jezičnog modela nije napravljena; čeka odobrenje i ključ.
 - **Rizici:** odgovor modela može biti netočan ili izvan opsega, što ublažava provjera brojki; trošak i zlouporaba ublažavaju se ograničenjima.
 
 ## Kako ponoviti mjerenja

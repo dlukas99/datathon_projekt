@@ -49,7 +49,8 @@ export function Assistant({ points }: { points: Point[] }) {
       <h2 id={`${id}-title`}>Pitajte asistenta</h2>
       <p className="hint">
         Odgovara samo iz izračuna za {points.length > 1 ? 'ove adrese' : 'ovu adresu'}, bez savjeta
-        o kupnji. Pitanja se ne spremaju.
+        o kupnji. Prepoznaje teme pitanja (npr. poplave, zrak, zelenilo, promet, vrtić, škola,
+        prijevoz); kad nešto ne zna, to i kaže. Pitanja se ne spremaju.
       </p>
       <div className="assistant-log" aria-live="polite">
         {turns.map((t, i) => (

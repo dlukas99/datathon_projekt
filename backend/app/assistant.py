@@ -22,20 +22,34 @@ from app.geocode import normalize
 from app.models import Category, Kind, Link, Report
 from app.sources import source_info
 
-Intent = Literal["report", "explain", "purchase_advice", "out_of_scope"]
+Intent = Literal[
+    "report", "explain", "purchase_advice", "out_of_scope", "overview", "no_data", "unknown"
+]
 
 CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
     "flood": ("poplav", "rijek", "nasip", "izlije", "potop"),
     "air": ("zrak", "prasin", "pm2", "pm 2", "no2", "dusik", "onecis", "smog"),
     "green": ("zelen", "drve", "park", "hlad", "vruc", "toplin", "vrucin"),
-    "noise": ("buk", "bucn", "promet", "pruga", "autocest"),
+    "noise": (
+        "buk",
+        "bucn",
+        "promet",
+        "pruga",
+        "autocest",
+        "cesta",
+        "ceste",
+        "cesti",
+        "tisin",
+        " tih",
+        " mirn",
+    ),
     "solar": ("sunc", "solar", "panel", "fotonapon", "elektran"),
     "fire": ("pozar", "opozar", "vatr", "gorjel"),
     "car_free": ("bez auta", "pjesice", "pjeske", "hodanj", "automobil", "auto "),
     "transit": ("autobus", "tramvaj", "vlak", "prijevoz", "stajalis", "polaz", "zeljeznic"),
     "kindergarten": ("vrtic", "jaslic"),
     "school": ("skol",),
-    "doctor": ("lijecni", "doktor", "ordinacij", "obiteljsk"),
+    "doctor": ("lijecni", "doktor", "ordinacij", "obiteljsk", "ambulant", "dom zdravlja"),
     "pediatrician": ("pedijat",),
     "pharmacy": ("ljekarn", "apotek"),
     "grocery": ("trgovin", "ducan", "namirnic", "supermarket", "market"),
@@ -77,11 +91,79 @@ OUT_OF_SCOPE = (
     "katast",
     "gradevinsk",
     "legaliz",
-    "potres",
-    "kriminal",
     "susjed",
 )
 EXPLAIN_PATTERNS = ("sto znaci", "sto je", "objasni", "kako se racuna", "sto su", "zasto")
+# General questions about the place: answered with the report's summary.
+OVERVIEW_PATTERNS = (
+    "opcenito",
+    "ukratko",
+    "sazet",
+    "sazmi",
+    "kakvo je ovo mjesto",
+    "kakvo je mjesto",
+    "kako je zivjeti",
+    "dobro mjesto",
+    "dobra lokacija",
+    "kakva je lokacija",
+    "okolin",
+    "okolis",
+    "prednost",
+    "nedostat",
+    "nedostac",
+    "pregled",
+)
+POPULATION_WORDS = ("stanovni", "koliko ljudi", "velicina naselja", "veliko naselje")
+
+
+@dataclass(frozen=True)
+class Gap:
+    """A topic people ask about for which the report has no data."""
+
+    words: tuple[str, ...]  # recognise the topic
+    weak: tuple[str, ...]  # recognise it only when no category matched ("sigurno od poplava")
+    sentence: str
+    related: tuple[str, ...] = ()  # categories that help instead
+
+
+GAPS: dict[str, Gap] = {
+    "hospital": Gap(
+        ("bolnic", "hitna pomoc", "hitnu pomoc", "hitne pomoci", "klinik", "kbc "),
+        (),
+        "O bolnicama i hitnoj pomoći nemamo podatke. U izvještaju su obiteljski liječnici, "
+        "pedijatri i ljekarne.",
+    ),
+    "secondary_school": Gap(
+        ("srednj", "gimnazij", "fakultet", "sveucilis"),
+        (),
+        "O srednjim školama i fakultetima nemamo podatke; u izvještaju su osnovne škole.",
+        ("school",),
+    ),
+    "crime": Gap(
+        ("kriminal", "kradj", "provala", "provale", "nasilj"),
+        ("sigurn",),
+        "O sigurnosti i kriminalu nemamo podatke.",
+    ),
+    "earthquake": Gap(("potres", "seizm"), (), "O potresima nemamo podatke."),
+    "internet": Gap(
+        ("internet", "optik", "signal", "wifi", "mobiln"),
+        (),
+        "O internetu i mobilnom signalu nemamo podatke.",
+    ),
+    "parking": Gap(("parking", "parkira", "garaz"), (), "O parkiranju nemamo podatke."),
+    "temperature": Gap(
+        ("temperatur", "stupnj", "toplinsk"),
+        (),
+        "Temperaturu ne mjerimo; pokazatelj hlada je udio drveća u okolici.",
+        ("green",),
+    ),
+}
+
+TOPICS = (
+    "poplave, zrak, zelenilo i hlad, promet i ceste u blizini, požari raslinja, sunce na krovu, "
+    "život bez auta, javni prijevoz, vrtić, osnovna škola, obiteljski liječnik, pedijatar, "
+    "ljekarna, trgovina, igralište, reciklaža i broj stanovnika naselja"
+)
 
 EXPLANATIONS: dict[str, str] = {
     "flood": (
@@ -161,6 +243,8 @@ class AssistantReply(BaseModel):
 class Understanding:
     intent: Intent
     categories: list[str] = field(default_factory=list)
+    gaps: list[str] = field(default_factory=list)
+    population: bool = False
 
 
 def understand_rules(question: str) -> Understanding:
@@ -168,11 +252,23 @@ def understand_rules(question: str) -> Understanding:
     if any(p in q for p in PURCHASE_PATTERNS):
         return Understanding("purchase_advice")
     cats = [c for c, words in CATEGORY_KEYWORDS.items() if any(w in q for w in words)]
-    if not cats and any(w in q for w in OUT_OF_SCOPE):
+    population = any(w in q for w in POPULATION_WORDS)
+    gaps = [
+        name
+        for name, gap in GAPS.items()
+        if any(w in q for w in gap.words) or (not cats and any(w in q for w in gap.weak))
+    ]
+    if gaps:
+        return Understanding("no_data", cats, gaps, population)
+    if not cats and not population and any(w in q for w in OUT_OF_SCOPE):
         return Understanding("out_of_scope")
     if cats and any(p in q for p in EXPLAIN_PATTERNS):
         return Understanding("explain", cats)
-    return Understanding("report", cats)
+    if cats or population:
+        return Understanding("report", cats, population=population)
+    if any(p in q for p in OVERVIEW_PATTERNS):
+        return Understanding("overview")
+    return Understanding("unknown")
 
 
 LLM_PROMPT = (
@@ -266,6 +362,21 @@ def _facts_for(
     return sentences, facts, list(cat.links)
 
 
+def _population(report: Report, prefix: str) -> tuple[str, list[Fact]]:
+    """Inhabitants of the settlement (census 2021), from the report's location."""
+    pop = report.location.population
+    if pop is None:
+        return f"{prefix}: broj stanovnika naselja nije poznat.", []
+    settlement = report.location.settlement or "naselje"
+    fact = Fact(
+        text=f"{pop.label}: {pop.display}",
+        source=source_info(pop.source).title,
+        retrieved_at=pop.retrieved_at,
+        kind=pop.kind,
+    )
+    return f"{prefix}: naselje {settlement} ima {pop.display}.", [fact]
+
+
 def _comparison(reports: list[Report], cat_id: str) -> str | None:
     """A neutral sentence saying where a numeric value is lower or higher."""
     keys = {
@@ -336,21 +447,43 @@ def answer(
         if parts:
             return AssistantReply(answer=" ".join(parts), mode=mode)
 
+    where = "ove adrese" if len(request.locations) > 1 else "ovu adresu"
+    if understood.intent == "unknown":
+        return AssistantReply(
+            answer=(
+                f"Ovo pitanje ne razumijem. Odgovaram samo iz izračuna za {where}, o ovim "
+                f"temama: {TOPICS}. Pitajte npr. „Kakav je zrak?” ili „Koliko je daleko vrtić?”"
+            ),
+            mode=mode,
+        )
+
+    sentences: list[str] = []
+    cats = list(understood.categories)
+    if understood.intent == "no_data":
+        sentences.extend(GAPS[g].sentence for g in understood.gaps)
+        cats += [c for g in understood.gaps for c in GAPS[g].related if c not in cats]
+        if not cats and not understood.population:
+            sentences.append(f"Za {where} mogu odgovoriti o ovim temama: {TOPICS}.")
+            return AssistantReply(answer=" ".join(sentences), mode=mode)
+
     reports = [build(p.lat, p.lon, p.label) for p in request.locations]
-    cats = understood.categories
-    if not cats:
-        sentences = []
+    facts: list[Fact] = []
+    links: list[Link] = []
+    if understood.population:
+        for i, r in enumerate(reports):
+            said, known = _population(r, _name(r, i, len(reports)))
+            sentences.append(said)
+            facts.extend(known)
+    if not cats and not sentences:
+        # A general question (or the model found no category): the report's summary.
         for i, r in enumerate(reports):
             sentences.append(f"{_name(r, i, len(reports))}: " + " ".join(r.summary))
         return AssistantReply(
             answer=" ".join(sentences)
-            + " Pitajte me konkretnije, npr. o poplavama, zraku ili najbližem vrtiću.",
+            + " Pitajte me i konkretnije, npr. o poplavama, zraku ili najbližem vrtiću.",
             mode=mode,
         )
 
-    sentences = []
-    facts: list[Fact] = []
-    links: list[Link] = []
     for cat_id in cats:
         for i, r in enumerate(reports):
             s, f, links_for = _facts_for(r, cat_id, _name(r, i, len(reports)))

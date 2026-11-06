@@ -94,3 +94,85 @@ def test_purchase_advice_is_refused() -> None:
     )
     reply = answer(request, lambda lat, lon, label: _report(1.0, "X"))
     assert reply.answer.startswith("Ne dajem savjete")
+
+
+# Questions the tester asked that used to get the same summary every time.
+MORE_QUESTIONS: list[tuple[str, str, set[str]]] = [
+    ("Kakva je okolina?", "overview", set()),
+    ("Je li ovo dobro mjesto za obitelj s djecom?", "overview", set()),
+    ("Gdje je najbliža bolnica?", "no_data", set()),
+    ("Je li sigurno za život?", "no_data", set()),
+    ("Je li sigurno od poplava?", "report", {"flood"}),
+    ("Ima li ovdje optički internet?", "no_data", set()),
+    ("Gdje je najbliža srednja škola?", "no_data", {"school"}),
+    ("Koliko ima stanovnika?", "report", set()),
+    ("Je li ulica tiha?", "report", {"noise"}),
+    ("Što mislite o ovome?", "unknown", set()),
+]
+
+
+@pytest.mark.parametrize(("question", "intent", "categories"), MORE_QUESTIONS)
+def test_rules_tell_general_unknown_and_missing_topics_apart(
+    question: str, intent: str, categories: set[str]
+) -> None:
+    understood = understand_rules(question)
+    assert understood.intent == intent
+    assert categories <= set(understood.categories)
+
+
+def _ask(question: str) -> tuple[str, int]:
+    built: list[int] = []
+
+    def build(lat: float, lon: float, label: str | None) -> Report:
+        built.append(1)
+        report = _report(12.3, "X")
+        report.location.settlement = "Split"
+        report.location.population = Value(
+            key="settlement_population",
+            label="Stanovnika u naselju Split",
+            value=149830,
+            unit="stanovnika",
+            display="149.830 stanovnika (Popis 2021.)",
+            source="dzs_popis",
+            retrieved_at=None,
+            kind="measured",
+        )
+        return report
+
+    request = AssistantRequest(question=question, locations=[AssistantLocation(lat=45.0, lon=16.0)])
+    return answer(request, build).answer, len(built)
+
+
+def test_unknown_question_says_so_and_lists_topics() -> None:
+    text, built = _ask("Što mislite o ovome?")
+    assert text.startswith("Ovo pitanje ne razumijem.")
+    assert "poplave" in text and "Sažetak." not in text
+    assert built == 0
+
+
+def test_missing_topic_is_named_without_building_a_report() -> None:
+    text, built = _ask("Gdje je najbliža bolnica?")
+    assert text.startswith("O bolnicama i hitnoj pomoći nemamo podatke.")
+    assert built == 0
+
+
+def test_general_question_gets_the_summary() -> None:
+    text, _ = _ask("Kakva je okolina?")
+    assert "Sažetak." in text
+
+
+def test_population_comes_from_the_report() -> None:
+    text, _ = _ask("Koliko ima stanovnika?")
+    assert "naselje Split ima 149.830 stanovnika (Popis 2021.)" in text
+
+
+def test_different_questions_get_different_answers() -> None:
+    questions = [
+        "Kakav je zrak?",
+        "Kakva je okolina?",
+        "Gdje je najbliža bolnica?",
+        "Koliko ima stanovnika?",
+        "Što mislite o ovome?",
+    ]
+    answers = {_ask(q)[0] for q in questions}
+    assert len(answers) == len(questions)

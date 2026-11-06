@@ -17,7 +17,10 @@ Namjere:
 
 | Namjera | Ponašanje |
 |---|---|
-| `report` | činjenice iz izvještaja za tražene kategorije; bez kategorija sažetak izvještaja |
+| `report` | činjenice iz izvještaja za tražene kategorije, a na pitanje o broju stanovnika broj stanovnika naselja (Popis 2021.) |
+| `overview` | opće pitanje („Kakvo je ovo mjesto?”, „ukratko”, „okolina”): sažetak izvještaja i prijedlog konkretnijeg pitanja |
+| `no_data` | tema za koju nemamo podatke (bolnica, sigurnost i kriminal, potres, internet, parkiranje, srednja škola, temperatura): rečenica da podataka nema i, gdje postoji, srodna kategorija (osnovna škola, zelenilo i hlad) |
+| `unknown` | pitanje bez prepoznate teme: „Ovo pitanje ne razumijem” i popis tema o kojima asistent može odgovoriti; nikad sažetak koji izgleda kao odgovor |
 | `explain` | objašnjenje pojma (povratno razdoblje, PM2,5, pravilo 3-30-300 …) |
 | `purchase_advice` | odbija savjet o kupnji i nudi činjenice |
 | `out_of_scope` | odbija pitanja o cijenama, kreditima, vlasništvu i gradnji te upućuje na nadležne institucije |
@@ -26,7 +29,7 @@ Pitanja se ne spremaju i ne bilježe. Svaki odgovor završava napomenom da nije 
 
 ## Testna pitanja
 
-Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, bez jezičnog modela). Stupac „Očekivani odgovor” opisuje sadržaj; točne brojke ovise o adresi i dolaze iz izvještaja.
+Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, bez jezičnog modela). Pitanja 21–30 dodana su 6. 11. 2026. nakon prijave da asistent na svako pitanje daje isti odgovor. Stupac „Očekivani odgovor” opisuje sadržaj; točne brojke ovise o adresi i dolaze iz izvještaja.
 
 | # | Pitanje | Namjera | Kategorije | Očekivani odgovor |
 |---|---|---|---|---|
@@ -50,6 +53,16 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 18 | Trebam li kupiti ovu kuću? | purchase_advice | — | „Ne dajem savjete o tome treba li kupiti nekretninu …” |
 | 19 | Koliko košta kvadrat u ovoj ulici? | out_of_scope | — | izvan opsega; upućivanje na nadležne institucije i stručnjake |
 | 20 | Je li zemljišnoknjižno stanje uredno? | out_of_scope | — | isto kao 19 |
+| 21 | Kakva je okolina? | overview | — | sažetak izvještaja (poplave, zrak, život bez auta) i prijedlog konkretnijeg pitanja |
+| 22 | Je li ovo dobro mjesto za obitelj s djecom? | overview | — | isto kao 21 |
+| 23 | Gdje je najbliža bolnica? | no_data | — | „O bolnicama i hitnoj pomoći nemamo podatke …” |
+| 24 | Je li sigurno za život? | no_data | — | „O sigurnosti i kriminalu nemamo podatke.” |
+| 25 | Je li sigurno od poplava? | report | poplave | isto kao 1 („sigurno” uz temu ne znači kriminal) |
+| 26 | Ima li ovdje optički internet? | no_data | — | „O internetu i mobilnom signalu nemamo podatke.” |
+| 27 | Gdje je najbliža srednja škola? | no_data | škola | da podataka o srednjim školama nema, i najbliža osnovna škola |
+| 28 | Koliko ima stanovnika? | report | — | broj stanovnika naselja iz Popisa 2021. |
+| 29 | Je li ulica tiha? | report | promet u blizini | isto kao 7 |
+| 30 | Što mislite o ovome? | unknown | — | „Ovo pitanje ne razumijem …” i popis tema |
 
 Za usporedbu dviju adresa provjereno je i:
 
@@ -58,5 +71,6 @@ Za usporedbu dviju adresa provjereno je i:
 
 ## Ograničenja
 
-- Pravila prepoznaju ključne riječi; neobično sročena pitanja dobivaju sažetak izvještaja i prijedlog konkretnijeg pitanja.
+- Pravila prepoznaju ključne riječi. Neobično sročeno pitanje dobiva odgovor „Ovo pitanje ne razumijem” s popisom tema, a ne sažetak koji bi izgledao kao odgovor. Do 6. 11. 2026. svako takvo pitanje dobivalo je isti sažetak, pa je izgledalo kao da asistent uvijek odgovara isto.
+- Jezični model (ako je postavljen) i dalje samo prepoznaje namjeru i kategorije; odgovor uvijek dolazi iz predložaka. Prijedlog modela koji piše odgovor iz podataka izvještaja, s provjerom brojki, opisan je u [NALAZI_TESTIRANJA.md](NALAZI_TESTIRANJA.md).
 - Asistent ne zna ništa izvan izvještaja: ne pretražuje internet i ne odgovara na pitanja o cijenama, pravu ni gradnji.
