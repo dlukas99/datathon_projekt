@@ -91,6 +91,26 @@ test('assistant answers from the report', async ({ page }) => {
   await expect(page.getByText(/Za ovu adresu \(poplave/)).toBeVisible()
 })
 
+test('walking route to the nearest place of a kind, from the legend and the daily list', async ({
+  page,
+}) => {
+  await page.goto(reportUrl)
+  const chip = page.getByRole('button', { name: /^Ljekarna ·/ })
+  await chip.click()
+  await expect(chip).toHaveAttribute('aria-pressed', 'true')
+  const panel = page.getByRole('group', { name: 'Pješački put' })
+  await expect(panel).toContainText(/\d+ min · [\d,]+ k?m pješice/)
+  await expect(page.locator('.map-wrap [role="status"]')).toContainText('Pješački put do odredišta')
+  await expectNoAxeViolations(page)
+  await page.keyboard.press('Escape')
+  await expect(panel).toHaveCount(0)
+  await expect(chip).toHaveAttribute('aria-pressed', 'false')
+
+  await page.locator('.daily-list').getByRole('button', { name: /Ljekarna/ }).click()
+  await expect(panel).toContainText(/\d+ min · [\d,]+ k?m pješice/)
+  await expect(panel).toBeFocused()
+})
+
 test('comparison shows both addresses side by side', async ({ page }) => {
   await page.goto(compareUrl)
   const table = page.getByRole('table', { name: /Usporedba dviju adresa/ })
