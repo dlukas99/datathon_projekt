@@ -86,7 +86,8 @@ Rješenje ima dva dijela:
 ### Zajednička konfiguracija (`config/`)
 
 - `profiles.json`: profili i težine za Skor za život; čitaju ga i backend (`app/profiles.py`) i frontend.
-- `listings.json`: slaganje poveznica na oglasnike (samo URL, bez dohvaćanja).
+- `listings.json`: slaganje poveznica na oglasnike (samo URL, bez dohvaćanja): kategorije, parametri filtara i iznimke slugova po oglasniku.
+- `listing_locations.json`: UUID-ovi mjesta za Index Oglasi i imena gradova i općina koja postoje u više županija; puni ga `backend/ingest/listing_locations.py`, a aplikacija ga samo čita.
 
 Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti skor koriste izvještaj i tražilica mjesta.
 

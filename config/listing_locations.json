@@ -1,0 +1,42 @@
+{
+  "_note": "Generira `uv run python -m ingest.listing_locations` (u mapi backend). index_oglasi: slug lokacije -> UUID iz https://www.index.hr/oglasi/api/routes (Index bez UUID-a zanemaruje mjesto u putanji); aplikacija Index ne zove. index_oglasi_not_found: slugovi za koje Index nema stranicu. ambiguous_municipalities: imena gradova i općina koja u DGU upravnim jedinicama postoje u više županija; poveznice za njih koriste županiju.",
+  "updated": "2026-11-05",
+  "ambiguous_municipalities": [
+    "Novigrad",
+    "Novigrad - Cittanova",
+    "Otok",
+    "Privlaka",
+    "Sveta Nedelja"
+  ],
+  "index_oglasi": {
+    "bale": {
+      "type": "city",
+      "id": "0fb3b5ad-5115-4062-bccd-9d9e03590cc2"
+    },
+    "grad-zagreb": {
+      "type": "county",
+      "id": "056b6c84-e6f1-433f-8bdc-9b8dbb86d6fb"
+    },
+    "mali-losinj": {
+      "type": "city",
+      "id": "21a57a53-5e8a-4640-baa1-2428432f253f"
+    },
+    "pula": {
+      "type": "city",
+      "id": "ab4ebc18-c455-4d21-9963-aad3381c3803"
+    },
+    "rijeka": {
+      "type": "city",
+      "id": "36bd1dbc-f301-4ae7-988e-171765d599f7"
+    },
+    "split": {
+      "type": "city",
+      "id": "52eb9db8-6dc1-4ed5-acf7-e1669df05240"
+    },
+    "splitsko-dalmatinska": {
+      "type": "county",
+      "id": "191f5ede-cf31-4c40-b353-257a9061462e"
+    }
+  },
+  "index_oglasi_not_found": []
+}

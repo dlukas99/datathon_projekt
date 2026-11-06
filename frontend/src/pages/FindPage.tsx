@@ -240,7 +240,11 @@ export function FindPage() {
                     >
                       Otvori izvještaj
                     </Link>
-                    <ListingLinks place={r.name} municipality={r.municipality} />
+                    <ListingLinks
+                      settlement={r.name}
+                      municipality={r.municipality}
+                      county={r.county}
+                    />
                   </div>
                 </li>
               ))}

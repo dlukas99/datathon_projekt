@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-06 03:30
+Zadnje ažurirano: 2026-11-06 11:38
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -66,7 +66,8 @@ Redoslijed (procjena):
 9. [x] Validacija zraka uz službene postaje (Zagreb, Osijek, Požega, po 4 lokacije) (1,5 h)
 10. [x] ML: model za godišnji NO2/PM2,5 na postajama, leave-one-station-out, usporedba s EEA; u aplikaciju samo ako je bolji (2 h)
 11. [x] Dokumentacija, scenarij videa, snimke zaslona (1 h)
-12. [x] Karta hoda (6. 11.): karta preko cijele širine s gumbom za cijeli zaslon i legendom ispod nje; vrste mjesta kao gumbi s brojem unutar 15 min i najbližim vremenom; pješački put po ulicama do najbližeg mjesta (i izvan 15 min) iz legende, s točke na karti ili iz popisa „Svakodnevni život”, uz „Sljedeći najbliži”. Put računa vlastiti Valhalla (`GET /api/route`) istom brzinom kao izvještaj; uz put stoji isto vrijeme kao u popisu, a vrijeme same rute od njega odstupa najviše 8 s (435 mjesta, šest demo adresa). Testovi: pytest 83, Vitest 27, Playwright 44.
+12. [x] Popravak poveznica na oglasnike (5. 11.): Njuškalo, Index Oglasi i Nekretnine.hr otvaraju pretragu s mjestom, vrstom, kupnjom ili najmom, cijenom i površinom; Index treba UUID mjesta, zasad upisan za 7 lokacija (`config/listing_locations.json`), ostalo čeka odluku o pokretanju `ingest.listing_locations`.
+13. [x] Karta hoda (6. 11.): karta preko cijele širine s gumbom za cijeli zaslon i legendom ispod nje; vrste mjesta kao gumbi s brojem unutar 15 min i najbližim vremenom; pješački put po ulicama do najbližeg mjesta (i izvan 15 min) iz legende, s točke na karti ili iz popisa „Svakodnevni život”, uz „Sljedeći najbliži”. Put računa vlastiti Valhalla (`GET /api/route`) istom brzinom kao izvještaj; uz put stoji isto vrijeme kao u popisu, a vrijeme same rute od njega odstupa najviše 8 s (435 mjesta, šest demo adresa). Testovi: pytest 83, Vitest 27, Playwright 44.
 
 Ako ponestane vremena, režem ovim redom:
 - ML ostaje samo evaluacija u `docs/ML.md`;
