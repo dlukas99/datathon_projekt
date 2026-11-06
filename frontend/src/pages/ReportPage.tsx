@@ -271,7 +271,11 @@ function Actions({ report }: { report: Report }) {
         Ispiši
       </button>
       {loc.settlement && (
-        <ListingLinks place={loc.settlement} municipality={loc.municipality ?? loc.settlement} />
+        <ListingLinks
+          settlement={loc.settlement}
+          municipality={loc.municipality}
+          county={loc.county}
+        />
       )}
       <span className="copied" role="status" aria-live="polite">
         {copied}

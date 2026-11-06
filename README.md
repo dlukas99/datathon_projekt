@@ -257,7 +257,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - Karta zraka prikazuje pozadinsku razinu; uz prometne ulice NO2 može biti znatno viši (provjera uz službene postaje u [docs/METODOLOGIJA.md](docs/METODOLOGIJA.md)). ML model nije ušao u aplikaciju jer nije bio bolji za obje tvari ([docs/ML.md](docs/ML.md)).
 - „Pronađi mjesto za život” računa za središte naselja s najmanje 200 stanovnika, bez sunca na krovu; za konkretnu adresu treba otvoriti izvještaj.
 - Skor za život koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
-- Njuškalo blokira automatsku provjeru poveznica, pa su kategorije i slugovi mjesta osim provjerenog primjera označeni TODO(verify) u `config/listings.json`; za neprovjerena mjesta poveznica vodi na pretragu kategorije s filtrima.
+- Poveznice na oglasnike slažu se prema formatima ručno provjerenima u pregledniku (`config/listings.json`). Njuškalo blokira automatske provjere, pa kategorije najma na Njuškalu nisu provjerene. Index Oglasi traži UUID mjesta, a on je zasad upisan za manji dio mjesta (`config/listing_locations.json`); za ostala poveznica na Index traži ručni odabir mjesta ili otvara županiju.
 - Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
 - Registri bez koordinata geokodirani su s 86–95 % uspjeha. Neuspjeli zapisi se ne prikazuju, a za vrtiće, škole i ljekarne dopunjuju se OpenStreetMapom.
 - HZZO-ovi popisi i vozni red HŽPP-a nemaju navedenu licencu; koriste se uz obrazloženje u [docs/ODLUKE.md](docs/ODLUKE.md).

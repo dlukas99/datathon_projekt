@@ -162,4 +162,5 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 - OSM čvorovi `place=city|town|village|hamlet|suburb|isolated_dwelling|locality` iz istog izvatka; čvor se koristi kad mu je ime jednako imenu DGU naselja i nalazi se unutar njegova poligona (6.536 od 6.759 naselja).
 
 ### Oglasnici (vanjske poveznice, ne izvori podataka)
-- Njuškalo, Index Oglasi i Nekretnine.hr. Aplikacija samo slaže poveznicu na pretragu (`config/listings.json`); ne dohvaća, ne parsira i ne prikazuje oglase. Njuškalo i Nekretnine.hr odbijaju automatske zahtjeve, pa poveznice nisu automatski provjerene.
+- Njuškalo, Index Oglasi i Nekretnine.hr. Aplikacija samo slaže poveznicu na pretragu (`config/listings.json`); ne dohvaća, ne parsira i ne prikazuje oglase. Njuškalo i Nekretnine.hr odbijaju automatske zahtjeve, pa su formati poveznica ručno provjereni u pregledniku 5. 11. 2026.
+- Index Oglasi mjesto prepoznaje samo po UUID-u. UUID-ovi su u `config/listing_locations.json`; puni ih korak za održavanje `ingest/listing_locations.py` preko Indexova razrješivača ruta (`/oglasi/api/routes`), jedan zahtjev u sekundi. Aplikacija Index ne zove. Filtri `priceTo` i `areaTo` za sve četiri kategorije potvrđeni su u Indexovoj javnoj konfiguraciji obrasca (`/oglasi/ui-config/hr/advancedSearch.json`).

@@ -1166,6 +1166,18 @@ details summary {
   padding: 1rem;
 }
 
+/* Side chosen in ListingLinks.tsx so the panel stays on screen. */
+.listings.open-left[open] > .listings-body {
+  left: 0;
+  right: auto;
+}
+
+.listings.open-below[open] > .listings-body {
+  position: static;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
 .listing-list {
   list-style: none;
   padding: 0;
@@ -1178,6 +1190,14 @@ details summary {
   gap: 0.3rem;
   min-height: 44px;
   font-weight: 600;
+}
+
+.listing-list li + li {
+  margin-top: 0.5rem;
+}
+
+.listing-list li > .hint {
+  margin: 0;
 }
 
 @media (width <= 560px) {
