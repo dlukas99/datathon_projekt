@@ -98,7 +98,8 @@ EXPLANATIONS: dict[str, str] = {
     "green": (
         "Udio drveća i zelenih površina u krugu od 300 m računamo iz satelitske karte ESA "
         "WorldCover. Uspoređujemo ga s pravilom 3-30-300: najmanje 30 % krošnji u susjedstvu i "
-        "javna zelena površina do 300 m od kuće. Drveće ljeti ublažava vrućine."
+        "javna zelena površina do 300 m od kuće. Drveće ljeti daje hlad i ublažava vrućine; "
+        "samu temperaturu ne mjerimo."
     ),
     "noise": (
         "Buku ne mjerimo: otvorene karte buke za cijelu Hrvatsku ne postoje. Prikazujemo "

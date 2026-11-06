@@ -34,8 +34,8 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 2 | Može li se ovdje izliti rijeka? | report | poplave | isto kao 1 |
 | 3 | Kakav je zrak na ovoj adresi? | report | zrak | PM2,5 i NO2 (µg/m³, 2024.) uz usporedbu sa smjernicom WHO-a i graničnom vrijednošću EU-a za 2030. |
 | 4 | Ima li puno prašine i smoga? | report | zrak | isto kao 3 |
-| 5 | Ima li dovoljno drveća i hlada ljeti? | report | toplina i zelenilo | udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park |
-| 6 | Koliko je daleko najbliži park? | report | toplina i zelenilo | najbliži park u minutama hoda i zračna udaljenost |
+| 5 | Ima li dovoljno drveća i hlada ljeti? | report | zelenilo i hlad | udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park |
+| 6 | Koliko je daleko najbliži park? | report | zelenilo i hlad | najbliži park u minutama hoda i zračna udaljenost |
 | 7 | Je li bučno zbog prometa? | report | promet u blizini | udaljenost od najbliže važnije ceste i pruge, označena kao procjena |
 | 8 | Isplate li se solarni paneli na krovu? | report | sunce | kWh po kWp godišnje i optimalni nagib iz PVGIS-a (bez savjeta o isplativosti) |
 | 9 | Mogu li ovdje živjeti bez auta? | report | život bez auta | „X od 7” potreba unutar 15 minuta hoda i popis onoga što nedostaje ili nije provjereno |

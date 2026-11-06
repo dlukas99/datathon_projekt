@@ -76,10 +76,11 @@ export function AboutPage() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">Toplina i zelenilo</th>
+                <th scope="row">Zelenilo i hlad</th>
                 <td>
-                  Udio drveća, zelenih i izgrađenih površina u krugu od 300 m (ESA WorldCover
-                  2021., 10 m) i najbliži park (OpenStreetMap).
+                  Udio drveća, zelenih i izgrađenih površina u kopnu u krugu od 300 m (ESA
+                  WorldCover 2021., 10 m; more se ne broji) i najbliži park (OpenStreetMap).
+                  Temperaturu ne mjerimo: drveće je pokazatelj hlada.
                 </td>
                 <td>
                   Pravilo 3-30-300 (Konijnendijk, 2023.): najmanje 30 % krošnji i javna zelena

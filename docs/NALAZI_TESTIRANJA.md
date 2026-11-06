@@ -10,7 +10,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 | 4 | Informacija o internetu | podaci HAKOM-a postoje, ali nisu objavljeni pod otvorenom licencom | ovisi o vanjskim podacima | samo izvještaj |
 | 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | planirano |
 | 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | napravljeno |
-| 7 | Sumnja na netočne podatke o zelenilu | podaci su u redu, ali nije objašnjeno što se broji; „toplina” se ne mjeri | lako; bolji izvori ovise o vanjskim podacima | planirano |
+| 7 | Sumnja na netočne podatke o zelenilu | podaci su u redu, ali nije objašnjeno što se broji; „toplina” se ne mjeri | lako; bolji izvori ovise o vanjskim podacima | napravljeno (bez novih izvora) |
 | 8 | Asistent uvijek daje isti odgovor | bez ključa za jezični model pitanje bez prepoznate teme dobiva uvijek isti sažetak | srednje; jezični model ovisi o ključu | planirano |
 
 Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
@@ -176,6 +176,13 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
   - toplinski podaci (npr. površinska temperatura iz programa Copernicus) za stvarnu „toplinu”.
 - **Procjena:** lako; bolji izvori ovise o vanjskim podacima.
 - **Rizici:** promjena naziva kategorije mijenja tekstove u zlatnim testovima, profilima, README-u i scenariju videa. Vrijednosti i podskorovi ostaju isti.
+- **Stanje: napravljeno bez novih izvora.**
+  - Kategorija se zove „Zelenilo i hlad”.
+  - Rečenica kaže „Drveće pokriva 11 % kopna u krugu od 300 m”.
+  - Napomene kažu da se temperatura ne mjeri, što se broji, da more nije uračunato i koje je ograničenje rezolucije od 10 m.
+  - Popis „Predloži mjesto” kaže „od središta naselja”.
+  - Vrijednosti, statusi i podskorovi su isti.
+  - Bolja karta krošanja i toplinski podaci čekaju odobrenje.
 
 ## 8. AI asistent uvijek daje isti odgovor
 

@@ -30,7 +30,7 @@ Izvještaj za adresu ima tri dijela:
 1. **Okolišni pregled** (prvi ekran):
    - **poplave:** je li lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, razumljivo izraženo kao vjerojatnost barem jedne poplave u 30 godina (trajanje stambenog kredita), s poveznicom na službene karte Hrvatskih voda;
    - **zrak:** jedna ocjena (vrlo dobar, dobar, umjeren, loš) i rečenica o tome što znači kroz godinu; godišnji PM2,5 i NO2 s granicama Svjetske zdravstvene organizacije i EU-a u detaljima;
-   - **toplina i zelenilo:** udio drveća, zelenih i izgrađenih površina u krugu od 300 m i najbliži park, prema pravilu 3-30-300;
+   - **zelenilo i hlad:** udio drveća, zelenih i izgrađenih površina kopna u krugu od 300 m i najbliži park, prema pravilu 3-30-300 (temperaturu ne mjerimo; drveće je pokazatelj hlada);
    - **promet u blizini:** udaljenost od autocesta, glavnih i važnijih cesta i pruga s opisnim rečenicama i pojasevima 300/500 m (procjena, ne mjerenje buke);
    - **požari raslinja:** opožarene površine u krugu od 2 km od 2016. (Copernicus EFFIS);
    - **sunce na krovu:** procijenjena godišnja proizvodnja solarne elektrane po kilovatu (JRC PVGIS).
@@ -63,7 +63,7 @@ Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izrač
 | Naselje | Vinkovci, 28.111 stanovnika (Popis 2021.) | Nijemci, 1.330 stanovnika (Popis 2021.) |
 | Poplave | **Dobro:** izvan modeliranih područja za 10, 100 i 500 godina, i u krugu od 100 m | **Dobro:** isto |
 | Zrak (godišnji prosjek 2024.) | **Umjerena** razina: PM2,5 18,2 µg/m³ (unutar današnje granice EU-a od 25, iznad granice za 2030. od 10), NO2 17,5 µg/m³ (niska) | **Umjerena**: PM2,5 18,6 µg/m³, NO2 16,5 µg/m³ |
-| Toplina i zelenilo (300 m) | **Upozorenje:** drveće 7 %, izgrađeno 90 %; park 2 min hoda | **Loše:** drveće 20 %; najbliži park udaljen 6,1 km |
+| Zelenilo i hlad (300 m) | **Upozorenje:** drveće 7 %, izgrađeno 90 %; park 2 min hoda | **Loše:** drveće 20 %; najbliži park udaljen 6,1 km |
 | Promet u blizini | **Blizu prometnice:** važnija cesta 10 m; pruga 1,4 km | **Blizu prometnice:** važnija cesta 20 m |
 | Sunce na krovu | oko 1.251 kWh po kWp godišnje, nagib 37° | oko 1.245 kWh po kWp godišnje, nagib 36° |
 | Život bez auta | 6 od 7 potreba unutar 15 min; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
@@ -87,7 +87,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - **Pronađi mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
 - **Skor za život** s vidljivim i podesivim težinama po profilu
 - poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
-- okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak na stupnjevanoj ljestvici, toplina i zelenilo, promet u blizini, požari raslinja, sunčev potencijal
+- okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak s jednom ocjenom, zelenilo i hlad, promet u blizini, požari raslinja, sunčev potencijal
 - izokrone hoda od 5, 10 i 15 minuta po mreži ulica i pješačkih staza
 - pješački put po ulicama do najbližeg vrtića, škole, ljekarne ili druge ustanove, s minutama i duljinom; otvara se iz legende karte, s točke na karti ili iz popisa „Svakodnevni život”
 - svakodnevne potrebe i javni prijevoz s minutama hoda
@@ -234,7 +234,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 |---|---|
 | Upotreba otvorenih podataka | 30 skupova podataka i PVGIS API; izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
 | Povezivanje javno dostupnih podataka | adresa se povezuje s upravnim jedinicama, popisom stanovništva, rasterskim okolišnim slojevima, mrežom ulica, registrima ustanova (geokodiranim nad adresama DGU-a) i voznim redovima |
-| Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i toplina, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
+| Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i hlad, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
 | Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Pronađi mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
 | Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |

@@ -36,7 +36,7 @@ const STEPS: { icon: string; title: string; text: string }[] = [
   {
     icon: 'flood',
     title: 'Okoliš',
-    text: 'Poplave, zrak, zelenilo i vrućine, promet u blizini, požari i sunce na krovu.',
+    text: 'Poplave, zrak, zelenilo i hlad, promet u blizini, požari i sunce na krovu.',
   },
   {
     icon: 'car_free',

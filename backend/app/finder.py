@@ -148,7 +148,10 @@ def _facts(row: pd.Series) -> list[str]:
             f"Javni prijevoz: do {fmt.num(float(row['max_departures']), 1)} polazaka na sat."
         )
     if pd.notna(row["tree_share"]):
-        facts.append(f"Drveće pokriva {fmt.num(float(row['tree_share']))} % okolice središta.")
+        facts.append(
+            f"Drveće pokriva {fmt.num(float(row['tree_share']))} % kopna u krugu od 300 m "
+            "od središta naselja."
+        )
     return facts
 
 

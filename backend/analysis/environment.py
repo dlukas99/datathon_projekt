@@ -468,7 +468,10 @@ def air_category(lon: float, lat: float) -> Category:
     )
 
 
-# --- Greenery and heat -------------------------------------------------------------------
+# --- Greenery and shade -------------------------------------------------------------------
+
+# Tree cover and the nearest park stand in for shade; temperature is not measured.
+GREEN_TITLE = "Zelenilo i hlad"
 
 
 def _worldcover_path(lon: float, lat: float) -> Path:
@@ -519,8 +522,8 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
                     source=src,
                     retrieved_at=retrieved_at(src),
                     kind="modelled",
-                    note="Udio kopnenih površina; vodene površine nisu uračunate."
-                    if key == "built"
+                    note="Udio kopna; more i druge vodene površine nisu uračunate."
+                    if key == "tree"
                     else None,
                 )
             )
@@ -551,7 +554,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
         return Category(
             id="green",
             group="environment",
-            title="Toplina i zelenilo",
+            title=GREEN_TITLE,
             status="no_data",
             status_label=label("no_data"),
             headline="Podaci o pokrovu tla za ovu lokaciju nisu dostupni.",
@@ -566,7 +569,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
     else:
         status = "bad"
     tree_txt = (
-        f"Drveće pokriva {fmt.num(cover['tree'])} % površine u krugu od 300 m "
+        f"Drveće pokriva {fmt.num(cover['tree'])} % kopna u krugu od 300 m "
         f"({'na razini ili iznad' if tree_ok else 'ispod'} preporučenih 30 %)"
     )
     if park_ok is None:
@@ -578,17 +581,23 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
     return Category(
         id="green",
         group="environment",
-        title="Toplina i zelenilo",
+        title=GREEN_TITLE,
         status=status,
         status_label=label(status),
         headline=f"{tree_txt}; {park_txt}.",
         values=values,
         places=[nearest_park] if nearest_park else [],
         notes=[
-            "Drveće i zelene površine ublažavaju vrućine ljeti. Usporedba se temelji na "
-            "pravilu 3-30-300 (najmanje 30 % krošnji u susjedstvu i javna zelena površina "
-            "do 300 m od kuće).",
-            "Pokrov tla iz satelitske karte ESA WorldCover za 2021. u rezoluciji 10 m.",
+            "Drveće ljeti daje hlad i ublažava vrućine. Temperaturu ne mjerimo; usporedba se "
+            "temelji na pravilu 3-30-300 (najmanje 30 % krošnji u susjedstvu i javna zelena "
+            "površina do 300 m od kuće).",
+            "Udjeli su iz satelitske karte ESA WorldCover za 2021. u rezoluciji 10 m, za kopno "
+            "u krugu od 300 m od lokacije; more i druge vodene površine nisu uračunate. Drveće "
+            "su krošnje koje karta prepoznaje kao drveće; zelene površine uključuju i grmlje, "
+            "travnjake i močvare.",
+            "Karta u rezoluciji 10 m ne razlikuje pojedinačna stabla u dvorištima i uz ulice kad "
+            "je oko njih izgrađeno, pa je udio drveća u gusto izgrađenim središtima i selima s "
+            "vrtovima vjerojatno nešto veći.",
         ],
     )
 
