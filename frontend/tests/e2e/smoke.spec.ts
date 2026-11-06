@@ -85,6 +85,44 @@ test('find a place to live ranks settlements with reasons', async ({ page }) => 
   await expect(page.getByText(/Prikazano je središte naselja/)).toBeVisible()
 })
 
+test('listing filters close on a click outside or Escape and are shared by all places', async ({
+  page,
+}) => {
+  await page.goto('/pronadi')
+  await page.getByRole('button', { name: 'Predloži mjesta' }).click()
+  const cards = page.locator('.find-results > li')
+  await expect(cards.nth(1)).toBeVisible()
+
+  const firstButton = cards.nth(0).getByRole('button', { name: 'Pogledaj oglase' })
+  await firstButton.click()
+  await expect(firstButton).toHaveAttribute('aria-expanded', 'true')
+  const firstPanel = cards.nth(0).getByRole('group', { name: 'Pogledaj oglase' })
+  await firstPanel.getByLabel('Što').selectOption('flat')
+  await firstPanel.getByLabel('Najviša cijena (€)').fill('150000')
+  await expect(firstButton).toHaveAttribute('aria-expanded', 'true')
+  await expectNoAxeViolations(page)
+
+  // A click on empty space closes the panel and gives focus back to the button.
+  await page.getByRole('heading', { level: 1 }).click()
+  await expect(firstPanel).toBeHidden()
+  await expect(firstButton).toBeFocused()
+
+  // The next place has the same filters; Escape closes it.
+  const secondButton = cards.nth(1).getByRole('button', { name: 'Pogledaj oglase' })
+  await secondButton.click()
+  const secondPanel = cards.nth(1).getByRole('group', { name: 'Pogledaj oglase' })
+  await expect(secondPanel.getByLabel('Što')).toHaveValue('flat')
+  await expect(secondPanel.getByLabel('Najviša cijena (€)')).toHaveValue('150000')
+  await secondPanel.getByLabel('Najviše m²').focus()
+  await page.keyboard.press('Escape')
+  await expect(secondPanel).toBeHidden()
+  await expect(secondButton).toBeFocused()
+
+  // Reopened, the first place still has its filters.
+  await firstButton.click()
+  await expect(firstPanel.getByLabel('Najviša cijena (€)')).toHaveValue('150000')
+})
+
 test('assistant answers from the report', async ({ page }) => {
   await page.goto(reportUrl)
   await page.getByRole('button', { name: 'Je li ova kuća u poplavnom području?' }).click()

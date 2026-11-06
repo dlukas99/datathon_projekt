@@ -4,7 +4,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 
 | # | Problem | Uzrok ukratko | Procjena | Stanje |
 |---|---|---|---|---|
-| 1 | Skočni prozor „Pogledaj oglase” ne zatvara se | element `<details>` zatvara se samo ponovnim klikom na gumb | lako do srednje | planirano |
+| 1 | Skočni prozor „Pogledaj oglase” ne zatvara se | element `<details>` zatvara se samo ponovnim klikom na gumb | lako do srednje | napravljeno |
 | 2 | Pretraga ne pronalazi neke ulice i kućne brojeve | slovo uz kućni broj gubilo se pri obradi; upit bez zareza, s poštanskim brojem ili gradom umjesto naselja nije se prepoznavao | srednje do teško | planirano |
 | 3 | Gornji izbornik zbunjuje | početni ekran nema stavku u izborniku; „Pronađi mjesto” zvuči kao pretraga | lako do srednje | planirano |
 | 4 | Informacija o internetu | podaci HAKOM-a postoje, ali nisu objavljeni pod otvorenom licencom | ovisi o vanjskim podacima | samo izvještaj |
@@ -26,6 +26,13 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
 - **Odluka: filtri su zajednički za sva mjesta.** „Što”, „Kako”, cijena i površina opisuju što korisnik traži, a ne mjesto. Na popisu prijedloga korisnik uspoređuje mjesta s istim uvjetima, pa bi ponovno upisivanje kod svakog mjesta bilo zamorno i podložno greškama. Zajedničke vrijednosti vrijede i na izvještaju otvorenom s popisa. Čuvaju se samo dok je stranica otvorena (u memoriji, ne u pregledniku), u skladu s pravilom da se upisi ne spremaju.
 - **Procjena:** lako do srednje.
 - **Rizici:** Esc na izvještaju već briše pješački put na karti; prozor mora obraditi Esc prvi i zaustaviti ga. Padajući izbornik ponaša se različito po preglednicima: u Chromiumu je provjereno automatski, u drugima ručno.
+- **Stanje: napravljeno.**
+  - Ploča se zatvara klikom izvan, tipkom Esc, ponovnim klikom i kad fokus tipkovnicom izađe iz nje. Esc i klik na prazno vraćaju fokus na gumb.
+  - Klik unutar ploče je ne zatvara.
+  - **Padajući popis:** preglednik zatvara otvoren popis prije nego što stranica vidi klik izvan njega, pa ploča sama pamti da je popis otvoren mišem. Prvi klik izvan zatvara samo popis, a ploča ostaje otvorena (provjereno u Chromiumu).
+  - Filtri su zajednički i ostaju nakon zatvaranja; to piše i u ploči.
+  - **Testovi:** 7 testova komponente i e2e test s axeom na popisu „Predloži mjesto”, na računalu i mobitelu.
+  - Za ručnu provjeru: Firefox i Safari.
 
 ## 2. Pretraga adresa ne pronalazi sve ulice i kućne brojeve
 
