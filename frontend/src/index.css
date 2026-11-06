@@ -440,6 +440,17 @@ select {
   font-size: 0.85rem;
 }
 
+.suggestion-note {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.search-status {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 /* Profile chips */
 
 .profiles {

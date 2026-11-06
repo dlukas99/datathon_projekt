@@ -16,6 +16,11 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 ## Lokacija
 
 - Adresa se pretvara u koordinate vlastitim geokoderom nad 1.683.411 adresa iz skupa „Adrese INSPIRE” Državne geodetske uprave. Upit i adrese normaliziraju se: mala slova, bez dijakritika, `đ` i `dj` kao `d`. Riječi „ulica” i „ul.” zanemaruju se jer ih službeni nazivi često nemaju („Bana Jelačića”). Kod upita od tri ili više riječi jedna riječ smije nedostajati (npr. ime u „Bana Josipa Jelačića”), ali najdulja mora odgovarati.
+- **Kućni broj** ima broj, slovo i podbroj (`addressNumber`, `addressNumberExtension`, `addressNumber2ndExtension`): 23, 23A, 25/2, 12A/1. Do 6. 11. 2026. obrada je zadržavala samo broj, pa 322.198 adresa (19 %) nije bilo moguće pronaći po točnom broju. Upit prepoznaje „23a”, „23 A”, „12/B”, „12-b”, „25/2” i „bb”.
+- **Mjesto** se piše iza zareza ili bez njega („Ivana Rendića 6 Rijeka”; tada riječi iza broja moraju biti naziv naselja, grada ili općine). Prihvaća se naselje, grad ili općina („Banjol 10, Rab”) i poštanski broj; „Hrvatska” se zanemaruje. Prednost imaju ulice u upisanom naselju.
+- **Drugi oblik naziva ulice** („Brune Bušića” za „Bušićevu”, „Ivana Gundulića” za „Gundulićevu ulicu”) prepoznaje se po osnovi prezimena, a prijedlog kaže pod kojim je nazivom ulica upisana.
+- **Kad nečega nema u registru**, prijedlog je ono najbliže što postoji, uz napomenu: isti broj bez slova, sredina ulice, a kod sela bez naziva ulica ili kad ulica nije pronađena središte naselja. Izvještaj tada piše da je prikazana sredina ulice ili središte naselja.
+- **Provjera:** `scripts/geocode_check.py` pretražuje 24 adrese osnovnih škola iz registra MZOM-a (veliki grad, manji grad, selo, otok; s brojem i bez njega). Prije 6. 11. 2026. točno je bilo 12, sada 22. Za preostale dvije DGU nema upisanog kućnog broja („Jelsa 161”, „1. ulica 25/2, Blato”), pa se prikazuju središte naselja i broj 25, uz napomenu.
 - Naselje, grad ili općina i županija određuju se točkom u poligonu nad DGU „Upravnim jedinicama INSPIRE”. Hijerarhija (naselje → JLS → županija) izvedena je prostorno, preko točke unutar poligona naselja, jer GDAL ne izlaže poveznice `upperLevelUnit`.
 - Udaljenosti se računaju u projekciji HTRS96/TM (EPSG:3765), u metrima.
 

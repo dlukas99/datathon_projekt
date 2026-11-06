@@ -45,6 +45,29 @@ test('main flow: search an address and read the report, environment first', asyn
   await expect(page.getByText(/informativni alat/i).first()).toBeVisible()
 })
 
+test('address search reads addresses as people write them and says what it did not find', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const search = page.getByRole('combobox', { name: 'Adresa ili naselje' })
+  // A school's address without a comma, and Enter before the suggestions appear.
+  await search.fill('Ivana Rendića 6 Rijeka')
+  await search.press('Enter')
+  await expect(page).toHaveURL(/\/izvjestaj\?/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ivana Rendića 6, Rijeka')
+
+  await page.goto('/')
+  await search.fill('Gundulićeva 23 A, Zagreb')
+  await expect(page.getByRole('option', { name: /Gundulićeva ulica 23A, Zagreb/ })).toBeVisible()
+  await search.fill('Ilica 999, Zagreb')
+  await expect(page.getByRole('option', { name: /^Ilica, Zagreb/ })).toContainText(
+    'Kućni broj 999 nije u registru adresa',
+  )
+  await expectNoAxeViolations(page)
+  await search.fill('Qwxzy 5')
+  await expect(page.getByText(/^Nema prijedloga\./)).toBeVisible()
+})
+
 test('settlement search opens its centre and says so', async ({ page }) => {
   await page.goto('/')
   const search = page.getByRole('combobox', { name: 'Adresa ili naselje' })

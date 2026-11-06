@@ -62,7 +62,8 @@ def main() -> int:
             response.raise_for_status()
             snap = snapshot(Report.model_validate(response.json()))
             path = GOLDEN_DIR / f"{demo['id']}.json"
-            path.write_text(json.dumps(snap, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            text = json.dumps(snap, ensure_ascii=False, indent=2) + "\n"
+            path.write_text(text, encoding="utf-8", newline="\n")  # LF, as in the repository
             print(f"{path.name}: zapisano")
     return 0
 

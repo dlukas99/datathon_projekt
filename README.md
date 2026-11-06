@@ -67,7 +67,7 @@ Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izrač
 | Udaljenost od prometnica | **Blizu prometnice:** županijska cesta Ž4290, 10 m; pruga 1,4 km | **Blizu prometnice:** županijska cesta Ž4224, 20 m |
 | Sunce na krovu | oko 1.251 kWh po kWp godišnje, nagib 37° | oko 1.245 kWh po kWp godišnje, nagib 36° |
 | Život bez auta | 6 od 7 potreba unutar 15 min; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
-| Najbliži vrtić / škola / liječnik | 3 / 4 / 5 min hoda | 12 / 3 / 4 min hoda |
+| Najbliži vrtić / škola / liječnik | 7 / 4 / 5 min hoda | 12 / 3 / 4 min hoda |
 | Skor za život (profil „Općenito”) | 67 | 60 |
 
 Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (Vinkovci) i `GET /api/report?lat=45.140273&lon=19.034942` (Nijemci). Svih šest demo adresa nalazi se u [scripts/demo_addresses.json](scripts/demo_addresses.json), a njihovi rezultati provjeravaju se zlatnim testovima.

@@ -5,7 +5,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 | # | Problem | Uzrok ukratko | Procjena | Stanje |
 |---|---|---|---|---|
 | 1 | Skočni prozor „Pogledaj oglase” ne zatvara se | element `<details>` zatvara se samo ponovnim klikom na gumb | lako do srednje | napravljeno |
-| 2 | Pretraga ne pronalazi neke ulice i kućne brojeve | slovo uz kućni broj gubilo se pri obradi; upit bez zareza, s poštanskim brojem ili gradom umjesto naselja nije se prepoznavao | srednje do teško | planirano |
+| 2 | Pretraga ne pronalazi neke ulice i kućne brojeve | slovo uz kućni broj gubilo se pri obradi; upit bez zareza, s poštanskim brojem ili gradom umjesto naselja nije se prepoznavao | srednje do teško | napravljeno |
 | 3 | Gornji izbornik zbunjuje | početni ekran nema stavku u izborniku; „Pronađi mjesto” zvuči kao pretraga | lako do srednje | napravljeno |
 | 4 | Informacija o internetu | podaci HAKOM-a postoje, ali nisu objavljeni pod otvorenom licencom | ovisi o vanjskim podacima | samo izvještaj |
 | 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | napravljeno |
@@ -65,6 +65,55 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
 - **Drugi pružatelj:** nije potreban. Javni Nominatim po pravilima korištenja ne dopušta pretragu dok korisnik tipka. Pružatelji nad OpenStreetMapom (Nominatim, Photon) oslanjaju se na OSM, koji za Hrvatsku ima 268.457 adresa s kućnim brojem (naš izvadak), a DGU 1.683.411. Službeni adresni podaci DGU-a već se koriste; problem nije bio u izvoru nego u obradi i tumačenju upita. Komercijalni geokoderi traže ključ i plaćanje.
 - **Procjena:** srednje do teško (obrada adresa, pretraga, sučelje, ponovna obrada podataka).
 - **Rizici:** nova adresna tablica pri sljedećem `make data` mijenja i geokodiranje registara (vrtići, škole, liječnici, ljekarne) jer se adrese sa slovom tada pronalaze točno. Opuštenije prepoznavanje mjesta može ponuditi istoimenu ulicu u drugom naselju; zato se prednost daje rezultatima u upisanom mjestu. Obrađene podatke na poslužitelju treba ponovno prenijeti.
+- **Stanje: napravljeno.**
+  - **Obrada adresa:** čuva slovo i podbroj; od 1.683.411 adresa njih 285.488 ima slovo, 34.841 podbroj, a 1.869 oboje. Tablica je ponovno izrađena iz već preuzete datoteke (19 s).
+  - **Pretraga** čita upit bez zareza, s poštanskim brojem, s „Hrvatska”, s gradom ili općinom umjesto naselja, sa slovom, podbrojem i „bb”.
+  - **Drugi oblik naziva ulice:** prepoznaje se, npr. „Brune Bušića 30, Split” je „Bušićeva 30”.
+  - **Kad nečega nema u registru:** nudi se isti broj bez slova, sredina ulice ili središte naselja, s napomenom.
+  - **Polje za pretragu:**
+    - vidljivo kaže kad nema prijedloga;
+    - Enter prije prijedloga traži upisani tekst;
+    - stariji odgovor ne prepisuje noviji;
+    - prijedlog pokazuje napomenu.
+  - **Odgovor:** ispod 2 ms po upitu.
+  - **Registri:** ponovno geokodirani; 247 točaka prešlo je sa sredine ulice na točnu adresu, a oko 50 je premješteno iz susjednog naselja istog poštanskog područja u naselje iz registra (detalji u `KVALITETA_PODATAKA.md`).
+  - **Ponovno izračunati:**
+    - spajanje točaka;
+    - profili naselja: 62 od 2.347 naselja promijenila su broj potreba unutar 15 minuta;
+    - zlatni testovi: npr. za Grad Vinkovci najbliži vrtić je 6,6 umjesto 2,8 min, jer je vrtić „Kralja Zvonimira 90b” sada na svojoj adresi, a ne 921 m dalje na sredini ulice.
+  - **Testovi:** 30 testova geokodera, 4 testa polja za pretragu i e2e test na stvarnim podacima.
+  - **Za ljude:** obrađene podatke (`addresses.parquet`, `registry_pois.parquet`, `pois.parquet`, `settlement_profiles.parquet`, `geocoding_report.json`) treba prenijeti na poslužitelj (`scripts/upload_data.sh`).
+
+  Mjerenje nakon popravka (`scripts/geocode_check.py`): **22 od 24 točno** (prije 12, a za 12 nije bilo nijednog prijedloga):
+
+  | # | Upit | Vrsta mjesta | Prije | Poslije: prvi prijedlog | Ocjena |
+  |---|---|---|---|---|---|
+  | 1 | Gundulićeva 23 A, Zagreb | veliki grad | ništa | Gundulićeva ulica 23A, Zagreb (address) | točno |
+  | 2 | Jabukovac 30, Zagreb | veliki grad | točno | Jabukovac 30, Zagreb (address) | točno |
+  | 3 | Joze Laurenčića bb, Zagreb | veliki grad | točno | Ulica Joze Laurenčića, Zagreb (street): Adrese bez kućnog broja (bb) nisu u registru; prikazana je sredina ulice. | točno |
+  | 4 | Ivana Rendića 6 Rijeka | veliki grad | ništa | Ivana Rendića 6, Rijeka (address) | točno |
+  | 5 | Brune Bušića 30, 21000 Split | veliki grad | ništa | Bušićeva 30, Split (address): Ulica je u registru adresa upisana kao „Bušićeva”. | točno |
+  | 6 | Drinska 12/B, Osijek | veliki grad | ništa | Drinska 12B, Osijek (address) | točno |
+  | 7 | Ilica, Zagreb | veliki grad | točno | Ilica, Zagreb (street) | točno |
+  | 8 | Ulica pape Ivana Pavla II. 6, Požega | manji grad | točno | Pape Ivana Pavla II 6, Požega (address) | točno |
+  | 9 | Slavonska 8, Pozega | manji grad | točno | Slavonska 8, Požega (address) | točno |
+  | 10 | Bartola Kašića 48 Vinkovci | manji grad | ništa | Bartola Kašića 48, Vinkovci (address) | točno |
+  | 11 | Miroslava Kraljevića 15, 53000 Gospić | manji grad | ništa | Ulica Miroslava Kraljevića 15, Gospić (address) | točno |
+  | 12 | Šetalište pazinske gimnazije 9, Pazin | manji grad | točno | Šetalište pazinske gimnazije 9, Pazin (address) | točno |
+  | 13 | Zrinska 8, Nijemci | selo | točno | Zrinska 8, Nijemci (address) | točno |
+  | 14 | Sveti Martin pod Okićem 37b | selo | ništa | Sveti Martin pod Okićem 37B, Sveti Martin pod Okićem (address) | točno |
+  | 15 | Gora 61 a | selo | ništa | Gora 61A, Gora (address) | točno |
+  | 16 | Nijemci | selo | točno | Nijemci, Nijemci (settlement) | točno |
+  | 17 | Kroz Burak 81, Hvar | otok | točno | Ulica kroz Burak 81, Hvar (address) | točno |
+  | 18 | Ante Starčevića 1, Korcula | otok | točno | Ulica Ante Starčevića 1, Korčula (address) | točno |
+  | 19 | Šetalište 20. travnja 56, Cres | otok | točno | Šetalište 20. travnja 56, Cres (address) | točno |
+  | 20 | Banjol 10, Rab | otok | ništa | Banjol 10, Banjol (address) | točno |
+  | 21 | Jelsa 161 | otok | ništa | Jelsa, Jelsa (settlement): Kućni broj 161 nije u registru adresa; prikazano je središte naselja. | samo naselje |
+  | 22 | 1. ulica 25/2, Blato | otok | ništa | 1. ulica 25, Blato (address): Kućni broj 25/2 nije u registru adresa; prikazan je broj 25. | krivi broj |
+  | 23 | Omladinska 11, 51550 Mali Lošinj, Hrvatska | otok | ništa | Omladinska 11, Mali Lošinj (address) | točno |
+  | 24 | Kroz Burak, Hvar | otok | točno | Ulica kroz Burak, Hvar (street) | točno |
+
+  Za „Jelsa 161” i „1. ulica 25/2” registar DGU-a nema upisan kućni broj, pa su središte naselja i broj 25 ispravna zamjena.
 
 ## 3. Preuređenje gornjeg izbornika
 
