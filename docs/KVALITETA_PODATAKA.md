@@ -19,11 +19,18 @@ Vlastiti geokoder uspoređuje adresu iz registra s 1.683.411 adresa DGU-a (pošt
 
 | Skup | Adresa točno | Sredina ulice | Nije pronađeno | Uspješnost |
 |---|---|---|---|---|
-| Registar dječjih vrtića (MZOM), izvan Zagreba | 493 | 158 | 51 | 92,7 % |
-| Osnovne škole (MZOM), izvan Zagreba | 675 | 76 | 58 | 92,8 % |
+| Registar dječjih vrtića (MZOM), izvan Zagreba | 599 | 53 | 50 | 92,9 % |
+| Osnovne škole (MZOM), izvan Zagreba | 726 | 26 | 57 | 93,0 % |
 | HZZO, ordinacije obiteljske medicine (jedinstvene adrese) | 1048 | 63 | 90 | 92,5 % |
 | HZZO, pedijatrijske ordinacije (jedinstvene adrese) | 180 | 4 | 10 | 94,8 % |
-| HZZO, ugovorene ljekarne (jedinstvene adrese) | 861 | 175 | 165 | 86,3 % |
+| HZZO, ugovorene ljekarne (jedinstvene adrese) | 955 | 83 | 163 | 86,4 % |
+
+Ponovno geokodirano 6. 11. 2026., nakon dva popravka:
+
+- **Slovo i podbroj u adresama DGU-a:** obrada ih je prije gubila (19 % adresa). Zato adresa iz registra sa slovom („Kralja Zvonimira 90b”) nije bila pronađena pa je dobivala sredinu ulice: vrtić u Vinkovcima bio je tako 921 m od stvarnog mjesta. Sada je 247 točaka na točnoj adresi umjesto na sredini ulice.
+- **Isti naziv ulice u susjednom naselju:** kad naselje iz registra nema traženi broj, adresa s istim poštanskim brojem birala se po nazivu ulice. Tako su na primjer „A. Šenoe 4, Ludbreg” i „Matije Gupca 27, Valpovo” završavali u susjednim selima istog poštanskog područja. Sada prednost ima ista ulica u istom naselju, i sa slovom uz broj, ispred istog broja u drugom naselju. Naselje napisano u samoj adresi („Sarvaš, Kolodvorska 4/a”, a mjesto je pošta Osijek) ima prednost pred mjestom iz registra. Ispravljeno je oko 50 točaka koje su bile 1 do 16 km daleko.
+
+Jedna točka ostaje dvojbena: „Kostanjevac 12” (HZZO) postoji u dva naselja istog imena, a popis nema poštanski broj.
 
 Najčešći razlozi neuspjeha:
 - nazivi ulica u drugom obliku nego u registru DGU-a (skraćenice poput „J.J.Strossmayera”, stari nazivi);

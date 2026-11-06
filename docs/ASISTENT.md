@@ -17,7 +17,10 @@ Namjere:
 
 | Namjera | Ponašanje |
 |---|---|
-| `report` | činjenice iz izvještaja za tražene kategorije; bez kategorija sažetak izvještaja |
+| `report` | činjenice iz izvještaja za tražene kategorije, a na pitanje o broju stanovnika broj stanovnika naselja (Popis 2021.) |
+| `overview` | opće pitanje („Kakvo je ovo mjesto?”, „ukratko”, „okolina”): sažetak izvještaja i prijedlog konkretnijeg pitanja |
+| `no_data` | tema za koju nemamo podatke (bolnica, sigurnost i kriminal, potres, internet, parkiranje, srednja škola, temperatura): rečenica da podataka nema i, gdje postoji, srodna kategorija (osnovna škola, zelenilo i hlad) |
+| `unknown` | pitanje bez prepoznate teme: „Ovo pitanje ne razumijem” i popis tema o kojima asistent može odgovoriti; nikad sažetak koji izgleda kao odgovor |
 | `explain` | objašnjenje pojma (povratno razdoblje, PM2,5, pravilo 3-30-300 …) |
 | `purchase_advice` | odbija savjet o kupnji i nudi činjenice |
 | `out_of_scope` | odbija pitanja o cijenama, kreditima, vlasništvu i gradnji te upućuje na nadležne institucije |
@@ -26,7 +29,7 @@ Pitanja se ne spremaju i ne bilježe. Svaki odgovor završava napomenom da nije 
 
 ## Testna pitanja
 
-Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, bez jezičnog modela). Stupac „Očekivani odgovor” opisuje sadržaj; točne brojke ovise o adresi i dolaze iz izvještaja.
+Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, bez jezičnog modela). Pitanja 21–30 dodana su 6. 11. 2026. nakon prijave da asistent na svako pitanje daje isti odgovor. Stupac „Očekivani odgovor” opisuje sadržaj; točne brojke ovise o adresi i dolaze iz izvještaja.
 
 | # | Pitanje | Namjera | Kategorije | Očekivani odgovor |
 |---|---|---|---|---|
@@ -34,9 +37,9 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 2 | Može li se ovdje izliti rijeka? | report | poplave | isto kao 1 |
 | 3 | Kakav je zrak na ovoj adresi? | report | zrak | PM2,5 i NO2 (µg/m³, 2024.) uz usporedbu sa smjernicom WHO-a i graničnom vrijednošću EU-a za 2030. |
 | 4 | Ima li puno prašine i smoga? | report | zrak | isto kao 3 |
-| 5 | Ima li dovoljno drveća i hlada ljeti? | report | toplina i zelenilo | udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park |
-| 6 | Koliko je daleko najbliži park? | report | toplina i zelenilo | najbliži park u minutama hoda i zračna udaljenost |
-| 7 | Je li bučno zbog prometa? | report | promet u blizini | udaljenost od najbliže važnije ceste i pruge, označena kao procjena |
+| 5 | Ima li dovoljno drveća i hlada ljeti? | report | zelenilo i hlad | udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park |
+| 6 | Koliko je daleko najbliži park? | report | zelenilo i hlad | najbliži park u minutama hoda i zračna udaljenost |
+| 7 | Je li bučno zbog prometa? | report | udaljenost od prometnica | udaljenost od najbliže autoceste, brze, državne ili županijske ceste (s oznakom, npr. D8) i pruge, označena kao procjena |
 | 8 | Isplate li se solarni paneli na krovu? | report | sunce | kWh po kWp godišnje i optimalni nagib iz PVGIS-a (bez savjeta o isplativosti) |
 | 9 | Mogu li ovdje živjeti bez auta? | report | život bez auta | „X od 7” potreba unutar 15 minuta hoda i popis onoga što nedostaje ili nije provjereno |
 | 10 | Ima li autobus ili tramvaj u blizini? | report | javni prijevoz | broj stajališta unutar 10 minuta hoda; najviše polazaka na sat gdje postoji vozni red |
@@ -50,6 +53,16 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 18 | Trebam li kupiti ovu kuću? | purchase_advice | — | „Ne dajem savjete o tome treba li kupiti nekretninu …” |
 | 19 | Koliko košta kvadrat u ovoj ulici? | out_of_scope | — | izvan opsega; upućivanje na nadležne institucije i stručnjake |
 | 20 | Je li zemljišnoknjižno stanje uredno? | out_of_scope | — | isto kao 19 |
+| 21 | Kakva je okolina? | overview | — | sažetak izvještaja (poplave, zrak, život bez auta) i prijedlog konkretnijeg pitanja |
+| 22 | Je li ovo dobro mjesto za obitelj s djecom? | overview | — | isto kao 21 |
+| 23 | Gdje je najbliža bolnica? | no_data | — | „O bolnicama i hitnoj pomoći nemamo podatke …” |
+| 24 | Je li sigurno za život? | no_data | — | „O sigurnosti i kriminalu nemamo podatke.” |
+| 25 | Je li sigurno od poplava? | report | poplave | isto kao 1 („sigurno” uz temu ne znači kriminal) |
+| 26 | Ima li ovdje optički internet? | no_data | — | „O internetu i mobilnom signalu nemamo podatke.” |
+| 27 | Gdje je najbliža srednja škola? | no_data | škola | da podataka o srednjim školama nema, i najbliža osnovna škola |
+| 28 | Koliko ima stanovnika? | report | — | broj stanovnika naselja iz Popisa 2021. |
+| 29 | Je li ulica tiha? | report | udaljenost od prometnica | isto kao 7 |
+| 30 | Što mislite o ovome? | unknown | — | „Ovo pitanje ne razumijem …” i popis tema |
 
 Za usporedbu dviju adresa provjereno je i:
 
@@ -58,5 +71,6 @@ Za usporedbu dviju adresa provjereno je i:
 
 ## Ograničenja
 
-- Pravila prepoznaju ključne riječi; neobično sročena pitanja dobivaju sažetak izvještaja i prijedlog konkretnijeg pitanja.
+- Pravila prepoznaju ključne riječi. Neobično sročeno pitanje dobiva odgovor „Ovo pitanje ne razumijem” s popisom tema, a ne sažetak koji bi izgledao kao odgovor. Do 6. 11. 2026. svako takvo pitanje dobivalo je isti sažetak, pa je izgledalo kao da asistent uvijek odgovara isto.
+- Jezični model (ako je postavljen) i dalje samo prepoznaje namjeru i kategorije; odgovor uvijek dolazi iz predložaka. Prijedlog modela koji piše odgovor iz podataka izvještaja, s provjerom brojki, opisan je u [NALAZI_TESTIRANJA.md](NALAZI_TESTIRANJA.md).
 - Asistent ne zna ništa izvan izvještaja: ne pretražuje internet i ne odgovara na pitanja o cijenama, pravu ni gradnji.

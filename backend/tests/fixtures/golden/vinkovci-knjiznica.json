@@ -62,13 +62,13 @@
     "daily": {
       "status": "info",
       "values": {
-        "nearest_kindergarten": 5.5,
-        "count15_kindergarten": 3,
+        "nearest_kindergarten": 13.3,
+        "count15_kindergarten": 2,
         "nearest_school": 7.3,
         "count15_school": 2,
         "nearest_doctor": 5.5,
         "count15_doctor": 4,
-        "nearest_pediatrician": 25.3,
+        "nearest_pediatrician": 23.3,
         "count15_pediatrician": 0,
         "nearest_pharmacy": 5.5,
         "count15_pharmacy": 6,

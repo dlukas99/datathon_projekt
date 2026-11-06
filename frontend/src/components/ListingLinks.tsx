@@ -1,8 +1,15 @@
 import { ExternalLink } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import { setListingFilters, useListingFilters } from '../lib/listingFilters'
 import { type Deal, type Kind, listingLinks, parsePositiveInt } from '../lib/listings'
 
-/** "Pogledaj oglase": builds search links on listing sites. No listing data is fetched. */
+/**
+ * "Pogledaj oglase": builds search links on listing sites. No listing data is fetched.
+ *
+ * The panel closes on a click outside it, Escape, the button again, or when keyboard focus
+ * leaves it (it would cover the next card). It stays open for clicks inside it and while
+ * one of its drop-downs is open. The filters are shared by all places (listingFilters.ts).
+ */
 export function ListingLinks({
   settlement,
   municipality,
@@ -13,34 +20,130 @@ export function ListingLinks({
   county: string | null
 }) {
   const id = useId()
-  const [kind, setKind] = useState<Kind>('house')
-  const [deal, setDeal] = useState<Deal>('sale')
-  const [price, setPrice] = useState('')
-  const [area, setArea] = useState('')
+  const buttonId = `${id}-button`
+  const panelId = `${id}-panel`
+  const filters = useListingFilters()
+  const [open, setOpen] = useState(false)
   const [side, setSide] = useState<PopoverSide>('right')
-  const priceMax = parsePositiveInt(price)
-  const areaMax = parsePositiveInt(area)
-  const links = listingLinks({ settlement, municipality, county, kind, deal, priceMax, areaMax })
+  const rootRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const priceMax = parsePositiveInt(filters.price)
+  const areaMax = parsePositiveInt(filters.area)
+  const links = listingLinks({
+    settlement,
+    municipality,
+    county,
+    kind: filters.kind,
+    deal: filters.deal,
+    priceMax,
+    areaMax,
+  })
+
+  useEffect(() => {
+    const root = rootRef.current
+    if (!open || !root) return
+    const button = buttonRef.current
+    const focusButton = () => button?.focus({ preventScroll: true })
+    // A drop-down list opened with the mouse may be showing. Browsers close the list on the
+    // next click outside before the page sees that click, so `:open` alone is not enough.
+    let listShown = false
+
+    function onPanelPointerDown(e: PointerEvent) {
+      listShown = e.target instanceof HTMLSelectElement
+    }
+    function onListDone(e: Event) {
+      // Only the drop-down itself: a text field also fires change when it loses focus.
+      if (e.target instanceof HTMLSelectElement) listShown = false
+    }
+    function onPointerDown(e: PointerEvent) {
+      if (!root || (e.target instanceof Node && root.contains(e.target))) return
+      if (listShown || pickerOpen(root)) {
+        // This click only closes the list: keep the panel open and the focus in the field.
+        listShown = false
+        const keepFocus = (m: MouseEvent) => {
+          m.preventDefault()
+        }
+        document.addEventListener('mousedown', keepFocus, { capture: true, once: true })
+        window.setTimeout(() => {
+          document.removeEventListener('mousedown', keepFocus, { capture: true })
+        }, 0)
+        return
+      }
+      const hadFocus = root.contains(document.activeElement)
+      setOpen(false)
+      // A click on empty space leaves focus on the page or a container around the panel
+      // (<main tabindex="-1">): give it back to the button. A click on a link or a field
+      // elsewhere keeps the focus there.
+      window.setTimeout(() => {
+        const active = document.activeElement
+        const empty = active === null || active === document.body || active.contains(root)
+        if (hadFocus && empty) focusButton()
+      }, 0)
+    }
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key !== 'Escape' || e.defaultPrevented || !root) return
+      if (pickerOpen(root)) return
+      if (listShown && e.target instanceof HTMLSelectElement) {
+        listShown = false // Escape closed the list (where the page sees it)
+        return
+      }
+      // Captured first and marked handled, so the map below does not also clear its route.
+      e.preventDefault()
+      setOpen(false)
+      focusButton()
+    }
+    function onFocusOut(e: FocusEvent) {
+      if (e.target instanceof HTMLSelectElement) listShown = false
+      const next = e.relatedTarget
+      // relatedTarget is null when the window loses focus (a link opened a new tab).
+      if (next instanceof Node && root && !root.contains(next)) setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown, true)
+    document.addEventListener('keydown', onKeyDown, true)
+    root.addEventListener('pointerdown', onPanelPointerDown, true)
+    root.addEventListener('change', onListDone)
+    root.addEventListener('focusout', onFocusOut)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown, true)
+      document.removeEventListener('keydown', onKeyDown, true)
+      root.removeEventListener('pointerdown', onPanelPointerDown, true)
+      root.removeEventListener('change', onListDone)
+      root.removeEventListener('focusout', onFocusOut)
+    }
+  }, [open])
+
   return (
-    <details className={`listings no-print open-${side}`}>
-      <summary
+    <div ref={rootRef} className={`listings no-print open-${side}`}>
+      <button
+        ref={buttonRef}
+        id={buttonId}
+        type="button"
         className="button ghost"
+        aria-expanded={open}
+        aria-controls={panelId}
         onClick={(e) => {
           // Measured before the panel opens, so it never shows off screen first.
-          setSide(popoverSide(e.currentTarget.getBoundingClientRect()))
+          if (!open) setSide(popoverSide(e.currentTarget.getBoundingClientRect()))
+          setOpen(!open)
         }}
       >
         Pogledaj oglase
-      </summary>
-      <div className="listings-body">
+      </button>
+      <div
+        id={panelId}
+        className="listings-body"
+        role="group"
+        aria-labelledby={buttonId}
+        hidden={!open}
+      >
         <div className="find-grid">
           <label htmlFor={`${id}-kind`}>
             Što
             <select
               id={`${id}-kind`}
-              value={kind}
+              value={filters.kind}
               onChange={(e) => {
-                setKind(e.target.value as Kind)
+                setListingFilters({ kind: e.target.value as Kind })
               }}
             >
               <option value="house">Kuća</option>
@@ -51,9 +154,9 @@ export function ListingLinks({
             Kako
             <select
               id={`${id}-deal`}
-              value={deal}
+              value={filters.deal}
               onChange={(e) => {
-                setDeal(e.target.value as Deal)
+                setListingFilters({ deal: e.target.value as Deal })
               }}
             >
               <option value="sale">Kupnja</option>
@@ -63,18 +166,23 @@ export function ListingLinks({
           <WholeNumberField
             id={`${id}-price`}
             label="Najviša cijena (€)"
-            value={price}
+            value={filters.price}
             parsed={priceMax}
-            onChange={setPrice}
+            onChange={(price) => {
+              setListingFilters({ price })
+            }}
           />
           <WholeNumberField
             id={`${id}-area`}
             label="Najviše m²"
-            value={area}
+            value={filters.area}
             parsed={areaMax}
-            onChange={setArea}
+            onChange={(area) => {
+              setListingFilters({ area })
+            }}
           />
         </div>
+        <p className="hint">Filtri vrijede za sva mjesta dok je stranica otvorena.</p>
         <ul className="listing-list">
           {links.map((l) => (
             <li key={l.id}>
@@ -92,8 +200,17 @@ export function ListingLinks({
           oglase; poveznica samo otvara pretragu s odabranim filtrima.
         </p>
       </div>
-    </details>
+    </div>
   )
+}
+
+/** Whether one of the panel's drop-downs shows its list (`:open`, where supported). */
+function pickerOpen(root: HTMLElement): boolean {
+  try {
+    return Array.from(root.querySelectorAll('select')).some((s) => s.matches(':open'))
+  } catch {
+    return false // `:open` not supported: the browser closes its own list first
+  }
 }
 
 type PopoverSide = 'right' | 'left' | 'below'

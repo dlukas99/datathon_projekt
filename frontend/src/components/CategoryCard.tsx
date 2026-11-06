@@ -85,6 +85,10 @@ const KEY_VALUE: Record<string, string> = {
 
 const FLOOD_RPS = [10, 100, 500]
 
+// Cards that show one rating and one sentence; their scales are details (air: two
+// pollutants with three limits each were too much at first glance).
+const SCALES_IN_DETAILS = new Set(['air'])
+
 function FloodTable({ values }: { values: Value[] }) {
   const byKey = Object.fromEntries(values.map((v) => [v.key, v]))
   return (
@@ -131,6 +135,8 @@ export function MoreDetails({
       </summary>
       <div className="more-body">
         {children}
+        {SCALES_IN_DETAILS.has(category.id) &&
+          category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
         {category.id === 'flood' && category.values.length > 0 ? (
           <FloodTable values={category.values} />
         ) : (
@@ -207,7 +213,8 @@ export function CategoryCard({
           <span className="key-label">{key.label}</span>
         </p>
       )}
-      {category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
+      {!SCALES_IN_DETAILS.has(category.id) &&
+        category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
       <p className="headline">{category.headline}</p>
       <MoreDetails category={category} sources={sources} />
     </article>

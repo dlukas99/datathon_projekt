@@ -73,12 +73,12 @@ Rješenje ima dva dijela:
 
 | Ruta | Opis |
 |---|---|
-| `GET /api/geocode?q=` | prijedlozi adresa, ulica i naselja |
+| `GET /api/geocode?q=` | prijedlozi adresa, ulica i naselja; kad kućnog broja ili ulice nema u registru, prijedlog ulice ili naselja s napomenom (`note`) |
 | `GET /api/reverse?lat=&lon=` | naselje, grad ili općina, županija |
 | `GET /api/report?lat=&lon=[&format=geojson]` | cijeli izvještaj; svaka vrijednost ima `source`, `retrieved_at` i `kind`; `nearby_places` su mjesta za kartu |
 | `GET /api/route?from_lat=&from_lon=&to_lat=&to_lon=` | pješački put između dviju točaka kao GeoJSON `Feature` (`LineString`) s duljinom, minutama, brzinom hoda i izvorom; samo na zahtjev, ništa se ne sprema |
 | `POST /api/assistant` | asistent nad izvještajem (vidi [ASISTENT.md](ASISTENT.md)) |
-| `GET /api/find/options`, `POST /api/find` | Pronađi mjesto za život: filtri i deterministički rang naselja |
+| `GET /api/find/options`, `POST /api/find` | Predloži mjesto za život (stranica `/predlozi`): filtri i deterministički rang naselja |
 | `POST /api/find/parse` | slobodno pitanje u filtre (samo uz jezični model) |
 | `GET /api/sources` | svi izvori s licencom i datumom |
 | `GET /api/sources/live` | datumi zadnje izmjene skupova uživo s Portala (CKAN) |

@@ -18,7 +18,7 @@ Procjena zraka je jedina primjena koja ima službenu „istinu” za provjeru (m
 - **Osnova (ono što aplikacija prikazuje):** vrijednost EEA karte za 2024. na lokaciji postaje.
 - **Značajke** (sve su poznate i za bilo koju adresu):
   - vrijednost EEA karte;
-  - udaljenost od najbliže autoceste, brze, glavne ili važnije ceste (OSM);
+  - udaljenost od najbliže autoceste, brze, državne ili županijske ceste (OSM);
   - udio izgrađenih površina i drveća u krugu od 300 m (ESA WorldCover);
   - logaritam broja stanovnika naselja (DZS).
 - **Modeli:** svi predviđaju odstupanje postaje od karte, a procjena je karta plus predviđeno odstupanje:

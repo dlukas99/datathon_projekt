@@ -16,6 +16,11 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 ## Lokacija
 
 - Adresa se pretvara u koordinate vlastitim geokoderom nad 1.683.411 adresa iz skupa „Adrese INSPIRE” Državne geodetske uprave. Upit i adrese normaliziraju se: mala slova, bez dijakritika, `đ` i `dj` kao `d`. Riječi „ulica” i „ul.” zanemaruju se jer ih službeni nazivi često nemaju („Bana Jelačića”). Kod upita od tri ili više riječi jedna riječ smije nedostajati (npr. ime u „Bana Josipa Jelačića”), ali najdulja mora odgovarati.
+- **Kućni broj** ima broj, slovo i podbroj (`addressNumber`, `addressNumberExtension`, `addressNumber2ndExtension`): 23, 23A, 25/2, 12A/1. Do 6. 11. 2026. obrada je zadržavala samo broj, pa 322.198 adresa (19 %) nije bilo moguće pronaći po točnom broju. Upit prepoznaje „23a”, „23 A”, „12/B”, „12-b”, „25/2” i „bb”.
+- **Mjesto** se piše iza zareza ili bez njega („Ivana Rendića 6 Rijeka”; tada riječi iza broja moraju biti naziv naselja, grada ili općine). Prihvaća se naselje, grad ili općina („Banjol 10, Rab”) i poštanski broj; „Hrvatska” se zanemaruje. Prednost imaju ulice u upisanom naselju.
+- **Drugi oblik naziva ulice** („Brune Bušića” za „Bušićevu”, „Ivana Gundulića” za „Gundulićevu ulicu”) prepoznaje se po osnovi prezimena, a prijedlog kaže pod kojim je nazivom ulica upisana.
+- **Kad nečega nema u registru**, prijedlog je ono najbliže što postoji, uz napomenu: isti broj bez slova, sredina ulice, a kod sela bez naziva ulica ili kad ulica nije pronađena središte naselja. Izvještaj tada piše da je prikazana sredina ulice ili središte naselja.
+- **Provjera:** `scripts/geocode_check.py` pretražuje 24 adrese osnovnih škola iz registra MZOM-a (veliki grad, manji grad, selo, otok; s brojem i bez njega). Prije 6. 11. 2026. točno je bilo 12, sada 22. Za preostale dvije DGU nema upisanog kućnog broja („Jelsa 161”, „1. ulica 25/2, Blato”), pa se prikazuju središte naselja i broj 25, uz napomenu.
 - Naselje, grad ili općina i županija određuju se točkom u poligonu nad DGU „Upravnim jedinicama INSPIRE”. Hijerarhija (naselje → JLS → županija) izvedena je prostorno, preko točke unutar poligona naselja, jer GDAL ne izlaže poveznice `upperLevelUnit`.
 - Udaljenosti se računaju u projekciji HTRS96/TM (EPSG:3765), u metrima.
 
@@ -41,14 +46,17 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 - **Izračun:** vrijednost ćelije u kojoj je točka.
 - **Stupnjevana ljestvica** (od 4. 11. 2026.): umjesto ocjene „prolazi ili ne prolazi” prema smjernici WHO-a, koju premašuje gotovo cijela Hrvatska, vrijednost se smješta na ljestvicu s četiri razine. Granice razina su službene vrijednosti:
 
-| Razina (status) | PM2,5, godišnji prosjek | NO2, godišnji prosjek | Granica |
-|---|---|---|---|
-| vrlo niska (dobro) | ≤ 5 µg/m³ | ≤ 10 µg/m³ | smjernica WHO-a 2021 |
-| niska (dobro) | ≤ 10 µg/m³ | ≤ 20 µg/m³ | granična vrijednost EU-a od 2030. |
-| umjerena (informacija, neutralno) | ≤ 25 µg/m³ | ≤ 40 µg/m³ | granična vrijednost EU-a koja vrijedi danas |
-| visoka (loše) | > 25 µg/m³ | > 40 µg/m³ | iznad današnje granične vrijednosti EU-a |
+| Razina onečišćenja (status) | Ocjena zraka na kartici | PM2,5, godišnji prosjek | NO2, godišnji prosjek | Granica |
+|---|---|---|---|---|
+| vrlo niska (dobro) | Vrlo dobar | ≤ 5 µg/m³ | ≤ 10 µg/m³ | smjernica WHO-a 2021 |
+| niska (dobro) | Dobar | ≤ 10 µg/m³ | ≤ 20 µg/m³ | granična vrijednost EU-a od 2030. |
+| umjerena (informacija, neutralno) | Umjeren | ≤ 25 µg/m³ | ≤ 40 µg/m³ | granična vrijednost EU-a koja vrijedi danas |
+| visoka (loše) | Loš | > 25 µg/m³ | > 40 µg/m³ | iznad današnje granične vrijednosti EU-a |
 
-Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije je viša od dviju razina (PM2,5, NO2). Uz svaku vrijednost tekstom se navodi odnos prema smjernici WHO-a i granicama EU-a, a na kartici je ljestvica s oznakama tih granica.
+Crveno je samo razina iznad granice koja danas pravno vrijedi. Status kategorije je viša od dviju razina (PM2,5, NO2).
+
+- **Prikaz** (od 6. 11. 2026.): kartica pokazuje ocjenu zraka bojom i riječju i jednu rečenicu o tome što ona znači kroz godinu. Ocjena govori o zraku, a ne o onečišćenju, pa „niska razina onečišćenja” više ne izgleda kao „niska kvaliteta”. Brojke, odnos prema smjernici WHO-a i granicama EU-a te ljestvice s oznakama granica nalaze se u „Detalji i izvor”.
+- **Zašto ne Europski indeks kvalitete zraka:** indeks EEA-e od revizije 2024. računa se iz satnih koncentracija i opisuje kratkotrajni rizik, pa se ne smije primijeniti na godišnje prosjeke (ETC HE Report 2024/17). Za godišnje prosjeke vrijede smjernica WHO-a i granične vrijednosti EU-a.
 
 - **Izvori pragova:**
   - WHO global air quality guidelines (2021), tablica 0.1: godišnja smjernica PM2,5 5 µg/m³ i NO2 10 µg/m³. https://iris.who.int/handle/10665/345329
@@ -102,11 +110,11 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **NO2:**
   - Karta je 5–17 µg/m³ niža od prometnih postaja (Zagreb-1, Osijek-1). To je očekivano: karta EEA-e procjenjuje pozadinsku razinu na mreži od 1 km, a prometne postaje mjere uz samu ulicu.
   - Od pozadinske postaje Zagreb-3 karta je niža za 4 µg/m³.
-  - Zato kartica zraka napominje da uz prometne ulice NO2 može biti znatno viši, a kategorija „Promet u blizini” to pokazuje zasebno.
+  - Zato kartica zraka napominje da uz prometne ulice NO2 može biti znatno viši, a kategorija „Udaljenost od prometnica” to pokazuje zasebno.
 - **Požega** nema službenu postaju. Najbliža je Slavonski Brod-1 na 31 km, pa je usporedba samo okvirna.
 - **Ograničenje provjere:** EEA karte izrađene su i uz pomoć istih postaja, pa ovo nije potpuno neovisna provjera. Pokazuje ipak kako se karta ponaša uz pozadinske, a kako uz prometne postaje.
 
-## Toplina i zelenilo
+## Zelenilo i hlad (ranije „Toplina i zelenilo”)
 
 - **Podaci:** ESA WorldCover 2021 v200 (10 m) i parkovi iz OpenStreetMapa (`leisure=park`).
 - **Izračun:** udio piksela unutar 300 m od točke, bez vodenih površina (razred 80):
@@ -118,12 +126,26 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
   - „no less than a 30% tree canopy in every neighbourhood”;
   - „no more than 300 m to the nearest public green space from every residence”.
 - **Status:** dobro ako su ispunjena oba uvjeta (drveće ≥ 30 % u krugu od 300 m i park na zračnoj udaljenosti ≤ 300 m), upozorenje ako je ispunjen jedan, loše ako nije nijedan.
-- **Ograničenja:** WorldCover mjeri pokrov tla iz satelita i ne razlikuje javne od privatnih vrtova. OSM parkovi su izvan gradova nepotpuni. Dio pravila „3 stabla vidljiva s prozora” ne može se izračunati iz otvorenih podataka.
+- **Temperatura se ne mjeri.** Drveće i park su pokazatelj hlada i ublažavanja vrućina; zato se kategorija od 6. 11. 2026. zove „Zelenilo i hlad”, a ne „Toplina i zelenilo”.
+- **Provjera (6. 11. 2026.):** za pet središta naselja (Split, Osijek, Požega, Nijemci, Hvar) udio drveća iz WorldCovera (11–33 %) uspoređen je s ortofotom DGU-a iz 2023. i s kartom gustoće krošanja Copernicus HRL 2018 (EEA). Brojke su ispravno izračunate i odgovaraju ortofotu; HRL daje još manje vrijednosti (1–11 %). Detalji su u [NALAZI_TESTIRANJA.md](NALAZI_TESTIRANJA.md).
+- **Ograničenja:** WorldCover mjeri pokrov tla iz satelita i ne razlikuje javne od privatnih vrtova. U rezoluciji 10 m ne razlikuje pojedinačna stabla u dvorištima i uz ulice kad je oko njih izgrađeno, pa je udio drveća u gusto izgrađenim središtima vjerojatno nešto veći. OSM parkovi su izvan gradova nepotpuni. Dio pravila „3 stabla vidljiva s prozora” ne može se izračunati iz otvorenih podataka.
 
-## Promet u blizini (procjena; ranije „Buka”)
+## Udaljenost od prometnica (procjena; ranije „Promet u blizini” i „Buka”)
 
-- **Podaci:** autoceste, brze, glavne i važnije ceste (`highway=motorway|trunk|primary|secondary`) i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa.
-- **Izračun:** zračna udaljenost do najbliže takve ceste i najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”.
+- **Podaci:** ceste `highway=motorway|trunk|primary|secondary` i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa. Ostale ulice se ne broje.
+- **Vrsta ceste** prema hrvatskim pravilima označavanja u OSM-u (wiki „Croatia/Ceste”):
+
+| OSM | U izvještaju | Primjer |
+|---|---|---|
+| `motorway` | autocesta i oznaka | autocesta A1 |
+| `trunk` | brza cesta i oznaka | brza cesta D1 |
+| `primary` s oznakom D | državna cesta i oznaka | državna cesta D8 |
+| `primary` bez oznake D | glavna cesta | |
+| `secondary` s četveroznamenkastom oznakom | županijska cesta (Ž i oznaka) | županijska cesta Ž2001 |
+| `secondary` bez oznake | županijska ili glavna gradska cesta (bivše županijske ceste u gradovima) | |
+
+  U podacima 19.042 dionice `primary` imaju oznaku D, a 16.463 dionice `secondary` županijsku oznaku; 3.910 dionica `secondary` nema oznaku, uglavnom u gradovima.
+- **Izračun:** zračna udaljenost od lokacije (adrese ili središta naselja) do najbliže točke osi takve ceste i do najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”. Za središta naselja udaljenost je često 0 m jer OSM čvor naselja leži na samoj cesti; za adresu uz cestu nekoliko je metara (točka adrese je na zgradi).
 - **Pojasevi:**
 
 | Udaljenost od ceste | Oznaka | Status |
@@ -135,6 +157,8 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Izvor pojaseva:** Health Effects Institute (2010.), *Traffic-Related Air Pollution: A Critical Review of the Literature on Emissions, Exposure, and Health Effects*, Special Report 17. Zona najjačeg utjecaja prometa je približno 300 do 500 m od autoceste ili velike prometnice, a dalje koncentracije padaju na pozadinsku razinu.
 - **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
 - **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
+- **Smjer podskora:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
+- **Popis „Predloži mjesto” i izvještaj:** popis računa za središte naselja, a izvještaj za odabranu adresu, pa se brojke mogu razlikovati (Split: središte 530 m od državne ceste, adresa uz tu cestu nekoliko metara).
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
 ## Požari raslinja
@@ -209,8 +233,8 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 |---|---|---|
 | Poplave | dobro 100, upozorenje 50, loše 0 | scenariji Hrvatskih voda i Direktive 2007/60/EZ |
 | Kvaliteta zraka | vrlo niska 100, niska 80, umjerena 50, visoka 10 (viša od razina PM2,5 i NO2) | WHO 2021 i granice EU-a |
-| Toplina i zelenilo | do 60 bodova za udio drveća (30 % = puni bodovi) i 40 bodova za park do 300 m (20 do 600 m) | pravilo 3-30-300 |
-| Promet u blizini | podalje 100, rub zone 60, blizu 25 | HEI 2010 (300/500 m) |
+| Zelenilo i hlad | do 60 bodova za udio drveća (30 % = puni bodovi) i 40 bodova za park do 300 m (20 do 600 m) | pravilo 3-30-300 |
+| Udaljenost od prometnica | podalje 100, rub zone 60, blizu 25 (veći broj znači manje prometa) | HEI 2010 (300/500 m) |
 | Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
 | Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
 | Život bez auta | broj potreba od 7 × 100 / 7 | — |
@@ -221,7 +245,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 - **Objašnjenje:** „najviše podiže” i „najviše spušta” su kategorije s najvećim pozitivnim, odnosno negativnim doprinosom: težina × (podskor − skor).
 - **Ograničenje:** skor je pomoć pri usporedbi, a ne ocjena kvalitete života. Normalizacije označene kao „naše” nisu službeni pragovi.
 
-## Pronađi mjesto za život
+## Predloži mjesto za život (ranije „Pronađi mjesto”)
 
 - **Obuhvat:** sva naselja s najmanje 200 stanovnika (2.347 naselja, 92 % stanovništva Hrvatske prema Popisu 2021.). Manja naselja rijetko imaju ikakve usluge, a njihova bi obrada udvostručila vrijeme.
 - **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, zelenilo, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi podskorovi. Sunce na krovu se izostavlja jer je PVGIS servis uživo.

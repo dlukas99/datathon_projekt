@@ -14,9 +14,9 @@ type Demo = (typeof demo.addresses)[number] | undefined
 const ENTRIES: { icon: string; title: string; text: string; to: (a: Demo, b: Demo) => string }[] = [
   {
     icon: 'find',
-    title: 'Pronađi mjesto za život',
+    title: 'Predloži mjesto za život',
     text: 'Zadajte što vam treba, a aplikacija predlaže naselja s razlozima.',
-    to: () => '/pronadi',
+    to: () => '/predlozi',
   },
   {
     icon: 'compare',
@@ -36,7 +36,7 @@ const STEPS: { icon: string; title: string; text: string }[] = [
   {
     icon: 'flood',
     title: 'Okoliš',
-    text: 'Poplave, zrak, zelenilo i vrućine, promet u blizini, požari i sunce na krovu.',
+    text: 'Poplave, zrak, zelenilo i hlad, udaljenost od prometnica, požari i sunce na krovu.',
   },
   {
     icon: 'car_free',

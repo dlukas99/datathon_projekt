@@ -26,8 +26,8 @@ export function profileWeights(id: string | null): Record<string, number> {
 export const FOCUS_OPTIONS: { id: string; label: string }[] = [
   { id: 'flood', label: 'Poplave' },
   { id: 'air', label: 'Kvaliteta zraka' },
-  { id: 'green', label: 'Toplina i zelenilo' },
-  { id: 'noise', label: 'Promet u blizini' },
+  { id: 'green', label: 'Zelenilo i hlad' },
+  { id: 'noise', label: 'Udaljenost od prometnica' },
   { id: 'fire', label: 'Požari raslinja' },
   { id: 'solar', label: 'Sunce na krovu' },
   { id: 'car_free', label: 'Život bez auta' },

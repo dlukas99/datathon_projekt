@@ -7,6 +7,10 @@ const KIND_TEXT: Record<Suggestion['kind'], string> = {
   settlement: 'naselje (središte)',
 }
 
+const NOTHING_FOUND =
+  'Nema prijedloga. Provjerite naziv ulice i kućni broj ili upišite samo naselje.'
+const UNAVAILABLE = 'Pretraga trenutačno nije dostupna.'
+
 /** Accessible combobox (WAI-ARIA 1.2 pattern) over the backend geocoder. */
 export function AddressSearch({
   onSelect,
@@ -23,12 +27,17 @@ export function AddressSearch({
   const id = inputId ?? `search-${autoId}`
   const listId = `${id}-list`
   const hintId = `${id}-hint`
+  const statusId = `${id}-status`
   const [query, setQuery] = useState(initialValue)
   const [items, setItems] = useState<Suggestion[]>([])
+  // The text the suggestions answer; while typing it lags behind the query.
+  const [itemsFor, setItemsFor] = useState('')
+  const [failed, setFailed] = useState(false)
+  const [searching, setSearching] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(-1)
-  const [status, setStatus] = useState('')
   const timer = useRef<number | undefined>(undefined)
+  const enterRequest = useRef<AbortController | null>(null)
 
   useEffect(() => {
     window.clearTimeout(timer.current)
@@ -38,18 +47,18 @@ export function AddressSearch({
     timer.current = window.setTimeout(() => {
       fetchSuggestions(q, controller.signal)
         .then((result) => {
+          // A late answer to an older query never replaces a newer one.
+          if (controller.signal.aborted) return
           setItems(result)
+          setItemsFor(q)
+          setFailed(false)
           setActive(-1)
-          setStatus(
-            result.length === 0
-              ? 'Nema prijedloga. Provjerite naziv ulice i kućni broj.'
-              : `${String(result.length)} prijedloga. Strelicama odaberite, Enter za potvrdu.`,
-          )
         })
         .catch((err: unknown) => {
           if (err instanceof DOMException && err.name === 'AbortError') return
           setItems([])
-          setStatus('Pretraga trenutačno nije dostupna.')
+          setItemsFor(q)
+          setFailed(true)
         })
     }, 200)
     return () => {
@@ -57,11 +66,47 @@ export function AddressSearch({
     }
   }, [query])
 
+  useEffect(
+    () => () => {
+      enterRequest.current?.abort()
+    },
+    [],
+  )
+
   function choose(s: Suggestion) {
+    enterRequest.current?.abort()
+    setSearching(false)
     setQuery(s.label)
     setOpen(false)
     setItems([])
     onSelect(s)
+  }
+
+  /** Enter before the suggestions caught up with the typing: search the text as it is now. */
+  function searchNow(q: string) {
+    enterRequest.current?.abort()
+    const controller = new AbortController()
+    enterRequest.current = controller
+    setSearching(true)
+    fetchSuggestions(q, controller.signal)
+      .then((result) => {
+        if (controller.signal.aborted) return
+        setSearching(false)
+        const pick = result[0]
+        if (pick) {
+          choose(pick)
+        } else {
+          setItems([])
+          setItemsFor(q)
+          setFailed(false)
+        }
+      })
+      .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === 'AbortError') return
+        setSearching(false)
+        setItemsFor(q)
+        setFailed(true)
+      })
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -73,19 +118,38 @@ export function AddressSearch({
       e.preventDefault()
       setActive((a) => Math.max(a - 1, 0))
     } else if (e.key === 'Enter') {
-      const pick = visible[active] ?? (visible.length > 0 ? visible[0] : undefined)
-      if (pick) {
+      const q = query.trim()
+      const chosen = visible[active]
+      if (chosen) {
         e.preventDefault()
-        choose(pick)
+        choose(chosen)
+      } else if (q.length >= 3 && itemsFor !== q) {
+        e.preventDefault()
+        searchNow(q)
+      } else if (visible[0]) {
+        e.preventDefault()
+        choose(visible[0])
       }
     } else if (e.key === 'Escape') {
       setOpen(false)
     }
   }
 
-  const short = query.trim().length < 3
+  const trimmed = query.trim()
+  const short = trimmed.length < 3
   const visible = short ? [] : items
   const expanded = open && visible.length > 0
+  const current = !short && itemsFor === trimmed
+  const empty = current && !failed && items.length === 0
+  let status = ''
+  if (searching) status = 'Tražim…'
+  else if (!short && failed) status = UNAVAILABLE
+  else if (empty) status = NOTHING_FOUND
+  else if (current) {
+    status = `${String(items.length)} prijedloga. Strelicama odaberite, Enter za potvrdu.`
+  }
+  // "Nothing found" and errors are shown to everyone; the count only to screen readers.
+  const shown = searching || (!short && failed) || empty
   return (
     <div className="search">
       <label htmlFor={id}>{label}</label>
@@ -96,7 +160,7 @@ export function AddressSearch({
         aria-autocomplete="list"
         aria-expanded={expanded}
         aria-controls={listId}
-        aria-describedby={hintId}
+        aria-describedby={shown ? `${hintId} ${statusId}` : hintId}
         aria-activedescendant={expanded && active >= 0 ? `${listId}-${String(active)}` : undefined}
         autoComplete="off"
         spellCheck={false}
@@ -140,12 +204,13 @@ export function AddressSearch({
           >
             <span>{s.label}</span>
             <span className="suggestion-kind">{KIND_TEXT[s.kind]}</span>
+            {s.note && <span className="suggestion-note">{s.note}</span>}
           </div>
         ))}
       </div>
-      <div className="visually-hidden" role="status" aria-live="polite">
-        {short ? '' : status}
-      </div>
+      <p id={statusId} className={shown ? 'search-status' : 'visually-hidden'} role="status">
+        {status}
+      </p>
     </div>
   )
 }

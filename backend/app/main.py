@@ -177,13 +177,13 @@ def assistant(request: AssistantRequest) -> AssistantReply:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
-@app.get("/api/find/options", tags=["pronađi mjesto"], response_model=FindOptions)
+@app.get("/api/find/options", tags=["predloži mjesto"], response_model=FindOptions)
 def find_options() -> FindOptions:
     """Županije, broj obuhvaćenih naselja i je li dostupan jezični model."""
     return options()
 
 
-@app.post("/api/find", tags=["pronađi mjesto"], response_model=FindResponse)
+@app.post("/api/find", tags=["predloži mjesto"], response_model=FindResponse)
 def find_places(request: FindRequest) -> FindResponse:
     """Najbolja naselja prema filtrima i Skoru za život; deterministički izračun."""
     return find(request)
@@ -193,7 +193,7 @@ class ParseQuestion(BaseModel):
     question: str = Field(min_length=3, max_length=300)
 
 
-@app.post("/api/find/parse", tags=["pronađi mjesto"], response_model=FindRequest)
+@app.post("/api/find/parse", tags=["predloži mjesto"], response_model=FindRequest)
 def find_parse(body: ParseQuestion) -> FindRequest:
     """Slobodno pitanje u filtre (samo ako je postavljen jezični model). Pitanje se ne sprema."""
     try:

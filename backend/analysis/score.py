@@ -40,7 +40,8 @@ def _flood(cat: Category) -> float | None:
 
 
 def _air(cat: Category) -> float | None:
-    return AIR_POINTS.get(cat.status_label.lower())
+    # The worse of the PM2.5 and NO2 levels; the card label is a rating, not a level.
+    return min((AIR_POINTS[s.band] for s in cat.scales if s.band in AIR_POINTS), default=None)
 
 
 def _green(cat: Category) -> float | None:

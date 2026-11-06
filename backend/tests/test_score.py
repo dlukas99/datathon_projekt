@@ -1,5 +1,5 @@
 from analysis import score
-from app.models import Category, Value
+from app.models import Category, Scale, Value
 from app.profiles import load, weights
 
 
@@ -13,6 +13,16 @@ def cat(cid: str, status: str = "info", status_label: str = "", values=None) -> 
         headline="",
         values=values or [],
     )
+
+
+def air(*levels: str) -> Category:
+    """Air category whose scales carry the PM2.5 and NO2 levels."""
+    c = cat("air", "info", "Umjeren")
+    c.scales = [
+        Scale(key=f"p{i}", label="", unit="µg/m³", value=0.0, band=level, bands=[])
+        for i, level in enumerate(levels)
+    ]
+    return c
 
 
 def val(key: str, value: float) -> Value:
@@ -30,7 +40,9 @@ def val(key: str, value: float) -> Value:
 def test_subscores_follow_documented_rules() -> None:
     assert score.subscore(cat("flood", "good")) == 100
     assert score.subscore(cat("flood", "bad")) == 0
-    assert score.subscore(cat("air", "info", "Umjerena")) == 50
+    assert score.subscore(air("umjerena")) == 50
+    assert score.subscore(air("niska", "umjerena")) == 50  # the worse level counts
+    assert score.subscore(air("vrlo niska", "niska")) == 80
     assert score.subscore(cat("noise", "warning", "Blizu prometnice")) == 25
     assert score.subscore(cat("car_free", values=[val("needs_within_15min", 7)])) == 100
     assert score.subscore(cat("solar", values=[val("pv_kwh_per_kwp", 1250)])) == 50

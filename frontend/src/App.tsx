@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { MapPin, Moon, Sun } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router'
+import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
+import { SiteNav, type Theme } from './components/SiteNav'
 import { BRAND } from './lib/brand'
 import { AboutPage } from './pages/AboutPage'
 import { ComparePage } from './pages/ComparePage'
@@ -15,7 +16,6 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 10 * 60 * 1000, refetchOnWindowFocus: false } },
 })
 
-type Theme = 'light' | 'dark'
 const THEME_KEY = 'prije-potpisa-tema'
 
 function initialTheme(): Theme {
@@ -51,7 +51,7 @@ const TITLES: Record<string, string> = {
   '/': `${BRAND.name}: ${BRAND.tagline}`,
   '/izvjestaj': `Izvještaj za adresu · ${BRAND.name}`,
   '/usporedi': `Usporedba dviju lokacija · ${BRAND.name}`,
-  '/pronadi': `Pronađi mjesto za život · ${BRAND.name}`,
+  '/predlozi': `Predloži mjesto za život · ${BRAND.name}`,
   '/izvori': `Izvori podataka · ${BRAND.name}`,
   '/o-alatu': `O alatu i metodologiji · ${BRAND.name}`,
 }
@@ -64,6 +64,12 @@ function TitleAndFocus() {
     window.scrollTo(0, 0)
   }, [pathname])
   return null
+}
+
+/** The old address of "Predloži mjesto" (until 6. 11. 2026.), with its query kept. */
+function FindRedirect() {
+  const { search, hash } = useLocation()
+  return <Navigate to={{ pathname: '/predlozi', search, hash }} replace />
 }
 
 function Layout() {
@@ -81,37 +87,7 @@ function Layout() {
             </span>
             <span className="brand-name">{BRAND.name}</span>
           </NavLink>
-          <nav className="site-nav" aria-label="Glavna navigacija">
-            <ul>
-              <li>
-                <NavLink to="/pronadi">
-                  Pronađi<span className="nav-long">mjesto</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/usporedi">Usporedi</NavLink>
-              </li>
-              <li className="nav-about">
-                <NavLink to="/o-alatu">O alatu</NavLink>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="theme-toggle"
-                  onClick={toggleTheme}
-                  aria-pressed={theme === 'dark'}
-                  aria-label="Tamna tema"
-                  title="Tamna tema"
-                >
-                  {theme === 'dark' ? (
-                    <Sun size={18} aria-hidden="true" />
-                  ) : (
-                    <Moon size={18} aria-hidden="true" />
-                  )}
-                </button>
-              </li>
-            </ul>
-          </nav>
+          <SiteNav theme={theme} onToggleTheme={toggleTheme} />
         </div>
       </header>
       <TitleAndFocus />
@@ -121,7 +97,8 @@ function Layout() {
             <Route path="/" element={<HomePage />} />
             <Route path="/izvjestaj" element={<ReportPage />} />
             <Route path="/usporedi" element={<ComparePage />} />
-            <Route path="/pronadi" element={<FindPage />} />
+            <Route path="/predlozi" element={<FindPage />} />
+            <Route path="/pronadi" element={<FindRedirect />} />
             <Route path="/izvori" element={<SourcesPage />} />
             <Route path="/o-alatu" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} />

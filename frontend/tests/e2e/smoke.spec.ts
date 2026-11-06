@@ -32,7 +32,7 @@ test('main flow: search an address and read the report, environment first', asyn
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Franje Kuhača 9, Osijek')
   const sections = page.locator('main h2:not(.visually-hidden)')
   await expect(sections.first()).toHaveText('Okolišni pregled')
-  for (const title of ['Poplave', 'Kvaliteta zraka', 'Toplina i zelenilo', 'Promet u blizini', 'Sunce na krovu']) {
+  for (const title of ['Poplave', 'Kvaliteta zraka', 'Zelenilo i hlad', 'Udaljenost od prometnica', 'Sunce na krovu']) {
     await expect(page.getByRole('heading', { level: 3, name: title })).toBeVisible()
   }
   await expect(page.getByRole('heading', { name: 'Život bez auta' })).toBeVisible()
@@ -43,6 +43,29 @@ test('main flow: search an address and read the report, environment first', asyn
   await floodCard.getByText('Detalji i izvor').click()
   await expect(floodCard.getByText(/Izvor:/)).toBeVisible()
   await expect(page.getByText(/informativni alat/i).first()).toBeVisible()
+})
+
+test('address search reads addresses as people write them and says what it did not find', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const search = page.getByRole('combobox', { name: 'Adresa ili naselje' })
+  // A school's address without a comma, and Enter before the suggestions appear.
+  await search.fill('Ivana Rendića 6 Rijeka')
+  await search.press('Enter')
+  await expect(page).toHaveURL(/\/izvjestaj\?/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ivana Rendića 6, Rijeka')
+
+  await page.goto('/')
+  await search.fill('Gundulićeva 23 A, Zagreb')
+  await expect(page.getByRole('option', { name: /Gundulićeva ulica 23A, Zagreb/ })).toBeVisible()
+  await search.fill('Ilica 999, Zagreb')
+  await expect(page.getByRole('option', { name: /^Ilica, Zagreb/ })).toContainText(
+    'Kućni broj 999 nije u registru adresa',
+  )
+  await expectNoAxeViolations(page)
+  await search.fill('Qwxzy 5')
+  await expect(page.getByText(/^Nema prijedloga\./)).toBeVisible()
 })
 
 test('settlement search opens its centre and says so', async ({ page }) => {
@@ -74,7 +97,7 @@ test('life score has visible, adjustable weights', async ({ page }) => {
 })
 
 test('find a place to live ranks settlements with reasons', async ({ page }) => {
-  await page.goto('/pronadi')
+  await page.goto('/predlozi')
   await page.getByLabel('Područje').selectOption({ label: 'Vukovarsko-srijemska županija' })
   await page.getByRole('checkbox', { name: 'Vrtić' }).check()
   await page.getByRole('button', { name: 'Predloži mjesta' }).click()
@@ -83,6 +106,94 @@ test('find a place to live ranks settlements with reasons', async ({ page }) => 
   await expect(results.first().getByText(/Najjače:/)).toBeVisible()
   await results.first().getByRole('link', { name: 'Otvori izvještaj' }).click()
   await expect(page.getByText(/Prikazano je središte naselja/)).toBeVisible()
+})
+
+test('listing filters close on a click outside or Escape and are shared by all places', async ({
+  page,
+}) => {
+  await page.goto('/predlozi')
+  await page.getByRole('button', { name: 'Predloži mjesta' }).click()
+  const cards = page.locator('.find-results > li')
+  await expect(cards.nth(1)).toBeVisible()
+
+  const firstButton = cards.nth(0).getByRole('button', { name: 'Pogledaj oglase' })
+  await firstButton.click()
+  await expect(firstButton).toHaveAttribute('aria-expanded', 'true')
+  const firstPanel = cards.nth(0).getByRole('group', { name: 'Pogledaj oglase' })
+  await firstPanel.getByLabel('Što').selectOption('flat')
+  await firstPanel.getByLabel('Najviša cijena (€)').fill('150000')
+  await expect(firstButton).toHaveAttribute('aria-expanded', 'true')
+  await expectNoAxeViolations(page)
+
+  // A click on empty space closes the panel and gives focus back to the button.
+  await page.getByRole('heading', { level: 1 }).click()
+  await expect(firstPanel).toBeHidden()
+  await expect(firstButton).toBeFocused()
+
+  // The next place has the same filters; Escape closes it.
+  const secondButton = cards.nth(1).getByRole('button', { name: 'Pogledaj oglase' })
+  await secondButton.click()
+  const secondPanel = cards.nth(1).getByRole('group', { name: 'Pogledaj oglase' })
+  await expect(secondPanel.getByLabel('Što')).toHaveValue('flat')
+  await expect(secondPanel.getByLabel('Najviša cijena (€)')).toHaveValue('150000')
+  await secondPanel.getByLabel('Najviše m²').focus()
+  await page.keyboard.press('Escape')
+  await expect(secondPanel).toBeHidden()
+  await expect(secondButton).toBeFocused()
+
+  // Reopened, the first place still has its filters.
+  await firstButton.click()
+  await expect(firstPanel.getByLabel('Najviša cijena (€)')).toHaveValue('150000')
+})
+
+test('main navigation: order, current page, menu on a phone and the old address', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 800 })
+  await page.goto('/')
+  const nav = page.getByRole('navigation', { name: 'Glavna navigacija' })
+  const menu = nav.getByRole('button', { name: 'Izbornik' })
+  await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toBeHidden()
+  await menu.click()
+  await expect(menu).toHaveAttribute('aria-expanded', 'true')
+  await expect(nav.getByRole('link')).toHaveText([
+    'Provjeri adresu',
+    'Predloži mjesto',
+    'Usporedi',
+    'O alatu',
+  ])
+  await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  )
+  await expectNoAxeViolations(page)
+  await page.keyboard.press('Escape')
+  await expect(menu).toHaveAttribute('aria-expanded', 'false')
+  await expect(menu).toBeFocused()
+
+  await menu.click()
+  await nav.getByRole('link', { name: 'Predloži mjesto' }).click()
+  await expect(page).toHaveURL(/\/predlozi$/)
+  await expect(menu).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.locator('.eyebrow')).toHaveText('Predloži mjesto za život')
+  await expect(page).toHaveTitle(/^Predloži mjesto za život/)
+
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await expect(menu).toBeHidden()
+  await expect(nav.getByRole('link', { name: 'Predloži mjesto' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  )
+  await page.goto(reportUrl)
+  await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toHaveAttribute(
+    'aria-current',
+    'true',
+  )
+
+  // Links to the old address keep working, with their parameters.
+  await page.goto('/pronadi?profil=obitelj')
+  await expect(page).toHaveURL(/\/predlozi\?profil=obitelj$/)
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Gdje bih mogao živjeti')
 })
 
 test('assistant answers from the report', async ({ page }) => {
@@ -133,7 +244,7 @@ for (const theme of ['light', 'dark'] as const) {
       ['report', reportUrl, first.address],
       ['compare', compareUrl, 'Usporedba dviju adresa'],
       ['sources', '/izvori', 'Izvori podataka'],
-      ['find', '/pronadi', 'Gdje bih mogao živjeti'],
+      ['find', '/predlozi', 'Gdje bih mogao živjeti'],
       ['about', '/o-alatu', 'O alatu i metodologiji'],
     ]
     for (const [name, url, heading] of pages) {

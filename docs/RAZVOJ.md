@@ -185,7 +185,7 @@ uv run python -m ingest.settlement_profiles
 cd ..
 ```
 
-Bez tog koraka sve radi osim stranice „Pronađi mjesto”.
+Bez tog koraka sve radi osim stranice „Predloži mjesto”.
 
 ### Ako imate `make`
 

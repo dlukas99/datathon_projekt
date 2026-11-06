@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import atexit
 import math
+import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -327,6 +328,43 @@ def _air_status(pollutant: str, value: float) -> Status:
 _STATUS_ORDER: dict[Status, int] = {"good": 0, "info": 1, "warning": 2, "bad": 3, "no_data": -1}
 _BAND_ORDER = ["vrlo niska", "niska", "umjerena", "visoka"]
 
+# The card rates the air itself, so "low pollution" never reads as "low quality". The
+# levels above stay the keys used by the score and the settlement finder.
+AIR_RATINGS: dict[str, str] = {
+    "vrlo niska": "Vrlo dobar",
+    "niska": "Dobar",
+    "umjerena": "Umjeren",
+    "visoka": "Loš",
+}
+AIR_SENTENCES: dict[str, str] = {
+    "vrlo niska": (
+        "Kroz godinu je zrak ovdje vrlo čist: prosjek onečišćenja unutar je preporuke "
+        "Svjetske zdravstvene organizacije."
+    ),
+    "niska": (
+        "Kroz godinu je zrak ovdje uglavnom čist: prosjek onečišćenja unutar je granice EU-a "
+        "za 2030., ali iznad strože preporuke Svjetske zdravstvene organizacije."
+    ),
+    "umjerena": (
+        "Kroz godinu je zrak ovdje umjereno onečišćen: prosjek je unutar granice EU-a koja "
+        "vrijedi danas, ali iznad strože granice za 2030."
+    ),
+    "visoka": (
+        "Kroz godinu je zrak ovdje onečišćen: prosjek je iznad granične vrijednosti EU-a "
+        "koja vrijedi danas."
+    ),
+}
+
+
+def air_level(cat: Category) -> str | None:
+    """The worse of the PM2.5 and NO2 levels ("vrlo niska" to "visoka"), or None."""
+    levels = [s.band for s in cat.scales if s.band in _BAND_ORDER]
+    return max(levels, key=_BAND_ORDER.index) if levels else None
+
+
+def _pair(limits: dict[str, float]) -> str:
+    return f"PM2,5 {fmt.num(limits['pm25'])} µg/m³, NO2 {fmt.num(limits['no2'])} µg/m³"
+
 
 def _compare_sentence(name: str, pollutant: str, value: float) -> str:
     who, eu30, now = WHO_2021[pollutant], EU_2030[pollutant], EU_NOW[pollutant]
@@ -366,7 +404,7 @@ def air_category(lon: float, lat: float) -> Category:
                 label=f"{name}, godišnji prosjek 2024.",
                 value=round(value, 1),
                 unit="µg/m³",
-                display=f"{fmt.num(value, 1)} µg/m³ ({band})",
+                display=f"{fmt.num(value, 1)} µg/m³ ({band} razina)",
                 source=src,
                 retrieved_at=retrieved_at(src),
                 kind="modelled",
@@ -376,7 +414,7 @@ def air_category(lon: float, lat: float) -> Category:
         scales.append(
             Scale(
                 key=pollutant,
-                label=f"{name}, godišnji prosjek",
+                label=f"Razina onečišćenja {name}, godišnji prosjek",
                 unit="µg/m³",
                 value=round(value, 1),
                 band=band,
@@ -405,31 +443,36 @@ def air_category(lon: float, lat: float) -> Category:
             links=links,
         )
     worst = max(bands, key=lambda b: _BAND_ORDER.index(b[0]))
-    headline = f"Razina onečišćenja zraka je {worst[0]} (godišnji prosjek, karta EEA-e za 2024.)."
     return Category(
         id="air",
         group="environment",
         title="Kvaliteta zraka",
         status=worst[1],
-        status_label=worst[0].capitalize(),
-        headline=headline,
+        status_label=AIR_RATINGS[worst[0]],
+        headline=AIR_SENTENCES[worst[0]],
         values=values,
         links=links,
         scales=scales,
         notes=[
-            "Ljestvica: vrlo niska do smjernice WHO-a, niska do granične vrijednosti EU-a za "
-            "2030., umjerena do granične vrijednosti EU-a koja vrijedi danas, visoka iznad nje.",
+            "Ocjena je lošija od ocjena za PM2,5 i NO2 (godišnji prosjek, karta EEA-e za "
+            f"2024.): vrlo dobar do smjernice Svjetske zdravstvene organizacije "
+            f"({_pair(WHO_2021)}), dobar do granične vrijednosti EU-a za 2030. "
+            f"({_pair(EU_2030)}), umjeren do granične vrijednosti EU-a koja vrijedi danas "
+            f"({_pair(EU_NOW)}), loš iznad nje.",
             "Karta EEA-e procjena je godišnjeg prosjeka na mreži od 1 km, izrađena iz mjerenja "
             "i modela. Nije mjerenje na samoj adresi i ne služi za službenu provjeru "
             "usklađenosti s graničnim vrijednostima.",
             "Karta prikazuje pozadinsku razinu: uz prometne ulice NO2 može biti znatno viši "
             "(u našoj provjeri prometne postaje u Zagrebu i Osijeku mjerile su 5–17 µg/m³ više "
-            "od karte). Vidi i kategoriju „Promet u blizini”.",
+            "od karte). Vidi i kategoriju „Udaljenost od prometnica”.",
         ],
     )
 
 
-# --- Greenery and heat -------------------------------------------------------------------
+# --- Greenery and shade -------------------------------------------------------------------
+
+# Tree cover and the nearest park stand in for shade; temperature is not measured.
+GREEN_TITLE = "Zelenilo i hlad"
 
 
 def _worldcover_path(lon: float, lat: float) -> Path:
@@ -480,8 +523,8 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
                     source=src,
                     retrieved_at=retrieved_at(src),
                     kind="modelled",
-                    note="Udio kopnenih površina; vodene površine nisu uračunate."
-                    if key == "built"
+                    note="Udio kopna; more i druge vodene površine nisu uračunate."
+                    if key == "tree"
                     else None,
                 )
             )
@@ -512,7 +555,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
         return Category(
             id="green",
             group="environment",
-            title="Toplina i zelenilo",
+            title=GREEN_TITLE,
             status="no_data",
             status_label=label("no_data"),
             headline="Podaci o pokrovu tla za ovu lokaciju nisu dostupni.",
@@ -527,7 +570,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
     else:
         status = "bad"
     tree_txt = (
-        f"Drveće pokriva {fmt.num(cover['tree'])} % površine u krugu od 300 m "
+        f"Drveće pokriva {fmt.num(cover['tree'])} % kopna u krugu od 300 m "
         f"({'na razini ili iznad' if tree_ok else 'ispod'} preporučenih 30 %)"
     )
     if park_ok is None:
@@ -539,30 +582,30 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
     return Category(
         id="green",
         group="environment",
-        title="Toplina i zelenilo",
+        title=GREEN_TITLE,
         status=status,
         status_label=label(status),
         headline=f"{tree_txt}; {park_txt}.",
         values=values,
         places=[nearest_park] if nearest_park else [],
         notes=[
-            "Drveće i zelene površine ublažavaju vrućine ljeti. Usporedba se temelji na "
-            "pravilu 3-30-300 (najmanje 30 % krošnji u susjedstvu i javna zelena površina "
-            "do 300 m od kuće).",
-            "Pokrov tla iz satelitske karte ESA WorldCover za 2021. u rezoluciji 10 m.",
+            "Drveće ljeti daje hlad i ublažava vrućine. Temperaturu ne mjerimo; usporedba se "
+            "temelji na pravilu 3-30-300 (najmanje 30 % krošnji u susjedstvu i javna zelena "
+            "površina do 300 m od kuće).",
+            "Udjeli su iz satelitske karte ESA WorldCover za 2021. u rezoluciji 10 m, za kopno "
+            "u krugu od 300 m od lokacije; more i druge vodene površine nisu uračunate. Drveće "
+            "su krošnje koje karta prepoznaje kao drveće; zelene površine uključuju i grmlje, "
+            "travnjake i močvare.",
+            "Karta u rezoluciji 10 m ne razlikuje pojedinačna stabla u dvorištima i uz ulice kad "
+            "je oko njih izgrađeno, pa je udio drveća u gusto izgrađenim središtima i selima s "
+            "vrtovima vjerojatno nešto veći.",
         ],
     )
 
 
-# --- Traffic nearby (proxy for traffic noise and exhaust) ---------------------------------
+# --- Distance from major roads (proxy for traffic noise and exhaust) ---------------------
 
-NOISE_KINDS = {
-    "motorway": "autocesta",
-    "trunk": "brza cesta",
-    "primary": "glavna cesta",
-    "secondary": "važnija cesta",
-    "rail": "željeznička pruga",
-}
+NOISE_TITLE = "Udaljenost od prometnica"
 # HEI (2010), Special Report 17: traffic pollution is highest within roughly 300 to 500 m
 # of a major road and falls to background levels beyond that.
 TRAFFIC_BANDS: list[tuple[float | None, str, Status]] = [
@@ -570,6 +613,25 @@ TRAFFIC_BANDS: list[tuple[float | None, str, Status]] = [
     (500.0, "Rub zone prometa", "info"),
     (None, "Podalje od prometnica", "good"),
 ]
+_COUNTY_REF = re.compile(r"\d{4}")
+
+
+def road_name(kind: str, ref: str) -> str:
+    """Croatian road class from OSM tags (wiki "Croatia/Ceste"): motorway is an autocesta,
+    trunk a brza cesta, primary a državna cesta (ref D…), secondary a županijska cesta
+    (four-digit ref, no prefix in OSM) or a former one inside a city (no ref)."""
+    first = (ref or "").split(";")[0].strip()
+    if kind == "rail":
+        return "željeznička pruga"
+    if kind == "motorway":
+        return f"autocesta {first}" if first.startswith("A") else "autocesta"
+    if kind == "trunk":
+        return f"brza cesta {first}" if first[:1] in ("A", "D") else "brza cesta"
+    if kind == "primary":
+        return f"državna cesta {first}" if first.startswith("D") else "glavna cesta"
+    if _COUNTY_REF.fullmatch(first):
+        return f"županijska cesta Ž{first}"
+    return "županijska ili glavna gradska cesta" if not first else "važnija cesta"
 
 
 def traffic_band(distance_m: float) -> tuple[str, Status]:
@@ -579,9 +641,8 @@ def traffic_band(distance_m: float) -> tuple[str, Status]:
     raise ValueError(distance_m)
 
 
-def _traffic_sentence(kind: str, distance: float) -> str:
-    road = NOISE_KINDS[kind].capitalize()
-    where = f"{road} je {fmt.metres(distance)} od adrese"
+def _traffic_sentence(road: str, distance: float) -> str:
+    where = f"{road[:1].upper()}{road[1:]} je {fmt.metres(distance)} od lokacije"
     if distance <= 300:
         return (
             f"{where}, unutar 300 m, gdje su buka i ispušni plinovi prometa obično najizraženiji."
@@ -594,12 +655,11 @@ def _traffic_sentence(kind: str, distance: float) -> str:
 def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     lines = layers.noise_lines
     links = [Link(label="Strateške karte buke (EEA, preglednik)", url=EEA_NOISE_VIEWER)]
-    title = "Promet u blizini"
     if lines is None:
         return Category(
             id="noise",
             group="environment",
-            title=title,
+            title=NOISE_TITLE,
             status="no_data",
             status_label=label("no_data"),
             headline="Podaci o prometnicama nisu dostupni.",
@@ -613,10 +673,10 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         group = "rail" if kind == "rail" else "road"
         d = float(lines.geoms[int(i)].distance(origin))
         if group not in nearest or d < nearest[group][0]:
-            nearest[group] = (d, kind)
+            nearest[group] = (d, road_name(kind, lines.refs[int(i)]))
     values: list[Value] = []
     for group, value_label in (
-        ("road", "Najbliža autocesta, glavna ili važnija cesta"),
+        ("road", "Najbliža autocesta, brza, državna ili županijska cesta"),
         ("rail", "Najbliža pruga"),
     ):
         found = nearest.get(group)
@@ -626,11 +686,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
                 label=value_label,
                 value=round(found[0]) if found else None,
                 unit="m",
-                display=(
-                    f"{fmt.metres(found[0])} ({NOISE_KINDS[found[1]]})"
-                    if found
-                    else "dalje od 2 km"
-                ),
+                display=f"{fmt.metres(found[0])} ({found[1]})" if found else "dalje od 2 km",
                 source="osm",
                 retrieved_at=retrieved_at("osm"),
                 kind="estimate",
@@ -643,10 +699,10 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     sentences = [
         _traffic_sentence(road[1], road[0])
         if road
-        else "U krugu od 2 km nema autoceste, brze, glavne ni važnije ceste."
+        else "U krugu od 2 km nema autoceste, brze, državne ni županijske ceste."
     ]
     if rail and rail[0] <= 500:
-        sentences.append(f"Željeznička pruga je {fmt.metres(rail[0])} od adrese.")
+        sentences.append(f"Željeznička pruga je {fmt.metres(rail[0])} od lokacije.")
     scale = Scale(
         key="road_distance",
         label="Udaljenost od velike prometnice",
@@ -659,7 +715,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     return Category(
         id="noise",
         group="environment",
-        title=title,
+        title=NOISE_TITLE,
         status=status,
         status_label=band,
         headline=" ".join(sentences),
@@ -667,11 +723,15 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         links=links,
         scales=[scale],
         notes=[
-            "Ne mjerimo buku: ovo je procjena prema udaljenosti od autocesta, brzih, glavnih i "
-            "važnijih cesta te pruga iz OpenStreetMapa.",
+            "Ne mjerimo buku: ovo je procjena prema zračnoj udaljenosti od lokacije (adrese ili "
+            "središta naselja) do osi najbliže autoceste, brze, državne ili županijske ceste "
+            "(u gradovima i bivše županijske ceste, danas glavne gradske ulice) te pruge iz "
+            "OpenStreetMapa. Ostale ulice se ne broje.",
             "Pojasevi slijede pregled istraživanja Health Effects Institutea (2010.): "
             "onečišćenje od prometa najveće je unutar približno 300 do 500 m od velike "
             "prometnice, a dalje pada na pozadinsku razinu.",
+            "U Skoru za život veći broj znači manje prometa: 100 je dalje od 500 m od velike "
+            "prometnice, 60 od 300 do 500 m, a 25 do 300 m.",
             "Strateške karte buke za veće gradove mogu se pogledati u pregledniku EEA-e. "
             "Svjetska zdravstvena organizacija preporučuje da buka cestovnog prometa bude "
             "ispod 53 dB Lden danju i 45 dB Lnight noću.",

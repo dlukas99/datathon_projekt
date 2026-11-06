@@ -36,6 +36,12 @@ RE_TEXT = re.compile(rb"<gn:text>([^<]*)</gn:text>")
 RE_ALT = re.compile(rb"<ad:alternativeIdentifier>([^<]*)</ad:alternativeIdentifier>")
 RE_POS = re.compile(rb"<gml:pos>([-0-9.]+) ([-0-9.]+)</gml:pos>")
 RE_DESIGNATOR = re.compile(rb"<ad:LocatorDesignator><ad:designator>([^<]*)</ad:designator>")
+# Every part of a house number with its INSPIRE type: addressNumber (45),
+# addressNumberExtension (A) and addressNumber2ndExtension (1).
+RE_LOCATOR = re.compile(
+    rb"<ad:LocatorDesignator><ad:designator>([^<]*)</ad:designator>\s*"
+    rb'<ad:type xlink:href="[^"]*/(\w+)"'
+)
 RE_COMPONENT = re.compile(rb'<ad:component xlink:href="#([A-Za-z]+)\.([0-9]+)"')
 RE_POSTCODE = re.compile(rb"<ad:postCode>([^<]*)</ad:postCode>")
 RE_LEVEL = re.compile(rb'<ad:level xlink:href="[^"]*/([0-9a-zA-Z]+)"')
@@ -62,6 +68,23 @@ def iter_members(zf: zipfile.ZipFile, name: str, block: int = 1 << 24) -> Iterat
 
 def _text(match: re.Match[bytes] | None) -> str:
     return match.group(1).decode("utf-8").strip() if match else ""
+
+
+def house_number(member: bytes) -> str:
+    """ "45", "45A", "25/2" or "12A/1" from an address's locator designators.
+
+    Until 6. 11. 2026. only the first part was kept, so letters and sub-numbers were lost
+    (60.030 of the first 401.839 addresses have a letter).
+    """
+    parts: dict[str, str] = {
+        kind.decode(): value.decode("utf-8").strip() for value, kind in RE_LOCATOR.findall(member)
+    }
+    number = parts.get("addressNumber", "")
+    if not number:
+        return _text(RE_DESIGNATOR.search(member))
+    letter = parts.get("addressNumberExtension", "").upper()
+    sub = parts.get("addressNumber2ndExtension", "")
+    return number + letter + (f"/{sub}" if sub else "")
 
 
 def parse_names(zf: zipfile.ZipFile, name: str) -> dict[str, tuple[str, str]]:
@@ -96,7 +119,7 @@ def addresses(zip_path: Path) -> dict[str, list[object]]:
         ys: list[float] = []
         for member in iter_members(zf, "Address.gml"):
             pos = RE_POS.search(member)
-            number = _text(RE_DESIGNATOR.search(member))
+            number = house_number(member)
             if pos is None or not number:
                 continue
             street = place = code = postcode = ""

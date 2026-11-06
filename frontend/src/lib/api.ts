@@ -109,6 +109,8 @@ export interface Suggestion {
   lon: number
   kind: 'address' | 'street' | 'settlement'
   source: string
+  // What was not found when a street or settlement is offered instead.
+  note?: string | null
 }
 
 export interface LiveSource {

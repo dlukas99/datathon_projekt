@@ -69,16 +69,18 @@ export function AboutPage() {
                 <th scope="row">Kvaliteta zraka</th>
                 <td>Godišnji prosjek PM2,5 i NO2 iz interpoliranih karata EEA-e za 2024. (1 km).</td>
                 <td>
-                  Ljestvica: vrlo niska do smjernice WHO-a (PM2,5 5, NO2 10 µg/m³), niska do
-                  granice EU-a za 2030. (10 i 20), umjerena do granice EU-a koja vrijedi danas
-                  (25 i 40, Direktiva (EU) 2024/2881), visoka iznad toga.
+                  Ocjena zraka, lošija od ocjena za PM2,5 i NO2: vrlo dobar do smjernice WHO-a
+                  (PM2,5 5, NO2 10 µg/m³), dobar do granice EU-a za 2030. (10 i 20), umjeren do
+                  granice EU-a koja vrijedi danas (25 i 40, Direktiva (EU) 2024/2881), loš iznad
+                  toga.
                 </td>
               </tr>
               <tr>
-                <th scope="row">Toplina i zelenilo</th>
+                <th scope="row">Zelenilo i hlad</th>
                 <td>
-                  Udio drveća, zelenih i izgrađenih površina u krugu od 300 m (ESA WorldCover
-                  2021., 10 m) i najbliži park (OpenStreetMap).
+                  Udio drveća, zelenih i izgrađenih površina u kopnu u krugu od 300 m (ESA
+                  WorldCover 2021., 10 m; more se ne broji) i najbliži park (OpenStreetMap).
+                  Temperaturu ne mjerimo: drveće je pokazatelj hlada.
                 </td>
                 <td>
                   Pravilo 3-30-300 (Konijnendijk, 2023.): najmanje 30 % krošnji i javna zelena
@@ -86,9 +88,9 @@ export function AboutPage() {
                 </td>
               </tr>
               <tr>
-                <th scope="row">Promet u blizini</th>
+                <th scope="row">Udaljenost od prometnica</th>
                 <td>
-                  Udaljenost od autocesta, brzih, glavnih i važnijih cesta te pruga
+                  Zračna udaljenost od lokacije do autocesta, brzih, državnih i županijskih cesta te pruga
                   (OpenStreetMap). Ne mjerimo buku; to je zamjenski pokazatelj.
                 </td>
                 <td>

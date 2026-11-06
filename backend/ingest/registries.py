@@ -60,13 +60,17 @@ def number_key(text: str) -> str:
 
 
 def split_address(address: str) -> tuple[str, str]:
-    """'J.J.Strossmayera 82' -> ('J.J.Strossmayera', '82'); number may be missing."""
+    """'J.J.Strossmayera 82' -> ('J.J.Strossmayera', '82'); number may be missing.
+
+    A letter written after a slash or dash belongs to the number ('23/a' -> '23a', as in the
+    DGU addresses); a sub-number does not ('25/2' -> '25').
+    """
     address = address.strip().rstrip(",")
-    m = re.search(r"\s(\d+\s*[a-zA-Z]?)(\s*[-/,].*)?$", " " + address)
+    m = re.search(r"\s(\d+)(?:\s*[-/]?\s*([a-zA-Z])(?![a-zA-Z]))?(\s*[-/,].*)?$", " " + address)
     if not m:
         return address, ""
     street = (" " + address)[: m.start()].strip(" ,")
-    return street, number_key(m.group(1))
+    return street, m.group(1) + (m.group(2) or "").lower()
 
 
 def street_tokens(text: str) -> list[str]:
@@ -91,6 +95,8 @@ class AddressIndex:
     streets_post: dict[str, list[int]] = field(default_factory=dict)
     streets_place: dict[str, list[int]] = field(default_factory=dict)
     street: list[str] = field(default_factory=list)
+    place: list[str] = field(default_factory=list)  # normalised settlement of each row
+    number: list[str] = field(default_factory=list)  # number key of each row
     lon: list[float] = field(default_factory=list)
     lat: list[float] = field(default_factory=list)
 
@@ -102,8 +108,12 @@ class AddressIndex:
             num = number_key(t["housenumber"][i])
             post = t["postcode"][i]
             place = normalize(t["place"][i])
-            idx.by_post.setdefault((post, num), []).append(i)
-            idx.by_place.setdefault((place, num), []).append(i)
+            idx.place.append(place)
+            idx.number.append(num)
+            # Keyed by the digits, so "32" also finds "32B" on the same street.
+            base = _digits(num)
+            idx.by_post.setdefault((post, base), []).append(i)
+            idx.by_place.setdefault((place, base), []).append(i)
             idx.streets_post.setdefault(post, []).append(i)
             idx.streets_place.setdefault(place, []).append(i)
         return idx
@@ -113,16 +123,19 @@ class AddressIndex:
     ) -> tuple[float, float, str] | None:
         street, num = split_address(address)
         place_n = normalize(place)
-        pools: list[list[int]] = []
         if num:
+            # The registry's postcode first, then its place, as before; inside each, the
+            # best-fitting address (_best), with letter variants of the number as candidates.
+            pools: list[list[int]] = []
             if postcode:
-                pools.append(self.by_post.get((postcode, num), []))
+                pools.append(self.by_post.get((postcode, _digits(num)), []))
             if place_n:
-                pools.append(self.by_place.get((place_n, num), []))
-        for pool in pools:
-            best = self._best(street, pool)
-            if best is not None:
-                return self.lon[best], self.lat[best], "address"
+                pools.append(self.by_place.get((place_n, _digits(num)), []))
+            written = f" {normalize(address)} "
+            for pool in pools:
+                best = self._best(street, pool, place_n, num, written)
+                if best is not None:
+                    return self.lon[best], self.lat[best], "address"
         # Street-level fallback: a middle address of the matching street.
         for pool in (self.streets_post.get(postcode, []), self.streets_place.get(place_n, [])):
             if not pool or not street:
@@ -132,22 +145,41 @@ class AddressIndex:
                 scored.setdefault(self.street[i], []).append(i)
             ranked = sorted(((street_score(street, s), s) for s in scored), key=lambda x: -x[0])
             if ranked and ranked[0][0] >= 0.99:
-                rows = scored[ranked[0][1]]
-                mid = rows[len(rows) // 2]
+                rows_of = scored[ranked[0][1]]
+                mid = rows_of[len(rows_of) // 2]
                 return self.lon[mid], self.lat[mid], "street"
         return None
 
-    def _best(self, street: str, pool: list[int]) -> int | None:
-        if not pool:
+    def _best(
+        self, street: str, rows: list[int], place: str, num: str, written: str = ""
+    ) -> int | None:
+        """The address that fits best: a street name that matches, then a settlement named in
+        the address itself ("Sarvaš, Kolodvorska 4/a" with the post office Osijek as place),
+        then the registry's place, then the same number. Until 6. 11. 2026. the number decided
+        first, so "Varaždinska 32, Jalžabet" could land on Varaždinska 32 in a neighbouring
+        settlement with the same postcode while Jalžabet has only 32B."""
+        if not rows:
             return None
         if not street_tokens(street):
-            return pool[0] if len({self.street[i] for i in pool}) == 1 else None
-        best_i, best_s = None, 0.0
-        for i in pool:
+            # No street words (e.g. a village address): only an unambiguous exact number.
+            exact = [i for i in rows if self.number[i] == num]
+            return exact[0] if exact and len({self.street[i] for i in exact}) == 1 else None
+        best_i: int | None = None
+        best_key: tuple[bool, bool, bool, bool, float] | None = None
+        for i in rows:
             s = street_score(street, self.street[i])
-            if s > best_s:
-                best_i, best_s = i, s
-        return best_i if best_s >= 0.5 else None
+            if s < 0.5:
+                continue
+            named = f" {self.place[i]} " in written and self.place[i] != place
+            key = (s >= 0.99, named, self.place[i] == place, self.number[i] == num, s)
+            if best_key is None or key > best_key:
+                best_i, best_key = i, key
+        return best_i
+
+
+def _digits(number: str) -> str:
+    m = re.match(r"\d+", number)
+    return m.group(0) if m else number
 
 
 @dataclass
