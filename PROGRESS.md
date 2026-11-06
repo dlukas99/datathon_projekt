@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-06 11:38
+Zadnje ažurirano: 2026-11-06 17:05
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -47,7 +47,10 @@ Zadnje ažurirano: 2026-11-06 11:38
 - Imena tima, mentora i visokog učilišta u README (`TODO(tim)`).
 - Javni repozitorij na GitHubu i push grane `main`.
 - Poslužitelj, domena i postavljanje prema `docs/DEPLOY.md`; demo URL u README (`TODO(ljudi)`).
-- Po želji ključ za jezični model (`LLM_*`).
+- Po želji ključ za jezični model (`LLM_*`); prijedlog asistenta koji odgovara iz podataka i cijene modela su u `docs/NALAZI_TESTIRANJA.md` (točka 8).
+- Zatražiti od HAKOM-a objavu slojeva dostupnosti interneta i pokrivenosti signalom pod otvorenom licencom ili dopuštenje (`docs/NALAZI_TESTIRANJA.md`, točka 4).
+- Prenijeti na poslužitelj ponovno obrađene adrese, registre, točke i profile naselja (`scripts/upload_data.sh`) ili pokrenuti `make data`.
+- Ručno provjeriti ploču „Pogledaj oglase” i „Izbornik” u Firefoxu i Safariju te s čitačem zaslona.
 - Snimanje videa prema `docs/VIDEO_SCENARIJ.md` i poveznica u README.
 - Slanje rješenja e-poštom na open.data@mpudt.hr do 9. 11. 2026. u 24:00 (popis u `docs/PREDAJA.md`).
 
@@ -68,6 +71,19 @@ Redoslijed (procjena):
 11. [x] Dokumentacija, scenarij videa, snimke zaslona (1 h)
 12. [x] Popravak poveznica na oglasnike (5. 11.): Njuškalo, Index Oglasi i Nekretnine.hr otvaraju pretragu s mjestom, vrstom, kupnjom ili najmom, cijenom i površinom; Index treba UUID mjesta, zasad upisan za 7 lokacija (`config/listing_locations.json`), ostalo čeka odluku o pokretanju `ingest.listing_locations`.
 13. [x] Karta hoda (6. 11.): karta preko cijele širine s gumbom za cijeli zaslon i legendom ispod nje; vrste mjesta kao gumbi s brojem unutar 15 min i najbližim vremenom; pješački put po ulicama do najbližeg mjesta (i izvan 15 min) iz legende, s točke na karti ili iz popisa „Svakodnevni život”, uz „Sljedeći najbliži”. Put računa vlastiti Valhalla (`GET /api/route`) istom brzinom kao izvještaj; uz put stoji isto vrijeme kao u popisu, a vrijeme same rute od njega odstupa najviše 8 s (435 mjesta, šest demo adresa). Testovi: pytest 83, Vitest 27, Playwright 44.
+14. [x] Nalazi testiranja (6. 11.), osam prijava, istraživanje i popravci u `docs/NALAZI_TESTIRANJA.md`:
+    - **zrak:** jedna ocjena i rečenica;
+    - **„Zelenilo i hlad”:** jasno što se broji, provjera uz ortofoto;
+    - **oglasi:** ploča se zatvara klikom izvan i tipkom Esc, filtri zajednički;
+    - **asistent:** kaže kad ne razumije ili nema podataka;
+    - **izbornik:** Provjeri adresu · Predloži mjesto, `/predlozi`;
+    - **„Udaljenost od prometnica”:** vrsta ceste s oznakom;
+    - **pretraga adresa:**
+      - slovo i podbroj kućnog broja (19 % adresa prije nije bilo moguće pronaći), upit bez zareza, s poštanskim brojem ili općinom, drugi oblik naziva ulice i zamjenski prijedlog s napomenom;
+      - 24 adrese škola: 12 → 22 točno;
+      - registri ponovno geokodirani: 247 točaka na točnoj adresi umjesto sredine ulice, oko 50 premješteno iz susjednog naselja.
+    - **Internet** (HAKOM bez otvorene licence) i **jezični model** samo su prijedlozi.
+    - **Testovi:** pytest 139, Vitest 52, Playwright 50.
 
 Ako ponestane vremena, režem ovim redom:
 - ML ostaje samo evaluacija u `docs/ML.md`;

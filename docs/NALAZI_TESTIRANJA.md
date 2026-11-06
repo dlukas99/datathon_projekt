@@ -304,6 +304,55 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
   - Integracija jezičnog modela nije napravljena; čeka odobrenje i ključ.
 - **Rizici:** odgovor modela može biti netočan ili izvan opsega, što ublažava provjera brojki; trošak i zlouporaba ublažavaju se ograničenjima.
 
+## Sažetak
+
+### Napravljeno
+
+| # | Što je napravljeno | Commit |
+|---|---|---|
+| 6 | Kartica zraka: ocjena (vrlo dobar, dobar, umjeren, loš) i jedna rečenica; brojke, ljestvice i izvor u „Detalji i izvor”; pragovi WHO 2021 i EU | `fix: air quality card …` |
+| 7 | „Zelenilo i hlad”: jasno što se broji (kopno u krugu od 300 m, bez mora), ograničenje rezolucije, temperatura se ne mjeri; provjera na pet mjesta uz ortofoto | `fix: greenery card …` |
+| 1 | „Pogledaj oglase”: zatvaranje klikom izvan, tipkom Esc i ponovnim klikom, fokus se vraća na gumb, padajući popis ne zatvara ploču; filtri zajednički za sva mjesta | `fix: listing filters panel …` |
+| 8 | Asistent: opće pitanje dobiva sažetak, tema bez podataka iskren odgovor, nerazumljivo pitanje „Ovo pitanje ne razumijem” i popis tema; broj stanovnika iz izvještaja | `fix: assistant says …` |
+| 3 | Izbornik: Provjeri adresu · Predloži mjesto · Usporedi · O alatu; istaknuta trenutačna stranica; „Izbornik” na mobitelu; `/pronadi` preusmjerava na `/predlozi` | `feat: main menu …` |
+| 5 | „Udaljenost od prometnica”: vrsta ceste s oznakom (državna cesta D8, županijska cesta Ž2001), „od lokacije”, objašnjen smjer podskora; „10 m” provjereno na ortofotu | `fix: traffic card …` |
+| 2 | Pretraga adresa: slovo i podbroj kućnog broja, upit bez zareza, poštanski broj, grad ili općina, „bb”, drugi oblik naziva ulice, zamjenski prijedlog s napomenom, vidljiva poruka kad nema prijedloga; 12 → 22 od 24; registri ponovno geokodirani | `fix: address search …` |
+
+### Nije napravljeno i zašto
+
+- **Točka 4, internet:** podaci HAKOM-a o dostupnosti i pokrivenosti nisu objavljeni pod otvorenom licencom (pravilo 3). Napravljen je samo izvještaj s izvorima i prijedlogom kartice.
+- **Jezični model za asistenta (točka 8):** traži ključ, trošak i odobrenje, a CLAUDE.md traži da brojke dolaze iz predložaka. Opisan je kao prijedlog.
+- **Bolji podaci o drveću i temperaturi (točka 7):** novi izvori traže odobrenje.
+- **Drugi pružatelj geokodiranja (točka 2):** nije potreban jer je uzrok bio u obradi i čitanju upita, a službeni podaci DGU-a već se koriste.
+
+### Što treba odlučiti ili nabaviti
+
+1. **Internet:** zatražiti od HAKOM-a objavu slojeva „Dostupnost širokopojasnog pristupa” i karata pokrivenosti na data.gov.hr ili pisano dopuštenje; tek tada kartica „Internet i mobilni signal”.
+2. **Asistent s modelom:** odabrati pružatelja i model (cijene su u točki 8) i pribaviti ključ (`LLM_*` ili `ANTHROPIC_API_KEY`); odobriti novi paket, ako je potreban, i ograničenja broja upita.
+3. **Zelenilo:** odobriti kartu visine krošanja (1 m, CC BY 4.0) i toplinske podatke, ako se želi preciznije drveće i stvarna „toplina”.
+4. **Poslužitelj:** prenijeti ponovno obrađene podatke (`addresses.parquet`, `registry_pois.parquet`, `pois.parquet`, `settlement_profiles.parquet`, `geocoding_report.json`) skriptom `scripts/upload_data.sh` ili pokrenuti `make data`.
+
+### Kako ručno provjeriti
+
+1. **Oglasi:**
+   - „Predloži mjesto” → „Predloži mjesta” → „Pogledaj oglase” na prvom mjestu → odaberite „Stan” i upišite cijenu → kliknite izvan ploče: zatvara se, a fokus je na gumbu;
+   - ponovo otvorite: vrijednosti su iste; otvorite drugo mjesto: iste vrijednosti;
+   - Esc zatvara; dok je popis „Što” otvoren, klik izvan zatvara samo popis.
+2. **Pretraga adresa:**
+   - „Gundulićeva 23 A, Zagreb”, „Banjol 10, Rab” i „Brune Bušića 30, 21000 Split” (s napomenom o nazivu);
+   - „Ivana Rendića 6 Rijeka” pa odmah Enter: otvara se izvještaj za tu adresu;
+   - „Ilica 999, Zagreb”: ulica s napomenom; „Qwxzy 5”: „Nema prijedloga”.
+3. **Izbornik:**
+   - redoslijed stavki;
+   - istaknuta je trenutačna stranica, na izvještaju „Provjeri adresu”;
+   - u uskom prozoru gumb „Izbornik”, koji se zatvara tipkom Esc;
+   - adresa `/pronadi` otvara „Predloži mjesto”.
+4. **Udaljenost od prometnica:** primjer „Grad Vinkovci” pokazuje „10 m (županijska cesta Ž4290)”; u „Detalji i izvor” piše što 100/100 znači; u „Predloži mjesto” razlozi kažu „Udaljenost od prometnica (100/100)”.
+5. **Zrak:** kartica ima ocjenu i jednu rečenicu, a brojke i ljestvice su u „Detalji i izvor”; filtar zraka u „Predloži mjesto” nudi „Dobar ili bolji”.
+6. **Zelenilo i hlad:** rečenica „Drveće pokriva … % kopna u krugu od 300 m” i napomene o tome što se broji.
+7. **Asistent:** pitanja „Kakva je okolina?”, „Gdje je najbliža bolnica?”, „Koliko ima stanovnika?” i „Što mislite o ovome?” daju četiri različita odgovora.
+8. **Firefox, Safari i čitač zaslona:** ručno provjeriti ploču oglasa s padajućim popisom i „Izbornik”. Automatski testovi rade u Chromiumu.
+
 ## Kako ponoviti mjerenja
 
 - Pretraga adresa: `cd backend && uv run python ../scripts/geocode_check.py` (treba `data/processed/addresses.parquet`).
