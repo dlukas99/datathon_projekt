@@ -66,7 +66,7 @@ Redoslijed (procjena):
 9. [x] Validacija zraka uz službene postaje (Zagreb, Osijek, Požega, po 4 lokacije) (1,5 h)
 10. [x] ML: model za godišnji NO2/PM2,5 na postajama, leave-one-station-out, usporedba s EEA; u aplikaciju samo ako je bolji (2 h)
 11. [x] Dokumentacija, scenarij videa, snimke zaslona (1 h)
-12. [x] Karta hoda (6. 11.): karta preko cijele širine s gumbom za cijeli zaslon i legendom ispod nje; vrste mjesta kao gumbi s brojem unutar 15 min i najbližim vremenom; pješački put po ulicama do najbližeg mjesta (i izvan 15 min) iz legende, s točke na karti ili iz popisa „Svakodnevni život”, uz „Sljedeći najbliži”. Put računa vlastiti Valhalla (`GET /api/route`) istom brzinom kao izvještaj; u Splitu se minute puta i popisa poklapaju na svih 51 mjesta. Testovi: pytest 83, Vitest 27, Playwright 44.
+12. [x] Karta hoda (6. 11.): karta preko cijele širine s gumbom za cijeli zaslon i legendom ispod nje; vrste mjesta kao gumbi s brojem unutar 15 min i najbližim vremenom; pješački put po ulicama do najbližeg mjesta (i izvan 15 min) iz legende, s točke na karti ili iz popisa „Svakodnevni život”, uz „Sljedeći najbliži”. Put računa vlastiti Valhalla (`GET /api/route`) istom brzinom kao izvještaj; uz put stoji isto vrijeme kao u popisu, a vrijeme same rute od njega odstupa najviše 8 s (435 mjesta, šest demo adresa). Testovi: pytest 83, Vitest 27, Playwright 44.
 
 Ako ponestane vremena, režem ovim redom:
 - ML ostaje samo evaluacija u `docs/ML.md`;

@@ -104,8 +104,9 @@ def test_parse_route_without_a_path() -> None:
 
 
 def test_minutes_come_from_the_router_time_like_the_report() -> None:
-    # Valhalla adds time at crossings, so 855 m is 11.9 min here, not 855 m / 4.5 km/h
-    # = 11.4 min. The report's walking times use the same router time (rounded to 0.1).
+    # Valhalla adds time at some points of the network, so 855 m is 11.9 min here, not
+    # 855 m / 4.5 km/h = 11.4 min. The report's walking times are the same router time
+    # (rounded to 0.1 min).
     path = valhalla.WalkPath(coordinates=[SPLIT[::-1], NEARBY[::-1]], length_m=855.4, time_s=714.0)
     feature = walk_route.route_feature(path)
     assert feature.properties.walk_minutes == 11.9

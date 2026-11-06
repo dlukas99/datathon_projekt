@@ -86,7 +86,7 @@ def route_payload(start: tuple[float, float], end: tuple[float, float]) -> dict[
     """Request for a walking route between two (lat, lon) points.
 
     Same costing and walking speed as the isochrones and the matrix, so the time of a
-    route equals the walking time in the report.
+    route matches the walking time in the report (within seconds, docs/METODOLOGIJA.md).
     """
     return {
         "locations": [{"lat": start[0], "lon": start[1]}, {"lat": end[0], "lon": end[1]}],
