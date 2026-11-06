@@ -1,4 +1,4 @@
-"""Profiles of settlements for "Pronađi mjesto za život".
+"""Profiles of settlements for "Predloži mjesto za život".
 
 For every settlement with at least MIN_POPULATION inhabitants the same analysis
 as the address report runs at the settlement centre (ingest/centers.py):

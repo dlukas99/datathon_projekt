@@ -226,7 +226,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 - **Objašnjenje:** „najviše podiže” i „najviše spušta” su kategorije s najvećim pozitivnim, odnosno negativnim doprinosom: težina × (podskor − skor).
 - **Ograničenje:** skor je pomoć pri usporedbi, a ne ocjena kvalitete života. Normalizacije označene kao „naše” nisu službeni pragovi.
 
-## Pronađi mjesto za život
+## Predloži mjesto za život (ranije „Pronađi mjesto”)
 
 - **Obuhvat:** sva naselja s najmanje 200 stanovnika (2.347 naselja, 92 % stanovništva Hrvatske prema Popisu 2021.). Manja naselja rijetko imaju ikakve usluge, a njihova bi obrada udvostručila vrijeme.
 - **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, zelenilo, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi podskorovi. Sunce na krovu se izostavlja jer je PVGIS servis uživo.

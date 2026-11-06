@@ -52,7 +52,7 @@ export function FindPage() {
 
   return (
     <>
-      <p className="eyebrow">Pronađi mjesto za život</p>
+      <p className="eyebrow">Predloži mjesto za život</p>
       <h1>Gdje bih mogao živjeti?</h1>
       <p className="lead left">
         Zadajte što vam je važno, a aplikacija predlaže naselja u kojima je to ispunjeno, s

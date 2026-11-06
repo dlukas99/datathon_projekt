@@ -214,16 +214,66 @@ a {
   font-weight: 500;
 }
 
-.nav-long {
-  margin-left: 0.25em;
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .site-nav a:hover {
   background: var(--surface-2);
 }
 
-.site-nav a[aria-current='page'] {
-  background: var(--surface-2);
+/* The current page, and "Provjeri adresu" on a report (aria-current="true"). */
+.site-nav a[aria-current='page'],
+.site-nav a[aria-current='true'] {
+  background: var(--accent-soft);
+  font-weight: 650;
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+@media (width <= 760px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .site-nav .nav-links {
+    display: none;
+  }
+
+  .site-nav .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 0.5rem 1.25rem 1rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .site-nav .nav-links.open a {
+    display: flex;
+    border-radius: var(--radius-sm);
+  }
 }
 
 .theme-toggle {
@@ -1869,15 +1919,6 @@ button.daily-row:hover .daily-show {
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
-  }
-
-  .site-nav a {
-    padding: 0 0.55rem;
-  }
-
-  .nav-long,
-  .nav-about {
-    display: none;
   }
 }
 

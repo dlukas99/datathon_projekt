@@ -74,7 +74,7 @@ test('life score has visible, adjustable weights', async ({ page }) => {
 })
 
 test('find a place to live ranks settlements with reasons', async ({ page }) => {
-  await page.goto('/pronadi')
+  await page.goto('/predlozi')
   await page.getByLabel('Područje').selectOption({ label: 'Vukovarsko-srijemska županija' })
   await page.getByRole('checkbox', { name: 'Vrtić' }).check()
   await page.getByRole('button', { name: 'Predloži mjesta' }).click()
@@ -88,7 +88,7 @@ test('find a place to live ranks settlements with reasons', async ({ page }) => 
 test('listing filters close on a click outside or Escape and are shared by all places', async ({
   page,
 }) => {
-  await page.goto('/pronadi')
+  await page.goto('/predlozi')
   await page.getByRole('button', { name: 'Predloži mjesta' }).click()
   const cards = page.locator('.find-results > li')
   await expect(cards.nth(1)).toBeVisible()
@@ -121,6 +121,56 @@ test('listing filters close on a click outside or Escape and are shared by all p
   // Reopened, the first place still has its filters.
   await firstButton.click()
   await expect(firstPanel.getByLabel('Najviša cijena (€)')).toHaveValue('150000')
+})
+
+test('main navigation: order, current page, menu on a phone and the old address', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 800 })
+  await page.goto('/')
+  const nav = page.getByRole('navigation', { name: 'Glavna navigacija' })
+  const menu = nav.getByRole('button', { name: 'Izbornik' })
+  await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toBeHidden()
+  await menu.click()
+  await expect(menu).toHaveAttribute('aria-expanded', 'true')
+  await expect(nav.getByRole('link')).toHaveText([
+    'Provjeri adresu',
+    'Predloži mjesto',
+    'Usporedi',
+    'O alatu',
+  ])
+  await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  )
+  await expectNoAxeViolations(page)
+  await page.keyboard.press('Escape')
+  await expect(menu).toHaveAttribute('aria-expanded', 'false')
+  await expect(menu).toBeFocused()
+
+  await menu.click()
+  await nav.getByRole('link', { name: 'Predloži mjesto' }).click()
+  await expect(page).toHaveURL(/\/predlozi$/)
+  await expect(menu).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.locator('.eyebrow')).toHaveText('Predloži mjesto za život')
+  await expect(page).toHaveTitle(/^Predloži mjesto za život/)
+
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await expect(menu).toBeHidden()
+  await expect(nav.getByRole('link', { name: 'Predloži mjesto' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  )
+  await page.goto(reportUrl)
+  await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toHaveAttribute(
+    'aria-current',
+    'true',
+  )
+
+  // Links to the old address keep working, with their parameters.
+  await page.goto('/pronadi?profil=obitelj')
+  await expect(page).toHaveURL(/\/predlozi\?profil=obitelj$/)
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Gdje bih mogao živjeti')
 })
 
 test('assistant answers from the report', async ({ page }) => {
@@ -171,7 +221,7 @@ for (const theme of ['light', 'dark'] as const) {
       ['report', reportUrl, first.address],
       ['compare', compareUrl, 'Usporedba dviju adresa'],
       ['sources', '/izvori', 'Izvori podataka'],
-      ['find', '/pronadi', 'Gdje bih mogao živjeti'],
+      ['find', '/predlozi', 'Gdje bih mogao živjeti'],
       ['about', '/o-alatu', 'O alatu i metodologiji'],
     ]
     for (const [name, url, heading] of pages) {

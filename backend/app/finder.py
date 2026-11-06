@@ -1,4 +1,4 @@
-"""Pronađi mjesto za život: deterministic ranking of settlements.
+"""Predloži mjesto za život: deterministic ranking of settlements.
 
 Filters and the weighted Skor za život run over precomputed settlement profiles
 (ingest/settlement_profiles.py). A language model, when configured, may only turn

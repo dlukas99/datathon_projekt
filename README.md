@@ -22,7 +22,7 @@ Ti podaci postoje, ali su rasuti po različitim institucijama i formatima: karte
 Naslovnica ima tri ulaza:
 
 1. **Provjeri adresu:** kako je živjeti na određenoj adresi.
-2. **Pronađi mjesto za život:** aplikacija predlaže naselja prema onome što vam treba.
+2. **Predloži mjesto za život:** aplikacija predlaže naselja prema onome što vam treba.
 3. **Usporedi dvije lokacije:** dvije adrese jedna uz drugu.
 
 Izvještaj za adresu ima tri dijela:
@@ -84,7 +84,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
 - odabir točke klikom na kartu ili povlačenjem oznake
-- **Pronađi mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
+- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
 - **Skor za život** s vidljivim i podesivim težinama po profilu
 - poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
 - okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak s jednom ocjenom, zelenilo i hlad, promet u blizini, požari raslinja, sunčev potencijal
@@ -236,10 +236,10 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 | Povezivanje javno dostupnih podataka | adresa se povezuje s upravnim jedinicama, popisom stanovništva, rasterskim okolišnim slojevima, mrežom ulica, registrima ustanova (geokodiranim nad adresama DGU-a) i voznim redovima |
 | Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i hlad, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
-| Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Pronađi mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
+| Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Predloži mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
 | Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |
 | Tehnička arhitektura i integracijski potencijal | REST i OpenAPI, GeoJSON, INSPIRE i GTFS na ulazu, opisani tehnički, organizacijski i pravni preduvjeti za uvođenje, Docker Compose |
-| Dojam rješenja | tri jasna ulaza (adresa, pronađi mjesto, usporedba); okolišni pregled na prvom ekranu; Skor za život s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
+| Dojam rješenja | tri jasna ulaza i jednako nazvane stavke izbornika (Provjeri adresu, Predloži mjesto, Usporedi); okolišni pregled na prvom ekranu; Skor za život s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
 | Prezentacija rješenja | video u trajanju do 3 minute: TODO(ljudi) (scenarij: [docs/VIDEO_SCENARIJ.md](docs/VIDEO_SCENARIJ.md)) |
 
 ## Privatnost i sigurnost
@@ -256,7 +256,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - Kvaliteta zraka prikazuje se kao godišnji prosjek modelirane karte na mreži od 1 km, a ne kao mjerenje na samoj adresi.
 - „Promet u blizini” je procjena prema udaljenosti od prometnica, a ne mjerenje buke: strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - Karta zraka prikazuje pozadinsku razinu; uz prometne ulice NO2 može biti znatno viši (provjera uz službene postaje u [docs/METODOLOGIJA.md](docs/METODOLOGIJA.md)). ML model nije ušao u aplikaciju jer nije bio bolji za obje tvari ([docs/ML.md](docs/ML.md)).
-- „Pronađi mjesto za život” računa za središte naselja s najmanje 200 stanovnika, bez sunca na krovu; za konkretnu adresu treba otvoriti izvještaj.
+- „Predloži mjesto za život” računa za središte naselja s najmanje 200 stanovnika, bez sunca na krovu; za konkretnu adresu treba otvoriti izvještaj.
 - Skor za život koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
 - Poveznice na oglasnike slažu se prema formatima ručno provjerenima u pregledniku (`config/listings.json`). Njuškalo blokira automatske provjere, pa kategorije najma na Njuškalu nisu provjerene. Index Oglasi traži UUID mjesta, a on je zasad upisan za manji dio mjesta (`config/listing_locations.json`); za ostala poveznica na Index traži ručni odabir mjesta ili otvara županiju.
 - Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.

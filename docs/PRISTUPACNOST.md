@@ -7,7 +7,7 @@ Cilj je WCAG 2.2 razine AA. Provjera je automatska (axe-core u Playwrightu); ono
 `make e2e` (dio `make verify`) pokreće `frontend/tests/e2e/smoke.spec.ts`:
 
 - **axe-core** s oznakama `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` i `wcag22aa`:
-  - na svim stranicama: naslovnica, izvještaj, usporedba, „Pronađi mjesto”, izvori i „O alatu”;
+  - na svim stranicama: naslovnica, izvještaj, usporedba, „Predloži mjesto”, izvori i „O alatu”;
   - u svijetloj i tamnoj temi;
   - na desktopu (Desktop Chrome) i mobitelu (Pixel 7);
   - ukupno 24 provjere, a sve moraju biti bez nalaza.
@@ -24,6 +24,7 @@ Iz axe provjere izuzet je samo `canvas` karte (MapLibre), jer je karta slika bez
 | Zahtjev | Rješenje |
 |---|---|
 | Jezik | `<html lang="hr">`; sav tekst na hrvatskom |
+| Glavni izbornik | redoslijed Provjeri adresu, Predloži mjesto, Usporedi, O alatu; trenutačna stranica ima `aria-current="page"` (na izvještaju „Provjeri adresu” ima `aria-current="true"`) i istaknutu pozadinu; ispod 760 px stavke su iza gumba „Izbornik” (`aria-expanded`) koji se zatvara tipkom Esc (fokus se vraća na gumb), klikom izvan, odlaskom fokusa i prelaskom na drugu stranicu |
 | Preskakanje navigacije | poveznica „Preskoči na sadržaj” kao prvi element; nakon promjene stranice fokus prelazi na `<main>`, a naslov dokumenta se mijenja |
 | Tipkovnica | sve funkcije dostupne tipkovnicom; vidljiv fokus (obrub od 3 px kontrastne boje) |
 | Pretraga adrese | kombinirani okvir prema uzorku WAI-ARIA 1.2 (`role="combobox"`, `aria-expanded`, `aria-activedescendant`, `listbox`/`option`); broj prijedloga najavljuje se u području `aria-live` |

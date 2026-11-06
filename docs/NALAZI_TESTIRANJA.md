@@ -6,7 +6,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 |---|---|---|---|---|
 | 1 | Skočni prozor „Pogledaj oglase” ne zatvara se | element `<details>` zatvara se samo ponovnim klikom na gumb | lako do srednje | napravljeno |
 | 2 | Pretraga ne pronalazi neke ulice i kućne brojeve | slovo uz kućni broj gubilo se pri obradi; upit bez zareza, s poštanskim brojem ili gradom umjesto naselja nije se prepoznavao | srednje do teško | planirano |
-| 3 | Gornji izbornik zbunjuje | početni ekran nema stavku u izborniku; „Pronađi mjesto” zvuči kao pretraga | lako do srednje | planirano |
+| 3 | Gornji izbornik zbunjuje | početni ekran nema stavku u izborniku; „Pronađi mjesto” zvuči kao pretraga | lako do srednje | napravljeno |
 | 4 | Informacija o internetu | podaci HAKOM-a postoje, ali nisu objavljeni pod otvorenom licencom | ovisi o vanjskim podacima | samo izvještaj |
 | 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | planirano |
 | 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | napravljeno |
@@ -77,6 +77,13 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
   - Na zaslonu užem od 760 px stavke su u izborniku iza gumba „Izbornik” jer četiri stavke i gumb za temu ne stanu u 320 px.
 - **Procjena:** lako do srednje.
 - **Rizici:** poveznice i oznake na `/pronadi` (dokumentacija, scenarij videa) treba uskladiti; preusmjeravanje čuva stare poveznice.
+- **Stanje: napravljeno.**
+  - **Izbornik:** Provjeri adresu · Predloži mjesto · Usporedi · O alatu · tema.
+  - **Trenutačna stranica:** istaknuta pozadinom i podebljanim tekstom te označena za čitače zaslona.
+  - **„Izbornik” na zaslonu užem od 760 px:** zatvara se tipkom Esc, klikom izvan, odlaskom fokusa i prelaskom na drugu stranicu.
+  - **Ruta:** `/predlozi`, a `/pronadi` preusmjerava sa svim parametrima.
+  - **Usklađeno:** nadnaslov „Predloži mjesto za život”, naslov stranice, ulaz na naslovnici, oznake API-ja (OpenAPI), README i dokumentacija.
+  - **Testovi:** novi e2e test s axeom za izbornik na mobitelu i računalu.
 
 ## 4. Informacija o pokrivenosti internetom
 
