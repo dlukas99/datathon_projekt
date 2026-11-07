@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { MapPin } from 'lucide-react'
+import { TrailMark } from './components/TrailMark'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
 import { SiteNav, type Theme } from './components/SiteNav'
@@ -84,9 +84,7 @@ function Layout() {
       <header className="site-header">
         <div className="container header-row">
           <NavLink to="/" className="brand" aria-label={`${BRAND.name}, naslovnica`}>
-            <span className="brand-mark" aria-hidden="true">
-              <MapPin size={16} strokeWidth={2.25} />
-            </span>
+            <TrailMark />
             <span className="brand-name">{BRAND.name}</span>
           </NavLink>
           <SiteNav theme={theme} onToggleTheme={toggleTheme} />

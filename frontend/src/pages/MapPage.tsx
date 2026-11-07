@@ -116,7 +116,6 @@ export function MapPage() {
 
   return (
     <>
-      <p className="eyebrow">Karta</p>
       <h1>Istraži kartu Hrvatske</h1>
       <p className="lead left">
         Naselja obojena prema okolišu, uslugama i prijevozu. Kliknite naselje za kratak pregled ili

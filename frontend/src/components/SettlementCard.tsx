@@ -145,7 +145,6 @@ export function SettlementCard({
   return (
     <div className="atlas-card">
       {close}
-      <p className="eyebrow">Naselje</p>
       <h2 ref={heading} tabIndex={-1} className="atlas-card-title">
         {name}
       </h2>

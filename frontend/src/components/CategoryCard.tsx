@@ -1,11 +1,26 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, CircleCheck, CircleHelp, Info, OctagonAlert, TriangleAlert } from 'lucide-react'
 import type { Category, SourceInfo, Status, Value } from '../lib/api'
 import { formatDate, KIND_HELP, KIND_LABELS } from '../lib/format'
 import { CategoryIcon } from './Icons'
 import { ScaleBar } from './ScaleBar'
 
+const STATUS_ICONS = {
+  good: CircleCheck,
+  warning: TriangleAlert,
+  bad: OctagonAlert,
+  info: Info,
+  no_data: CircleHelp,
+} as const
+
+/** Status in colour, shape and words: never colour alone. */
 export function StatusBadge({ status, label }: { status: Status; label: string }) {
-  return <span className={`status status-${status}`}>{label}</span>
+  const Icon = STATUS_ICONS[status]
+  return (
+    <span className={`status status-${status}`}>
+      <Icon size={15} strokeWidth={2.4} aria-hidden="true" />
+      {label}
+    </span>
+  )
 }
 
 export type SourceMap = Record<string, SourceInfo | undefined>
