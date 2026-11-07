@@ -22,16 +22,16 @@ valhalla:
 	$(COMPOSE_DEV) up -d valhalla
 
 dev: valhalla
-	cd $(BACKEND) && uv run uvicorn app.main:app --reload --port 8000 --no-access-log & \
+	cd $(BACKEND) && uv run python -m uvicorn app.main:app --reload --port 8000 --no-access-log & \
 	cd $(FRONTEND) && npm run dev; \
 	wait
 
 test:
-	cd $(BACKEND) && uv run pytest -q
+	cd $(BACKEND) && uv run python -m pytest -q
 	cd $(FRONTEND) && npm test
 
 lint:
-	cd $(BACKEND) && uv run ruff check . && uv run ruff format --check . && uv run mypy
+	cd $(BACKEND) && uv run ruff check . && uv run ruff format --check . && uv run python -m mypy
 	cd $(FRONTEND) && npm run lint && npm run typecheck
 
 build:

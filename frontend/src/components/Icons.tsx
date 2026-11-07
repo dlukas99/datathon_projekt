@@ -4,6 +4,7 @@ import {
   Bus,
   Flame,
   Footprints,
+  Map as MapIcon,
   Pill,
   Scale,
   Search,
@@ -39,6 +40,7 @@ const ICONS: Record<string, LucideIcon> = {
   recycling: Recycle,
   compare: Scale,
   find: Search,
+  map: MapIcon,
 }
 
 /** Decorative icon for a category; the text next to it always carries the meaning. */

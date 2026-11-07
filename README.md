@@ -19,11 +19,12 @@ Ti podaci postoje, ali su rasuti po različitim institucijama i formatima: karte
 
 ## Rješenje
 
-Naslovnica ima tri ulaza:
+Naslovnica ima četiri ulaza:
 
 1. **Provjeri adresu:** kako je živjeti na određenoj adresi.
 2. **Predloži mjesto za život:** aplikacija predlaže naselja prema onome što vam treba.
 3. **Usporedi dvije lokacije:** dvije adrese jedna uz drugu.
+4. **Istraži kartu Hrvatske:** naselja obojena prema Skoru za život, zraku, poplavama, uslugama pješice ili javnom prijevozu.
 
 Izvještaj za adresu ima tri dijela:
 
@@ -85,6 +86,11 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
 - odabir točke klikom na kartu ili povlačenjem oznake
 - **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
+- **Karta Hrvatske** (`/karta`):
+  - naselja obojena prema odabranom sloju (Skor za život za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;
+  - klik daje kratku karticu naselja (na mobitelu kao donji list) s oznakama i gumbima „Otvori puni izvještaj” i „Pogledaj oglase”;
+  - za šumu ili polje, more i inozemstvo kartica ima vlastitu poruku;
+  - ispod karte je pretraživa tablica istih naselja.
 - **Skor za život** s vidljivim i podesivim težinama po profilu
 - poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
 - okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak s jednom ocjenom, zelenilo i hlad, udaljenost od prometnica, požari raslinja, sunčev potencijal
@@ -101,6 +107,10 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 | Naslovnica | Mobitel, tamna tema | Asistent |
 |---|---|---|
 | ![Naslovnica s pretragom i odabirom profila](docs/images/naslovnica.png) | ![Izvještaj na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) | ![Asistent odgovara iz izračuna](docs/images/asistent.png) |
+
+| Karta Hrvatske | Karta na mobitelu |
+|---|---|
+| ![Karta Hrvatske: naselja obojena prema kvaliteti zraka i kartica za Vinkovce](docs/images/karta.png) | ![Karta na mobitelu: kartica naselja Zagreb kao donji list](docs/images/karta-mobitel.png) |
 
 ## Izvori otvorenih podataka
 
@@ -257,6 +267,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - „Udaljenost od prometnica” je procjena, a ne mjerenje buke: strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - Karta zraka prikazuje pozadinsku razinu; uz prometne ulice NO2 može biti znatno viši (provjera uz službene postaje u [docs/METODOLOGIJA.md](docs/METODOLOGIJA.md)). ML model nije ušao u aplikaciju jer nije bio bolji za obje tvari ([docs/ML.md](docs/ML.md)).
 - „Predloži mjesto za život” računa za središte naselja s najmanje 200 stanovnika, bez sunca na krovu; za konkretnu adresu treba otvoriti izvještaj.
+- Karta Hrvatske boji svih 6.759 naselja prema vrijednosti u središtu naselja, a ne za svaku kuću u njemu; za konkretnu adresu kartica nudi puni izvještaj.
 - Skor za život koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
 - Poveznice na oglasnike slažu se prema formatima ručno provjerenima u pregledniku (`config/listings.json`). Njuškalo blokira automatske provjere, pa kategorije najma na Njuškalu nisu provjerene. Index Oglasi traži UUID mjesta, a on je zasad upisan za manji dio mjesta (`config/listing_locations.json`); za ostala poveznica na Index traži ručni odabir mjesta ili otvara županiju.
 - Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
@@ -287,7 +298,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 ## Korišteni AI alati
 
-Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic). Asistent u aplikaciji može koristiti bilo koji model preko OpenAI-kompatibilnog API-ja i ne ovisi o jednom pružatelju; bez modela radi s pravilima.
+Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic). Za pregled dizajna sučelja korišten je skill [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) za Claude Code; to je razvojni alat i nije dio aplikacije. Asistent u aplikaciji može koristiti bilo koji model preko OpenAI-kompatibilnog API-ja i ne ovisi o jednom pružatelju; bez modela radi s pravilima.
 
 ## Ograničenje odgovornosti
 

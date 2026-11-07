@@ -7,11 +7,11 @@ Cilj je WCAG 2.2 razine AA. Provjera je automatska (axe-core u Playwrightu); ono
 `make e2e` (dio `make verify`) pokreće `frontend/tests/e2e/smoke.spec.ts`:
 
 - **axe-core** s oznakama `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` i `wcag22aa`:
-  - na svim stranicama: naslovnica, izvještaj, usporedba, „Predloži mjesto”, izvori i „O alatu”;
+  - na svim stranicama: naslovnica, izvještaj, usporedba, „Predloži mjesto”, karta (s otvorenom karticom naselja), izvori i „O alatu”;
   - u svijetloj i tamnoj temi;
   - na desktopu (Desktop Chrome) i mobitelu (Pixel 7);
-  - ukupno 24 provjere, a sve moraju biti bez nalaza.
-- **Bez vodoravnog pomicanja** na širini od 320 px (naslovnica, izvještaj, usporedba).
+  - ukupno 28 provjera, a sve moraju biti bez nalaza.
+- **Bez vodoravnog pomicanja** na širini od 320 px (naslovnica, izvještaj, usporedba, karta).
 - **Glavni tok tipkovnicom:** pretraga, strelica dolje i Enter do izvještaja.
 - **Pješački put:** gumb vrste mjesta i redak popisa „Svakodnevni život” crtaju put, Esc ga uklanja, a axe se pokreće i dok su podaci o putu otvoreni.
 
@@ -32,6 +32,7 @@ Iz axe provjere izuzet je samo `canvas` karte (MapLibre), jer je karta slika bez
 | Kontrast | boje teksta i statusa provjerene axe-om u obje teme (≥ 4,5:1) |
 | Status nikad samo bojom | svaka oznaka statusa ima riječ („Dobro”, „Upozorenje”, „Loše”, „Nema podataka”, „Informacija”); ocjene imaju i točku u boji |
 | Karta | nije jedini nositelj informacije: ispod karte je tekstualni popis onoga što je na 5, 10 i 15 minuta hoda i, za svaku vrstu mjesta, broj unutar 15 minuta i najbliže vrijeme, a ispod toga popis najbližih ustanova; `<figure>` s opisom za čitače zaslona; kontrole karte i oblačić na hrvatskom |
+| Karta Hrvatske | Karta nije jedini nositelj informacije. Ispod nje je tablica istih naselja s vrijednošću odabranog sloja riječima; pretražuje se i bez dijakritika, a poredana je po sloju (najbolja ili najslabija prvo). Naziv naselja u tablici je gumb koji otvara istu karticu kao klik na kartu. Kartica dobiva fokus na naslovu, a Esc je zatvara i vraća fokus na redak tablice. Legenda ima nazive razreda, ne samo boje. Na mobitelu je kartica donji list s gumbom „Zatvori karticu” od 44 px, a izbor sloja je red gumba koji se pomiče vodoravno unutar sebe |
 | Pješački put | do puta se dolazi tipkovnicom bez karte: gumbi vrsta mjesta (pravi `<button>` s `aria-pressed`; uključeni ima kvačicu i deblji rub, ne samo boju) i retci popisa „Svakodnevni život”. Rezultat („Pješački put do odredišta …: 31 minuta, 2,4 kilometra.”) najavljuje područje `role="status"`. Esc uklanja put. Nakon „Ukloni put” fokus ostaje na gumbu vrste, a nakon klika u popisu prelazi na podatke o putu. Vrsta bez podataka je onemogućen gumb s tekstom „nema podataka u blizini” |
 | „Pogledaj oglase” | pravi gumb s `aria-expanded` i `aria-controls`; ploča se zatvara tipkom Esc (fokus se vraća na gumb), klikom izvan ploče (s praznog mjesta fokus se vraća na gumb) i kad fokus tipkovnicom izađe iz nje, da ne pokrije element s fokusom (WCAG 2.4.11); dok je padajući popis otvoren, klik izvan zatvara samo popis |
 | Tablice | `<caption>`, zaglavlja s `scope` |

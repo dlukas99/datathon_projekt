@@ -269,3 +269,123 @@ export function parseFindQuestion(question: string): Promise<Partial<FindRequest
 export function geojsonUrl(lat: number, lon: number): string {
   return `/api/report?lat=${String(lat)}&lon=${String(lon)}&format=geojson`
 }
+
+// --- Karta Hrvatske (backend/app/map_layer.py) ---------------------------------------
+
+export interface MapRow {
+  id: number
+  code: string
+  name: string
+  municipality: string
+  county: string
+  /** null: the settlement is not in the 2021 census table. */
+  population: number | null
+  lat: number
+  lon: number
+  air: string | null
+  pm25: number | null
+  flood: string | null
+  tree: number | null
+  needs: number | null
+  departures: number | null
+  stops: boolean
+  scores: Record<string, number | null>
+}
+
+export interface MapTable {
+  rows: MapRow[]
+  profiles_date: string | null
+  sources: Record<string, { title: string; retrieved_at: string | null }[]>
+}
+
+export interface PointTag {
+  id: string
+  title: string
+  text: string
+  status: Status
+}
+
+export interface MapPoint {
+  kind: 'settlement' | 'sea' | 'outside'
+  message: string | null
+  id: number | null
+  code: string | null
+  name: string | null
+  municipality: string | null
+  county: string | null
+  population: number | null
+  profiled: boolean
+  populated: boolean
+  centre_lat: number | null
+  centre_lon: number | null
+  centre_km: number | null
+  at_point: PointTag[]
+}
+
+/** Compact settlement outlines: rings of delta-encoded integers in steps of `step` degrees. */
+export interface CompactGeometry {
+  step: number
+  features: [number, number[][][]][]
+}
+
+export function fetchMapGeometry(
+  level: 'overview' | 'detail',
+  signal?: AbortSignal,
+): Promise<CompactGeometry> {
+  return getJson<CompactGeometry>(`/api/map/geometry/${level}`, {}, signal)
+}
+
+/** The settlement table as the API sends it: one list per field (backend MapColumns). */
+interface MapColumns {
+  id: number[]
+  name: string[]
+  municipality: string[]
+  county: string[]
+  population: (number | null)[]
+  lat: number[]
+  lon: number[]
+  air: (string | null)[]
+  pm25: (number | null)[]
+  flood: (string | null)[]
+  tree: (number | null)[]
+  needs: (number | null)[]
+  departures: (number | null)[]
+  stops: boolean[]
+  scores: Record<string, (number | null)[]>
+  profiles_date: string | null
+  sources: MapTable['sources']
+}
+
+export function columnsToTable(c: MapColumns): MapTable {
+  const rows: MapRow[] = c.id.map((id, i) => ({
+    id,
+    code: String(id).padStart(6, '0'),
+    name: c.name[i] ?? '',
+    municipality: c.municipality[i] ?? '',
+    county: c.county[i] ?? '',
+    population: c.population[i] ?? null,
+    lat: c.lat[i] ?? 0,
+    lon: c.lon[i] ?? 0,
+    air: c.air[i] ?? null,
+    pm25: c.pm25[i] ?? null,
+    flood: c.flood[i] ?? null,
+    tree: c.tree[i] ?? null,
+    needs: c.needs[i] ?? null,
+    departures: c.departures[i] ?? null,
+    stops: c.stops[i] ?? false,
+    scores: Object.fromEntries(Object.entries(c.scores).map(([p, v]) => [p, v[i] ?? null])),
+  }))
+  return { rows, profiles_date: c.profiles_date, sources: c.sources }
+}
+
+export async function fetchMapTable(signal?: AbortSignal): Promise<MapTable> {
+  return columnsToTable(await getJson<MapColumns>('/api/map/settlements', {}, signal))
+}
+
+export function fetchMapPoint(lat: number, lon: number, signal?: AbortSignal): Promise<MapPoint> {
+  return getJson<MapPoint>(
+    '/api/map/point',
+    { lat: lat.toFixed(6), lon: lon.toFixed(6) },
+    signal,
+  )
+}

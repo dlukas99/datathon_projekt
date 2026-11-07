@@ -83,6 +83,11 @@ export function SiteNav({ theme, onToggleTheme }: { theme: Theme; onToggleTheme:
           </NavLink>
         </li>
         <li>
+          <NavLink to="/karta" onClick={closeMenu}>
+            Karta
+          </NavLink>
+        </li>
+        <li>
           <NavLink to="/o-alatu" onClick={closeMenu}>
             O alatu
           </NavLink>
