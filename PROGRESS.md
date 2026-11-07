@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-06 17:05
+Zadnje ažurirano: 2026-11-07 18:58
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -84,6 +84,16 @@ Redoslijed (procjena):
       - registri ponovno geokodirani: 247 točaka na točnoj adresi umjesto sredine ulice, oko 50 premješteno iz susjednog naselja.
     - **Internet** (HAKOM bez otvorene licence) i **jezični model** samo su prijedlozi.
     - **Testovi:** pytest 139, Vitest 52, Playwright 50.
+15. [x] Karta Hrvatske (7. 11., grana `feature/karta`):
+    - **gdje:** `/karta`, „Karta” u izborniku između „Usporedi” i „O alatu”, četvrti ulaz na naslovnici;
+    - **slojevi:** naselja obojena prema Skoru za život (pet profila), zraku, poplavama, uslugama pješice ili javnom prijevozu, iz istih profila naselja kao „Predloži mjesto”; legenda s nazivima iz izvještaja, izvorima i datumom;
+    - **geometrija:** 6.759 granica DGU-a pojednostavljenih kao pokrivenost, u sažetom JSON-u (pregled 0,28 MB gzip, detalj 0,8 MB tek pri približavanju), pokazatelji 0,13 MB; boje u `feature-state`;
+    - **klik:** kratka kartica (na mobitelu donji list) s 6 oznaka, „Otvori puni izvještaj” i „Pogledaj oglase”; šuma ili polje (naselje, udaljenost do središta, poplave i zrak na točki), more i inozemstvo s vlastitom porukom; odgovor 0,15–0,45 s;
+    - **pristupačnost:** pretraživa i poredana tablica naselja ispod karte, tipkovnica (fokus na kartici, Esc vraća na redak), axe na karti s otvorenom karticom u obje teme, 320 px;
+    - **učitavanje** (produkcijska izgradnja, karta s bojama i podlogom spremna): desktop 2,7–3,4 s, mobitel na 4G uz 4× sporiji procesor 5,0 s, na Fast 3G 10,8 s;
+    - **snimke:** `docs/images/karta.png` i `karta-mobitel.png`; README, metodologija, arhitektura, pristupačnost, odluke i scenarij videa ažurirani;
+    - **testovi:** `make verify` izlaz 0; pytest 148, Vitest 60, Playwright 58 (s 28 axe provjera), provjera README-a prolazi;
+    - **usput:** lokalni obrađeni podaci ponovno izgrađeni u Docker kontejneru (`make data` iz `data/raw`), jer su bili stariji od zlatnih testova iz 6. 11.; Python alati u Makefileu pokreću se kao moduli (`python -m pytest`, `mypy`, `uvicorn`) jer Smart App Control na Windowsima blokira njihove `.exe` pokretače.
 
 Ako ponestane vremena, režem ovim redom:
 - ML ostaje samo evaluacija u `docs/ML.md`;
