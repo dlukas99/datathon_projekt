@@ -30,6 +30,12 @@ const ENTRIES: { icon: string; title: string; text: string; to: (a: Demo, b: Dem
           )
         : '/usporedi',
   },
+  {
+    icon: 'map',
+    title: 'Istraži kartu Hrvatske',
+    text: 'Naselja obojena prema zraku, poplavama, uslugama i prijevozu.',
+    to: () => '/karta',
+  },
 ]
 
 const STEPS: { icon: string; title: string; text: string }[] = [

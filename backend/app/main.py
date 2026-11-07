@@ -2,16 +2,18 @@
 
 from __future__ import annotations
 
+import gzip
 import json
+import threading
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Annotated, Any, Literal
 
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 
-from app import brand, pvgis, valhalla
+from app import brand, map_layer, pvgis, valhalla
 from app.assistant import AssistantReply, AssistantRequest, answer
 from app.config import REPO_ROOT
 from app.finder import (
@@ -65,6 +67,8 @@ def warm_up() -> None:
     if demo.exists():
         points = json.loads(demo.read_text(encoding="utf-8"))["addresses"]
         pvgis.warm([(p["lat"], p["lon"]) for p in points])
+    # The map layers take a few seconds to build; do it in the background.
+    threading.Thread(target=map_layer.warm, daemon=True).start()
 
 
 @app.get("/api/health", tags=["sustav"])
@@ -200,3 +204,49 @@ def find_parse(body: ParseQuestion) -> FindRequest:
         return parse_question(body.question)
     except ParseUnavailable as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+
+# --- Karta Hrvatske --------------------------------------------------------------------------
+
+MAP_CACHE = "public, max-age=3600"
+
+
+def _gzip_response(body: bytes, request: Request) -> Response:
+    """Pre-compressed body; decompressed for the rare client that does not accept gzip."""
+    if "gzip" in request.headers.get("accept-encoding", ""):
+        return Response(
+            body,
+            media_type="application/json",
+            headers={
+                "Content-Encoding": "gzip",
+                "Cache-Control": MAP_CACHE,
+                "Vary": "Accept-Encoding",
+            },
+        )
+    return Response(
+        gzip.decompress(body), media_type="application/json", headers={"Cache-Control": MAP_CACHE}
+    )
+
+
+@app.get("/api/map/geometry/{level}", tags=["karta"])
+def map_geometry(level: Literal["overview", "detail"], request: Request) -> Response:
+    """Pojednostavljene granice svih naselja (DGU) u sažetom obliku.
+
+    `{"step": s, "features": [[id, [[[x0, y0, dx1, dy1, ...], ...], ...]], ...]}`: koordinate
+    su cijeli brojevi u koracima od `s` stupnjeva, svaka sljedeća kao razlika od prethodne;
+    `id` je šifra naselja. `overview` (300 m) služi za cijelu Hrvatsku, `detail` (80 m) za
+    približeni prikaz.
+    """
+    return _gzip_response(map_layer.geometry(level), request)
+
+
+@app.get("/api/map/settlements", tags=["karta"], response_model=map_layer.MapTable)
+def map_settlements(request: Request) -> Response:
+    """Pokazatelji za središte svakog naselja s najmanje 200 stanovnika, za bojenje karte."""
+    return _gzip_response(map_layer.table_json(), request)
+
+
+@app.get("/api/map/point", tags=["karta"], response_model=map_layer.MapPoint)
+def map_point(lat: Lat, lon: Lon) -> map_layer.MapPoint:
+    """Što je na kliknutoj točki: naselje, more ili područje izvan Hrvatske. Točka se ne sprema."""
+    return map_layer.point(lat, lon)

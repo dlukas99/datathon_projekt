@@ -160,6 +160,7 @@ test('main navigation: order, current page, menu on a phone and the old address'
     'Provjeri adresu',
     'Predloži mjesto',
     'Usporedi',
+    'Karta',
     'O alatu',
   ])
   await expect(nav.getByRole('link', { name: 'Provjeri adresu' })).toHaveAttribute(
@@ -194,6 +195,113 @@ test('main navigation: order, current page, menu on a phone and the old address'
   await page.goto('/pronadi?profil=obitelj')
   await expect(page).toHaveURL(/\/predlozi\?profil=obitelj$/)
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Gdje bih mogao živjeti')
+})
+
+// Karta Hrvatske. Clicks go to a known place: the map container carries its visible
+// area (data-bounds="w,s,e,n"), and the map is Web Mercator.
+const VINKOVCI: [number, number] = [18.8047, 45.2883] // town centre
+const FOREST: [number, number] = [17.66, 45.52] // Papuk, outside any village
+const SEA: [number, number] = [16.4, 43.4] // between Split and Brač
+const ABROAD: [number, number] = [14.505, 46.05] // Ljubljana
+
+async function clickOnMap(page: Page, [lon, lat]: [number, number]) {
+  const map = page.locator('.atlas-map')
+  await expect(map).toHaveAttribute('data-bounds', /,/)
+  await map.scrollIntoViewIfNeeded()
+  const box = await map.boundingBox()
+  const bounds = (await map.getAttribute('data-bounds')) ?? ''
+  const [w = 0, s = 0, e = 0, n = 0] = bounds.split(',').map(Number)
+  const merc = (y: number) => Math.log(Math.tan(Math.PI / 4 + (y * Math.PI) / 360))
+  if (!box) throw new Error('map not visible')
+  await page.mouse.click(
+    box.x + ((lon - w) / (e - w)) * box.width,
+    box.y + ((merc(n) - merc(lat)) / (merc(n) - merc(s))) * box.height,
+  )
+}
+
+test('map of Croatia: layers, legend, a click on a town, a forest, the sea and abroad', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await page.goto('/karta')
+  await expect(page).toHaveTitle(/^Karta Hrvatske/)
+  const ready = page.locator('.atlas-map-wrap')
+  await expect(ready).toHaveAttribute('data-ready', 'true')
+  console.log(`map ready in ${String(await ready.getAttribute('data-load-ms'))} ms`)
+
+  // Legend follows the layer, with the report's names, a source and a date.
+  const legend = page.locator('.atlas-legend')
+  await expect(legend.getByRole('heading')).toHaveText('Skor za život: Općenito')
+  await page.getByRole('radio', { name: 'Kvaliteta zraka' }).click()
+  await expect(page).toHaveURL(/sloj=air/)
+  await expect(page.getByRole('radio', { name: 'Kvaliteta zraka' })).toBeChecked()
+  await expect(legend.getByRole('heading')).toHaveText('Kvaliteta zraka')
+  await expect(legend.locator('li')).toHaveText([
+    'Vrlo dobar',
+    'Dobar',
+    'Umjeren',
+    'Loš',
+    /Nema izračuna/,
+  ])
+  await expect(legend).toContainText('EEA, karta PM2,5 za 2024. (preuzeto')
+  await page.getByRole('radio', { name: 'Skor za život' }).click()
+  await expect(page.getByRole('radio', { name: 'Skor za život' })).toBeChecked()
+
+  const card = page.locator('.atlas-card')
+  await clickOnMap(page, VINKOVCI)
+  await expect(card.locator('h2')).toHaveText('Vinkovci')
+  await expect(card).toContainText('stanovnika (Popis 2021.)')
+  await expect(card.locator('.atlas-tags li')).toHaveCount(6)
+  await expect(card.getByRole('link', { name: 'Otvori puni izvještaj' })).toHaveAttribute(
+    'href',
+    /\/izvjestaj\?lat=45\.2\d+&lon=18\.8\d+.*tip=karta/,
+  )
+  await expect(card.getByRole('button', { name: 'Pogledaj oglase' })).toBeVisible()
+  await expect(card.locator('h2')).toBeFocused()
+
+  await page.keyboard.press('Escape')
+  await expect(card).toHaveCount(0)
+  await clickOnMap(page, FOREST)
+  await expect(card).toContainText('Odabrana točka je izvan naseljenog dijela; prikazujem naselje')
+  await expect(card).toContainText(/središte \d/)
+  await expect(card).toContainText('na odabranoj točki')
+
+  await page.keyboard.press('Escape')
+  await clickOnMap(page, SEA)
+  await expect(card.locator('h2')).toHaveText('Odaberite točku na kopnu.')
+  await page.keyboard.press('Escape')
+  await clickOnMap(page, ABROAD)
+  await expect(card.locator('h2')).toHaveText('Podaci su dostupni samo za Hrvatsku.')
+})
+
+test('map of Croatia: the table carries the same data and works with the keyboard', async ({
+  page,
+}) => {
+  await page.goto('/karta?sloj=needs')
+  const table = page.locator('.atlas-table')
+  await expect(table.locator('tbody tr')).toHaveCount(50)
+  await expect(table.locator('thead th').last()).toHaveText('Usluge pješice')
+  // Best first: the first row has at least as many needs as the last one shown.
+  const values = await table.locator('tbody tr td:last-child').allInnerTexts()
+  const n = (t: string) => Number(t.trim().split(' ')[0])
+  expect(n(values[0] ?? '')).toBeGreaterThanOrEqual(n(values[values.length - 1] ?? ''))
+
+  await page.getByLabel('Traži naselje').fill('vinkovci')
+  // The town and the villages of the town of Vinkovci; diacritics are not needed.
+  await expect(table.locator('tbody tr').first()).toContainText('Vinkovci')
+  const pick = table.getByRole('button', { name: 'Vinkovci', exact: true })
+  await pick.focus()
+  await page.keyboard.press('Enter')
+  const card = page.locator('.atlas-card')
+  await expect(card.locator('h2')).toHaveText('Vinkovci')
+  await expect(card.locator('h2')).toBeFocused()
+  await expect(card.getByRole('link', { name: 'Otvori puni izvještaj' })).toHaveAttribute(
+    'href',
+    /tip=naselje/,
+  )
+  await page.keyboard.press('Escape')
+  await expect(card).toHaveCount(0)
+  await expect(pick).toBeFocused()
 })
 
 test('assistant answers from the report', async ({ page }) => {
@@ -246,6 +354,7 @@ for (const theme of ['light', 'dark'] as const) {
       ['sources', '/izvori', 'Izvori podataka'],
       ['find', '/predlozi', 'Gdje bih mogao živjeti'],
       ['about', '/o-alatu', 'O alatu i metodologiji'],
+      ['map', '/karta', 'Istraži kartu Hrvatske'],
     ]
     for (const [name, url, heading] of pages) {
       test(`${name} has no axe violations`, async ({ page }) => {
@@ -254,6 +363,11 @@ for (const theme of ['light', 'dark'] as const) {
         if (name === 'report') await expect(page.getByText('Okolišni pregled')).toBeVisible()
         if (name === 'compare') await expect(page.getByRole('table')).toBeVisible()
         if (name === 'sources') await expect(page.getByText('Svi izvori')).toBeVisible()
+        if (name === 'map') {
+          await expect(page.locator('.atlas-map-wrap')).toHaveAttribute('data-ready', 'true')
+          await clickOnMap(page, VINKOVCI)
+          await expect(page.locator('.atlas-card h2')).toHaveText('Vinkovci')
+        }
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme)
         await expectNoAxeViolations(page)
       })
@@ -263,10 +377,11 @@ for (const theme of ['light', 'dark'] as const) {
 
 test('no horizontal scrolling at 320 px', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 })
-  for (const url of ['/', reportUrl, compareUrl]) {
+  for (const url of ['/', reportUrl, compareUrl, '/karta']) {
     await page.goto(url)
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     if (url !== '/') await page.waitForSelector('article, table')
+    if (url === '/karta') await page.waitForSelector('.atlas-table tbody tr')
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     )

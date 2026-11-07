@@ -8,6 +8,7 @@ import { AboutPage } from './pages/AboutPage'
 import { ComparePage } from './pages/ComparePage'
 import { FindPage } from './pages/FindPage'
 import { HomePage } from './pages/HomePage'
+import { MapPage } from './pages/MapPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ReportPage } from './pages/ReportPage'
 import { SourcesPage } from './pages/SourcesPage'
@@ -52,6 +53,7 @@ const TITLES: Record<string, string> = {
   '/izvjestaj': `Izvještaj za adresu · ${BRAND.name}`,
   '/usporedi': `Usporedba dviju lokacija · ${BRAND.name}`,
   '/predlozi': `Predloži mjesto za život · ${BRAND.name}`,
+  '/karta': `Karta Hrvatske · ${BRAND.name}`,
   '/izvori': `Izvori podataka · ${BRAND.name}`,
   '/o-alatu': `O alatu i metodologiji · ${BRAND.name}`,
 }
@@ -98,6 +100,7 @@ function Layout() {
             <Route path="/izvjestaj" element={<ReportPage />} />
             <Route path="/usporedi" element={<ComparePage />} />
             <Route path="/predlozi" element={<FindPage />} />
+            <Route path="/karta" element={<MapPage />} />
             <Route path="/pronadi" element={<FindRedirect />} />
             <Route path="/izvori" element={<SourcesPage />} />
             <Route path="/o-alatu" element={<AboutPage />} />

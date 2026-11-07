@@ -559,6 +559,11 @@ select {
   border-color: var(--accent);
 }
 
+/* An odd last card takes the whole row instead of standing alone in half of it. */
+.entry-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 .entry-text {
   display: flex;
   flex-direction: column;
@@ -2008,4 +2013,361 @@ button.daily-row:hover .daily-show {
     font-size: 0.8em;
     color: #555;
   }
+}
+
+/* Karta Hrvatske: map with a side panel (desktop) or a bottom sheet (phone) */
+
+.atlas-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1.5rem;
+  margin: 1.25rem 0 1rem;
+}
+
+.atlas-layers {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.atlas-layers legend,
+.atlas-profile,
+.atlas-table-tools label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.atlas-profile,
+.atlas-table-tools label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.atlas {
+  scroll-margin-top: 5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.atlas-map-wrap {
+  min-width: 0;
+}
+
+.atlas-map {
+  width: 100%;
+  height: clamp(420px, 70vh, 760px);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.atlas-map-loading,
+.atlas-map-failed {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.atlas-panel {
+  min-width: 0;
+}
+
+.atlas-placeholder {
+  padding: 1.25rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.atlas-card {
+  position: relative;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.atlas-card .eyebrow {
+  margin-bottom: 0.1rem;
+}
+
+.atlas-card-title {
+  font-size: 1.3rem;
+  margin: 0 2.75rem 0.25rem 0;
+}
+
+.atlas-card-title:focus {
+  outline: none;
+}
+
+.atlas-card-title:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.atlas-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.atlas-close:hover {
+  border-color: var(--accent);
+}
+
+.atlas-close:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.atlas-note {
+  margin: 0.75rem 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--info-bg);
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.atlas-note p {
+  margin: 0;
+}
+
+.atlas-point-values {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.atlas-tags {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0.9rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-tags li {
+  display: grid;
+  grid-template-columns: 1rem minmax(0, 1fr);
+  column-gap: 0.4rem;
+  align-content: start;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.atlas-tags svg {
+  transform: translateY(0.1rem);
+  color: var(--muted);
+}
+
+.atlas-tag-title {
+  color: var(--muted);
+}
+
+.atlas-tag-text {
+  grid-column: 1 / -1;
+  font-weight: 650;
+}
+
+.atlas-legend {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.atlas-legend-title {
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+}
+
+.legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+}
+
+.legend-list li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.atlas-legend .legend-swatch,
+.atlas-table .legend-swatch {
+  border: 1px solid color-mix(in srgb, var(--text) 25%, transparent);
+  margin-right: 0.45rem;
+}
+
+.atlas-legend .legend-swatch {
+  margin-right: 0;
+}
+
+.atlas-table-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.atlas-table-tools input {
+  min-height: 44px;
+  min-width: min(100%, 18rem);
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.atlas-table th,
+.atlas-table td {
+  padding: 0.35rem 0.5rem;
+  vertical-align: middle;
+}
+
+.atlas-table td.num,
+.atlas-table th.num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.atlas-table tr.selected {
+  background: var(--accent-soft);
+}
+
+.link-button {
+  display: inline;
+  min-height: 0;
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.link-button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.show-narrow {
+  display: none;
+}
+
+@media (width <= 760px) {
+  .atlas {
+    grid-template-columns: 1fr;
+  }
+
+  .atlas-map {
+    height: 62vh;
+    min-height: 320px;
+  }
+
+  .atlas-placeholder {
+    display: none;
+  }
+
+  /* Bottom sheet over the lower part of the map */
+  .atlas-panel:has(.atlas-card) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 0 0.5rem 0.5rem;
+  }
+
+  .atlas-panel .atlas-card {
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 -8px 24px rgb(0 0 0 / 18%);
+  }
+
+  .hide-narrow {
+    display: none;
+  }
+
+  .show-narrow {
+    display: block;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+
+  .atlas-layers {
+    max-width: 100%;
+  }
+
+  /* One row of layer buttons that scrolls sideways, so the map starts higher up */
+  .atlas-layers .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 3px 3px 6px;
+    margin: -3px;
+  }
+
+  .atlas-layers .chip {
+    flex-shrink: 0;
+  }
+
+  .atlas-controls {
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .atlas-panel:has(.atlas-card) {
+    max-height: 52vh;
+  }
+
+  .atlas-panel .atlas-card {
+    padding: 1rem;
+  }
+
+  .atlas-card-title {
+    font-size: 1.15rem;
+  }
+}
+
+/* Links in the map attribution are told apart from its text by more than colour. */
+.atlas-map .maplibregl-ctrl-attrib a {
+  text-decoration: underline;
 }
