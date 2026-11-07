@@ -1,10 +1,10 @@
-"""Profiles of settlements for "Predloži mjesto za život".
+"""Profiles of settlements for the map of Croatia and "Predloži mjesto za život".
 
-For every settlement with at least MIN_POPULATION inhabitants the same analysis
-as the address report runs at the settlement centre (ingest/centers.py):
-floods, air, greenery, traffic, fires, walking access, public transport and
-daily needs. Solar is left out (PVGIS is a live API and varies little across
-Croatia). Needs the walking router (Valhalla) to be running.
+For every settlement in the DGU administrative units (all 6,759, also those without
+inhabitants or without a 2021 census count) the same analysis as the address report
+runs at the settlement centre (ingest/centers.py): floods, air, greenery, traffic,
+fires, walking access, public transport and daily needs. Solar is left out (PVGIS is
+a live API and varies little across Croatia). Needs the walking router (Valhalla).
 
 Output: data/processed/settlement_profiles.parquet, one row per settlement with
 facts and the 0–100 sub-score of each category (analysis/score.py).
@@ -38,7 +38,6 @@ from app.layers import get_layers
 from app.models import Category
 from ingest.common import processed_dir, record_source
 
-MIN_POPULATION = 200
 DAILY_NEEDS = ("kindergarten", "school", "doctor", "pediatrician", "pharmacy", "grocery")
 
 
@@ -65,7 +64,8 @@ def profile(row: dict[str, Any]) -> dict[str, Any]:
         "name": row["name"],
         "municipality": row["municipality"],
         "county": row["county"],
-        "population": int(row["population"]),
+        # None: the settlement is not in the 2021 census table (e.g. parts of Podstrana).
+        "population": None if pd.isna(row["population"]) else int(row["population"]),
         "lon": lon,
         "lat": lat,
         "router_ok": reach.router_ok,
@@ -99,10 +99,9 @@ def run(workers: int = 4) -> None:
     d = processed_dir()
     settlements = pd.read_parquet(d / "settlements.parquet")
     population = pd.read_parquet(d / "settlement_population.parquet")
-    merged = settlements.merge(population, left_on="code", right_on="settlement_code")
+    merged = settlements.merge(population, left_on="code", right_on="settlement_code", how="left")
     rows: list[dict[str, Any]] = [
-        {str(k): v for k, v in r.items()}
-        for r in merged[merged["population"] >= MIN_POPULATION].to_dict("records")
+        {str(k): v for k, v in r.items()} for r in merged.to_dict("records")
     ]
     start = time.monotonic()
     with ThreadPoolExecutor(max_workers=workers) as pool:
@@ -114,7 +113,7 @@ def run(workers: int = 4) -> None:
     failed = int((~table["router_ok"]).sum())
     record_source(
         "settlement_profiles",
-        title=f"Profili naselja (≥ {MIN_POPULATION} stanovnika), izračun aplikacije",
+        title="Profili svih naselja, izračun aplikacije",
         publisher="izvedeno iz izvora navedenih na stranici Izvori",
         url="",
         license="CC BY 4.0 (izvedeni podaci); ulazni izvori zadržavaju svoje licence",

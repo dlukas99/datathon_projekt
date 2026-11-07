@@ -94,21 +94,35 @@ class FindOptions(BaseModel):
     llm: bool
 
 
+# The finder ranks settlements with at least this many inhabitants: smaller ones rarely
+# have any services and would crowd the top of the list (the map shows all of them).
+MIN_POPULATION = 200
+
+
 @lru_cache
 def profiles() -> pd.DataFrame:
+    """Profiles of all settlements (also used by the map of Croatia)."""
     path = get_settings().processed_dir / "settlement_profiles.parquet"
     if not path.exists():
         return pd.DataFrame()
     return pd.read_parquet(path)
 
 
-def options() -> FindOptions:
+def ranked() -> pd.DataFrame:
+    """The settlements the finder ranks: at least MIN_POPULATION inhabitants."""
     df = profiles()
+    if df.empty:
+        return df
+    return df[df["population"].fillna(0) >= MIN_POPULATION]
+
+
+def options() -> FindOptions:
+    df = ranked()
     settings = get_settings()
     return FindOptions(
         counties=sorted(df["county"].dropna().unique().tolist()) if not df.empty else [],
         settlements=len(df),
-        min_population=200,
+        min_population=MIN_POPULATION,
         llm=bool(settings.llm_base_url and settings.llm_model),
     )
 
@@ -175,7 +189,7 @@ def _reasons(row: pd.Series, weights: dict[str, float], total: int | None) -> li
 
 
 def find(req: FindRequest) -> FindResponse:
-    df = profiles()
+    df = ranked()
     note = (
         "Rang je izračun nad unaprijed pripremljenim podacima za središte svakog naselja s "
         "najmanje 200 stanovnika. Za konkretnu adresu otvorite izvještaj."

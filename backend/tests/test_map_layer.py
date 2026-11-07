@@ -183,9 +183,12 @@ def test_map_endpoints_are_compressed_and_complete() -> None:
     data = res.json()
     assert len(data["features"]) > 6000
     table = client.get("/api/map/settlements").json()
-    assert len(table["rows"]) > 2000
+    # Every settlement of Croatia has a profile, and every list has one entry per settlement.
+    assert len(table["id"]) == len(data["features"])
+    assert all(len(table[k]) == len(table["id"]) for k in ("name", "air", "needs", "stops"))
+    assert all(len(v) == len(table["id"]) for v in table["scores"].values())
     ids = {f[0] for f in data["features"]}
-    assert all(r["id"] in ids for r in table["rows"])
+    assert set(table["id"]) == ids
     res = client.get("/api/map/geometry/overview", headers={"Accept-Encoding": "identity"})
     assert "content-encoding" not in res.headers
     assert json.loads(res.content)["step"] == pytest.approx(1e-3)

@@ -87,12 +87,13 @@ Redoslijed (procjena):
 15. [x] Karta Hrvatske (7. 11., grana `feature/karta`):
     - **gdje:** `/karta`, „Karta” u izborniku između „Usporedi” i „O alatu”, četvrti ulaz na naslovnici;
     - **slojevi:** naselja obojena prema Skoru za život (pet profila), zraku, poplavama, uslugama pješice ili javnom prijevozu, iz istih profila naselja kao „Predloži mjesto”; legenda s nazivima iz izvještaja, izvorima i datumom;
-    - **geometrija:** 6.759 granica DGU-a pojednostavljenih kao pokrivenost, u sažetom JSON-u (pregled 0,28 MB gzip, detalj 0,8 MB tek pri približavanju), pokazatelji 0,13 MB; boje u `feature-state`;
+    - **geometrija:** 6.759 granica DGU-a pojednostavljenih kao pokrivenost, u sažetom JSON-u (pregled 0,28 MB gzip, detalj 0,8 MB tek pri približavanju), pokazatelji po stupcima 0,18 MB; boje u `feature-state`;
+    - **sva naselja:** profili za svih 6.759 naselja (246 s u Dockeru, sva s mrežom hoda), pa na karti nema sivih naselja; „Predloži mjesto” i dalje rangira 2.347 naselja s najmanje 200 stanovnika;
     - **klik:** kratka kartica (na mobitelu donji list) s 6 oznaka, „Otvori puni izvještaj” i „Pogledaj oglase”; šuma ili polje (naselje, udaljenost do središta, poplave i zrak na točki), more i inozemstvo s vlastitom porukom; odgovor 0,15–0,45 s;
     - **pristupačnost:** pretraživa i poredana tablica naselja ispod karte, tipkovnica (fokus na kartici, Esc vraća na redak), axe na karti s otvorenom karticom u obje teme, 320 px;
-    - **učitavanje** (produkcijska izgradnja, karta s bojama i podlogom spremna): desktop 2,7–3,4 s, mobitel na 4G uz 4× sporiji procesor 5,0 s, na Fast 3G 10,8 s;
+    - **učitavanje** (produkcijska izgradnja, karta s bojama i podlogom spremna): desktop 2,2 s, mobitel na 4G uz 4× sporiji procesor 4,1 s, na Fast 3G 11,7 s;
     - **snimke:** `docs/images/karta.png` i `karta-mobitel.png`; README, metodologija, arhitektura, pristupačnost, odluke i scenarij videa ažurirani;
-    - **testovi:** `make verify` izlaz 0; pytest 148, Vitest 60, Playwright 58 (s 28 axe provjera), provjera README-a prolazi;
+    - **testovi:** `make verify` izlaz 0; pytest 149, Vitest 61, Playwright 58 (s 28 axe provjera), provjera README-a prolazi;
     - **usput:** lokalni obrađeni podaci ponovno izgrađeni u Docker kontejneru (`make data` iz `data/raw`), jer su bili stariji od zlatnih testova iz 6. 11.; Python alati u Makefileu pokreću se kao moduli (`python -m pytest`, `mypy`, `uvicorn`) jer Smart App Control na Windowsima blokira njihove `.exe` pokretače.
 
 Ako ponestane vremena, režem ovim redom:

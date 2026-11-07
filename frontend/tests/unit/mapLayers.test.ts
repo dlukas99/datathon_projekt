@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { MapRow } from '../../src/lib/api'
+import { columnsToTable, type MapRow } from '../../src/lib/api'
 import {
   LAYERS,
   featureState,
@@ -24,10 +24,8 @@ function row(over: Partial<MapRow>): MapRow {
     lon: 18.4,
     air: 'umjerena',
     pm25: 14,
-    no2: 12,
     flood: 'good',
     tree: 12,
-    green: 40,
     needs: 6,
     departures: null,
     stops: true,
@@ -95,6 +93,35 @@ describe('settlement table', () => {
     expect(matches(row({}), 'dakovo')).toBe(true)
     expect(matches(row({ name: 'Čakovec', municipality: 'Čakovec' }), 'cakov')).toBe(true)
     expect(matches(row({}), 'split')).toBe(false)
+  })
+})
+
+describe('settlement table by columns', () => {
+  it('turns one list per field back into rows, with the six-digit code', () => {
+    const t = columnsToTable({
+      id: [35, 69248],
+      name: ['Adžamovci', 'Vinkovci'],
+      municipality: ['Rešetari', 'Vinkovci'],
+      county: ['Brodsko-posavska županija', 'Vukovarsko-srijemska županija'],
+      population: [446, null],
+      lat: [45.2513, 45.2884],
+      lon: [17.4619, 18.8045],
+      air: ['umjerena', 'umjerena'],
+      pm25: [15.7, 14.2],
+      flood: ['good', 'good'],
+      tree: [24.2, 7.1],
+      needs: [1, 6],
+      departures: [null, null],
+      stops: [false, true],
+      scores: { opci: [55, 68], obitelj: [50, null] },
+      profiles_date: '2026-11-07T18:00:00+00:00',
+      sources: {},
+    })
+    expect(t.rows).toHaveLength(2)
+    expect(t.rows[0]?.code).toBe('000035')
+    expect(t.rows[1]?.population).toBeNull()
+    expect(t.rows[1]?.scores).toEqual({ opci: 68, obitelj: null })
+    expect(t.rows[1]?.stops).toBe(true)
   })
 })
 

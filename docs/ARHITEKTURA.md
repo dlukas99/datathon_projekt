@@ -53,7 +53,7 @@ Rješenje ima dva dijela:
 | `recycling.py` | CKAN pretraga općinskih skupova + OSM | `recycling.parquet`, `recycling_ckan.json` |
 | `centers.py` | OSM čvorovi `place` | stvarna središta naselja u `settlements.parquet` |
 | `stations.py` | EEA Air Quality Download Service | `stations_2024.parquet`: godišnji prosjeci službenih postaja |
-| `settlement_profiles.py` | sve gore (treba Valhallu) | `settlement_profiles.parquet`: profil središta 2.347 naselja za tražilicu |
+| `settlement_profiles.py` | sve gore (treba Valhallu) | `settlement_profiles.parquet`: profil središta svih 6.759 naselja za kartu i tražilicu (tražilica uzima 2.347 naselja s najmanje 200 stanovnika) |
 | `pois.py` | sve gore | `pois.parquet`: jedan sloj točaka s prednošću službenih izvora |
 | `common.py` | — | pristojno preuzimanje (User-Agent, razmak između zahtjeva, ponavljanje, nastavak prekinutog preuzimanja) i `manifest.json` s izvorom, licencom i datumom preuzimanja |
 
@@ -81,7 +81,7 @@ Rješenje ima dva dijela:
 | `GET /api/find/options`, `POST /api/find` | Predloži mjesto za život (stranica `/predlozi`): filtri i deterministički rang naselja |
 | `POST /api/find/parse` | slobodno pitanje u filtre (samo uz jezični model) |
 | `GET /api/map/geometry/{overview,detail}` | granice svih 6.759 naselja (DGU) pojednostavljene kao pokrivenost (300 m ili 80 m), u sažetom JSON-u (cijeli brojevi kao razlike); gzip 0,28 MB ili 0,8 MB, predmemorija 1 h |
-| `GET /api/map/settlements` | pokazatelji za središta 2.347 naselja (zrak, poplave, drveće, usluge, prijevoz, skor za pet profila) te izvori s datumima; gzip 0,13 MB |
+| `GET /api/map/settlements` | pokazatelji za središta svih 6.759 naselja (zrak, poplave, drveće, usluge, prijevoz, skor za pet profila) po stupcima (jedan popis po polju) te izvori s datumima; gzip 0,18 MB |
 | `GET /api/map/point?lat=&lon=` | što je na točki karte: naselje (i je li točka u naseljenom dijelu), more ili inozemstvo; točka se ne sprema |
 | `GET /api/sources` | svi izvori s licencom i datumom |
 | `GET /api/sources/live` | datumi zadnje izmjene skupova uživo s Portala (CKAN) |

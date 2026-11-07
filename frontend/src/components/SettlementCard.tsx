@@ -153,7 +153,9 @@ export function SettlementCard({
         {[municipality !== name ? municipality : '', county !== municipality ? county : '']
           .filter(Boolean)
           .join(', ')}
-        {population !== null && ` · ${population.toLocaleString('hr-HR')} stanovnika (Popis 2021.)`}
+        {population !== null
+          ? ` · ${population.toLocaleString('hr-HR')} stanovnika (Popis 2021.)`
+          : ' · broja stanovnika nema u tablici Popisa 2021.'}
       </p>
 
       {outside && (
@@ -195,8 +197,8 @@ export function SettlementCard({
         </>
       ) : (
         <p className="hint">
-          Za naselja s manje od 200 stanovnika pokazatelji nisu unaprijed izračunati. Puni
-          izvještaj izračunava ih za odabranu točku.
+          Za ovo naselje pokazatelji trenutačno nisu dostupni. Puni izvještaj izračunava ih za
+          odabranu točku.
         </p>
       )}
 

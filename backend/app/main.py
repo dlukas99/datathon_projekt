@@ -240,9 +240,9 @@ def map_geometry(level: Literal["overview", "detail"], request: Request) -> Resp
     return _gzip_response(map_layer.geometry(level), request)
 
 
-@app.get("/api/map/settlements", tags=["karta"], response_model=map_layer.MapTable)
+@app.get("/api/map/settlements", tags=["karta"], response_model=map_layer.MapColumns)
 def map_settlements(request: Request) -> Response:
-    """Pokazatelji za središte svakog naselja s najmanje 200 stanovnika, za bojenje karte."""
+    """Pokazatelji za središte svakog naselja u Hrvatskoj, za bojenje karte."""
     return _gzip_response(map_layer.table_json(), request)
 
 

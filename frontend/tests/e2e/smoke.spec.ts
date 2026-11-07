@@ -241,7 +241,7 @@ test('map of Croatia: layers, legend, a click on a town, a forest, the sea and a
     'Dobar',
     'Umjeren',
     'Loš',
-    /Nema izračuna/,
+    'Nema podataka',
   ])
   await expect(legend).toContainText('EEA, karta PM2,5 za 2024. (preuzeto')
   await page.getByRole('radio', { name: 'Skor za život' }).click()

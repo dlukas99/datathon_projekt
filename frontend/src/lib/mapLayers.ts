@@ -214,7 +214,7 @@ export function sortRows(rows: MapRow[], layer: MapLayer, profile: string, bestF
       if (a.v === null) return 1
       if (b.v === null) return -1
       const d = bestFirst ? b.v - a.v : a.v - b.v
-      return d || b.row.population - a.row.population
+      return d || (b.row.population ?? 0) - (a.row.population ?? 0)
     })
     .map((x) => x.row)
 }

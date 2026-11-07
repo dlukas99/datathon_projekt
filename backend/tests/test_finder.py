@@ -73,3 +73,16 @@ def test_results_explain_themselves() -> None:
 def test_parse_without_model_is_unavailable() -> None:
     with pytest.raises(finder.ParseUnavailable):
         finder.parse_question("mirno mjesto s vrtićem")
+
+
+def test_finder_ranks_only_settlements_with_200_or_more(monkeypatch: pytest.MonkeyPatch) -> None:
+    hamlet = row("Zaselak", 12, "A", "good", "vrlo niska", True, flood=100, air=100)
+    unknown = row("Bezbroja", 0, "A", "good", "vrlo niska", True, flood=100, air=100)
+    unknown["population"] = None
+    town = row("Grad", 5000, "A", "good", "umjerena", True, flood=100, air=50)
+    df = pd.DataFrame([hamlet, unknown, town])
+    monkeypatch.setattr(finder, "profiles", lambda: df)
+    res = finder.find(finder.FindRequest())
+    assert [r.name for r in res.results] == ["Grad"]
+    assert res.searched == 1
+    assert finder.options().settlements == 1

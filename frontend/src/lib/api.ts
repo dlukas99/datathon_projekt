@@ -278,15 +278,14 @@ export interface MapRow {
   name: string
   municipality: string
   county: string
-  population: number
+  /** null: the settlement is not in the 2021 census table. */
+  population: number | null
   lat: number
   lon: number
   air: string | null
   pm25: number | null
-  no2: number | null
   flood: string | null
   tree: number | null
-  green: number | null
   needs: number | null
   departures: number | null
   stops: boolean
@@ -295,7 +294,6 @@ export interface MapRow {
 
 export interface MapTable {
   rows: MapRow[]
-  min_population: number
   profiles_date: string | null
   sources: Record<string, { title: string; retrieved_at: string | null }[]>
 }
@@ -337,8 +335,51 @@ export function fetchMapGeometry(
   return getJson<CompactGeometry>(`/api/map/geometry/${level}`, {}, signal)
 }
 
-export function fetchMapTable(signal?: AbortSignal): Promise<MapTable> {
-  return getJson<MapTable>('/api/map/settlements', {}, signal)
+/** The settlement table as the API sends it: one list per field (backend MapColumns). */
+interface MapColumns {
+  id: number[]
+  name: string[]
+  municipality: string[]
+  county: string[]
+  population: (number | null)[]
+  lat: number[]
+  lon: number[]
+  air: (string | null)[]
+  pm25: (number | null)[]
+  flood: (string | null)[]
+  tree: (number | null)[]
+  needs: (number | null)[]
+  departures: (number | null)[]
+  stops: boolean[]
+  scores: Record<string, (number | null)[]>
+  profiles_date: string | null
+  sources: MapTable['sources']
+}
+
+export function columnsToTable(c: MapColumns): MapTable {
+  const rows: MapRow[] = c.id.map((id, i) => ({
+    id,
+    code: String(id).padStart(6, '0'),
+    name: c.name[i] ?? '',
+    municipality: c.municipality[i] ?? '',
+    county: c.county[i] ?? '',
+    population: c.population[i] ?? null,
+    lat: c.lat[i] ?? 0,
+    lon: c.lon[i] ?? 0,
+    air: c.air[i] ?? null,
+    pm25: c.pm25[i] ?? null,
+    flood: c.flood[i] ?? null,
+    tree: c.tree[i] ?? null,
+    needs: c.needs[i] ?? null,
+    departures: c.departures[i] ?? null,
+    stops: c.stops[i] ?? false,
+    scores: Object.fromEntries(Object.entries(c.scores).map(([p, v]) => [p, v[i] ?? null])),
+  }))
+  return { rows, profiles_date: c.profiles_date, sources: c.sources }
+}
+
+export async function fetchMapTable(signal?: AbortSignal): Promise<MapTable> {
+  return columnsToTable(await getJson<MapColumns>('/api/map/settlements', {}, signal))
 }
 
 export function fetchMapPoint(lat: number, lon: number, signal?: AbortSignal): Promise<MapPoint> {

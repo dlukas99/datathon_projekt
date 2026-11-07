@@ -226,7 +226,7 @@ export function MapPage() {
           ))}
           <li>
             <span className="legend-swatch" style={{ background: palette.none }} />
-            Nema izračuna (naselja ispod 200 stanovnika) ili podataka
+            Nema podataka
           </li>
         </ul>
         <p className="hint">
@@ -245,8 +245,8 @@ export function MapPage() {
       <section className="section" aria-labelledby="table-title">
         <h2 id="table-title">Naselja u tablici</h2>
         <p className="section-intro">
-          Isti podaci kao na karti, za {rows.length.toLocaleString('hr-HR')} naselja s najmanje
-          200 stanovnika. Poredano prema sloju „{layer.title}”.
+          Isti podaci kao na karti, za svih {rows.length.toLocaleString('hr-HR')} naselja u
+          Hrvatskoj. Poredano prema sloju „{layer.title}”.
         </p>
         <div className="atlas-table-tools">
           <label htmlFor="atlas-search">
@@ -316,7 +316,7 @@ export function MapPage() {
                       <span className="show-narrow">{r.municipality !== r.name ? r.municipality : ''}</span>
                     </th>
                     <td className="hide-narrow">{r.municipality}</td>
-                    <td className="num">{r.population.toLocaleString('hr-HR')}</td>
+                    <td className="num">{r.population === null ? '–' : r.population.toLocaleString('hr-HR')}</td>
                     <td>
                       <span
                         className="legend-swatch"
