@@ -373,6 +373,20 @@ Sve mora proći (0 grešaka).
 - `ruff format .` (bez `--check`) sam uredi Python kod.
 - Zlatni testovi uspoređuju izvještaje za demo adrese sa snimkama u `backend\tests\fixtures\golden\`. Ako namjerno promijenite izračun ili osvježite podatke, snimke osvježite naredbom `uv run python -m tests.golden --update` (u mapi `backend`) i commitajte ih.
 
+### Impeccable: provjera dizajna u Claude Codeu (neobavezno)
+
+[Impeccable](https://github.com/pbakaus/impeccable) (Paul Bakaus, licenca Apache-2.0) je razvojni alat: skill za Claude Code koji pregledava dizajn sučelja. Nije dio aplikacije i ne ulazi u njezinu izgradnju.
+
+- Skill i pomoćni agenti su u repozitoriju: `.claude/skills/impeccable/` i `.claude/agents/impeccable-*.md`.
+- Hook za dizajn (provjera nakon svake izmjene datoteke sučelja i na kraju odgovora) zapisuje se u `.claude/settings.local.json`, koji se ne commita. Tko ga želi, jednom pokrene u korijenu projekta:
+
+```powershell
+npx impeccable install --providers=claude --scope=project -y
+```
+
+- Installer preuzima i izvršnu datoteku alata (oko 20 MB) u `.claude/skills/impeccable/scripts/bin/`; ta mapa se ne commita. Ako je nema, pokretač je sam preuzme i provjeri prema `engine-checksums.txt`.
+- Zajedničke postavke dizajna (`PRODUCT.md`, `DESIGN.md`, `.impeccable/config.json`) commitaju se; privremene datoteke iz `.impeccable/` su u `.gitignore`.
+
 ---
 
 ## 9. Gdje je što

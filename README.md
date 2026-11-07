@@ -298,7 +298,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 ## Korišteni AI alati
 
-Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic). Asistent u aplikaciji može koristiti bilo koji model preko OpenAI-kompatibilnog API-ja i ne ovisi o jednom pružatelju; bez modela radi s pravilima.
+Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic). Za pregled dizajna sučelja korišten je skill [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) za Claude Code; to je razvojni alat i nije dio aplikacije. Asistent u aplikaciji može koristiti bilo koji model preko OpenAI-kompatibilnog API-ja i ne ovisi o jednom pružatelju; bez modela radi s pravilima.
 
 ## Ograničenje odgovornosti
 
