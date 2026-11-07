@@ -83,6 +83,10 @@ export function MapPage() {
   const onPick = useCallback((lat: number, lon: number) => {
     opener.current = null
     setPicked({ lat, lon, from: 'map' })
+    // On a phone the card covers the lower half of the screen: show the whole map above it.
+    if (window.matchMedia('(width <= 760px)').matches) {
+      document.querySelector('.atlas')?.scrollIntoView({ block: 'start' })
+    }
   }, [])
 
   const onClose = useCallback(() => {
@@ -168,9 +172,9 @@ export function MapPage() {
             <div className="atlas-map atlas-map-failed" role="alert">
               Karta trenutačno nije dostupna. Pokušajte ponovno za nekoliko trenutaka.
             </div>
-          ) : geometry.data && table.data ? (
+          ) : (
             <CroatiaMap
-              geometry={geometry.data}
+              geometry={geometry.data ?? null}
               rows={rows}
               layer={layer.id}
               profile={profile}
@@ -180,10 +184,11 @@ export function MapPage() {
               onPick={onPick}
               onReady={onReady}
             />
-          ) : (
-            <div className="atlas-map atlas-map-loading" aria-busy="true">
-              Učitavam kartu…
-            </div>
+          )}
+          {!mapReady && !geometry.isError && !table.isError && (
+            <p className="atlas-loading" role="status">
+              Učitavam naselja…
+            </p>
           )}
         </div>
 

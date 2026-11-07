@@ -82,3 +82,51 @@ test('sources', async ({ page }) => {
   await settle(page)
   await page.screenshot({ path: `${OUT}/izvori.png` })
 })
+
+// Karta Hrvatske: a click at a known place (the map carries its visible area in data-bounds).
+async function clickOnMap(page: Page, lon: number, lat: number) {
+  const map = page.locator('.atlas-map')
+  await expect(map).toHaveAttribute('data-bounds', /,/)
+  const box = await map.boundingBox()
+  const [w = 0, s = 0, e = 0, n = 0] = ((await map.getAttribute('data-bounds')) ?? '')
+    .split(',')
+    .map(Number)
+  const merc = (y: number) => Math.log(Math.tan(Math.PI / 4 + (y * Math.PI) / 360))
+  if (!box) throw new Error('map not visible')
+  await page.mouse.click(
+    box.x + ((lon - w) / (e - w)) * box.width,
+    box.y + ((merc(n) - merc(lat)) / (merc(n) - merc(s))) * box.height,
+  )
+}
+
+test('map desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await page.goto('/karta?sloj=air')
+  await expect(page.locator('.atlas-map-wrap')).toHaveAttribute('data-ready', 'true')
+  await settle(page)
+  await page.locator('.atlas').scrollIntoViewIfNeeded()
+  await clickOnMap(page, 18.8047, 45.2883) // Vinkovci, town centre
+  await expect(page.locator('.atlas-card h2')).toHaveText('Vinkovci')
+  await settle(page)
+  await page.addStyleTag({ content: '.site-header { position: static !important; }' })
+  await page.screenshot({ path: `${OUT}/karta.png`, fullPage: false })
+})
+
+test('map mobile', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+  })
+  const page = await context.newPage()
+  await page.goto('/karta')
+  await expect(page.locator('.atlas-map-wrap')).toHaveAttribute('data-ready', 'true')
+  await page.locator('.atlas-map').scrollIntoViewIfNeeded()
+  await settle(page)
+  await clickOnMap(page, 15.977, 45.813) // Zagreb, Trg bana Jelačića
+  await expect(page.locator('.atlas-card h2')).toBeVisible()
+  await settle(page)
+  await page.screenshot({ path: `${OUT}/karta-mobitel.png` })
+  await context.close()
+})

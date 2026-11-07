@@ -259,6 +259,28 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 - **Jezični model** (neobavezan): samo pretvara slobodno pitanje u iste filtre (`POST /api/find/parse`). Ne vidi podatke i ne piše brojke. Bez modela radi forma.
 - **Ograničenje:** vrijednosti vrijede za središte naselja; za konkretnu adresu treba otvoriti izvještaj.
 
+## Karta Hrvatske
+
+- **Što se boji:** svako naselje s najmanje 200 stanovnika, prema vrijednosti u svojem središtu iz profila naselja (vidi „Predloži mjesto za život”). Pri kliku na naselje ništa se ne računa.
+- **Slojevi i razredi** (`frontend/src/lib/mapLayers.ts`), od najslabijeg do najboljeg:
+
+| Sloj | Razredi | Osnova |
+|---|---|---|
+| Skor za život | 0–19, 20–39, 40–59, 60–79, 80–100 za odabrani profil | skor kao u izvještaju; koraci od 20 služe samo prikazu |
+| Kvaliteta zraka | loš, umjeren, dobar, vrlo dobar | isti pragovi kao u izvještaju (WHO 2021, EU 2030., EU danas) |
+| Poplave | u modeliranom području (10 ili 100 godina); područje od 500 godina ili do 100 m; izvan modeliranih područja | statusi iz izvještaja (scenariji Hrvatskih voda) |
+| Usluge pješice | 0–1, 2–3, 4–5, 6–7 od 7 svakodnevnih potreba do 15 min | brojanje iz Života bez auta; parovi služe samo prikazu |
+| Javni prijevoz | nema stajališta do 10 min; stajališta bez voznog reda; manje od 1 polaska na sat; 1 do 6; 6 i više | 1 na sat iz Života bez auta, 6 na sat iz Skora za život |
+
+- **Boje:** plava ljestvica u pet koraka (u tamnoj temi svjetlija je bolja) i siva za „nema izračuna”. Boja nije jedini nositelj informacije: legenda ima nazive, a tablica ispod karte daje iste vrijednosti riječima.
+- **Klik na kartu** (`GET /api/map/point`):
+  - točka u naselju, a u njezinoj ili susjednoj ćeliji od 150 m postoji kućni broj (DGU ili OSM): kartica naselja;
+  - točka u naselju bez kućnih brojeva u blizini (šuma, polje): kartica naselja uz napomenu „Odabrana točka je izvan naseljenog dijela; prikazujem naselje X (središte N km)” te poplave i zrak na samoj točki iz rastera;
+  - točka izvan svih naselja na kojoj ESA WorldCover pokazuje vodu ili nema podatka: „Odaberite točku na kopnu”;
+  - kopno izvan svih naselja: „Podaci su dostupni samo za Hrvatsku”.
+- **Geometrija:** granice naselja DGU-a pojednostavljene kao pokrivenost (300 m za cijelu Hrvatsku, 80 m nakon približavanja). Pojednostavljene granice služe samo prikazu, a klik se provjerava nad izvornim granicama.
+- **Ograničenje:** boja vrijedi za središte naselja, a ne za svaku kuću u njemu. Za konkretnu adresu treba otvoriti puni izvještaj.
+
 ## Asistent
 
 Vidi [ASISTENT.md](ASISTENT.md).

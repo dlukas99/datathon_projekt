@@ -80,6 +80,9 @@ Rješenje ima dva dijela:
 | `POST /api/assistant` | asistent nad izvještajem (vidi [ASISTENT.md](ASISTENT.md)) |
 | `GET /api/find/options`, `POST /api/find` | Predloži mjesto za život (stranica `/predlozi`): filtri i deterministički rang naselja |
 | `POST /api/find/parse` | slobodno pitanje u filtre (samo uz jezični model) |
+| `GET /api/map/geometry/{overview,detail}` | granice svih 6.759 naselja (DGU) pojednostavljene kao pokrivenost (300 m ili 80 m), u sažetom JSON-u (cijeli brojevi kao razlike); gzip 0,28 MB ili 0,8 MB, predmemorija 1 h |
+| `GET /api/map/settlements` | pokazatelji za središta 2.347 naselja (zrak, poplave, drveće, usluge, prijevoz, skor za pet profila) te izvori s datumima; gzip 0,13 MB |
+| `GET /api/map/point?lat=&lon=` | što je na točki karte: naselje (i je li točka u naseljenom dijelu), more ili inozemstvo; točka se ne sprema |
 | `GET /api/sources` | svi izvori s licencom i datumom |
 | `GET /api/sources/live` | datumi zadnje izmjene skupova uživo s Portala (CKAN) |
 
@@ -96,6 +99,10 @@ Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti sko
 - React 19, TypeScript (strict), Vite, React Router, TanStack Query.
 - MapLibre GL JS s podlogom OpenFreeMap (svijetla i tamna; mijenja se s temom bez gubitka slojeva).
 - Pješački putevi na karti (`frontend/src/lib/route.ts`): jedan klijent za cijelu aplikaciju sprema rute u memoriju po polazištu i cilju zaokruženima na 5 decimala. Šalje najviše jedan zahtjev u sekundi, prekida prethodni zahtjev kad se odabere drugo mjesto (`AbortController`) i odustaje nakon 8 s. Backend pita isti Valhalla kao za izokrone; Valhalla nije javno izložena.
+- Karta Hrvatske (`/karta`, `frontend/src/pages/MapPage.tsx`):
+  - granice se učitavaju jednom, a boja svakog naselja za svaki sloj i profil zapisuje se u MapLibreovo stanje značajki (`feature-state`), pa promjena sloja mijenja samo izraz boje, bez novog zahtjeva;
+  - podloga se učitava paralelno s podacima;
+  - detaljne granice dohvaćaju se tek pri približavanju (zoom 8,5).
 - Font Inter (OFL) poslužuje se iz vlastitog builda.
 - Stanje izvještaja (koordinate, adresa, profil) je u URL-u, pa se svaka stranica može podijeliti ili ispisati.
 

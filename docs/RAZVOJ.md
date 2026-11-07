@@ -150,7 +150,7 @@ docker compose -f deploy/docker-compose.dev.yml up -d
 ```powershell
 cd backend
 $env:PYTHONUTF8 = "1"
-uv run uvicorn app.main:app --reload --port 8000 --no-access-log
+uv run python -m uvicorn app.main:app --reload --port 8000 --no-access-log
 ```
 
 Provjera: http://localhost:8000/api/health vraća `{"status":"ok"}`, a opis API-ja je na http://localhost:8000/api/docs.
@@ -344,8 +344,8 @@ Backend:
 cd backend
 uv run ruff check .
 uv run ruff format --check .
-uv run mypy
-uv run pytest -q
+uv run python -m mypy
+uv run python -m pytest -q
 cd ..
 ```
 

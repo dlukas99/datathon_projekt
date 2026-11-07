@@ -66,6 +66,8 @@ function showCroatianNames(map: maplibregl.Map) {
   }
 }
 
+const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] }
+
 function firstSymbolLayer(map: maplibregl.Map): string | undefined {
   return map.getStyle().layers.find((l) => l.type === 'symbol')?.id
 }
@@ -85,7 +87,8 @@ export function CroatiaMap({
   onPick,
   onReady,
 }: {
-  geometry: GeoJSON.FeatureCollection
+  /** Overview outlines; null while they load (the base map is drawn meanwhile). */
+  geometry: GeoJSON.FeatureCollection | null
   rows: MapRow[]
   layer: LayerId
   profile: string
@@ -99,7 +102,10 @@ export function CroatiaMap({
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markerRef = useRef<maplibregl.Marker | null>(null)
   const ready = useRef(false)
-  const data = useRef(geometry)
+  const data = useRef<GeoJSON.FeatureCollection>(geometry ?? EMPTY)
+  // Which outlines the source holds; the detailed ones are never replaced by the overview.
+  const level = useRef<'none' | 'overview' | 'detail'>(geometry ? 'overview' : 'none')
+  const reported = useRef(false)
   const rowsRef = useRef(rows)
   const paint = useRef({ layer, profile })
   const selectedRef = useRef<number | null>(null)
@@ -153,6 +159,7 @@ export function CroatiaMap({
       fetchMapGeometry('detail')
         .then((compact) => {
           data.current = decodeGeometry(compact)
+          level.current = 'detail'
           void map.getSource<maplibregl.GeoJSONSource>('settlements')?.setData(data.current)
         })
         .catch(() => {
@@ -208,9 +215,6 @@ export function CroatiaMap({
       ready.current = true
       setStyleVersion((v) => v + 1)
     })
-    map.once('idle', () => {
-      onReadyRef.current()
-    })
     map.on('click', (e) => {
       onPickRef.current(e.lngLat.lat, e.lngLat.lng)
     })
@@ -254,10 +258,22 @@ export function CroatiaMap({
   useEffect(() => {
     const map = mapRef.current
     if (!map || !ready.current) return
+    if (geometry && level.current === 'none') {
+      data.current = geometry
+      level.current = 'overview'
+      void map.getSource<maplibregl.GeoJSONSource>('settlements')?.setData(geometry)
+    }
     for (const row of rows) {
       map.setFeatureState({ source: 'settlements', id: row.id }, featureState(row))
     }
-  }, [rows, styleVersion])
+    // Ready once the coloured settlements are drawn (MapLibre "idle": all tiles rendered).
+    if (level.current !== 'none' && rows.length > 0 && !reported.current) {
+      reported.current = true
+      map.once('idle', () => {
+        onReadyRef.current()
+      })
+    }
+  }, [geometry, rows, styleVersion])
 
   useEffect(() => {
     const map = mapRef.current

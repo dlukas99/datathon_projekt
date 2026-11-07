@@ -2055,7 +2055,20 @@ button.daily-row:hover .daily-show {
 }
 
 .atlas-map-wrap {
+  position: relative;
   min-width: 0;
+}
+
+.atlas-loading {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  margin: 0;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
 }
 
 .atlas-map {
@@ -2067,7 +2080,6 @@ button.daily-row:hover .daily-show {
   background: var(--surface-2);
 }
 
-.atlas-map-loading,
 .atlas-map-failed {
   display: grid;
   place-items: center;

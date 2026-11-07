@@ -21,7 +21,7 @@ export default defineConfig({
     ? undefined
     : [
         {
-          command: 'uv run uvicorn app.main:app --port 8000',
+          command: 'uv run python -m uvicorn app.main:app --port 8000',
           cwd: '../backend',
           url: 'http://localhost:8000/api/health',
           reuseExistingServer: true,

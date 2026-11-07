@@ -150,8 +150,9 @@ export function SettlementCard({
         {name}
       </h2>
       <p className="place-line">
-        {municipality && municipality !== name ? `${municipality}, ` : ''}
-        {county}
+        {[municipality !== name ? municipality : '', county !== municipality ? county : '']
+          .filter(Boolean)
+          .join(', ')}
         {population !== null && ` · ${population.toLocaleString('hr-HR')} stanovnika (Popis 2021.)`}
       </p>
 
