@@ -17,7 +17,10 @@ import { getProfile } from '../lib/profiles'
 import { decodeGeometry } from '../lib/settlementGeometry'
 import { useDocumentTheme } from '../lib/useDocumentTheme'
 
-const PAGE = 50
+// The list under the map is short: the five best, or the first five search results.
+const SHOWN = 5
+// The best-rated list leaves out hamlets, as "Predloži mjesto" does.
+const MIN_POPULATION = 200
 
 export function MapPage() {
   const [params, setParams] = useSearchParams()
@@ -27,8 +30,6 @@ export function MapPage() {
   const [picked, setPicked] = useState<Picked | null>(null)
   const [focus, setFocus] = useState<MapFocus | null>(null)
   const [query, setQuery] = useState('')
-  const [bestFirst, setBestFirst] = useState(true)
-  const [shown, setShown] = useState(PAGE)
   const [mapReady, setMapReady] = useState(false)
   const started = useRef(0)
   const focusCount = useRef(0)
@@ -60,8 +61,15 @@ export function MapPage() {
 
   const rows = useMemo(() => table.data?.rows ?? [], [table.data])
   const byId = useMemo(() => new Map(rows.map((r) => [r.id, r])), [rows])
-  const sorted = useMemo(() => sortRows(rows, layer, profile, bestFirst), [rows, layer, profile, bestFirst])
-  const filtered = useMemo(() => sorted.filter((r) => matches(r, query)), [sorted, query])
+  const sorted = useMemo(() => sortRows(rows, layer, profile, true), [rows, layer, profile])
+  const searching = query.trim() !== ''
+  const filtered = useMemo(
+    () =>
+      searching
+        ? sorted.filter((r) => matches(r, query))
+        : sorted.filter((r) => (r.population ?? 0) >= MIN_POPULATION),
+    [sorted, query, searching],
+  )
 
   const selectedRow: MapRow | null =
     picked?.from === 'map'
@@ -228,7 +236,7 @@ export function MapPage() {
             </li>
           </ul>
           <p className="hint">
-            {layer.explain} Boja naselja prikazuje vrijednost u njegovu središtu.
+            {layer.explain} Vrijednosti su za naselje, a ne za pojedinu adresu.
           </p>
           <p className="fine-print">
             Izvori:{' '}
@@ -242,11 +250,7 @@ export function MapPage() {
       </div>
 
       <section className="section" aria-labelledby="table-title">
-        <h2 id="table-title">Naselja u tablici</h2>
-        <p className="section-intro">
-          Isti podaci kao na karti, za svih {rows.length.toLocaleString('hr-HR')} naselja u
-          Hrvatskoj. Poredano prema sloju „{layer.title}”.
-        </p>
+        <h2 id="table-title">{searching ? 'Pronađena naselja' : 'Najbolje ocijenjena naselja'}</h2>
         <div className="atlas-table-tools">
           <label htmlFor="atlas-search">
             Traži naselje
@@ -257,32 +261,25 @@ export function MapPage() {
               placeholder="npr. Đakovo"
               onChange={(e) => {
                 setQuery(e.target.value)
-                setShown(PAGE)
               }}
             />
           </label>
-          <button
-            type="button"
-            className="button ghost"
-            aria-pressed={!bestFirst}
-            onClick={() => {
-              setBestFirst(!bestFirst)
-              setShown(PAGE)
-            }}
-          >
-            {bestFirst ? 'Prikaži najslabije prvo' : 'Prikaži najbolje prvo'}
-          </button>
         </div>
         <p className="hint" aria-live="polite">
           {table.isPending
             ? 'Učitavam naselja…'
-            : `Prikazano ${String(Math.min(shown, filtered.length))} od ${filtered.length.toLocaleString('hr-HR')} naselja.`}
+            : searching
+              ? filtered.length === 0
+                ? 'Nijedno naselje ne odgovara pretrazi.'
+                : filtered.length > SHOWN
+                  ? `Prvih ${String(SHOWN)} od ${filtered.length.toLocaleString('hr-HR')}; upišite više slova za užu pretragu.`
+                  : ''
+              : `Pet najboljih prema sloju „${layer.title}” među naseljima s najmanje ${String(MIN_POPULATION)} stanovnika.`}
         </p>
         <div className="table-scroll">
           <table className="place-table atlas-table">
             <caption className="visually-hidden">
-              Naselja poredana prema sloju {layer.title},{' '}
-              {bestFirst ? 'najbolja prvo' : 'najslabija prvo'}
+              {searching ? 'Pronađena naselja' : `Najbolje ocijenjena naselja, sloj ${layer.title}`}
             </caption>
             <thead>
               <tr>
@@ -297,7 +294,7 @@ export function MapPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.slice(0, shown).map((r) => {
+              {filtered.slice(0, SHOWN).map((r) => {
                 const c = layer.classOf(r, profile)
                 const step = c === null ? null : layer.classes[c]?.step
                 return (
@@ -329,25 +326,7 @@ export function MapPage() {
             </tbody>
           </table>
         </div>
-        {shown < filtered.length && (
-          <div className="button-row">
-            <button
-              type="button"
-              className="button ghost"
-              onClick={() => {
-                setShown(shown + PAGE)
-              }}
-            >
-              Prikaži još {Math.min(PAGE, filtered.length - shown)}
-            </button>
-          </div>
-        )}
       </section>
-
-      <p className="fine-print center">
-        Informativni alat, a ne službena procjena. Vrijednosti vrijede za središte naselja; za
-        konkretnu adresu otvorite puni izvještaj.
-      </p>
     </>
   )
 }

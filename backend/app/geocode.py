@@ -448,7 +448,10 @@ def get_geocoder() -> Geocoder:
             municipalities[str(t["code"][i])] = str(t["municipality"][i])
             settlements.append(
                 Suggestion(
-                    label=f"{t['name'][i]}, {t['municipality'][i]}",
+                    # "Split", not "Split, Split", when the town has the settlement's name.
+                    label=str(t["name"][i])
+                    if t["name"][i] == t["municipality"][i]
+                    else f"{t['name'][i]}, {t['municipality'][i]}",
                     lat=round(float(t["lat"][i]), 6),
                     lon=round(float(t["lon"][i]), 6),
                     kind="settlement",

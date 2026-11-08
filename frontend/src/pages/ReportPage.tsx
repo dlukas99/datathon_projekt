@@ -24,7 +24,7 @@ import {
   type Report,
 } from '../lib/api'
 import { BRAND } from '../lib/brand'
-import { formatDate, wholeMinutes } from '../lib/format'
+import { formatDate, minutesText } from '../lib/format'
 import { categoryStats } from '../lib/places'
 import { focusList, getProfile, orderByFocus, profileWeights, PROFILES } from '../lib/profiles'
 import { decodeWeights, encodeWeights, lifeScore } from '../lib/score'
@@ -118,7 +118,6 @@ function DailyList({
       <ul className="daily-list">
         {rows.map((key) => {
           const nearest = byKey[`nearest_${key}`]
-          const count = byKey[`count15_${key}`]
           if (!nearest) return null
           const minutes = nearest.unit === 'min' && typeof nearest.value === 'number'
           const name = nearest.display.match(/\(([^)]*)\)\s*$/)?.[1]
@@ -130,17 +129,12 @@ function DailyList({
               </span>
               <span className="daily-main">
                 <span className="daily-label">{nearest.label}</span>
-                <span className="daily-name">
-                  {name && name !== 'bez naziva' ? name : ''}
-                  {count && count.value !== null && Number(count.value) > 0
-                    ? `${name && name !== 'bez naziva' ? ' · ' : ''}${String(count.value)} unutar 15 min`
-                    : ''}
-                </span>
+                <span className="daily-name">{name && name !== 'bez naziva' ? name : ''}</span>
               </span>
               <span className="daily-end">
                 <span className={`daily-time${minutes ? '' : ' muted'}`}>
                   {minutes
-                    ? `${String(wholeMinutes(nearest.value as number))} min`
+                    ? minutesText(nearest.value as number)
                     : nearest.display.replace(/\s*\(.*\)$/, '')}
                 </span>
                 {place && (
@@ -529,7 +523,9 @@ export function ReportPage() {
             <p className="notice">
               Prikazano je {pointKind === 'naselje' ? 'središte naselja' : 'sredina ulice'}.
               Vrijednosti na vašoj adresi mogu se razlikovati: za točan izvještaj upišite ulicu i
-              kućni broj ili povucite oznaku na karti. <Link to="/">Nova pretraga</Link>
+              kućni broj ili povucite oznaku na karti. Skor ovdje vrijedi za tu jednu točku, pa
+              se može razlikovati od Skora na Karti, koji vrijedi za cijelo naselje.{' '}
+              <Link to="/">Nova pretraga</Link>
             </p>
           )}
           <div className="report-tools no-print">
@@ -558,10 +554,6 @@ export function ReportPage() {
               }}
             />
           )}
-          <p className="summary-note">
-            Informativni alat iz otvorenih podataka, a ne službena procjena.{' '}
-            <Link to="/o-alatu">Kako računamo</Link>
-          </p>
         </div>
       </header>
       {report && <ReportGuide sections={GUIDE} />}

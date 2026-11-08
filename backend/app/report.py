@@ -10,6 +10,7 @@ from analysis import score
 from analysis.daily import WALK_LIMIT_MIN, car_free_category, daily_category, transit_category
 from analysis.environment import (
     air_category,
+    air_level,
     fire_category,
     flood_category,
     green_category,
@@ -65,12 +66,89 @@ def locate(lat: float, lon: float, label: str | None = None) -> Location:
     )
 
 
+FLOOD_WARNINGS: dict[str, str] = {
+    "bad": "Pažnja: lokacija je u području koje rijeka može poplaviti.",
+    "warning": "Pažnja: u rijetkim velikim poplavama rijeka može doći do ove lokacije ili "
+    "sasvim blizu nje.",
+}
+AIR_PHRASES: dict[str, str] = {"vrlo niska": "čistim zrakom", "niska": "dobrim zrakom"}
+AIR_CONCERNS: dict[str, str] = {
+    "umjerena": "zrak je osrednji, lošiji nego što preporučuje Svjetska zdravstvena organizacija",
+    "visoka": "zrak je loš",
+}
+
+
+def _value(cat: Category, key: str) -> Any:
+    return next((v.value for v in cat.values if v.key == key), None)
+
+
 def summary(categories: dict[str, Category]) -> list[str]:
-    """Two to three sentences built only from category headlines (templates)."""
-    sentences = [categories["flood"].headline, categories["air"].headline]
-    car_free = categories["car_free"]
+    """Two or three plain sentences, built only from category statuses (templates).
+
+    What is really good or bad here comes first; a flood is named first only when the
+    location is in or next to a modelled flood area.
+    """
+    flood, air, green = categories["flood"], categories["air"], categories["green"]
+    noise, car_free = categories["noise"], categories["car_free"]
+    level = air_level(air)
+    sentences: list[str] = []
+    if flood.status in FLOOD_WARNINGS:
+        sentences.append(FLOOD_WARNINGS[flood.status])
+
+    quiet = noise.status == "good"
+    withs: list[str] = []
+    if level in AIR_PHRASES:
+        withs.append(AIR_PHRASES[level])
+    if green.status == "good":
+        withs.append("puno zelenila")
+    no_flood = flood.status == "good"
+    # Safety from floods is named in the opening sentence only next to other good news;
+    # alone it gets a short sentence at the end, so it never leads by default.
+    if no_flood and (quiet or withs):
+        withs.append("bez opasnosti od riječnih poplava")
+        no_flood = False
+    if quiet or withs:
+        head = "Mirno mjesto" if quiet else "Mjesto"
+        if not withs:
+            sentences.append("Mirno mjesto, podalje od velikih cesta.")
+        else:
+            phrase = withs[0] if len(withs) == 1 else ", ".join(withs[:-1]) + " i " + withs[-1]
+            joiner = " " if phrase.startswith("bez") else " s "
+            sentences.append(f"{head}{joiner}{phrase}.")
+
     if car_free.status != "no_data":
-        sentences.append(car_free.headline.split(" Nedostaje:")[0].split(" Nije provjereno:")[0])
+        have = _value(car_free, "needs_within_15min")
+        missing = _value(car_free, "needs_missing")
+        unknown = _value(car_free, "needs_unknown")
+        if isinstance(have, int):
+            if (not missing or missing == "ništa") and not unknown:
+                sentences.append("Sve što trebate svaki dan imate pješice unutar 15 minuta.")
+            elif not missing or missing == "ništa":
+                sentences.append(
+                    "Trgovinu, ljekarnu, liječnika, vrtić, školu i park imate pješice unutar "
+                    "15 minuta."
+                )
+            elif have >= 4:
+                sentences.append(
+                    f"Većinu svakodnevnih potreba imate pješice unutar 15 minuta, "
+                    f"ali nedostaje: {missing}."
+                )
+            else:
+                sentences.append(
+                    "Za većinu svakodnevnih potreba trebat će vam auto ili javni prijevoz."
+                )
+    if no_flood:
+        sentences.append("Riječne poplave ovdje ne prijete.")
+
+    concerns: list[str] = []
+    if noise.status == "warning":
+        concerns.append("velika cesta je blizu")
+    if level in AIR_CONCERNS:
+        concerns.append(AIR_CONCERNS[level])
+    if green.status == "bad":
+        concerns.append("malo je drveća i hlada")
+    if concerns:
+        sentences.append(f"Na što obratiti pažnju: {concerns[0]}.")
     return sentences
 
 

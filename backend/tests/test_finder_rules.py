@@ -169,7 +169,7 @@ def test_general_profiles_need_a_shop_on_foot(towns: pd.DataFrame, profile: str)
 
 def test_met_requirements_carry_their_values(towns: pd.DataFrame) -> None:
     r = strict("umirovljenik")[0]
-    assert any("6 min hoda" in m for m in r.met)
+    assert any("6 minuta hoda" in m for m in r.met)
 
 
 def test_too_few_strict_results_are_filled_with_one_missing_and_flagged(

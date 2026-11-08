@@ -87,7 +87,7 @@ export function transitText(row: MapRow): string {
     return `do ${row.departures.toLocaleString('hr-HR', { maximumFractionDigits: 1 })} polazaka na sat`
   }
   if (row.needs === null) return NO_VALUE
-  return row.stops ? 'stajališta bez voznog reda' : 'nema stajališta do 10 min hoda'
+  return row.stops ? 'stajališta bez voznog reda' : 'nema stajališta do 10 minuta hoda'
 }
 
 export const LAYERS: MapLayer[] = [
@@ -162,7 +162,7 @@ export const LAYERS: MapLayer[] = [
     explain:
       'Najviše polazaka na sat radnim danom sa stajališta do 10 minuta hoda (vozni redovi ZET-a, HŽPP-a i Autotroleja).',
     classes: [
-      { label: 'Nema stajališta do 10 min hoda', step: 0 },
+      { label: 'Nema stajališta do 10 minuta hoda', step: 0 },
       { label: 'Stajališta bez voznog reda', step: 1 },
       { label: 'Manje od 1 polaska na sat', step: 2 },
       { label: '1 do 6 polazaka na sat', step: 3 },

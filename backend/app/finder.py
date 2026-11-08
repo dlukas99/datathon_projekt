@@ -84,8 +84,9 @@ class FindResult(BaseModel):
     relaxed: bool = Field(
         default=False, description="Ne ispunjava jedan obavezni uvjet; prikazano uz napomenu"
     )
-    reasons: list[str]
-    facts: list[str]
+    reasons: list[str] = Field(description="Dva do tri kratka razloga za odabrani profil")
+    caution: str | None = Field(default=None, description="Na što obratiti pažnju")
+    facts: list[str] = Field(description="Brojke i izvori za „Detalje”")
 
 
 class FindResponse(BaseModel):
@@ -159,7 +160,7 @@ def _criteria(req: FindRequest) -> list[str]:
     out.append("uvjet profila: " + fr.profile_rules(req.profile)["summary"].rstrip("."))
     out.append(f"veličina: {SIZE_LABELS[req.size]}")
     if req.must:
-        out.append("pješice do 15 min: " + ", ".join(NEED_LABELS[n] for n in req.must))
+        out.append("pješice do 15 minuta: " + ", ".join(NEED_LABELS[n] for n in req.must))
     if req.max_air != "any":
         out.append(f"zrak: {AIR_RATINGS[req.max_air].lower()} ili bolji")
     if req.avoid_flood:
@@ -188,7 +189,7 @@ def _facts(row: pd.Series) -> list[str]:
             "glavne gradske ceste."
         )
     if pd.notna(row["needs_15min"]):
-        facts.append(f"Pješice do 15 min: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")
+        facts.append(f"Pješice do 15 minuta: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")
     if pd.notna(row["max_departures"]):
         facts.append(
             f"Javni prijevoz: do {fmt.num(float(row['max_departures']), 1)} polazaka na sat."
@@ -201,29 +202,10 @@ def _facts(row: pd.Series) -> list[str]:
     return facts
 
 
-def _reasons(row: pd.Series, weights: dict[str, float], total: int | None) -> list[str]:
-    labels = {c["id"]: c["label"] for c in load_profiles()["categories"]}
-    pulls = []
-    for cid in SCORED:
-        s = row.get(f"score_{cid}")
-        w = weights.get(cid, 0.0)
-        if s is None or pd.isna(s) or w <= 0 or total is None:
-            continue
-        pulls.append((w * (float(s) - total), cid, int(s)))
-    pulls.sort(reverse=True)
-    best = [f"{labels[c]} ({s}/100)" for p, c, s in pulls[:2] if p > 0]
-    out = ["Najjače: " + ", ".join(best)] if best else []
-    weakest = [x for x in pulls if x[0] < 0]
-    if weakest:
-        _, c, s = weakest[-1]
-        out.append(f"Najslabije: {labels[c]} ({s}/100)")
-    return out
-
-
 def _requirement_label(req: str) -> str:
     walk = int(fr.rules()["walk_minutes"])
     if req.startswith("walk:"):
-        return f"{fr.WALK_LABELS[req.split(':', 1)[1]][0]} do {walk} min hoda"
+        return f"{fr.WALK_LABELS[req.split(':', 1)[1]][0]} do {walk} minuta hoda"
     km = fmt.num(float(fr.rules()["higher_ed"]["max_km"]))
     return (
         f"Studiji u naselju ili veće studijsko središte do {km} km, uz stajalište javnog prijevoza"
@@ -302,8 +284,8 @@ def find(req: FindRequest) -> FindResponse:
         )
     results = []
     for (s, row, checks), relaxed in picked:
+        # Only a requirement that is not met; weaker criteria are named in the caution.
         gaps = [c.text for c in checks if not c.ok]
-        gaps += [g for cid in extra if (g := fr.criterion_gap(cid, row)) is not None]
         results.append(
             FindResult(
                 code=str(row["code"]),
@@ -317,7 +299,8 @@ def find(req: FindRequest) -> FindResponse:
                 met=[c.text for c in checks if c.ok],
                 missing=list(dict.fromkeys(gaps)),
                 relaxed=relaxed,
-                reasons=_reasons(row, weights, None if s is None else int(s)),
+                reasons=fr.highlights(req.profile, row),
+                caution=fr.caution(req.profile, row),
                 facts=fr.profile_facts(req.profile, row) + _facts(row),
             )
         )

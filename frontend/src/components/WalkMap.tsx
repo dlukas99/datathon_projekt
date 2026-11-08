@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Place, Report } from '../lib/api'
-import { metresLabel, wholeMinutes } from '../lib/format'
+import { metresLabel, minutesText } from '../lib/format'
 import {
   type CategoryStats,
   categoryStats,
@@ -93,7 +93,7 @@ function IsochroneLegend({ places }: { places: Place[] }) {
             aria-hidden="true"
           />
           <span>
-            <strong>{limit} min</strong>{' '}
+            <strong>{limit} minuta</strong>{' '}
             <span className="legend-text">
               {counts.size === 0
                 ? 'ništa od prikazanog'
@@ -273,7 +273,7 @@ export function WalkMap({
             {status === 'ready' && route && minutes !== null && (
               <>
                 <p className="route-summary">
-                  <strong>{wholeMinutes(minutes)} min</strong> · {metresLabel(route.distanceM)}{' '}
+                  <strong>{minutesText(minutes)}</strong> · {metresLabel(route.distanceM)}{' '}
                   pješice
                 </p>
                 <SourceMeta
@@ -318,15 +318,11 @@ export function WalkMap({
         {live}
       </p>
       <div className="walk-legend">
-        {onPick && (
-          <p className="muted-note no-print">
-            Povucite oznaku za izvještaj na drugoj točki.
-          </p>
-        )}
-        <p className="muted-note no-print">Kliknite kategoriju ili točku na karti za pješački put.</p>
-        <h3 className="legend-title">Pješice za</h3>
-        <IsochroneLegend places={places} />
-        <h3 className="legend-title">Mjesta na karti</h3>
+        <h3 className="legend-title">Najbliže pješice</h3>
+        <p className="muted-note no-print">
+          Odaberite stavku ili točku na karti za pješački put do nje
+          {onPick ? '; povucite oznaku za izvještaj na drugoj točki.' : '.'}
+        </p>
         <ul className="place-chips">
           {PLACE_ORDER.map((category) => {
             const s = stats.get(category)
@@ -357,8 +353,8 @@ export function WalkMap({
                     <span className="place-chip-name">{PLACE_LABELS[category]}</span>
                     <span className="place-chip-meta">
                       {nearest && nearest.walk_minutes !== null
-                        ? ` · ${String(s?.count15 ?? 0)} unutar ${String(WALK_LIMIT_MIN)} min · ${nearestWord(category)} ${String(wholeMinutes(nearest.walk_minutes))} min`
-                        : ' · nema podataka u blizini'}
+                        ? ` – ${minutesText(nearest.walk_minutes)}`
+                        : ' – nije u blizini'}
                     </span>
                   </span>
                 </button>
@@ -366,6 +362,12 @@ export function WalkMap({
             )
           })}
         </ul>
+        <details className="more walk-more">
+          <summary>Koliko je mjesta unutar 5, 10 i 15 minuta</summary>
+          <div className="more-body">
+            <IsochroneLegend places={places} />
+          </div>
+        </details>
       </div>
     </div>
   )

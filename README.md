@@ -26,7 +26,7 @@ Naslovnica postavlja jedno pitanje, „Kako je živjeti ovdje?”, i nudi dva pu
 
 Uz to su na naslovnici sva naselja Hrvatske obojena prema Skoru za život, s poveznicom na **kartu Hrvatske** (slojevi: Skor za život, zrak, poplave, usluge pješice, javni prijevoz), i šest okolišnih mjerenja (svako u boji koju ima i u izvještaju) i kratko objašnjenje kako aplikacija radi. **Usporedba dviju lokacija** dostupna je iz izbornika i iz izvještaja.
 
-Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenice sažetka iz predložaka i šest ključnih očitanja sa statusom (poplave, zrak, drveće, prometnica, pješice, prijevoz), od kojih svako vodi na svoj instrument. Okolišni pregled je ploča instrumenata: vodomjer za poplave, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od 300 m, ravnalo do prometnice, radar požara i luk sunca, svaki nacrtan iz stvarnih vrijednosti za adresu. Ispod naslovnog dijela izvještaj ima tri dijela:
+Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenice sažetka iz predložaka i šest ključnih očitanja sa statusom (poplave, zrak, drveće, prometnica, pješice, prijevoz), od kojih svako vodi na svoj instrument. Okolišni pregled je niz kartica: poplave i požari jednom jasnom rečenicom, zrak ocjenom riječju i jednostavnom ljestvicom, krug zelenila od 300 m, ravnalo do prometnice i luk sunca, svaki iz stvarnih vrijednosti za adresu; brojke, pragovi i izvori su pod „Detalji i izvor”. Ispod naslovnog dijela izvještaj ima tri dijela:
 
 1. **Okolišni pregled** (prvi ekran):
    - **poplave:** je li lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, razumljivo izraženo kao vjerojatnost barem jedne poplave u 30 godina (trajanje stambenog kredita), s poveznicom na službene karte Hrvatskih voda;
@@ -64,11 +64,11 @@ Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izrač
 | Naselje | Vinkovci, 28.111 stanovnika (Popis 2021.) | Nijemci, 1.330 stanovnika (Popis 2021.) |
 | Poplave | **Dobro:** izvan modeliranih područja za 10, 100 i 500 godina, i u krugu od 100 m | **Dobro:** isto |
 | Zrak (godišnji prosjek 2024.) | **Umjeren:** PM2,5 18,2 µg/m³ (unutar današnje granice EU-a od 25, iznad granice za 2030. od 10), NO2 17,5 µg/m³ (niska razina) | **Umjeren:** PM2,5 18,6 µg/m³, NO2 16,5 µg/m³ |
-| Zelenilo i hlad (300 m) | **Upozorenje:** drveće 7 %, izgrađeno 90 %; park 2 min hoda | **Loše:** drveće 20 %; najbliži park udaljen 6,1 km |
+| Zelenilo i hlad (300 m) | **Upozorenje:** drveće 7 %, izgrađeno 90 %; park 2 minute hoda | **Loše:** drveće 20 %; najbliži park udaljen 6,1 km |
 | Udaljenost od prometnica | **Podalje od prometnica:** najbliža velika cesta 790 m (glavna gradska cesta); pruga 1,4 km. Županijska cesta Ž4290 uz zgradu se od 8. 11. ne broji | **Blizu prometnice:** glavna cesta, 40 m |
 | Sunce na krovu | oko 1.251 kWh po kWp godišnje, nagib 37° | oko 1.245 kWh po kWp godišnje, nagib 36° |
-| Život bez auta | 6 od 7 potreba unutar 15 min; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
-| Najbliži vrtić / škola / liječnik | 7 / 4 / 5 min hoda | 12 / 3 / 4 min hoda |
+| Život bez auta | 6 od 7 potreba unutar 15 minuta; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
+| Najbliži vrtić / škola / liječnik | 7 / 4 / 5 minuta hoda | 12 / 3 / 4 minute hoda |
 | Skor za život (profil „Općenito”) | 77 | 60 |
 
 Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (Vinkovci) i `GET /api/report?lat=45.140273&lon=19.034942` (Nijemci). Svih šest demo adresa nalazi se u [scripts/demo_addresses.json](scripts/demo_addresses.json), a njihovi rezultati provjeravaju se zlatnim testovima.
@@ -85,12 +85,12 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
 - odabir točke povlačenjem oznake na karti
-- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika; svaki profil ima obavezne uvjete (npr. Student: studiji u mjestu ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 min hoda) i važne kriterije uz Skor za život, a uz svaki prijedlog piše zašto je predložen i što nedostaje
+- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika; svaki profil ima obavezne uvjete (npr. Student: studiji u mjestu ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 minuta hoda) i važne kriterije, a uz svaki prijedlog piše koje uvjete ispunjava, dva do tri jednostavna razloga i jedna napomena na što obratiti pažnju
 - **Karta Hrvatske** (`/karta`):
   - naselja obojena prema odabranom sloju (Skor za život za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;
   - klik daje kratku karticu naselja (na mobitelu kao donji list) s oznakama i gumbima „Otvori puni izvještaj” i „Pogledaj oglase”;
   - za šumu ili polje, more i inozemstvo kartica ima vlastitu poruku;
-  - ispod karte je pretraživa tablica istih naselja.
+  - ispod karte je pet najbolje ocijenjenih naselja za odabrani sloj i pretraga svih naselja (pristupačno i bez karte).
 - **Skor za život** s vidljivim i podesivim težinama po profilu
 - poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
 - okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak s jednom ocjenom, zelenilo i hlad, udaljenost od prometnica, požari raslinja, sunčev potencijal
@@ -104,7 +104,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - stranica „Izvori”: datumi osvježavanja uživo preko CKAN API-ja Portala otvorenih podataka i nalazi o kvaliteti podataka
 - pristupačnost: WCAG 2.2 razine AA (axe bez nalaza na svim stranicama u svijetloj i tamnoj temi), mobilni prikaz od 320 px, tamna tema; sve što je na karti dostupno je i u tekstu
 
-![Okolišni pregled kao ploča instrumenata: vodomjer za poplave, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od 300 m, ravnalo do prometnice, radar požara i luk sunca (Osijek, gradska uprava)](docs/images/okolis.png)
+![Okolišni pregled: poplave i požari jednom rečenicom, zrak ocjenom i ljestvicom, krug zelenila od 300 m, ravnalo do prometnice i luk sunca (Osijek, gradska uprava)](docs/images/okolis.png)
 
 | Naslovnica | Naslovnica na mobitelu | Iskaznica mjesta na mobitelu, tamna tema |
 |---|---|---|

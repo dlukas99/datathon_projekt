@@ -14,13 +14,13 @@ const MEASURES: { id: string; title: string; text: string; source: string }[] = 
   {
     id: 'flood',
     title: 'Poplave',
-    text: 'Modelirana područja riječnih poplava za 10, 100 i 500 godina, na adresi i do 100 m.',
+    text: 'Je li adresa u području koje rijeka može poplaviti i koliko je to vjerojatno.',
     source: 'JRC',
   },
   {
     id: 'air',
     title: 'Zrak',
-    text: 'Godišnji prosjek PM2,5 i NO2 uz preporuke WHO-a i granice EU-a.',
+    text: 'Koliko je zrak čist kroz godinu, jednom riječju od vrlo dobrog do lošeg.',
     source: 'EEA',
   },
   {
@@ -38,7 +38,7 @@ const MEASURES: { id: string; title: string; text: string; source: string }[] = 
   {
     id: 'fire',
     title: 'Požari raslinja',
-    text: 'Opožarene površine snimljene sa satelita u krugu od 2 km.',
+    text: 'Veći požari raslinja u krugu od 2 km, zabilježeni sa satelita od 2016.',
     source: 'Copernicus EFFIS',
   },
   {
@@ -68,10 +68,6 @@ export function HomePage() {
   const navigate = useNavigate()
   const theme = useDocumentTheme()
   const [first, second] = demo.addresses
-  // One example per town (Vinkovci has two public institutions in the demo list).
-  const examples = demo.addresses.filter(
-    (d, i, all) => all.findIndex((x) => x.address.split(', ').pop() === d.address.split(', ').pop()) === i,
-  )
 
   function open(s: Suggestion) {
     void navigate(reportPath(s.lat, s.lon, s.label, 'opci', [], s.kind))
@@ -103,20 +99,6 @@ export function HomePage() {
             </Link>
           </div>
 
-          <div className="examples">
-            <span className="examples-label" id="demo-title">
-              Ili pogledajte primjer:
-            </span>
-            <ul className="example-list" aria-labelledby="demo-title">
-              {examples.map((d) => (
-                <li key={d.id}>
-                  <Link to={reportPath(d.lat, d.lon, d.address, 'opci')}>
-                    {d.institution.replace(/ \(.*\)$/, '')}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         <figure className="trailhead-map">
@@ -141,7 +123,7 @@ export function HomePage() {
       <section className="measures" aria-labelledby="measures-title">
         <h2 id="measures-title">Šest mjerenja okoliša za svaku adresu</h2>
         <p className="measures-intro">
-          Svako mjerenje ima svoju boju i u izvještaju dobiva vlastiti mjerni prikaz.
+          Svako mjerenje ima svoju boju, a u izvještaju kratko i jasno piše što znači.
         </p>
         <ul className="measure-list">
           {MEASURES.map((m) => (
@@ -194,9 +176,6 @@ export function HomePage() {
         </p>
       </section>
 
-      <p className="fine-print center">
-        Informativni alat, a ne službena procjena. <Link to="/o-alatu">Kako računamo</Link>
-      </p>
     </>
   )
 }

@@ -262,7 +262,7 @@ test('clicking a category asks for the route to its nearest place, even beyond 1
     expect(map.layers.has('places')).toBe(true)
   })
   const kindergarten = chip(/^Vrtić/)
-  expect(kindergarten).toHaveTextContent('Vrtić · 0 unutar 15 min · najbliži 31 min')
+  expect(kindergarten).toHaveTextContent('Vrtić – 31 minuta')
   fireEvent.click(kindergarten)
   expect(kindergarten).toHaveAttribute('aria-pressed', 'true')
 
@@ -276,7 +276,7 @@ test('clicking a category asks for the route to its nearest place, even beyond 1
   await within(panel).findByText('2,4 km', { exact: false })
   expect(panel).toHaveTextContent('Najbliži vrtić')
   expect(panel).toHaveTextContent('Vrtić Prvi')
-  expect(panel).toHaveTextContent('31 min · 2,4 km pješice')
+  expect(panel).toHaveTextContent('31 minuta · 2,4 km pješice')
   expect(screen.getByRole('status')).toHaveTextContent(
     'Pješački put do odredišta Vrtić Prvi: 31 minuta, 2,4 kilometra.',
   )
@@ -307,7 +307,7 @@ test('clicking a point opens its details and does not move the report point', as
   expect(onPick).not.toHaveBeenCalled()
   const popup = fake.FakePopup.instances.at(-1)
   expect(popup?.content).toHaveTextContent('Trgovina Kut')
-  expect(popup?.content).toHaveTextContent('Trgovina namirnicama · 4 min hoda')
+  expect(popup?.content).toHaveTextContent('Trgovina namirnicama · 4 minute hoda')
 
   const show = popup?.content?.querySelector('button')
   expect(show).toHaveTextContent('Prikaži put pješice')
@@ -345,7 +345,7 @@ test('Escape removes the route and brings all points back', async () => {
     expect(map.layers.has('places')).toBe(true)
   })
   fireEvent.click(chip(/^Vrtić/))
-  await screen.findByText('31 min', { exact: false, selector: 'strong' })
+  await screen.findByText('31 minuta', { exact: false, selector: 'strong' })
 
   fireEvent.keyDown(document, { key: 'Escape' })
   expect(screen.queryByRole('group', { name: 'Pješački put' })).toBeNull()
@@ -375,5 +375,5 @@ test('a kind with no places is a disabled button that says why', () => {
   setup(() => Promise.resolve(routeResponse(1, 10)))
   const pediatrician = chip(/^Pedijatar/)
   expect(pediatrician).toBeDisabled()
-  expect(pediatrician).toHaveTextContent('nema podataka u blizini')
+  expect(pediatrician).toHaveTextContent('nije u blizini')
 })

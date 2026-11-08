@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import type { Place, Report } from '../lib/api'
-import { wholeMinutes } from '../lib/format'
+import { minutesText } from '../lib/format'
 import { PLACE_COLORS, PLACE_LABELS, placeKey, placeTitle } from '../lib/places'
 import type { WalkRoute } from '../lib/route'
 
@@ -204,7 +204,7 @@ function popupContent(place: Place, onShow: () => void): HTMLElement {
   title.textContent = placeTitle(place)
   const meta = document.createElement('span')
   const minutes =
-    place.walk_minutes === null ? '' : ` · ${String(wholeMinutes(place.walk_minutes))} min hoda`
+    place.walk_minutes === null ? '' : ` · ${minutesText(place.walk_minutes)} hoda`
   meta.textContent = `${PLACE_LABELS[place.category] ?? place.category}${minutes}`
   const button = document.createElement('button')
   button.type = 'button'

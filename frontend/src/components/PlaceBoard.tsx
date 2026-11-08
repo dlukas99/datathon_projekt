@@ -32,7 +32,7 @@ function display(c: Category, key: string): string | null {
 function stopsText(n: string): string {
   const count = Number(n)
   if (!Number.isFinite(count)) return n
-  return `${n} ${count % 10 === 1 && count % 100 !== 11 ? 'stajalište' : 'stajališta'} do 10 min`
+  return `${n} ${count % 10 === 1 && count % 100 !== 11 ? 'stajalište' : 'stajališta'} do 10 minuta`
 }
 
 /** The key facts for the top of the report, each with its own status, from the report itself. */
