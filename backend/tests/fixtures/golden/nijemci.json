@@ -35,7 +35,7 @@
     "noise": {
       "status": "warning",
       "values": {
-        "distance_road": 23,
+        "distance_road": 43,
         "distance_rail": null
       }
     },

@@ -76,6 +76,6 @@ def test_road_names_follow_croatian_road_classes() -> None:
     assert road_name("primary", "D8;D1") == "državna cesta D8"
     assert road_name("primary", "") == "glavna cesta"
     assert road_name("secondary", "2001") == "županijska cesta Ž2001"
-    assert road_name("secondary", "") == "županijska ili glavna gradska cesta"
+    assert road_name("secondary", "") == "glavna gradska cesta"
     assert road_name("secondary", "R-408") == "važnija cesta"
     assert road_name("rail", "M202") == "željeznička pruga"

@@ -121,6 +121,14 @@ def profiles() -> pd.DataFrame:
     facilities = d / "settlement_facilities.parquet"
     if facilities.exists():
         df = df.merge(pd.read_parquet(facilities), on="code", how="left")
+    traffic = d / "settlement_traffic.parquet"
+    if traffic.exists():
+        # Distance from major roads over every address of the settlement replaces the
+        # value at its single centre point (ingest/settlement_traffic.py).
+        t = pd.read_parquet(traffic).rename(columns={"score_noise": "score_noise_addr"})
+        df = df.merge(t, on="code", how="left")
+        df["score_noise"] = df["score_noise_addr"].fillna(df["score_noise"])
+        df = df.drop(columns="score_noise_addr")
     return df
 
 
@@ -171,6 +179,13 @@ def _facts(row: pd.Series) -> list[str]:
         facts.append(
             f"Zrak: {AIR_RATINGS.get(row['air_band'], row['air_band']).lower()} "
             f"(PM2,5 {fmt.num(float(row['pm25']), 1)} µg/m³)."
+        )
+    near, far = row.get("near_share"), row.get("far_share")
+    if near is not None and far is not None and pd.notna(near) and pd.notna(far):
+        facts.append(
+            f"Prometnice: {fmt.num(100 * float(near))} % adresa naselja je do 300 m, a "
+            f"{fmt.num(100 * float(far))} % dalje od 500 m od autoceste, brze, državne ili "
+            "glavne gradske ceste."
         )
     if pd.notna(row["needs_15min"]):
         facts.append(f"Pješice do 15 min: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")

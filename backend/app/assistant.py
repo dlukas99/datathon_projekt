@@ -185,9 +185,9 @@ EXPLANATIONS: dict[str, str] = {
     ),
     "noise": (
         "Buku ne mjerimo: otvorene karte buke za cijelu Hrvatsku ne postoje. Prikazujemo "
-        "udaljenost od autocesta, brzih, državnih i županijskih cesta te pruga. Do 300 m od velike "
-        "prometnice buka i ispušni plinovi obično su najizraženiji, a dalje od 500 m utjecaj "
-        "je slab (pregled istraživanja Health Effects Institutea, 2010.)."
+        "udaljenost od autocesta, brzih, državnih i glavnih gradskih cesta te pruga. "
+        "Do 300 m od velike prometnice buka i ispušni plinovi obično su najizraženiji, "
+        "a dalje od 500 m utjecaj je slab (pregled istraživanja Health Effects Institutea, 2010.)."
     ),
     "solar": (
         "Procjena dolazi iz alata PVGIS Europske komisije: koliko bi kilovatsati godišnje "

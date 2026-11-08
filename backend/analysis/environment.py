@@ -616,6 +616,19 @@ TRAFFIC_BANDS: list[tuple[float | None, str, Status]] = [
 _COUNTY_REF = re.compile(r"\d{4}")
 
 
+def is_traffic_road(kind: str, ref: str) -> bool:
+    """Roads that count as major traffic: motorways, expressways, state and other primary
+    roads, and secondary roads without a county number (main city streets that used to
+    be county roads). County roads (secondary with a four-digit Ž number) run through
+    almost every village and mostly carry little traffic, so they are left out."""
+    if kind in ("motorway", "trunk", "primary"):
+        return True
+    if kind == "secondary":
+        first = (ref or "").split(";")[0].strip()
+        return not _COUNTY_REF.fullmatch(first)
+    return False
+
+
 def road_name(kind: str, ref: str) -> str:
     """Croatian road class from OSM tags (wiki "Croatia/Ceste"): motorway is an autocesta,
     trunk a brza cesta, primary a državna cesta (ref D…), secondary a županijska cesta
@@ -631,7 +644,7 @@ def road_name(kind: str, ref: str) -> str:
         return f"državna cesta {first}" if first.startswith("D") else "glavna cesta"
     if _COUNTY_REF.fullmatch(first):
         return f"županijska cesta Ž{first}"
-    return "županijska ili glavna gradska cesta" if not first else "važnija cesta"
+    return "glavna gradska cesta" if not first else "važnija cesta"
 
 
 def traffic_band(distance_m: float) -> tuple[str, Status]:
@@ -670,13 +683,15 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     nearest: dict[str, tuple[float, str]] = {}
     for i in lines.tree.query(origin.buffer(2000.0), predicate="intersects"):
         kind = lines.kinds[int(i)]
+        if kind != "rail" and not is_traffic_road(kind, lines.refs[int(i)]):
+            continue
         group = "rail" if kind == "rail" else "road"
         d = float(lines.geoms[int(i)].distance(origin))
         if group not in nearest or d < nearest[group][0]:
             nearest[group] = (d, road_name(kind, lines.refs[int(i)]))
     values: list[Value] = []
     for group, value_label in (
-        ("road", "Najbliža autocesta, brza, državna ili županijska cesta"),
+        ("road", "Najbliža autocesta, brza, državna ili glavna gradska cesta"),
         ("rail", "Najbliža pruga"),
     ):
         found = nearest.get(group)
@@ -699,7 +714,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
     sentences = [
         _traffic_sentence(road[1], road[0])
         if road
-        else "U krugu od 2 km nema autoceste, brze, državne ni županijske ceste."
+        else "U krugu od 2 km nema autoceste, brze, državne ni glavne gradske ceste."
     ]
     if rail and rail[0] <= 500:
         sentences.append(f"Željeznička pruga je {fmt.metres(rail[0])} od lokacije.")
@@ -724,9 +739,9 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
         scales=[scale],
         notes=[
             "Ne mjerimo buku: ovo je procjena prema zračnoj udaljenosti od lokacije (adrese ili "
-            "središta naselja) do osi najbliže autoceste, brze, državne ili županijske ceste "
-            "(u gradovima i bivše županijske ceste, danas glavne gradske ulice) te pruge iz "
-            "OpenStreetMapa. Ostale ulice se ne broje.",
+            "središta naselja) do osi najbliže autoceste, brze, državne ili glavne gradske "
+            "ceste (bivše županijske ceste u gradovima) te pruge iz OpenStreetMapa. "
+            "Županijske ceste s oznakom Ž i ostale ulice se ne broje.",
             "Pojasevi slijede pregled istraživanja Health Effects Institutea (2010.): "
             "onečišćenje od prometa najveće je unutar približno 300 do 500 m od velike "
             "prometnice, a dalje pada na pozadinsku razinu.",

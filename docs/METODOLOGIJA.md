@@ -132,7 +132,7 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 
 ## Udaljenost od prometnica (procjena; ranije „Promet u blizini” i „Buka”)
 
-- **Podaci:** ceste `highway=motorway|trunk|primary|secondary` i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa. Ostale ulice se ne broje.
+- **Podaci:** ceste `highway=motorway|trunk|primary` i `secondary` bez županijske oznake (glavne gradske ulice) te pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa. Županijske ceste (`secondary` s četveroznamenkastom oznakom Ž) i ostale ulice se od 8. 11. 2026. ne broje: kroz gotovo svako selo prolazi neka županijska cesta, pa je 79 % naselja bilo „blizu prometnice” i podatak nije razlikovao mirna mjesta od prometnih.
 - **Vrsta ceste** prema hrvatskim pravilima označavanja u OSM-u (wiki „Croatia/Ceste”):
 
 | OSM | U izvještaju | Primjer |
@@ -141,8 +141,8 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 | `trunk` | brza cesta i oznaka | brza cesta D1 |
 | `primary` s oznakom D | državna cesta i oznaka | državna cesta D8 |
 | `primary` bez oznake D | glavna cesta | |
-| `secondary` s četveroznamenkastom oznakom | županijska cesta (Ž i oznaka) | županijska cesta Ž2001 |
-| `secondary` bez oznake | županijska ili glavna gradska cesta (bivše županijske ceste u gradovima) | |
+| `secondary` s četveroznamenkastom oznakom | ne broji se (županijska cesta) | županijska cesta Ž2001 |
+| `secondary` bez oznake | glavna gradska cesta (bivše županijske ceste u gradovima) | |
 
   U podacima 19.042 dionice `primary` imaju oznaku D, a 16.463 dionice `secondary` županijsku oznaku; 3.910 dionica `secondary` nema oznaku, uglavnom u gradovima.
 - **Izračun:** zračna udaljenost od lokacije (adrese ili središta naselja) do najbliže točke osi takve ceste i do najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”. Za središta naselja udaljenost je često 0 m jer OSM čvor naselja leži na samoj cesti; za adresu uz cestu nekoliko je metara (točka adrese je na zgradi).
@@ -158,7 +158,8 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
 - **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - **Smjer podskora:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
-- **Popis „Predloži mjesto” i izvještaj:** popis računa za središte naselja, a izvještaj za odabranu adresu, pa se brojke mogu razlikovati (Split: središte 530 m od državne ceste, adresa uz tu cestu nekoliko metara).
+- **Naselje (karta i „Predloži mjesto”):** jedna točka ne opisuje naselje (središte Splita je u pješačkoj staroj jezgri, a središte gotovo svakog sela na cesti kroz selo), pa se za svako naselje računa pojas za **svaku adresu DGU-a** u njemu (1.683.411 adresa, `ingest/settlement_traffic.py`). Podskor naselja je prosjek podskorova adresa (100, 60 ili 25), a uz prijedlog piše koliki udio adresa je do 300 m i koliki dalje od 500 m od velike prometnice. Naselja bez adresa (17) zadržavaju vrijednost u središtu. Izvještaj za adresu i dalje računa za tu adresu.
+- **Ograničenje:** prometnija županijska cesta kroz središte grada (npr. Ž4290 u Vinkovcima) ne broji se kao prometnica; buku i broj vozila ne mjerimo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
 ## Požari raslinja

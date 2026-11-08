@@ -18,6 +18,7 @@ from ingest import (
     recycling,
     registries,
     settlement_profiles,
+    settlement_traffic,
     stations,
     transit,
 )
@@ -36,6 +37,7 @@ STEPS: list[tuple[str, Callable[[], None]]] = [
     ("Spajanje točaka", pois.run),
     ("Profili naselja (treba pokrenutu Valhallu)", settlement_profiles.run),
     ("Visoka učilišta, bolnice i studentski domovi (MZOM, OSM)", facilities.run),
+    ("Udaljenost adresa naselja od prometnica (DGU, OSM)", settlement_traffic.run),
 ]
 
 
