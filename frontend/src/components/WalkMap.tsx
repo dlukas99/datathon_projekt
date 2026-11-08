@@ -320,7 +320,7 @@ export function WalkMap({
       <div className="walk-legend">
         {onPick && (
           <p className="muted-note no-print">
-            Kliknite na kartu ili povucite oznaku za izvještaj na drugoj točki.
+            Povucite oznaku za izvještaj na drugoj točki.
           </p>
         )}
         <p className="muted-note no-print">Kliknite kategoriju ili točku na karti za pješački put.</p>
