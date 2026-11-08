@@ -4,6 +4,7 @@ import { type WalkFocus, WalkMap } from '../../src/components/WalkMap'
 import type { Place, Report } from '../../src/lib/api'
 import { placeKey } from '../../src/lib/places'
 import { createRouteClient } from '../../src/lib/route'
+import { SINGLE_CLICK_DELAY_MS } from '../../src/lib/singleClick'
 
 // jsdom has no WebGL, so MapLibre is replaced by a small fake that records what the
 // component asks of the map and lets the test click on it.
@@ -316,12 +317,27 @@ test('clicking a point opens its details and does not move the report point', as
   expect(fetchSpy.mock.calls[0]?.[0]).toContain('to_lat=45.00100&to_lon=16.00100')
   expect(popup?.removed).toBe(true)
 
-  // a click away from the points still moves the report point
+  // a double click away from the points only zooms: the report point stays
   map.hits = []
+  const away = { point: { x: 300, y: 200 }, lngLat: { lat: 45.5, lng: 16.5 } }
   act(() => {
-    map.fire('click', { point: { x: 300, y: 200 }, lngLat: { lat: 45.5, lng: 16.5 } })
+    map.fire('mousedown', {})
+    map.fire('click', { ...away, originalEvent: { detail: 1 } })
+    map.fire('mousedown', {})
+    map.fire('click', { ...away, originalEvent: { detail: 2 } })
+    map.fire('dblclick', {})
   })
-  expect(onPick).toHaveBeenCalledWith(45.5, 16.5)
+  await new Promise((resolve) => setTimeout(resolve, SINGLE_CLICK_DELAY_MS + 100))
+  expect(onPick).not.toHaveBeenCalled()
+
+  // a single click away from the points moves the report point, after the delay
+  act(() => {
+    map.fire('click', { ...away, originalEvent: { detail: 1 } })
+  })
+  expect(onPick).not.toHaveBeenCalled()
+  await waitFor(() => {
+    expect(onPick).toHaveBeenCalledWith(45.5, 16.5)
+  })
 })
 
 test('Escape removes the route and brings all points back', async () => {

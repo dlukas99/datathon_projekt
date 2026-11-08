@@ -357,6 +357,32 @@ test('walking route to the nearest place of a kind, from the legend and the dail
   await expect(panel).toBeFocused()
 })
 
+test('report map: a double click only zooms, a single click moves the point', async ({ page }) => {
+  await page.goto(reportUrl)
+  const frame = page.locator('.map-frame')
+  await expect(frame).toHaveAttribute('data-ready', 'true')
+  await frame.scrollIntoViewIfNeeded()
+  // Let the opening camera flight settle, so the clicks land on a still map.
+  await page.waitForTimeout(2500)
+  const box = await frame.locator('.maplibregl-canvas').boundingBox()
+  if (!box) throw new Error('map not visible')
+  // Left edge, half way down: away from the marker, the buttons and the attribution.
+  const x = box.x + box.width * 0.08
+  const y = box.y + box.height * 0.5
+  const heading = page.getByRole('heading', { level: 1 })
+  const title = (await heading.textContent()) ?? ''
+  const before = page.url()
+
+  await page.mouse.dblclick(x, y)
+  await page.waitForTimeout(1500)
+  expect(page.url()).toBe(before)
+  await expect(heading).toHaveText(title)
+
+  await page.mouse.click(x, y)
+  await expect(page).toHaveURL(/tip=karta/)
+  expect(new URL(page.url()).searchParams.has('adresa')).toBe(false)
+})
+
 test('comparison shows both addresses side by side', async ({ page }) => {
   await page.goto(compareUrl)
   const table = page.getByRole('table', { name: /Usporedba dviju adresa/ })

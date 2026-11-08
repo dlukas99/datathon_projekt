@@ -5,7 +5,8 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import type { Place, Report } from '../lib/api'
 import { wholeMinutes } from '../lib/format'
 import { PLACE_COLORS, PLACE_LABELS, placeKey, placeTitle } from '../lib/places'
-import type { WalkRoute } from '../lib/route'
+import { straightDistance, type WalkRoute } from '../lib/route'
+import { createSingleClick } from '../lib/singleClick'
 
 // The bundler moves maplibre's module away from its worker file; point to it explicitly.
 maplibregl.setWorkerUrl(workerUrl)
@@ -49,6 +50,18 @@ const ROUTE_ATTRIBUTION =
 const CLICKABLE_LAYERS = ['target', 'places']
 // Clicks this close to a point (in pixels) count as a click on the point; easier on touch.
 const HIT_TOLERANCE = 8
+// A new point closer than this to the current one does not recompute the report.
+const MIN_MOVE_M = 5
+// Any of these while a single click waits means it was not a choice of location:
+// a double click or tap (zoom), a pan or a zoom, or the press of a second click.
+const CANCEL_PICK_EVENTS = [
+  'dblclick',
+  'movestart',
+  'zoomstart',
+  'dragstart',
+  'mousedown',
+  'touchstart',
+] as const
 
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] }
 
@@ -262,6 +275,7 @@ export function ReportMap({
 
   useEffect(() => {
     if (!container.current || !frame.current) return
+    const frameEl = frame.current
     let map: maplibregl.Map
     appliedTheme.current = currentTheme()
     styleReady.current = false
@@ -304,6 +318,8 @@ export function ReportMap({
     })
     map.once('load', () => {
       loadedRef.current = true
+      // For tests and tools: the map now takes clicks.
+      frameEl.dataset.ready = 'true'
       const current = routeRef.current
       if (current) fitRoute(map, report, current)
       else fitIsochrones(map, report)
@@ -328,6 +344,20 @@ export function ReportMap({
       }
     })
 
+    const pick = (lat: number, lon: number) => {
+      const here = { lat: report.location.lat, lon: report.location.lon }
+      if (straightDistance(here, { lat, lon }) < MIN_MOVE_M) {
+        marker.setLngLat([here.lon, here.lat])
+        return
+      }
+      onPickRef.current?.(lat, lon)
+    }
+    // A double click or tap zooms (MapLibre's own doubleClickZoom) and never moves the point.
+    const singleClick = createSingleClick<maplibregl.LngLat>((p) => {
+      pick(p.lat, p.lng)
+    })
+    for (const type of CANCEL_PICK_EVENTS) map.on(type, singleClick.cancel)
+
     // A click on a point opens its details; only a click elsewhere moves the report point.
     map.on('click', (e) => {
       if (!styleReady.current) return
@@ -343,6 +373,7 @@ export function ReportMap({
           )
         : []
       if (hits.length > 0) {
+        singleClick.cancel()
         // Of the points near the click, the one closest to it.
         let place: Place | undefined
         let best = Infinity
@@ -369,7 +400,7 @@ export function ReportMap({
         }
         return
       }
-      onPickRef.current?.(e.lngLat.lat, e.lngLat.lng)
+      singleClick.click(e.lngLat, e.originalEvent.detail)
     })
 
     const marker = new maplibregl.Marker({ color: '#5b3a1e', draggable: interactive })
@@ -377,7 +408,7 @@ export function ReportMap({
       .addTo(map)
     marker.on('dragend', () => {
       const p = marker.getLngLat()
-      onPickRef.current?.(p.lat, p.lng)
+      pick(p.lat, p.lng)
     })
 
     const onKey = (e: KeyboardEvent) => {
@@ -385,6 +416,8 @@ export function ReportMap({
     }
     document.addEventListener('keydown', onKey)
     return () => {
+      singleClick.cancel()
+      delete frameEl.dataset.ready
       document.removeEventListener('keydown', onKey)
       mapRef.current = null
       loadedRef.current = false
