@@ -15,7 +15,7 @@ def test_openapi_is_published() -> None:
 def test_report_rejects_points_outside_croatia() -> None:
     response = client.get("/api/report", params={"lat": 48.2, "lon": 16.37})
     assert response.status_code == 422
-    assert response.json()["detail"] == "Lokacija nije u Hrvatskoj."
+    assert response.json()["detail"] == "Lokacija nije na kopnu u Hrvatskoj."
 
 
 def test_geocode_requires_query() -> None:

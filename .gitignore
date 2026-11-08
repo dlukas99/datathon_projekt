@@ -55,3 +55,13 @@ Thumbs.db
 **/.impeccable/live/deferred-svelte-component-accepts.json
 **/.impeccable/live/*.png
 # impeccable-ignore-end
+
+# Local leftovers: temporary scripts, logs, coverage, Playwright blob reports
+*tmp*.mjs
+*.log
+.env.*
+!.env.example
+coverage/
+htmlcov/
+.coverage
+frontend/blob-report/

@@ -122,7 +122,7 @@ def run() -> None:
             "preko EEA Air Quality Download Service"
         ),
         url="https://eeadmz1-downloads-webapp.azurewebsites.net/",
-        license="uvjeti EEA-e za ponovnu upotrebu podataka, TODO(verify)",
+        license="CC BY 4.0 (pravna obavijest EEA-e, https://www.eea.europa.eu/en/legal-notice)",
         retrieved_at=file_date(raw_dir("eea_stations") / "samplingpoints.zip"),
         data_date=str(YEAR),
         notes=json.dumps({"stations": int(out["station_code"].nunique())}),

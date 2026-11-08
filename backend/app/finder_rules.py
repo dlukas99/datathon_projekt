@@ -181,20 +181,6 @@ def criterion_score(cid: str, row: pd.Series) -> float | None:
     raise ValueError(f"Nepoznat kriterij: {cid}")
 
 
-def criterion_gap(cid: str, row: pd.Series) -> str | None:
-    """A sentence for an important criterion the settlement does poorly on."""
-    s = criterion_score(cid, row)
-    if s is None or s >= 50:
-        return None
-    if cid.startswith("walk:"):
-        return check_requirement(cid, row).text if s == 0 else None
-    if cid == "hospital":
-        km = _num(row, "hospital_km")
-        name = row.get("hospital_name") or "bolnica"
-        return f"Najbliža opća ili klinička bolnica je daleko: {name}, {fmt.num(km or 0, 1)} km"
-    return None
-
-
 def profile_facts(profile_id: str, row: pd.Series) -> list[str]:
     """Facts only some profiles need: hospital, student dormitory and canteen (OSM)."""
     out = []

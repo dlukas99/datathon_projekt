@@ -96,7 +96,7 @@ function Statement({ text }: { text: string }) {
   )
 }
 
-/* Zrak: two rulers with the WHO and EU limits; the needle settles at the annual mean. */
+/* Zrak: the rating in one word and a four-step scale; the WHO and EU limits are in the details. */
 
 const AIR_STEPS = ['Vrlo dobar', 'Dobar', 'Umjeren', 'Loš'] as const
 

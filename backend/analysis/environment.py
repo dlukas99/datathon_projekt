@@ -310,10 +310,6 @@ def air_band(pollutant: str, value: float) -> tuple[str, Status]:
     raise ValueError(pollutant)
 
 
-def _air_status(pollutant: str, value: float) -> Status:
-    return air_band(pollutant, value)[1]
-
-
 _STATUS_ORDER: dict[Status, int] = {"good": 0, "info": 1, "warning": 2, "bad": 3, "no_data": -1}
 _BAND_ORDER = ["vrlo niska", "niska", "umjerena", "visoka"]
 

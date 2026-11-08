@@ -389,10 +389,6 @@ a {
   padding: 0 0.6rem 0 0;
 }
 
-.footer-small {
-  font-size: 0.82rem;
-}
-
 main {
   padding: 2rem 0 1rem;
 }
@@ -817,32 +813,6 @@ select:hover {
 .plank-arrow {
   grid-column: 2;
   grid-row: 1 / span 2;
-}
-
-.examples {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 0.35rem;
-  margin-top: 2.5rem;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-.example-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.1rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.example-list a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0 0.45rem;
 }
 
 /* The settlement mosaic bleeds off the right edge on wide screens. */
@@ -1406,12 +1376,6 @@ details summary {
   font-size: 0.82rem;
 }
 
-/* Report */
-
-.report-header {
-  padding-bottom: 0.5rem;
-}
-
 .eyebrow {
   color: var(--accent);
   font-weight: 650;
@@ -1424,13 +1388,6 @@ details summary {
 .place-line {
   color: var(--muted);
   margin: 0;
-}
-
-.title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
 }
 
 .score-badge {
@@ -1993,11 +1950,6 @@ details summary {
   font-weight: 750;
 }
 
-.find-reasons {
-  font-weight: 600;
-  margin: 0.75rem 0 0;
-}
-
 /* What the profile requires, and per place what it meets and what it lacks. */
 .find-rule {
   max-width: 68ch;
@@ -2351,7 +2303,6 @@ section[aria-labelledby='carfree-title'] .card.category:hover {
   box-shadow: 0 2px 4px rgb(20 36 32 / 6%), 0 16px 32px -18px rgb(20 36 32 / 30%);
 }
 
-
 .inst {
   grid-column: span 4;
 }
@@ -2545,218 +2496,6 @@ section[aria-labelledby='carfree-title'] .card.category .card-icon {
 .gauge-svg text {
   font-family: var(--font-text);
   fill: var(--muted);
-}
-
-/* Poplave */
-.flood-gauge {
-  display: grid;
-  gap: 0.6rem;
-}
-
-.water {
-  fill: var(--c);
-}
-
-.w500 {
-  opacity: 0.14;
-}
-
-.w100 {
-  opacity: 0.2;
-}
-
-.w10 {
-  opacity: 0.32;
-}
-
-.flood-water {
-  clip-path: inset(100% 0 0 0);
-  transition: clip-path 1.8s var(--ease-out) 0.15s;
-}
-
-.inst[data-on='true'] .flood-water {
-  clip-path: inset(0 0 0 0);
-}
-
-.flood-level line {
-  stroke: var(--c);
-  stroke-width: 1;
-  stroke-dasharray: 3 4;
-}
-
-.flood-level text {
-  font-size: 13px;
-}
-
-.flood-house path {
-  fill: var(--surface);
-  stroke: var(--text);
-  stroke-width: 2;
-  stroke-linejoin: round;
-}
-
-.flood-house line {
-  stroke: var(--text);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.flood-rows {
-  margin: 0;
-  font-size: 0.85rem;
-}
-
-.flood-rows > div {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0 0.75rem;
-  padding: 0.3rem 0;
-  border-top: 1px solid var(--border);
-}
-
-.flood-rows dt {
-  font-weight: 650;
-}
-
-.flood-rows dd {
-  margin: 0;
-  color: var(--muted);
-}
-
-.flood-rows strong {
-  color: var(--text);
-}
-
-/* Zrak */
-.air-rulers {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.air-ruler {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: baseline;
-  gap: 0 0.75rem;
-  width: 100%;
-  min-height: 44px;
-  padding: 0.6rem 0.85rem 1.7rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
-}
-
-.air-ruler:hover {
-  border-color: var(--c);
-}
-
-.air-ruler[aria-pressed='true'] {
-  border-color: var(--c);
-  box-shadow: inset 0 0 0 1px var(--c);
-  background: color-mix(in srgb, var(--c) 6%, var(--surface));
-}
-
-.air-name {
-  font-weight: 700;
-}
-
-.air-value {
-  justify-self: end;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.ruler {
-  position: relative;
-  grid-column: 1 / -1;
-  height: 10px;
-  margin-top: 1.5rem;
-  border-radius: 5px;
-  background: var(--surface-2);
-}
-
-.ruler-band {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  background: var(--c);
-}
-
-.band-0 {
-  opacity: 0.16;
-  border-radius: 5px 0 0 5px;
-}
-
-.band-1 {
-  opacity: 0.32;
-}
-
-.band-2 {
-  opacity: 0.56;
-}
-
-.band-3 {
-  opacity: 0.85;
-  border-radius: 0 5px 5px 0;
-}
-
-.ruler-tick {
-  position: absolute;
-  top: -4px;
-  bottom: -4px;
-  width: 2px;
-  margin-left: -1px;
-}
-
-.ruler-tick::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--text);
-}
-
-.ruler-tick-label {
-  position: absolute;
-  top: 17px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 0.7rem;
-  color: var(--muted);
-}
-
-.ruler-tick.up .ruler-tick-label {
-  top: auto;
-  bottom: 17px;
-}
-
-.needle-track {
-  position: absolute;
-  inset: 0;
-  transform: translateX(0);
-  transition: transform 1.4s var(--ease-out) 0.2s;
-}
-
-.inst[data-on='true'] .needle-track {
-  transform: translateX(var(--to));
-}
-
-.needle {
-  position: absolute;
-  left: 0;
-  top: -8px;
-  width: 6px;
-  height: 26px;
-  margin-left: -3px;
-  border-radius: 3px;
-  background: var(--text);
-  box-shadow: 0 0 0 2px var(--surface);
 }
 
 /* Zelenilo */
@@ -2966,48 +2705,6 @@ section[aria-labelledby='carfree-title'] .card.category .card-icon {
   right: 0;
 }
 
-/* Požari */
-.radar {
-  max-width: 8.5rem;
-  justify-self: end;
-}
-
-.radar circle,
-.radar line {
-  fill: none;
-  stroke: var(--c);
-  stroke-width: 1;
-  opacity: 0.5;
-}
-
-.radar text {
-  font-size: 8px;
-}
-
-.radar .radar-home {
-  fill: var(--text);
-  stroke: none;
-  opacity: 1;
-}
-
-.radar-sweep {
-  fill: var(--c);
-  opacity: 0.16;
-  transform-box: view-box;
-  transform-origin: 0 0;
-}
-
-.inst[data-on='true'] .radar-sweep {
-  animation: radar-sweep 2.4s var(--ease-out) both;
-}
-
-@keyframes radar-sweep {
-  from {
-    transform: rotate(-150deg);
-    opacity: 0.4;
-  }
-}
-
 /* Sunce */
 .sun {
   max-width: 22rem;
@@ -3086,9 +2783,6 @@ section[aria-labelledby='carfree-title'] .card.category .card-icon {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .radar {
-    justify-self: start;
-  }
 }
 
 .life-score-number {
@@ -3111,18 +2805,11 @@ section[aria-labelledby='carfree-title'] .grid.two {
   gap: 2rem;
 }
 
-
 /* Movement only: the text is readable at every frame. */
 @keyframes board-in {
   from {
     transform: translateY(10px) scale(0.97);
   }
-}
-
-.summary-note {
-  color: var(--muted);
-  font-size: 0.85rem;
-  margin: 1rem 0 0 !important;
 }
 
 /* "Ovdje ste": the report's sections as a short trail that stays under the header. */
@@ -3705,12 +3392,6 @@ button.daily-row:hover .daily-show {
   grid-template-columns: 1fr 1fr;
 }
 
-.big-number {
-  font-size: 2.2rem;
-  font-weight: 800;
-  line-height: 1.1;
-}
-
 /* Assistant */
 
 .assistant {
@@ -3949,12 +3630,10 @@ a {
   background: var(--accent-soft);
   transform: translateY(-1px);
 }
-
 .choice,
 .find-result,
 .daily-row,
-.atlas-table tbody tr,
-.example-list a {
+.atlas-table tbody tr {
   transition:
     background-color 200ms var(--ease-out),
     border-color 200ms var(--ease-out),
@@ -4055,7 +3734,6 @@ a {
     box-shadow 260ms var(--ease-out),
     border-color 200ms var(--ease-out);
 }
-
 
 .measure:hover {
   transform: translateY(-3px);
@@ -4174,10 +3852,6 @@ a {
     transition-property: color, background-color, border-color, opacity !important;
   }
 
-  .inst .needle-track {
-    transform: translateX(var(--to));
-  }
-
   .inst .road-line,
   .inst .dot {
     transform: scale(1);
@@ -4189,13 +3863,6 @@ a {
 }
 
 @media print {
-  .inst .flood-water {
-    clip-path: none;
-  }
-
-  .inst .needle-track {
-    transform: translateX(var(--to));
-  }
 
   .inst .road-line,
   .inst .dot,
