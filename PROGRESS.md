@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-08 21:30
+Zadnje ažurirano: 2026-11-08 21:40
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -128,3 +128,9 @@ Ako ponestane vremena, režem ovim redom:
     - **Karta:** pet najbolje ocijenjenih naselja (najmanje 200 stanovnika) ili pet rezultata pretrage; jednostavnije kartice naselja; razlika Skora na Karti (naselje, 83 za Split) i u izvještaju (točka, 92) objašnjena na kartici i u izvještaju;
     - **Predloži mjesto:** uz prijedlog uvjeti profila (✓), dva do tri obična razloga, jedna napomena „Na što obratiti pažnju”, brojke pod „Detalji”;
     - **usput:** CSS točkica zelenila skrivao je točkice boje na karti hoda (greška iz prošlog redizajna); `make verify` prolazi (pytest 170, Vitest 64, Playwright 60), snimke osvježene.
+20. [x] Završni pregled prije predaje (8. 11., grana `chore/zavrsni-pregled`; tri neovisne provjere: dokumentacija, kod i sigurnost, sučelje):
+    - **tim i predaja:** tim „Požega”, mentor i FERIT u README-u, `docs/PREDAJA.md` (s nacrtom e-pošte mentora) i na „O alatu”; novi `docs/ALATI_I_LICENCE.md` (AI alati, biblioteke, usluge s licencama), licenca Impeccablea uz njegove datoteke;
+    - **dokumentacija:** popis svih 33 skupa podataka iz `manifest.json` s izdavačem, poveznicom, licencom i datumima; ispravljene netočne tvrdnje (HAKOM ima otvoreni skup namjera gradnje svjetlovodne mreže; boje karte; razlozi u „Predloži mjesto”; brojke); pretpostavke bez izvora popisane; scenarij videa s ciljnim korisnicima, arhitekturom i daljnjim razvojem, do 2:55;
+    - **kod:** uklonjen mrtvi kod i 333 retka CSS-a, privremena skripta i stare snimke; licenca EEA postaja CC BY 4.0 umjesto `TODO(verify)`; „Lokacija nije na kopnu u Hrvatskoj.”; bez ponovnog pokušaja za odgovore 4xx; hod dulji od sata je „više od sat hoda”;
+    - **sučelje:** usporedba na mobitelu bez lomljenja slovo po slovo; isti postotak drveća u zaglavlju i na kartici; „Puno zelenila” samo uz najmanje 30 % drveća; gramatika („1 prijedlog”, „Najboljih 10”, „32 polaska”), datumi bez vodećih nula, „Grad Zagreb” bez ponavljanja;
+    - **provjereno:** čisti klon s GitHuba (`make setup`, `make lint`, `make test`: 155 prošlo, 15 preskočeno bez podataka), nema tajni u povijesti, nema osobnih imena u sučelju i fiksturama, sve izravne ovisnosti pod licencama spojivima s EUPL-1.2; `make verify` prolazi (pytest 170, Vitest 64, Playwright 62).

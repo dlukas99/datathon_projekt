@@ -138,6 +138,8 @@ function GreenInstrument({ c }: { c: Category }) {
   const built = numberOf(c, 'built_share_300m')
   const park = valueOf(c, 'nearest_park')
   if (tree === null) return <Readout big="Nema podataka" label="za pokrov tla u krugu od 300 m" />
+  // The backend's display, so the card shows the same whole percent as the header chip.
+  const shown = (key: string) => valueOf(c, key)?.display.replace(/\s*%$/, '') ?? ''
   const n = DOTS.length
   const nTree = Math.round((tree / 100) * n)
   const nGreen = green === null ? nTree : Math.max(nTree, Math.round((green / 100) * n))
@@ -147,7 +149,7 @@ function GreenInstrument({ c }: { c: Category }) {
   return (
     <>
       <Readout
-        big={num(tree, 0)}
+        big={shown('tree_share_300m')}
         unit="%"
         label="drveća u krugu od 300 m"
         extra={
@@ -173,9 +175,9 @@ function GreenInstrument({ c }: { c: Category }) {
           <circle className="dots-home" r="0.5" />
         </svg>
         <ul className="dots-legend">
-          <li className="lg-tree">Drveće {num(tree, 0)} %</li>
-          {green !== null && <li className="lg-grass">Sve zelene površine {num(green, 0)} %</li>}
-          {built !== null && <li className="lg-built">Izgrađeno {num(built, 0)} %</li>}
+          <li className="lg-tree">Drveće {shown('tree_share_300m')} %</li>
+          {green !== null && <li className="lg-grass">Sve zelene površine {shown('green_share_300m')} %</li>}
+          {built !== null && <li className="lg-built">Izgrađeno {shown('built_share_300m')} %</li>}
           <li className="lg-other">Ostalo (oranice, golo tlo)</li>
         </ul>
       </div>

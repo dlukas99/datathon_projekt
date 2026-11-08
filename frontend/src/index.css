@@ -4424,3 +4424,21 @@ a {
 span.dot {
   transform: none;
 }
+
+/* Compare table on a phone: words wrap whole, and the table scrolls inside its region
+   instead of squeezing the category column to one letter per line. */
+.compare-table {
+  min-width: 34rem;
+}
+
+.compare-table th,
+.compare-table td {
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+}
+
+.compare-table tbody th {
+  min-width: 8rem;
+}
+

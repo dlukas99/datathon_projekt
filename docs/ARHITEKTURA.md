@@ -77,7 +77,7 @@ Rješenje ima dva dijela:
   - šalje jedan poziv matrice Valhalle za sve kandidate (oko 100–250 odredišta) i jedan poziv izokrona;
   - paralelno pita PVGIS (predmemorija po koordinatama zaokruženima na 0,01°);
   - čita šest rastera.
-  - Izmjereno trajanje na demo adresama je oko 1 s s hladnom predmemorijom PVGIS-a i oko 0,1 s s toplom (cilj: ispod 2 s).
+  - Izmjereno 8. 11. 2026. (razvojno računalo): odgovor API-ja za demo adrese 0,1–0,5 s s toplom predmemorijom PVGIS-a; prvi izvještaj za točku koju PVGIS još nije vidio traje 5–6 s, jer čeka vanjski servis (najviše 6 s, zatim „Nema podataka” za sunce dok rezultat ne stigne). U pregledniku je izvještaj spreman za 0,5–1,6 s, a karta Hrvatske za oko 2 s (`data-load-ms`).
 
 | Ruta | Opis |
 |---|---|

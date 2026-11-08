@@ -24,7 +24,7 @@ import {
   type Report,
 } from '../lib/api'
 import { BRAND } from '../lib/brand'
-import { formatDate, minutesText } from '../lib/format'
+import { formatDate, isoDatesToText, walkText } from '../lib/format'
 import { categoryStats } from '../lib/places'
 import { focusList, getProfile, orderByFocus, profileWeights, PROFILES } from '../lib/profiles'
 import { decodeWeights, encodeWeights, lifeScore } from '../lib/score'
@@ -68,7 +68,11 @@ export function sourceMap(report: Report): SourceMap {
 
 export function placeLine(report: Report): string {
   const loc = report.location
-  return [loc.settlement, loc.municipality !== loc.settlement ? loc.municipality : null, loc.county]
+  return [
+    loc.settlement,
+    loc.municipality !== loc.settlement ? loc.municipality : null,
+    loc.county !== loc.municipality ? loc.county : null,
+  ]
     .filter(Boolean)
     .join(', ')
 }
@@ -134,7 +138,7 @@ function DailyList({
               <span className="daily-end">
                 <span className={`daily-time${minutes ? '' : ' muted'}`}>
                   {minutes
-                    ? minutesText(nearest.value as number)
+                    ? walkText(nearest.value as number)
                     : nearest.display.replace(/\s*\(.*\)$/, '')}
                 </span>
                 {place && (
@@ -403,7 +407,7 @@ export function SourcesList({ report }: { report: Report }) {
               <span>{s.publisher}</span>
               <span>Licenca: {s.license}</span>
               {formatDate(s.retrieved_at) && <span>preuzeto {formatDate(s.retrieved_at)}</span>}
-              {s.data_date && <span>podaci: {s.data_date}</span>}
+              {s.data_date && <span>podaci: {isoDatesToText(s.data_date)}</span>}
             </span>
             {s.url && (
               <a href={s.url} target="_blank" rel="noreferrer">
@@ -528,6 +532,7 @@ export function ReportPage() {
               <Link to="/">Nova pretraga</Link>
             </p>
           )}
+          {!query.isError && (
           <div className="report-tools no-print">
             <label className="profile-select">
               <span>Gledam kao</span>
@@ -546,6 +551,7 @@ export function ReportPage() {
             </label>
             {report && <Actions report={report} />}
           </div>
+          )}
           {profile === 'vlastiti' && (
             <FocusPicker
               custom={customIds}
@@ -582,7 +588,7 @@ export function ReportPage() {
           <Assistant points={[{ lat: report.location.lat, lon: report.location.lon, label }]} />
           <SourcesList report={report} />
           <p className="fine-print">
-            {report.disclaimer} Izračunato {formatDate(report.generated_at)}.
+            {report.disclaimer} Izračunato {formatDate(report.generated_at)}
           </p>
         </>
       )}

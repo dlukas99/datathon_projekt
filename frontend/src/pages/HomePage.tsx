@@ -121,7 +121,7 @@ export function HomePage() {
       </section>
 
       <section className="measures" aria-labelledby="measures-title">
-        <h2 id="measures-title">Šest mjerenja okoliša za svaku adresu</h2>
+        <h2 id="measures-title">Šest pokazatelja okoliša za svaku adresu</h2>
         <p className="measures-intro">
           Svako mjerenje ima svoju boju, a u izvještaju kratko i jasno piše što znači.
         </p>
@@ -159,7 +159,7 @@ export function HomePage() {
           ))}
         </ol>
         <p className="how-more">
-          Dvoumite se između dvije adrese?{' '}
+          Dvoumite se između dviju adresa?{' '}
           <Link
             to={
               first && second

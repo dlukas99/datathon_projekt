@@ -262,15 +262,16 @@ def _highlight(key: str, row: pd.Series) -> str | None:
             return None
         return (
             f"Trgovina odmah do vas, {m}"
-            if (_num(row, "min_grocery") or 99) < 3
+            if round(_num(row, "min_grocery") or 99) <= 2
             else f"Trgovina {m}"
         )
     if key == "air":
         # Most of Croatia has "good" air; only "very good" is worth naming as a reason.
         return "Čist zrak" if air == "vrlo niska" else None
     if key == "green":
-        s = _num(row, "score_green")
-        return "Puno zelenila i hlada" if s is not None and s >= 90 else None
+        # The 3-30-300 rule: at least 30 % tree cover, as on the map card.
+        tree = _num(row, "tree_share")
+        return "Puno zelenila i hlada" if tree is not None and tree >= 30 else None
     if key == "quiet":
         s = _num(row, "score_noise")
         return (

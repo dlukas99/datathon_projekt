@@ -3,6 +3,7 @@ import { TrailMark } from './components/TrailMark'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
 import { SiteNav, type Theme } from './components/SiteNav'
+import { ApiError } from './lib/api'
 import { BRAND } from './lib/brand'
 import { AboutPage } from './pages/AboutPage'
 import { ComparePage } from './pages/ComparePage'
@@ -14,7 +15,14 @@ import { ReportPage } from './pages/ReportPage'
 import { SourcesPage } from './pages/SourcesPage'
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 1, staleTime: 10 * 60 * 1000, refetchOnWindowFocus: false } },
+  defaultOptions: {
+    queries: {
+      // A 4xx answer (e.g. a point at sea) will not change on a retry.
+      retry: (count, error) => !(error instanceof ApiError && error.status < 500) && count < 1,
+      staleTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+    },
+  },
 })
 
 const THEME_KEY = 'prije-potpisa-tema'

@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Place, Report } from '../lib/api'
-import { metresLabel, minutesText } from '../lib/format'
+import { metresLabel, minutesText, walkText } from '../lib/format'
 import {
   type CategoryStats,
   categoryStats,
@@ -353,7 +353,7 @@ export function WalkMap({
                     <span className="place-chip-name">{PLACE_LABELS[category]}</span>
                     <span className="place-chip-meta">
                       {nearest && nearest.walk_minutes !== null
-                        ? ` – ${minutesText(nearest.walk_minutes)}`
+                        ? ` – ${walkText(nearest.walk_minutes)}`
                         : ' – nije u blizini'}
                     </span>
                   </span>

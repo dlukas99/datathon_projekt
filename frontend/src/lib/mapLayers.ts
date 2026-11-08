@@ -1,3 +1,4 @@
+import { plural } from './format'
 // Layers of the Croatia map. Classes use the same thresholds and names as the report
 // (backend/analysis/environment.py, analysis/score.py); docs/METODOLOGIJA.md, "Karta".
 import type { MapRow } from './api'
@@ -84,7 +85,8 @@ export function transitClass(row: MapRow): number | null {
 
 export function transitText(row: MapRow): string {
   if (row.departures !== null) {
-    return `do ${row.departures.toLocaleString('hr-HR', { maximumFractionDigits: 1 })} polazaka na sat`
+    const n = Math.max(1, Math.round(row.departures))
+    return `do ${String(n)} ${plural(n, 'polaska', 'polaska', 'polazaka')} na sat`
   }
   if (row.needs === null) return NO_VALUE
   return row.stops ? 'stajališta bez voznog reda' : 'nema stajališta do 10 minuta hoda'

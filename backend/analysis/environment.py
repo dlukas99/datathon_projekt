@@ -531,7 +531,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
         dist = nearest_park.distance_m
         park_ok = dist is not None and dist <= PARK_DISTANCE_TARGET_M
         if nearest_park.walk_minutes is not None:
-            display = f"{fmt.minutes(nearest_park.walk_minutes)} hoda"
+            display = fmt.walk(nearest_park.walk_minutes)
             value: float | None = nearest_park.walk_minutes
             unit = "min"
         else:
