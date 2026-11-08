@@ -44,7 +44,7 @@ Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenic
 **Skor za život** (0–100) sažima sve kategorije s težinama odabranog profila (obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti). Težine su vidljive i podesive, a uz skor piše što ga najviše podiže i spušta.
 
 **Ostalo:**
-- Točka se može odabrati i klikom na kartu ili povlačenjem oznake.
+- Točka se može odabrati i povlačenjem oznake na karti. Klik na kartu izvan točaka ne mijenja lokaciju, pa se izvještaj ne izgubi slučajnim klikom ili dvostrukim klikom za zum.
 - Za upisano naselje prikazuje se njegovo stvarno središte, uz napomenu da za točan izvještaj treba upisati adresu.
 - Gumb „Pogledaj oglase” otvara pretragu oglasa za to mjesto. Aplikacija samo slaže poveznicu i ne prikazuje oglase.
 - Asistent odgovara na pitanja poput „Je li ova kuća u poplavnom području?”.
@@ -84,7 +84,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 ## Funkcionalnosti
 
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
-- odabir točke klikom na kartu ili povlačenjem oznake
+- odabir točke povlačenjem oznake na karti
 - **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika; svaki profil ima obavezne uvjete (npr. Student: studiji u mjestu ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 minuta hoda) i važne kriterije, a uz svaki prijedlog piše koje uvjete ispunjava, dva do tri jednostavna razloga i jedna napomena na što obratiti pažnju
 - **Karta Hrvatske** (`/karta`):
   - naselja obojena prema odabranom sloju (Skor za život za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;

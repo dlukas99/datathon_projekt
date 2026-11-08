@@ -320,8 +320,8 @@ export function WalkMap({
       <div className="walk-legend">
         <h3 className="legend-title">Najbliže pješice</h3>
         <p className="muted-note no-print">
-          Odaberite stavku za pješački put do nje
-          {onPick ? '; klik na kartu otvara izvještaj za tu točku.' : '.'}
+          Odaberite stavku ili točku na karti za pješački put do nje
+          {onPick ? '; povucite oznaku za izvještaj na drugoj točki.' : '.'}
         </p>
         <ul className="place-chips">
           {PLACE_ORDER.map((category) => {

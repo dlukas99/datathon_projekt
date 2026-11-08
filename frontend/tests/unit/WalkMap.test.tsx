@@ -111,6 +111,10 @@ const fake = vi.hoisted(() => {
   }
 
   class FakeMarker {
+    static instances: FakeMarker[] = []
+    constructor() {
+      FakeMarker.instances.push(this)
+    }
     handlers = new Map<string, Handler>()
     lngLat = { lng: 0, lat: 0 }
     setLngLat([lng, lat]: [number, number]) {
@@ -316,12 +320,23 @@ test('clicking a point opens its details and does not move the report point', as
   expect(fetchSpy.mock.calls[0]?.[0]).toContain('to_lat=45.00100&to_lon=16.00100')
   expect(popup?.removed).toBe(true)
 
-  // a click away from the points still moves the report point
+  // a click or double click away from the points does nothing: the report stays
   map.hits = []
+  const away = { point: { x: 300, y: 200 }, lngLat: { lat: 45.5, lng: 16.5 } }
   act(() => {
-    map.fire('click', { point: { x: 300, y: 200 }, lngLat: { lat: 45.5, lng: 16.5 } })
+    map.fire('click', away)
+    map.fire('click', away)
+    map.fire('dblclick', away)
   })
-  expect(onPick).toHaveBeenCalledWith(45.5, 16.5)
+  expect(onPick).not.toHaveBeenCalled()
+
+  // dragging the marker still moves the report point
+  const marker = fake.FakeMarker.instances.at(-1)
+  act(() => {
+    marker?.setLngLat([16.5, 45.5])
+    marker?.handlers.get('dragend')?.({})
+  })
+  expect(onPick).toHaveBeenCalledExactlyOnceWith(45.5, 16.5)
 })
 
 test('Escape removes the route and brings all points back', async () => {
