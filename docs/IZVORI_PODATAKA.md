@@ -2,7 +2,7 @@
 
 Svaki izvor provjeren je stvarnim preuzimanjem 2. 11. 2026. Za svaki je naveden status (**radi**, **djelomično**, **ne radi**), licenca, format i odabrani rezervni plan. Datumi preuzimanja pojedine datoteke zapisuju se automatski u `data/processed/manifest.json` pri pokretanju `make data` i prikazuju se uz svaku vrijednost u aplikaciji.
 
-Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno koriste već preuzete datoteke iz `data/raw/` i između zahtjeva istom poslužitelju čekaju najmanje jednu sekundu.
+Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)` (tehnički naziv projekta iz početka rada), ponovno koriste već preuzete datoteke iz `data/raw/` i između zahtjeva istom poslužitelju čekaju najmanje jednu sekundu.
 
 ## Pregled
 
@@ -14,7 +14,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 | Poplave | JRC, karte opasnosti od riječnih poplava (CEMS-EFAS) v3.1.1 | radi | ODbL 1.0 / CC BY 4.0 (vidi napomenu) | dubina vode za povratna razdoblja 10, 100 i 500 godina |
 | Poplave (službeno) | Hrvatske vode, karte opasnosti od poplava 2019. | samo poveznica | nije navedena | poveznica na preglednik |
 | Zrak | EEA, interpolirane karte kvalitete zraka 2024., 1 km | radi | CC BY 4.0 | PM2,5 i NO2 |
-| Zrak (provjera) | EEA Air Quality Download Service, službene postaje RH 2024. (E1a) | radi | uvjeti EEA-e, TODO(verify) | provjera karte i ML evaluacija |
+| Zrak (provjera) | EEA Air Quality Download Service, službene postaje RH 2024. (E1a) | radi | CC BY 4.0 | provjera karte i ML evaluacija |
 | Zelenilo | ESA WorldCover 10 m 2021 v200 | radi | CC BY 4.0 | drveće, zelene i izgrađene površine |
 | Buka | EEA, strateške karte buke (END 2022) | ne koristi se | ograničena (istraživanje i neprofitna upotreba) | rezervni plan: udaljenost od prometnica (OSM) |
 | Sunce | JRC PVGIS 5.3 API | radi | slobodna upotreba uz navođenje izvora | kWh po kWp godišnje |
@@ -38,6 +38,46 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 | Datumi osvježavanja | CKAN API data.gov.hr | radi | — | stranica „Izvori” uživo |
 | Podloga karte | OpenFreeMap | radi | MIT (softver), ODbL (podaci) | kartografska podloga |
 
+## Svi skupovi podataka
+
+Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade puni pri preuzimanju (stanje 8. 11. 2026.). Ukupno 33 skupa podataka; uz njih aplikacija uživo koristi JRC PVGIS API (sunce na krovu) i CKAN API Portala (datumi osvježavanja). Karte opasnosti od poplava Hrvatskih voda i strateške karte buke EEA-e samo se povezuju, a podloga karte je OpenFreeMap (© OpenMapTiles, podaci © suradnici OpenStreetMapa). Oglasnici su vanjske poveznice, ne izvori podataka. Izvedeni skupovi (profili naselja, udaljenost adresa od prometnica) nisu u popisu jer ih računa aplikacija. „Preuzeto” je datum preuzimanja, a za općinske skupove s Portala datum zadnje izmjene na Portalu.
+
+| # | Skup podataka | Izdavač | Licenca | Preuzeto | Podaci |
+|---|---|---|---|---|---|
+| 1 | [OpenStreetMap, izvadak za Hrvatsku (Geofabrik)](https://download.geofabrik.de/europe/croatia-latest.osm.pbf) | suradnici OpenStreetMapa | ODbL 1.0 | 2. 11. 2026. | – |
+| 2 | [Interpolirana karta kvalitete zraka, godišnji prosjek PM2,5 za 2024., 1 km](https://sdi.eea.europa.eu/catalogue/srv/api/records/c3db03e4-82e9-4a40-acb1-a5bd15f11f8c) | Europska agencija za okoliš (EEA) | CC BY 4.0 | 2. 11. 2026. | 2024 |
+| 3 | [Interpolirana karta kvalitete zraka, godišnji prosjek NO2 za 2024., 1 km](https://sdi.eea.europa.eu/catalogue/srv/api/records/4c6361bd-cfd4-48de-9b4b-101cfb37f1f0) | Europska agencija za okoliš (EEA) | CC BY 4.0 | 2. 11. 2026. | 2024 |
+| 4 | [ZET, vozni red u obliku GTFS](https://www.zet.hr/odredbe/datoteke-u-gtfs-formatu/669) | Zagrebački električni tramvaj d.o.o. | Otvorena dozvola Republike Hrvatske | 2. 11. 2026. | radni dan 2026-11-11 |
+| 5 | [ESA WorldCover 10 m 2021 v200](https://doi.org/10.5281/zenodo.7254221) | Europska svemirska agencija (ESA), konzorcij WorldCover | CC BY 4.0 | 2. 11. 2026. | 2021 |
+| 6 | [HŽ Putnički prijevoz, vozni red u obliku GTFS](https://data.gov.hr/ckan/dataset/vozni-red-h-putni-kog-prijevoza-u-gtfs-obliku) | HŽ Putnički prijevoz d.o.o. | nije navedena; skup je objavljen na data.gov.hr radi izrade aplikacija | 2. 11. 2026. | radni dan 2026-11-11 |
+| 7 | [Vozni redovi autobusa Autotroleja (radni dan)](https://data.gov.hr/ckan/dataset/at-vozni-redovi) | Grad Rijeka | CC BY 4.0 | 2. 11. 2026. | radni dan |
+| 8 | [Upravne jedinice INSPIRE (županije, gradovi i općine, naselja)](https://data.gov.hr/ckan/dataset/upravne-jedinice-inspire) | Državna geodetska uprava | Otvorena dozvola RH | 2. 11. 2026. | – |
+| 9 | [Adrese INSPIRE (Registar prostornih jedinica)](https://data.gov.hr/ckan/dataset/adrese-inspire) | Državna geodetska uprava | Otvorena dozvola RH | 2. 11. 2026. | – |
+| 10 | [Registar dječjih vrtića](https://data.gov.hr/ckan/dataset/djecji-vrtici) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola RH | 2. 11. 2026. | – |
+| 11 | [Geoportal: dječji vrtići Grada Zagreba](https://data.gov.hr/ckan/dataset/geoportal-djecji-vrtici) | Grad Zagreb | CC BY 4.0 | 2. 11. 2026. | – |
+| 12 | [Osnovne škole](https://data.gov.hr/ckan/dataset/osnovne-skole) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola RH | 2. 11. 2026. | – |
+| 13 | [Geoportal: osnovne škole Grada Zagreba](https://data.gov.hr/ckan/dataset/geoportal-osnovne-skole) | Grad Zagreb | Otvorena dozvola RH | 2. 11. 2026. | – |
+| 14 | [Ugovoreni timovi opće/obiteljske medicine](https://hzzo.hr/zdravstvena-zastita/zdravstvena-zastita-pokrivena-obveznim-zdravstvenim-osiguranjem/ugovoreni) | Hrvatski zavod za zdravstveno osiguranje (HZZO) | nije navedena; javno objavljen popis tijela javne vlasti | 2. 11. 2026. | rujan 2026. |
+| 15 | [Ugovoreni timovi zdravstvene zaštite predškolske djece (pedijatrija)](https://hzzo.hr/zdravstvena-zastita/zdravstvena-zastita-pokrivena-obveznim-zdravstvenim-osiguranjem/ugovoreni) | Hrvatski zavod za zdravstveno osiguranje (HZZO) | nije navedena; javno objavljen popis tijela javne vlasti | 2. 11. 2026. | rujan 2026. |
+| 16 | [Popis ugovorenih ljekarni](https://hzzo.hr/zdravstvena-zastita/zdravstvena-zastita-pokrivena-obveznim-zdravstvenim-osiguranjem/ugovoreni) | Hrvatski zavod za zdravstveno osiguranje (HZZO) | nije navedena; javno objavljen popis tijela javne vlasti | 2. 11. 2026. | rujan 2023. (zadnja izmjena datoteke) |
+| 17 | [Karte opasnosti od riječnih poplava za Europu (CEMS-EFAS), v3.1.1](https://data.jrc.ec.europa.eu/dataset/1d128b6c-a4ee-4858-9e34-6210707f3c81) | Europska komisija, Zajednički istraživački centar (JRC) | ODbL 1.0 prema katalogu JRC-a; CC BY 4.0 prema copyright.txt u mapi preuzimanja | 2. 11. 2026. | verzija 3.1.1 od 5. 3. 2026. |
+| 18 | [Reciklažno dvorište, Općina Cernik](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste) | Općina Cernik | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 19 | [Reciklažno dvorište Općine Dugopolje](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-opcine-dugopolje) | Općina Dugopolje | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 20 | [Reciklažno dvorište Općine Kloštar Podravski](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-opcine-klostar-podravski) | Općina Kloštar Podravski | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 21 | [Reciklažno dvorište na području Grada Hvara](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-na-podrucju-grada-hvara) | Grad Hvar | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 22 | [Reciklažno dvorište na području općine Bistra](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-na-podrucju-opcine-bistra) | Općina Bistra | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 23 | [Reciklažna dvorišta i zeleni otoci](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-i-zeleni-otoci) | Općina Mikleuš | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 24 | [Reciklažna dvorišta i zeleni otoci](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-i-zeleni-otoci-ovl) | Općina Velika Ludina | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 25 | [Geoportal Reciklažna dvorišta grada Zagreba](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-grada-zagreba1) | Grad Zagreb | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 26 | [Zeleni otoci i reciklažna dvorišta na području Općine Kalinovac](https://data.gov.hr/ckan/dataset/zeleni-otoci-i-reciklazna-dvorista-na-podrucju-opcine-kalinovac) | Općina Kalinovac | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 27 | [Zeleni otoci](https://data.gov.hr/ckan/dataset/zeleni-otoci-op) | Općina Posedarje | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 28 | [Zeleni otoci na području Općine Sopje](https://data.gov.hr/ckan/dataset/zeleni-otoci-na-podrucju-opcine-sopje) | Općina Sopje | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 29 | [Popis stanovništva, kućanstava i stanova 2021., stanovništvo po naseljima](https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021) | Državni zavod za statistiku | Otvorena dozvola RH | 3. 11. 2026. | Popis 2021. |
+| 30 | [EFFIS, opožarene površine (MODIS), Hrvatska](https://forest-fire.emergency.copernicus.eu/applications/data-and-services) | Europska komisija, Copernicus EFFIS (JRC) | CC BY 4.0 | 3. 11. 2026. | 2016.–2026. |
+| 31 | [Službene mjerne postaje kvalitete zraka u Hrvatskoj, mjerenja 2024. (E1a)](https://eeadmz1-downloads-webapp.azurewebsites.net/) | Ministarstvo zaštite okoliša i zelene tranzicije, preko EEA Air Quality Download Service | CC BY 4.0 (pravna obavijest EEA-e, https://www.eea.europa.eu/en/legal-notice) | 4. 11. 2026. | 2024 |
+| 32 | [Ustanove iz sustava visokog obrazovanja](https://data.gov.hr/ckan/dataset/ustanove-iz-sustava-visokog-obrazovanja) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena na Portalu) |
+| 33 | [Studijski programi visokih učilišta](https://data.gov.hr/ckan/dataset/studijski-programi-visokih-ucilista) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena na Portalu) |
+
 ## Detalji po izvorima
 
 ### DGU: Adrese INSPIRE
@@ -59,7 +99,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 ### DZS: Popis 2021., stanovništvo po naseljima
 - Skup: https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021
 - Datoteka: https://podaci.dzs.hr/media/rqybclnx/popis_2021-stanovnistvo_po_naseljima.xlsx (list `1.`, zaglavlje u 8. retku).
-- Nema šifri naselja ni koordinata; spaja se s DGU naseljima po imenu naselja i JLS-a (99,8 % naselja nakon skraćivanja dvojezičnih naziva).
+- Nema šifri naselja ni koordinata; spaja se s DGU naseljima po imenu naselja i JLS-a (spojeno 6.633 od 6.759 DGU naselja, 98,1 %, nakon skraćivanja dvojezičnih naziva).
 - Licenca: Otvorena dozvola RH, uz navođenje izvora (DZS).
 - Rezervni plan: izostaviti broj stanovnika.
 
@@ -114,7 +154,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 - Izvadak: https://download.geofabrik.de/europe/croatia-latest.osm.pbf (≈ 201 MB).
 - Licenca: ODbL 1.0, © suradnici OpenStreetMapa.
 - Usmjerivač: Valhalla 3.9.1 (`ghcr.io/valhalla/valhalla-scripted:3.9.1`, MIT), pješački profil uz brzinu 4,5 km/h. Isti usmjerivač računa i pješački put do mjesta na karti (`GET /api/route`, samo na zahtjev); karta ga navodi u atribuciji („Izokrone i rute: Valhalla, © OpenStreetMap”).
-- Oznake: trgovine `shop=supermarket|convenience|greengrocer`; igrališta `leisure=playground`; parkovi `leisure=park`; ljekarne `amenity=pharmacy`; liječnici `amenity=doctors`; vrtići `amenity=kindergarten`; škole `amenity=school`; reciklaža `amenity=recycling`; stajališta `highway=bus_stop`, `public_transport=platform` + `bus=yes`, `railway=tram_stop|halt|station`; prometnice `highway=motorway|trunk|primary`, pruge `railway=rail`.
+- Oznake: trgovine `shop=supermarket|convenience|greengrocer`; igrališta `leisure=playground`; parkovi `leisure=park`; ljekarne `amenity=pharmacy`; liječnici `amenity=doctors`; vrtići `amenity=kindergarten`; škole `amenity=school`; reciklaža `amenity=recycling`; stajališta `highway=bus_stop`, `public_transport=platform` + `bus=yes`, `railway=tram_stop|halt|station`; prometnice `highway=motorway|trunk|primary` i `secondary` bez županijske oznake (Ž), pruge `railway=rail`.
 
 ### MZOM: Registar dječjih vrtića i osnovne škole
 - Vrtići: https://data.gov.hr/ckan/dataset/djecji-vrtici (CSV, 885 redaka: `Naziv, Adresa, Mjesto, ePosta, Telefon, Zupanija, PostanskiBroj`).
@@ -155,7 +195,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 - Split, Osijek, Zadar, Pula i Dubrovnik nemaju javno dostupan GTFS: prikazuju se stajališta iz OSM-a s oznakom „bez voznog reda”.
 
 ### Reciklaža
-- CKAN pretraga Portala („reciklažno dvorište”, „zeleni otok” …) vraća 35 skupova; samo 13 ima koordinate. Detaljni nalazi su u `docs/KVALITETA_PODATAKA.md`.
+- CKAN pretraga Portala („reciklažno dvorište”, „zeleni otok” …) vraća 33 skupa; samo 11 ima upotrebljive koordinate. Detaljni nalazi su u `docs/KVALITETA_PODATAKA.md`.
 - Osnova je OSM `amenity=recycling`, dopunjena općinskim skupovima s koordinatama.
 
 ### OpenFreeMap
@@ -172,7 +212,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 ### EEA Air Quality Download Service: službene mjerne postaje
 - API: `POST https://eeadmz1-downloads-api-appservice.azurewebsites.net/ParquetFile/urls` sa `countries: ["HR"]`, `pollutants: ["PM2.5", "NO2"]`, `dataset: 2` (verificirani podaci E1a), 2024. godina; jedna parquet datoteka po mjernom mjestu.
 - Metapodaci mjernih mjesta (koordinate, vrsta i područje postaje): `https://discomap.eea.europa.eu/App/AQViewer/download?fqn=Airquality_Dissem.b2g.measurements&f=csv`.
-- Podatke prijavljuje ministarstvo nadležno za zaštitu okoliša (namespace `aqd.azo.hr`). Licenca: uvjeti ponovne upotrebe EEA-e, TODO(verify) točan naziv licence.
+- Podatke prijavljuje ministarstvo nadležno za zaštitu okoliša (namespace `aqd.azo.hr`). Licenca: CC BY 4.0 prema pravnoj obavijesti EEA-e (https://www.eea.europa.eu/en/legal-notice, provjereno 8. 11. 2026.), uz navođenje EEA-e kao izvora.
 - Upotreba: samo provjera karte zraka i ML evaluacija (`docs/METODOLOGIJA.md`, `docs/ML.md`); vrijednosti postaja ne prikazuju se u izvještaju.
 
 ### Središta naselja (OpenStreetMap)

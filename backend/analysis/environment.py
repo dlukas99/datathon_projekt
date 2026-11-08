@@ -310,10 +310,6 @@ def air_band(pollutant: str, value: float) -> tuple[str, Status]:
     raise ValueError(pollutant)
 
 
-def _air_status(pollutant: str, value: float) -> Status:
-    return air_band(pollutant, value)[1]
-
-
 _STATUS_ORDER: dict[Status, int] = {"good": 0, "info": 1, "warning": 2, "bad": 3, "no_data": -1}
 _BAND_ORDER = ["vrlo niska", "niska", "umjerena", "visoka"]
 
@@ -535,7 +531,7 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
         dist = nearest_park.distance_m
         park_ok = dist is not None and dist <= PARK_DISTANCE_TARGET_M
         if nearest_park.walk_minutes is not None:
-            display = f"{fmt.minutes(nearest_park.walk_minutes)} hoda"
+            display = fmt.walk(nearest_park.walk_minutes)
             value: float | None = nearest_park.walk_minutes
             unit = "min"
         else:

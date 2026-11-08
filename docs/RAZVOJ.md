@@ -118,6 +118,10 @@ cd ..
 7. Registri vrtića, škola, ordinacija i ljekarni, geokodirani nad adresama
 8. Reciklažna dvorišta s Portala otvorenih podataka
 9. Spajanje svih točaka u jedan sloj
+10. Središta naselja i službene mjerne postaje zraka
+11. Profili naselja (treba pokrenutu Valhallu)
+12. Visoka učilišta, bolnice i studentski domovi (MZOM, OSM)
+13. Udaljenost adresa naselja od prometnica
 
 Rezultat:
 - `data\raw\` (izvorne datoteke, oko 2,6 GB)
@@ -185,7 +189,7 @@ uv run python -m ingest.settlement_profiles
 cd ..
 ```
 
-Bez tog koraka sve radi osim stranice „Predloži mjesto”.
+Bez tog koraka sve radi osim stranice „Predloži mjesto”, karte Hrvatske i mozaika naselja na naslovnici. Nakon njega pokrenite i `uv run python -m ingest.facilities` i `uv run python -m ingest.settlement_traffic`.
 
 ### Ako imate `make`
 
@@ -394,7 +398,7 @@ npx impeccable install --providers=claude --scope=project -y
 ```
 backend/
   app/        API (FastAPI): main.py su rute, report.py sastavlja izvještaj, assistant.py je asistent
-  analysis/   izračuni po kategorijama (environment.py: poplave, zrak, zelenilo, buka, požari)
+  analysis/   izračuni po kategorijama (environment.py: poplave, zrak, zelenilo, udaljenost od prometnica, požari)
   ingest/     preuzimanje i obrada izvora (run_all.py pokreće sve)
   tests/      testovi
 frontend/

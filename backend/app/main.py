@@ -87,7 +87,7 @@ def geocode(
 
 def _check_point(lat: float, lon: float) -> None:
     if not in_bbox(lon, lat):
-        raise HTTPException(status_code=422, detail="Lokacija nije u Hrvatskoj.")
+        raise HTTPException(status_code=422, detail="Lokacija nije na kopnu u Hrvatskoj.")
 
 
 @app.get("/api/reverse", tags=["adrese"], response_model=Location)

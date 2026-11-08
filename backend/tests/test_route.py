@@ -154,7 +154,7 @@ def test_route_api_returns_a_geojson_feature(monkeypatch: pytest.MonkeyPatch) ->
 def test_route_api_errors(monkeypatch: pytest.MonkeyPatch) -> None:
     outside = client.get("/api/route", params=route_params((48.2, 16.37), NEARBY))
     assert outside.status_code == 422
-    assert outside.json()["detail"] == "Lokacija nije u Hrvatskoj."
+    assert outside.json()["detail"] == "Lokacija nije na kopnu u Hrvatskoj."
 
     too_far = client.get("/api/route", params=route_params(SPLIT, (45.8, 15.97)))
     assert too_far.status_code == 422

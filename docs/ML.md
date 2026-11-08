@@ -54,7 +54,7 @@ Procjena zraka je jedina primjena koja ima službenu „istinu” za provjeru (m
 
 ## Odluka
 
-Prema unaprijed određenom pravilu **model ne ulazi u aplikaciju**. Aplikacija prikazuje vrijednost EEA karte, a ograničenje uz prometne ulice opisuje napomenom u kartici zraka i zasebnom kategorijom „Promet u blizini”.
+Prema unaprijed određenom pravilu **model ne ulazi u aplikaciju**. Aplikacija prikazuje vrijednost EEA karte, a ograničenje uz prometne ulice opisuje napomenom u kartici zraka i zasebnom kategorijom „Udaljenost od prometnica”.
 
 ## Daljnji razvoj
 

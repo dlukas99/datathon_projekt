@@ -5,7 +5,7 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 ## Načela
 
 1. **Apsolutno značenje ispred relativnog ranga.** Pregled kaže, na primjer, „lokacija je u modeliranom poplavnom području za povratno razdoblje od 100 godina”, a ne „rizik iznad prosjeka”.
-2. **Svaka kategorija ima status** prema pragu s izvorom: dobro, upozorenje, loše ili nema podataka. Kategorije za koje ne postoji općeprihvaćen prag (sunce, buka kao procjena, život bez auta, javni prijevoz, svakodnevni život) imaju status „Informacija” i prikazuju samo podatak, bez ocjene. „Nema podataka” se uvijek prikazuje; kategorija se nikad tiho ne izostavlja.
+2. **Svaka kategorija ima status** prema pragu s izvorom: dobro, upozorenje, loše ili nema podataka. Kategorije za koje ne postoji općeprihvaćen prag (sunce, požari, život bez auta, javni prijevoz, svakodnevni život) imaju status „Informacija” i prikazuju samo podatak, bez ocjene. „Nema podataka” se uvijek prikazuje; kategorija se nikad tiho ne izostavlja.
 3. **Skupna ocjena samo s vidljivim težinama.** Kategorije se prikazuju zasebno; „Skor za život” (odjeljak niže) je ponderirani prosjek s vidljivim i podesivim težinama. Profil mijenja redoslijed, naglasak i težine, nikad vrijednosti ni statuse.
 4. **Svaka vrijednost ima izvor, datum preuzimanja i vrstu.** Vrste su:
    - `measured` (izmjereno): vrijednost iz mjerenja, voznog reda ili službenog registra;
@@ -259,7 +259,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
   4. pri jednakom rangu prednost ima veće naselje.
 
   Izračun je deterministički: isti upit uvijek daje isti poredak. Jezični model ne sudjeluje u rangu.
-- **Razlozi:** uz svaki prijedlog „Zašto je predloženo” (ispunjeni obavezni uvjeti s vrijednostima, npr. „Ljekarna: 4 min hoda”, „Studiji u naselju: 156 studijskih programa, npr. Sveučilište Josipa Jurja Strossmayera u Osijeku”) i „Što nedostaje” (neispunjeni uvjet i važni kriteriji koje naselje nema), zatim dvije kategorije s najvećim pozitivnim doprinosom i jedna s najvećim negativnim, uz kratke činjenice iz izračuna (poplave, zrak, hod, prijevoz, drveće; za umirovljenika najbliža bolnica, za studenta studentski dom i menza iz OSM-a).
+- **Razlozi:** uz svaki prijedlog „Ispunjava uvjete profila” (s vrijednostima, npr. „Ljekarna: 4 minute hoda”, „Studiji u mjestu: 156 studijskih programa, npr. Sveučilište Josipa Jurja Strossmayera u Osijeku”), dva do tri obična razloga za profil i najviše jedna napomena „Na što obratiti pažnju”; brojke iz izračuna (poplave, zrak, prometnice, hod, prijevoz, drveće; za umirovljenika najbliža bolnica, za studenta studentski dom i menza iz OSM-a) su pod „Detalji”.
 
 - **Opis uz prijedlog** (`app/finder_rules.py`, `highlights` i `caution`): uvjeti profila koje mjesto ispunjava (s vrijednostima), zatim dva do tri kratka razloga redoslijedom važnim za profil (npr. za umirovljenika bolnica blizu, zelenilo, mir; za obitelj pedijatar i igralište; za studenta javni prijevoz i sve pješice) i najviše jedna napomena „Na što obratiti pažnju: …”. Razlozi nemaju bodove ni postotke; brojke su pod „Detalji”. „Dobar zrak” nije razlog, jer ga ima većina Hrvatske; razlog je samo „čist zrak” (vrlo dobar), a „dobar, ali ne izvrstan” je napomena.
 
@@ -281,10 +281,17 @@ Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovj
 - **Bolnica za umirovljenika:** najbliža opća ili klinička bolnica iz OSM-a (`amenity=hospital`, bez specijalnih, psihijatrijskih, lječilišta i bolnica preko granice), zračna linija od središta naselja: 100 do 10 km, linearno do 0 na 40 km (prozirna normalizacija).
 - **Studentski dom i menza** (OSM, prema nazivu) prikazuju se kao činjenica uz prijedlog, ali se ne boduju: OSM ih ne bilježi potpuno, pa bi bodovanje kažnjavalo gradove u kojima ih nitko nije ucrtao.
 - **Premalo rezultata:** ako na odabranom području obavezne uvjete ispunjava manje od 5 naselja, ispod njih se prikazuju naselja kojima nedostaje točno jedan uvjet, uz napomenu na vrhu i oznaku „Ne ispunjava jedan uvjet profila” s opisom što nedostaje.
-- **Što se ne boduje:** planirana optička mreža za rad od kuće (nema otvorenog skupa na data.gov.hr; provjereno 8. 11. 2026.), sunce na krovu (PVGIS je servis uživo).
+- **Što se ne boduje:** planirana optička mreža za rad od kuće (HAKOM na Portalu objavljuje samo namjere gradnje svjetlovodne mreže, WFS pod Otvorenom dozvolom, a ne postojeću dostupnost; nije uključeno do roka, vidi „Daljnji razvoj” u README-u), sunce na krovu (PVGIS je servis uživo).
 - **Provjera smislenosti:** `backend/tests/test_finder_rules.py` provjerava pravila, ne gradove (svaki prijedlog za studenta ima studije u naselju ili u dosegu, svaki za umirovljenika trgovinu, ljekarnu i liječnika pješice, svaki za obitelj vrtić i školu, grad sa studijima je iznad svojeg predgrađa), a nad stvarnim podacima i to da top 10 za svaki profil u Hrvatskoj i u Osječko-baranjskoj županiji poštuje obavezne uvjete.
 - **Jezični model** (neobavezan): samo pretvara slobodno pitanje u iste filtre (`POST /api/find/parse`). Ne vidi podatke i ne piše brojke. Bez modela radi forma.
 - **Ograničenje:** vrijednosti vrijede za središte naselja; za konkretnu adresu treba otvoriti izvještaj.
+
+### Pretpostavke bez vanjskog izvora
+
+Izvori iz ovog dokumenta određuju granice razreda (WHO, EU, HEI, 3-30-300, scenariji poplava). Bodovi unutar razreda i nekoliko udaljenosti naša su prozirna normalizacija, zapisana i u [ODLUKE.md](ODLUKE.md):
+- bodovi podskorova: poplave 100/50/0, zrak 100/80/50/10, prometnice 100/60/25, zelenilo 60 + 40 i 20 bodova za park do 600 m;
+- krug od 2 km za požare, 10 minuta hoda do stajališta, razdoblje polazaka od 6 do 20 sati radnim danom, 30 godina kao trajanje stambenog kredita;
+- udaljenosti za spajanje duplikata točaka (100, 60 i 30 m) i faktor predgrađa za studenta 0,75 · (1 − 0,5 · km / 15).
 
 ## Karta Hrvatske
 
@@ -301,7 +308,7 @@ Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovj
 
 - **Popis ispod karte:** pet najbolje ocijenjenih naselja s najmanje 200 stanovnika za odabrani sloj (kao u „Predloži mjesto”), ili prvih pet rezultata pretrage. Pretraga postoji da se do svakog naselja može doći i bez karte (pristupačnost).
 - **Skor na Karti i u izvještaju:** Karta i kartica naselja daju Skor za naselje (udaljenost od prometnica za sve adrese naselja, ostalo za središte, bez sunca na krovu jer je PVGIS servis uživo). Izvještaj računa za jednu točku i uključuje sunce, pa se brojevi razlikuju (npr. Split); kartica i izvještaj to pišu.
-- **Boje:** plava ljestvica u pet koraka (u tamnoj temi svjetlija je bolja) i siva za „nema podataka”. Boja nije jedini nositelj informacije: legenda ima nazive, a tablica ispod karte daje iste vrijednosti riječima.
+- **Boje:** zelena ljestvica u pet koraka, od livadne žute do šumske zelene (u svijetloj temi tamnija je bolja, u tamnoj svjetlija) i siva za „nema podataka”. Boja nije jedini nositelj informacije: legenda ima nazive, a tablica ispod karte daje iste vrijednosti riječima.
 - **Klik na kartu** (`GET /api/map/point`):
   - točka u naselju, a u njezinoj ili susjednoj ćeliji od 150 m postoji kućni broj (DGU ili OSM): kartica naselja;
   - točka u naselju bez kućnih brojeva u blizini (šuma, polje): kartica naselja uz napomenu „Odabrana točka je izvan naseljenog dijela; prikazujem naselje X (središte N km)” te poplave i zrak na samoj točki iz rastera;

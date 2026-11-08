@@ -1,16 +1,24 @@
 import type { Kind } from './api'
 
-const dateFormat = new Intl.DateTimeFormat('hr-HR', {
-  day: 'numeric',
-  month: 'numeric',
-  year: 'numeric',
-})
 
 export function formatDate(iso: string | null | undefined): string | null {
   if (!iso) return null
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return null
-  return dateFormat.format(date)
+  // Croatian standard form without leading zeros: "8. 11. 2026."
+  return `${String(date.getDate())}. ${String(date.getMonth() + 1)}. ${String(date.getFullYear())}.`
+}
+
+/** "radni dan 2026-11-11" → "radni dan 11. 11. 2026." in notes that come from the data. */
+export function isoDatesToText(text: string): string {
+  return text.replace(/(\d{4})-(\d{2})-(\d{2})/g, (_m, y: string, mo: string, d: string) =>
+    `${String(Number(d))}. ${String(Number(mo))}. ${y}.`,
+  )
+}
+
+/** Walking time for a list of nearest places: beyond an hour it is simply "not nearby". */
+export function walkText(minutes: number): string {
+  return minutes > 60 ? 'više od sat hoda' : minutesText(minutes)
 }
 
 export const KIND_LABELS: Record<Kind, string> = {

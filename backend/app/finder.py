@@ -20,6 +20,7 @@ import pandas as pd
 from pydantic import BaseModel, Field, ValidationError
 
 from analysis import score
+from analysis.daily import departures
 from analysis.environment import AIR_RATINGS
 from app import finder_rules as fr
 from app import fmt
@@ -191,9 +192,7 @@ def _facts(row: pd.Series) -> list[str]:
     if pd.notna(row["needs_15min"]):
         facts.append(f"Pješice do 15 minuta: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")
     if pd.notna(row["max_departures"]):
-        facts.append(
-            f"Javni prijevoz: do {fmt.num(float(row['max_departures']), 1)} polazaka na sat."
-        )
+        facts.append(f"Javni prijevoz: do {departures(float(row['max_departures']))} na sat.")
     if pd.notna(row["tree_share"]):
         facts.append(
             f"Drveće pokriva {fmt.num(float(row['tree_share']))} % kopna u krugu od 300 m "

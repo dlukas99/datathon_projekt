@@ -16,18 +16,18 @@
 | Vrijeme | Slika | Govor (prijedlog) |
 |---|---|---|
 | 0:00–0:15 | naslovnica: pitanje „Kako je živjeti ovdje?”, polje za adresu i naselja Hrvatske koja se pune od istoka prema zapadu (pustite da animacija završi) | „Gdje živjeti najveća je odluka u životu. Gledamo cijenu i kvadraturu, a poplave, zrak ili to možemo li bez auta otkrijemo tek kad uselimo. Ti podaci postoje, ali su rasuti po desetak institucija.” |
-| 0:15–0:25 | upis „Bana Jelačića 1, Vinkovci” u polje za adresu, zatim iskaznica mjesta na vrhu izvještaja; „Gledam kao” → „Obitelj s djecom” | „Dobro mjesto daje okoliš i svakodnevni život za svaku adresu u Hrvatskoj. Upišem adresu i odmah dobijem iskaznicu mjesta: sažetak i šest ključnih očitanja. Odaberem tko sam.” |
+| 0:15–0:25 | upis „Bana Jelačića 1, Vinkovci” u polje za adresu, zatim iskaznica mjesta na vrhu izvještaja; „Gledam kao” → „Obitelj s djecom” | „Dobro mjesto je za svakoga tko bira gdje živjeti: obitelji, umirovljenike i studente. Upišem adresu i dobijem iskaznicu mjesta. Odaberem tko sam.” |
 | 0:25–0:55 | izvještaj: sažetak na vrhu, kartice Poplave i Zrak (jedna rečenica, ocjena riječju), točkice zelenila, ravnalo prometnice; otvorite „Detalji i izvor” kod zraka | „Prvo okoliš. Poplave iz karata JRC-a, uz poveznicu na Hrvatske vode; kad je adresa u poplavnom području, rizik vidim kao vjerojatnost u 30 godina kredita. Zrak dobiva jednu ocjenu, a brojke i granice WHO-a i EU-a su u detaljima, zelenilo prema pravilu 3-30-300, a promet prema udaljenosti od ceste. Uz svaku brojku su izvor i datum.” |
 | 0:55–1:10 | Skor za život u zaglavlju, zatim ploča s klizačima | „Skor za život sažima sve kategorije prema mom profilu. Težine su vidljive i mogu ih mijenjati, a piše i što skor najviše podiže i spušta.” |
 | 1:10–1:25 | Život bez auta: karta doleti do adrese, krugovi hoda od 5, 10 i 15 minuta šire se redom, kvačice | „Hod se računa po stvarnim ulicama: što je na 5, 10 i 15 minuta i koliko od sedam svakodnevnih potreba imam bez auta.” |
-| 1:25–1:50 | „Pronađi mjesto za mene”: tri koraka s trakom napretka (tko traži → gdje → što je važno), rezultati s razlozima, „Otvori izvještaj” | „A ako još ne znam gdje? Odgovorim na tri pitanja: tko traži, gdje i što mi je važno, a aplikacija rangira 2.347 naselja i objasni zašto. Izračun je deterministički; jezični model smije samo pretvoriti moje pitanje u filtre.” |
+| 1:25–1:50 | „Pronađi mjesto za mene”: profil „Student”, tri koraka s trakom napretka (tko traži → gdje → što je važno), prvi prijedlog s uvjetima i razlozima, „Otvori izvještaj” | „A ako još ne znam gdje? Odgovorim na tri pitanja, a aplikacija rangira 2.347 naselja. Svaki profil ima obavezne uvjete: student dobiva mjesta sa studijima, a uz svaki prijedlog piše zašto.” |
 | 1:50–2:05 | „Pogledaj oglase”, zatim usporedba Vinkovci i Nijemci | „Za odabrano mjesto otvaram pretragu oglasa; mi samo slažemo poveznicu. Dvije lokacije usporedim jednu uz drugu.” |
 | 2:05–2:15 | Karta: sloj „Kvaliteta zraka”, klik na Vinkovce, kartica naselja | „Na karti vidim cijelu Hrvatsku, naselje po naselje: zrak, poplave, usluge ili prijevoz. Klik daje kratak pregled i put do punog izvještaja.” |
 | 2:15–2:28 | asistent: „Gdje je bliže do vrtića?” | „Asistent odgovara samo iz izračuna i ne daje savjete o kupnji.” |
-| 2:28–2:45 | stranica „Izvori”, metodologija (provjera zraka), `/api/docs` | „Koristimo 31 otvoreni skup podataka: Portal otvorenih podataka, DGU, DZS, Ministarstvo, HZZO, gradove, ZET, HŽPP, JRC, EEA, ESA, Copernicus i OpenStreetMap. Kartu zraka provjerili smo uz službene postaje, a Random Forest model pošteno usporedili s njom. Sve je dostupno kao REST API s OpenAPI opisom.” |
-| 2:45–3:00 | naslovnica, „Kako radi” (tri postaje) | „Kod je otvoren pod licencom EUPL. Dobro mjesto: okoliš i svakodnevni život za svaku adresu u Hrvatskoj.” |
+| 2:28–2:40 | stranica „Izvori”, metodologija (provjera zraka) | „Koristimo 33 otvorena skupa podataka: Portal otvorenih podataka, DGU, DZS, ministarstva, HZZO, gradove, prijevoznike, JRC, EEA, ESA, Copernicus i OpenStreetMap. Kartu zraka provjerili smo uz službene postaje.” |
+| 2:40–2:55 | dijagram arhitekture iz `docs/ARHITEKTURA.md`, `/api/docs`, zatim naslovnica | „Ispod su FastAPI, Valhalla i Docker Compose, uz otvoreni REST API i kod pod licencom EUPL. Dalje: buka i internet čim postanu otvoreni, vozni redovi ostalih gradova i ugradnja u gradske portale.” |
 
 **Napomene za snimanje:**
-- Ukupno oko 425 riječi; govorite mirno, bez zastrašivanja.
+- Ukupno oko 300 riječi (oko 2:55 uz mirno čitanje); govorite mirno, bez zastrašivanja.
 - Tijekom videa natpis: „Informativni alat, nije službena procjena.”
 - Ako demo URL još nije javan, snimite lokalno (upute u `docs/RAZVOJ.md`).

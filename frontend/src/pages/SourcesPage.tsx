@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchLiveSources, fetchSources } from '../lib/api'
-import { formatDate } from '../lib/format'
+import { formatDate, isoDatesToText } from '../lib/format'
 
 export function SourcesPage() {
   const sources = useQuery({ queryKey: ['sources'], queryFn: ({ signal }) => fetchSources(signal) })
@@ -81,7 +81,7 @@ export function SourcesPage() {
                 <span>{s.publisher}</span>
                 <span>Licenca: {s.license}</span>
                 {formatDate(s.retrieved_at) && <span>preuzeto {formatDate(s.retrieved_at)}</span>}
-                {s.data_date && <span>podaci: {s.data_date}</span>}
+                {s.data_date && <span>podaci: {isoDatesToText(s.data_date)}</span>}
               </div>
               {s.url && (
                 <a href={s.url} target="_blank" rel="noreferrer">

@@ -124,6 +124,10 @@ const fake = vi.hoisted(() => {
     addTo() {
       return this
     }
+    element = document.createElement('div')
+    getElement() {
+      return this.element
+    }
     on(type: string, handler: Handler) {
       this.handlers.set(type, handler)
       return this

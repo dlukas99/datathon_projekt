@@ -140,7 +140,7 @@ def compute_reach(
     if flat:
         try:
             times = valhalla.walk_minutes(lat, lon, [(p.lat, p.lon) for p in flat])
-        except valhalla.RouterUnavailable:
+        except (valhalla.RouterUnavailable, KeyError, IndexError, TypeError):
             reach.router_ok = False
             times = [None] * len(flat)
         for place, minutes in zip(flat, times, strict=True):

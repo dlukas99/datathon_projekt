@@ -45,6 +45,12 @@ SEARCHED_SOURCE = {
 }
 
 
+def departures(per_hour: float) -> str:
+    """Departures per hour as a whole number with the right Croatian form ("32 polaska")."""
+    n = max(1, round(per_hour))
+    return f"{fmt.num(n)} {fmt.plural(n, 'polazak', 'polaska', 'polazaka')}"
+
+
 def _value_for_nearest(cat: str, title: str, place: Place | None, router_ok: bool) -> Value:
     if place is None:
         return Value(
@@ -57,7 +63,7 @@ def _value_for_nearest(cat: str, title: str, place: Place | None, router_ok: boo
             kind="modelled",
         )
     if place.walk_minutes is not None:
-        display = f"{fmt.minutes(place.walk_minutes)} hoda"
+        display = fmt.walk(place.walk_minutes)
         value: float | None = place.walk_minutes
         unit = "min"
         kind = place.kind
@@ -170,7 +176,7 @@ def transit_category(reach: Reach, has_timetables: bool) -> Category:
                 label="Najviše polazaka na sat radnim danom (jedno stajalište)",
                 value=round(best, 1),
                 unit="polazaka/h",
-                display=f"{fmt.num(best, 1)} polazaka na sat ({top.name})",
+                display=f"{departures(best)} na sat ({top.name})",
                 source=top.source,
                 retrieved_at=top.retrieved_at,
                 kind="measured",
@@ -196,7 +202,7 @@ def transit_category(reach: Reach, has_timetables: bool) -> Category:
         status = "info"
         headline = (
             f"Unutar 10 minuta hoda {_stops_phrase(len(stops))}, "
-            f"s najviše {fmt.num(best, 1)} polazaka na sat radnim danom."
+            f"s najviše {departures(best)} na sat radnim danom."
         )
     notes = []
     if stops and not with_tt:

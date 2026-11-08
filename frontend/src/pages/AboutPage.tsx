@@ -144,8 +144,20 @@ export function AboutPage() {
       <section className="section" aria-labelledby="privacy">
         <h2 id="privacy">Privatnost</h2>
         <p>
-          Upisane adrese i pitanja asistentu ne spremaju se i ne bilježe. Nema kolačića za
+          Upisane adrese i pitanja asistentu ne spremaju se i ne bilježe. Ako je uključen
+          jezični model, samo tekst pitanja (bez adrese) šalje se njegovu pružatelju. Nema kolačića za
           praćenje ni analitike. Fontovi se poslužuju s našeg poslužitelja.
+        </p>
+      </section>
+
+      <section className="section" aria-labelledby="team">
+        <h2 id="team">Tim</h2>
+        <p>
+          Tim „Požega”: Domagoj Lukas i Fabio Mandić, studenti diplomskog studija Računarstvo, smjer
+          Podatkovna znanost. Mentor i voditelj tima: dr. sc. Matej Džijan. Fakultet elektrotehnike,
+          računarstva i informacijskih tehnologija Osijek (FERIT), Sveučilište J. J. Strossmayera u
+          Osijeku. Izrađeno za Datathon Portala otvorenih podataka 2026., izazov B: Okoliš i održivi
+          prostor.
         </p>
       </section>
 

@@ -1,3 +1,4 @@
+import { plural } from '../lib/format'
 import { ArrowRight } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { fetchSuggestions, type Suggestion } from '../lib/api'
@@ -155,7 +156,7 @@ export function AddressSearch({
   else if (!short && failed) status = UNAVAILABLE
   else if (empty) status = NOTHING_FOUND
   else if (current) {
-    status = `${String(items.length)} prijedloga. Strelicama odaberite, Enter za potvrdu.`
+    status = `${String(items.length)} ${plural(items.length, 'prijedlog', 'prijedloga', 'prijedloga')}. Strelicama odaberite, Enter za potvrdu.`
   }
   // "Nothing found" and errors are shown to everyone; the count only to screen readers.
   const shown = searching || (!short && failed) || empty

@@ -394,7 +394,7 @@ test('comparison shows both addresses side by side', async ({ page }) => {
 
 test('outside Croatia shows a friendly error', async ({ page }) => {
   await page.goto('/izvjestaj?lat=48.2&lon=16.37')
-  await expect(page.getByRole('alert')).toContainText('Lokacija nije u Hrvatskoj')
+  await expect(page.getByRole('alert')).toContainText('Lokacija nije na kopnu u Hrvatskoj')
 })
 
 for (const theme of ['light', 'dark'] as const) {

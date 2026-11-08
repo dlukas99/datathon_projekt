@@ -42,7 +42,7 @@ def locate(lat: float, lon: float, label: str | None = None) -> Location:
     admin = get_admin()
     place = admin.lookup(lon, lat) if admin else None
     if admin is not None and place is None:
-        raise OutsideCroatia("Lokacija nije u Hrvatskoj.")
+        raise OutsideCroatia("Lokacija nije na kopnu u Hrvatskoj.")
     population = None
     if place is not None and place.population is not None:
         population = Value(

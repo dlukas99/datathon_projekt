@@ -2,8 +2,8 @@
 
 **Okoliš i svakodnevni život za svaku adresu u Hrvatskoj: poplave, zrak, zelenilo, promet, požari i sunce, sve što vam treba na dohvat ruke, i prijedlog mjesta za život, iz otvorenih podataka.**
 
-Datathon Portala otvorenih podataka 2026 · Izazov B: Okoliš i održivi prostor
-Tim: TODO(tim) · Mentor: TODO(tim) · Visoko učilište: TODO(tim)
+Datathon Portala otvorenih podataka 2026. · izazov B: Okoliš i održivi prostor
+Tim „Požega”: Domagoj Lukas i Fabio Mandić, studenti diplomskog studija Računarstvo, smjer Podatkovna znanost · Mentor i voditelj tima: dr. sc. Matej Džijan · Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek (FERIT), Sveučilište J. J. Strossmayera u Osijeku
 
 **Demo:** TODO(ljudi): javni URL nakon postavljanja na poslužitelj (vidi [docs/DEPLOY.md](docs/DEPLOY.md))
 
@@ -24,7 +24,7 @@ Naslovnica postavlja jedno pitanje, „Kako je živjeti ovdje?”, i nudi dva pu
 1. **Provjeri adresu:** jedno polje, odmah do izvještaja za tu adresu.
 2. **Pronađi mjesto za mene:** vođeni tok u tri pitanja (tko traži, gdje, što je važno), s prijedlogom naselja i razlozima.
 
-Uz to su na naslovnici sva naselja Hrvatske obojena prema Skoru za život, s poveznicom na **kartu Hrvatske** (slojevi: Skor za život, zrak, poplave, usluge pješice, javni prijevoz), i šest okolišnih mjerenja (svako u boji koju ima i u izvještaju) i kratko objašnjenje kako aplikacija radi. **Usporedba dviju lokacija** dostupna je iz izbornika i iz izvještaja.
+Na naslovnici su i sva naselja Hrvatske obojena prema Skoru za život (poveznica na **kartu Hrvatske** sa slojevima Skor za život, zrak, poplave, usluge pješice i javni prijevoz), šest okolišnih mjerenja u bojama izvještaja i kratko objašnjenje kako aplikacija radi. **Usporedba dviju lokacija** dostupna je iz izbornika i iz izvještaja.
 
 Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenice sažetka iz predložaka i šest ključnih očitanja sa statusom (poplave, zrak, drveće, prometnica, pješice, prijevoz), od kojih svako vodi na svoj instrument. Okolišni pregled je niz kartica: poplave i požari jednom jasnom rečenicom, zrak ocjenom riječju i jednostavnom ljestvicom, krug zelenila od 300 m, ravnalo do prometnice i luk sunca, svaki iz stvarnih vrijednosti za adresu; brojke, pragovi i izvori su pod „Detalji i izvor”. Ispod naslovnog dijela izvještaj ima tri dijela:
 
@@ -41,10 +41,10 @@ Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenic
    - koliko od sedam svakodnevnih potreba lokacija pokriva bez auta.
 3. **Svakodnevni život:** najbliži vrtić, škola, liječnik, pedijatar, ljekarna, trgovina, igralište i mjesto za reciklažu, s minutama hoda.
 
-**Skor za život** (0–100) sažima sve kategorije s težinama odabranog profila (obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti). Težine su vidljive i podesive, a uz skor piše što ga najviše podiže i spušta.
+**Skor za život** (0–100) sažima sve kategorije s težinama odabranog profila (općenito, obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti). Težine su vidljive i podesive, a uz skor piše što ga najviše podiže i spušta.
 
 **Ostalo:**
-- Točka se može odabrati i povlačenjem oznake na karti. Klik na kartu izvan točaka ne mijenja lokaciju, pa se izvještaj ne izgubi slučajnim klikom ili dvostrukim klikom za zum.
+- Točka se može odabrati i povlačenjem oznake na karti. Klik na kartu izvan točaka ne mijenja lokaciju, pa se izvještaj ne izgubi slučajnim klikom ili dvostrukim klikom za uvećanje.
 - Za upisano naselje prikazuje se njegovo stvarno središte, uz napomenu da za točan izvještaj treba upisati adresu.
 - Gumb „Pogledaj oglase” otvara pretragu oglasa za to mjesto. Aplikacija samo slaže poveznicu i ne prikazuje oglase.
 - Asistent odgovara na pitanja poput „Je li ova kuća u poplavnom području?”.
@@ -53,7 +53,7 @@ Svaka brojka ima izvor, datum i vrstu (izmjereno, modelirano ili procjena). Broj
 
 ## Primjer
 
-Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izračunato 4. 11. 2026. iz podataka preuzetih 1.–4. 11. 2026.:
+Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izračunato 8. 11. 2026. iz podataka preuzetih 1.–8. 11. 2026.:
 - kvaliteta zraka: EEA karta za 2024.;
 - pokrov tla: ESA WorldCover 2021.;
 - poplave: JRC v3.1.1;
@@ -97,7 +97,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - izokrone hoda od 5, 10 i 15 minuta po mreži ulica i pješačkih staza
 - pješački put po ulicama do najbližeg vrtića, škole, ljekarne ili druge ustanove, s minutama i duljinom; otvara se iz legende karte, s točke na karti ili iz popisa „Svakodnevni život”
 - svakodnevne potrebe i javni prijevoz s minutama hoda
-- profili korisnika koji mijenjaju redoslijed i naglasak
+- profili korisnika koji mijenjaju redoslijed, naglasak i težine, a u „Predloži mjesto” i obavezne uvjete (`config/finder_rules.json`)
 - usporedba dviju lokacija
 - asistent na hrvatskom koji odgovara samo iz rezultata izračuna (s jezičnim modelom ili bez njega)
 - ispis, dijeljenje poveznicom (stanje izvještaja je u URL-u) i preuzimanje GeoJSON-a
@@ -120,7 +120,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 ## Izvori otvorenih podataka
 
-Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 31 skup podataka (uz službene mjerne postaje zraka za provjeru) i PVGIS API. Oglasnici nisu izvori podataka, nego samo vanjske poveznice.
+Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 33 skupa podataka (DGU 2, DZS 1, MZOM 4, Grad Zagreb 3, ostali gradovi i općine 10, HZZO 3, JRC 1, EEA 3, ESA 1, EFFIS 1, ZET 1, HŽPP 1, Autotrolej 1, OpenStreetMap 1) i PVGIS API; popis svih s izdavačem, poveznicom, licencom i datumom je u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md#svi-skupovi-podataka). Oglasnici nisu izvori podataka, nego samo vanjske poveznice.
 
 | Izvor | Podaci | Primjena |
 |---|---|---|
@@ -186,7 +186,7 @@ Detalji, standardi te tehnički, organizacijski i pravni preduvjeti za uvođenje
 
 ## Tehnologije
 
-Python 3.12 · FastAPI · Pydantic · rasterio · Shapely · GeoPandas · pyosmium · PyArrow · httpx · pytest · ruff · mypy (strict) · Valhalla · React 19 + TypeScript (Vite) · React Router · TanStack Query · MapLibre GL JS · OpenFreeMap · fontovi Bricolage Grotesque i Figtree (OFL) · Playwright + axe-core · ESLint (typescript-eslint, jsx-a11y) · Docker Compose · Caddy
+Python 3.12 · FastAPI · Pydantic · rasterio · Shapely · GeoPandas · pyosmium · PyArrow · httpx · scikit-learn (samo evaluacija) · pytest · ruff · mypy (strict) · Valhalla · React 19 + TypeScript (Vite) · React Router · TanStack Query · MapLibre GL JS · Lucide · OpenFreeMap · fontovi Bricolage Grotesque i Figtree (OFL) · Playwright + axe-core · ESLint (typescript-eslint, jsx-a11y) · Docker Compose · Caddy
 
 ## Pokretanje
 
@@ -197,7 +197,7 @@ cp .env.example .env     # CONTACT_EMAIL za User-Agent; LLM_* samo ako želite a
 make setup               # ovisnosti backenda i frontenda
 make data                # preuzimanje i obrada svih izvora (prvi put oko 20 minuta i 2,6 GB preuzimanja; vidi docs/IZVORI_PODATAKA.md)
 make dev                 # Valhalla, backend na http://localhost:8000 i frontend na http://localhost:5173
-make verify              # lint, tipovi, testovi, build, e2e i pristupačnost
+make verify              # lint, tipovi, testovi, izgradnja, e2e i pristupačnost
 ```
 
 Pri prvom pokretanju (`make dev` ili `make valhalla`) Valhalla oko 3 minute gradi pločice iz OSM izvatka.
@@ -217,7 +217,8 @@ Upute za poslužitelj, domenu i prijenos obrađenih podataka nalaze se u [docs/D
 ```
 backend/    app/ (API), ingest/ (konektori izvora), analysis/ (izračuni), tests/
 frontend/   React aplikacija
-deploy/     Docker Compose, Caddy, Dockerfileovi, Valhalla
+deploy/     Docker Compose, Caddy, Dockerove datoteke, Valhalla
+config/     profili i težine, pravila profila za Predloži mjesto, poveznice na oglasnike
 docs/       metodologija, arhitektura, izvori, kvaliteta podataka, pristupačnost, asistent, odluke, scenarij videa, predaja, images/
 scripts/    provjera README-a, demo adrese, prijenos podataka na poslužitelj
 ```
@@ -233,7 +234,7 @@ scripts/    provjera README-a, demo adrese, prijenos podataka na poslužitelj
 
 Provjereno 2. i 3. 11. 2026. tijekom automatske obrade:
 
-- **Registri bez koordinata:** registar dječjih vrtića, popis osnovnih škola i HZZO-ovi popisi ordinacija i ljekarni. Naše geokodiranje nad adresama DGU-a uspijeva za 86–95 % zapisa; najslabije za ljekarne (86,3 %).
+- **Registri bez koordinata:** registar dječjih vrtića, popis osnovnih škola i HZZO-ovi popisi ordinacija i ljekarni. Naše geokodiranje nad adresama DGU-a uspijeva za 86–95 % zapisa; najslabije za ljekarne (86,4 %).
 - **Registri pravnih osoba umjesto lokacija:** registar vrtića za Zagreb ima 199 redaka, a gradski geoportal 323 objekta. Popis škola nema područne škole.
 - **Općinski podaci o otpadu:** od 33 skupa o reciklažnim dvorištima i zelenim otocima samo 11 ima upotrebljive koordinate. Ostali su PDF-ovi, poveznice na web stranice ili tablice bez koordinata, jedan skup ima koordinate u neispravnom obliku broja, a dva imaju točke s koordinatama izvan Hrvatske.
 - **Neispravne poveznice:**
@@ -249,19 +250,19 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 | Kriterij | Kako ga rješenje ispunjava |
 |---|---|
-| Upotreba otvorenih podataka | 30 skupova podataka i PVGIS API; izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
+| Upotreba otvorenih podataka | 33 skupa podataka i PVGIS API ([popis](docs/IZVORI_PODATAKA.md#svi-skupovi-podataka)); izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
 | Povezivanje javno dostupnih podataka | adresa se povezuje s upravnim jedinicama, popisom stanovništva, rasterskim okolišnim slojevima, mrežom ulica, registrima ustanova (geokodiranim nad adresama DGU-a) i voznim redovima |
 | Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i hlad, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
 | Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Predloži mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
 | Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |
 | Tehnička arhitektura i integracijski potencijal | REST i OpenAPI, GeoJSON, INSPIRE i GTFS na ulazu, opisani tehnički, organizacijski i pravni preduvjeti za uvođenje, Docker Compose |
-| Dojam rješenja | tri jasna ulaza i jednako nazvane stavke izbornika (Provjeri adresu, Predloži mjesto, Usporedi); okolišni pregled na prvom ekranu; Skor za život s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
+| Dojam rješenja | dva ulaza na naslovnici (Provjeri adresu, Pronađi mjesto za mene) i karta Hrvatske; izbornik Provjeri adresu · Predloži mjesto · Usporedi · Karta · O alatu; jednostavan jezik (minute riječima, jedna rečenica za poplave i požare); okolišni pregled na prvom ekranu; Skor za život s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
 | Prezentacija rješenja | video u trajanju do 3 minute: TODO(ljudi) (scenarij: [docs/VIDEO_SCENARIJ.md](docs/VIDEO_SCENARIJ.md)) |
 
 ## Privatnost i sigurnost
 
-- Upisane adrese, koordinate i pitanja asistentu ne spremaju se: API i Caddy ne vode pristupni zapis, a nema ni kolačića za praćenje ni analitike.
+- Upisane adrese, koordinate i pitanja asistentu ne spremaju se: API i Caddy ne vode pristupni zapis, a nema ni kolačića za praćenje ni analitike. Ako je na poslužitelju uključen jezični model, tekst pitanja asistentu (bez adrese i podataka izvještaja) šalje se pružatelju tog modela.
 - Iz HZZO-ovih popisa ne prikazuju se imena liječnika, a iz popisa škola imena ravnatelja.
 - U demo materijalima koriste se isključivo adrese javnih ustanova.
 - Ključevi se nikad ne spremaju u repozitorij (samo `.env`, koji je u `.gitignore`).
@@ -280,6 +281,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
 - Registri bez koordinata geokodirani su s 86–95 % uspjeha. Neuspjeli zapisi se ne prikazuju, a za vrtiće, škole i ljekarne dopunjuju se OpenStreetMapom.
 - HZZO-ovi popisi i vozni red HŽPP-a nemaju navedenu licencu; koriste se uz obrazloženje u [docs/ODLUKE.md](docs/ODLUKE.md).
+- Požari: EFFIS bilježi uglavnom požare od otprilike 30 ha naviše (od 2018. i neke manje); manji požari nisu vidljivi.
 - Sunce na krovu dolazi uživo iz PVGIS-a. Kad servis sporo odgovara, kategorija privremeno prikazuje „Nema podataka” dok rezultat ne stigne.
 - OpenStreetMap je izvan gradova nepotpun, pa „nije pronađeno” može značiti i da objekt nije ucrtan; pregled to navodi.
 - Pristupačnost je provjerena automatski (axe-core, tipkovnica, 320 px). Provjera s čitačima zaslona i korisnicima još nije provedena.
@@ -288,7 +290,8 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 - obavijest kad se za odabranu lokaciju promijeni službena karta opasnosti od poplava
 - model NO2 na razini ulice uz gradske mjerne mreže i podatke o prometnom opterećenju ([docs/ML.md](docs/ML.md))
-- strateške karte buke ako postanu dostupne pod otvorenom licencom
+- strateške karte buke i HAKOM-ovi slojevi dostupnosti interneta ako postanu dostupni pod otvorenom licencom
+- planirana optička mreža za profil „Rad od kuće” iz HAKOM-ova skupa namjera gradnje svjetlovodne mreže (WFS, Otvorena dozvola), jasno označena kao plan, a ne postojeća mreža
 - vozni redovi ostalih gradskih prijevoznika (GTFS)
 - provjereno mapiranje mjesta za poveznice na oglasnike, u dogovoru s oglasnicima
 - ugradnja u oglasnike nekretnina i gradske portale preko API-ja
@@ -305,7 +308,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 ## Korišteni AI alati
 
-Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic). Za pregled dizajna sučelja korišten je skill [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) za Claude Code; to je razvojni alat i nije dio aplikacije. Asistent u aplikaciji može koristiti bilo koji model preko OpenAI-kompatibilnog API-ja i ne ovisi o jednom pružatelju; bez modela radi s pravilima.
+Za pisanje koda i dokumentacije korišten je Claude Code (Anthropic, vlasnički uvjeti korištenja). Za pregled dizajna sučelja korišten je dodatak (skill) [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) za Claude Code; to je razvojni alat i nije dio aplikacije. Popis svih alata, biblioteka i usluga s licencama je u [docs/ALATI_I_LICENCE.md](docs/ALATI_I_LICENCE.md). Asistent u aplikaciji može koristiti bilo koji model preko OpenAI-kompatibilnog API-ja i ne ovisi o jednom pružatelju; bez modela radi s pravilima.
 
 ## Ograničenje odgovornosti
 

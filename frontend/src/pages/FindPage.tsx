@@ -5,6 +5,7 @@ import { Link, useSearchParams } from 'react-router'
 import { ListingLinks } from '../components/ListingLinks'
 import { type FindRequest, fetchFindOptions, findPlaces, parseFindQuestion } from '../lib/api'
 import { finderRationale, finderSummary } from '../lib/finderRules'
+import { plural } from '../lib/format'
 import { PROFILES, SCORE_CATEGORIES, profileWeights } from '../lib/profiles'
 import { decodeWeights, encodeWeights } from '../lib/score'
 import { placeName, reportPath } from '../lib/urls'
@@ -439,7 +440,7 @@ export function FindPage() {
             <h2 id="step-title" ref={headingRef} tabIndex={-1}>
               {results.data
                 ? results.data.results.length > 0
-                  ? `Najbolje ${String(results.data.results.length)} od ${results.data.matching.toLocaleString('hr-HR')} naselja`
+                  ? `${plural(results.data.results.length, 'Najbolje', 'Najbolja', 'Najboljih')} ${String(results.data.results.length)} od ${results.data.matching.toLocaleString('hr-HR')} naselja`
                   : 'Nijedno naselje ne ispunjava sve uvjete'
                 : results.isError
                   ? 'Prijedlozi trenutačno nisu dostupni'

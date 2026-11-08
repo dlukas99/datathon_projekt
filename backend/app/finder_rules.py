@@ -181,20 +181,6 @@ def criterion_score(cid: str, row: pd.Series) -> float | None:
     raise ValueError(f"Nepoznat kriterij: {cid}")
 
 
-def criterion_gap(cid: str, row: pd.Series) -> str | None:
-    """A sentence for an important criterion the settlement does poorly on."""
-    s = criterion_score(cid, row)
-    if s is None or s >= 50:
-        return None
-    if cid.startswith("walk:"):
-        return check_requirement(cid, row).text if s == 0 else None
-    if cid == "hospital":
-        km = _num(row, "hospital_km")
-        name = row.get("hospital_name") or "bolnica"
-        return f"Najbliža opća ili klinička bolnica je daleko: {name}, {fmt.num(km or 0, 1)} km"
-    return None
-
-
 def profile_facts(profile_id: str, row: pd.Series) -> list[str]:
     """Facts only some profiles need: hospital, student dormitory and canteen (OSM)."""
     out = []
@@ -276,15 +262,16 @@ def _highlight(key: str, row: pd.Series) -> str | None:
             return None
         return (
             f"Trgovina odmah do vas, {m}"
-            if (_num(row, "min_grocery") or 99) < 3
+            if round(_num(row, "min_grocery") or 99) <= 2
             else f"Trgovina {m}"
         )
     if key == "air":
         # Most of Croatia has "good" air; only "very good" is worth naming as a reason.
         return "Čist zrak" if air == "vrlo niska" else None
     if key == "green":
-        s = _num(row, "score_green")
-        return "Puno zelenila i hlada" if s is not None and s >= 90 else None
+        # The 3-30-300 rule: at least 30 % tree cover, as on the map card.
+        tree = _num(row, "tree_share")
+        return "Puno zelenila i hlada" if tree is not None and tree >= 30 else None
     if key == "quiet":
         s = _num(row, "score_noise")
         return (

@@ -378,6 +378,7 @@ export function ReportMap({
     const marker = new maplibregl.Marker({ color: '#5b3a1e', draggable: interactive })
       .setLngLat([report.location.lon, report.location.lat])
       .addTo(map)
+    marker.getElement().setAttribute('aria-label', 'Oznaka lokacije')
     marker.on('dragend', () => {
       const p = marker.getLngLat()
       onPickRef.current?.(p.lat, p.lng)
