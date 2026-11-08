@@ -79,29 +79,29 @@ export function HomePage() {
 
   return (
     <>
-      <section className="hero" aria-labelledby="home-title">
-        <div className="hero-text">
-          <h1 id="home-title">
-            Kako je živjeti <em>ovdje</em>?
-          </h1>
-          <p className="hero-lead">
+      <section className="trailhead" aria-labelledby="home-title">
+        <div className="trailhead-text">
+          <h1 id="home-title">Kako je živjeti ovdje?</h1>
+          <p className="trailhead-lead">
             Upišite adresu bilo gdje u Hrvatskoj i saznajte, iz otvorenih podataka, kakav je ondje
             okoliš i što vam je pješice na dohvat ruke.
           </p>
 
-          <div className="hero-search">
-            <AddressSearch
-              onSelect={open}
-              label="Adresa ili naselje"
-              inputId="home-search"
-              submitLabel="Prikaži"
-            />
+          <div className="signpost">
+            <div className="plank plank-place">
+              <AddressSearch
+                onSelect={open}
+                label="Adresa ili naselje"
+                inputId="home-search"
+                submitLabel="Prikaži"
+              />
+            </div>
+            <Link className="plank plank-go" to="/predlozi">
+              <span className="plank-title">Pronađi mjesto za mene</span>
+              <span className="plank-sub">Tri pitanja, pa prijedlog naselja s razlozima</span>
+              <ArrowRight className="plank-arrow" size={22} aria-hidden="true" />
+            </Link>
           </div>
-          <Link className="hero-find" to="/predlozi">
-            <span className="hero-find-title">Pronađi mjesto za mene</span>
-            <span className="hero-find-sub">Tri pitanja, pa prijedlog naselja s razlozima</span>
-            <ArrowRight className="hero-find-arrow" size={22} aria-hidden="true" />
-          </Link>
 
           <div className="examples">
             <span className="examples-label" id="demo-title">
@@ -119,7 +119,7 @@ export function HomePage() {
           </div>
         </div>
 
-        <figure className="hero-map">
+        <figure className="trailhead-map">
           <Link to="/karta" className="mosaic-link" aria-label="Istraži kartu Hrvatske: sva naselja prema Skoru za život">
             <CroatiaMosaic />
           </Link>
@@ -140,15 +140,20 @@ export function HomePage() {
 
       <section className="measures" aria-labelledby="measures-title">
         <h2 id="measures-title">Šest mjerenja okoliša za svaku adresu</h2>
+        <p className="measures-intro">
+          Svako mjerenje ima svoju boju i u izvještaju dobiva vlastiti mjerni prikaz.
+        </p>
         <ul className="measure-list">
           {MEASURES.map((m) => (
             <li key={m.id} className={`measure cat-${m.id}`}>
-              <span className="measure-icon">
-                <CategoryIcon id={m.id} size={24} />
-              </span>
-              <h3>{m.title}</h3>
+              <h3>
+                <span className="measure-icon">
+                  <CategoryIcon id={m.id} size={22} />
+                </span>
+                {m.title}
+              </h3>
               <p>{m.text}</p>
-              <p className="measure-source">{m.source}</p>
+              <p className="measure-source">Izvor: {m.source}</p>
             </li>
           ))}
         </ul>

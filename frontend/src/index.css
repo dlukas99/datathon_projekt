@@ -1,38 +1,36 @@
-/* Instrumenti: paper, ink and one colour per thing measured. Actions are ink; colour is
-   reserved for the six environmental readings (and walking and transit), so wherever a
-   colour appears it names what is measured. Status keeps its own colours, always with an
-   icon and a word. Colours meet WCAG 2.2 AA in both themes. */
+/* Calm and minimal. Colours meet WCAG 2.2 AA in both themes. */
 
 :root {
   color-scheme: light;
-  --bg: #f6f5f1;
+  /* Putokaz: a trail system in a nature park. Meadow-tinted ground, forest ink, forest
+     green for actions and the trail, brown tourist-sign for the place itself, and one
+     nature colour per measurement (river, sky, leaf, ochre, ember, sun). Status colours
+     stay separate and always come with an icon and a word. */
+  --bg: #eef3ea;
   --surface: #ffffff;
-  --surface-2: #ecebe5;
-  --text: #15171a;
-  --muted: #55595f;
-  --border: #dcdad2;
-  --control-border: #7a7d82;
-  --accent: #15171a;
-  --accent-hover: #000000;
-  --accent-soft: #e7e6e0;
+  --surface-2: #e0eadb;
+  --text: #13261b;
+  --muted: #475a4e;
+  --border: #cfdbcc;
+  --control-border: #6b7f70;
+  --accent: #1d6e3a;
+  --accent-hover: #155a2e;
+  --accent-soft: #d6ecd8;
   --accent-contrast: #ffffff;
-  --link: #1d4fc4;
-  --sign: #15171a;
-  --sign-ink: #f6f5f1;
-  --sign-muted: #c9c7bf;
-  --sign-edge: #000000;
-  --focus: #1d4fc4;
-
-  /* One colour per measurement (text-safe on paper and white). */
-  --c-flood: #1f55d0;
-  --c-air: #6a46d1;
-  --c-green: #18804a;
-  --c-noise: #a85a00;
-  --c-fire: #c4381a;
+  --c-flood: #1b5f9e;
+  --c-air: #0e6f80;
+  --c-green: #2f7d32;
+  --c-noise: #95560a;
+  --c-fire: #b6401a;
   --c-solar: #845800;
-  --c-solar-fill: #f5b800;
-  --c-car_free: #0b7480;
-  --c-transit: #b02a6a;
+  --c-solar-fill: #f2b705;
+  --c-car_free: #5b3a1e;
+  --c-transit: #9b2f4e;
+  --sign: #5b3a1e;
+  --sign-ink: #ffffff;
+  --sign-muted: #e9d9c6;
+  --sign-edge: #3f2713;
+  --focus: #1a56c4;
 
   --good: #1d6b3a;
   --good-bg: #e1f0e4;
@@ -43,14 +41,14 @@
   --info: #2c4f72;
   --info-bg: #e3ecf4;
   --nodata: #545a57;
-  --nodata-bg: #e8e7e2;
+  --nodata-bg: #e7e9e6;
 
-  --radius: 14px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 2px rgb(21 23 26 / 6%), 0 10px 28px -14px rgb(21 23 26 / 22%);
-  --max: 1160px;
-  --font-text: 'Instrument Sans Variable', system-ui, sans-serif;
-  --font-display: 'Instrument Serif', Georgia, serif;
+  --radius: 6px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(20 36 32 / 6%), 0 6px 18px -8px rgb(20 36 32 / 14%);
+  --max: 1120px;
+  --font-text: 'Figtree Variable', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Figtree Variable', sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-text);
   font-size: 100%;
@@ -59,38 +57,38 @@
   background: var(--bg);
   font-variant-numeric: tabular-nums;
   accent-color: var(--accent);
-  font-synthesis: none;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #111316;
-  --surface: #181b1f;
-  --surface-2: #22262b;
-  --text: #efede7;
-  --muted: #a9adb3;
-  --border: #2d3137;
-  --control-border: #7c8188;
-  --accent: #efede7;
-  --accent-hover: #ffffff;
-  --accent-soft: #2a2e34;
-  --accent-contrast: #111316;
-  --link: #8fb0ff;
-  --sign: #efede7;
-  --sign-ink: #111316;
-  --sign-muted: #4a4d52;
-  --sign-edge: #c9c7bf;
-  --focus: #8fb0ff;
-
-  --c-flood: #82a8ff;
-  --c-air: #b9a4ff;
-  --c-green: #6fd59b;
-  --c-noise: #ffb85c;
-  --c-fire: #ff8f6b;
-  --c-solar: #ffd04d;
-  --c-solar-fill: #ffd04d;
-  --c-car_free: #5fd0da;
-  --c-transit: #ff8fc2;
+  --plank-go: #1f6b3a;
+  --plank-go-hover: #267a44;
+  --plank-go-ink: #ffffff;
+  --bg: #0e1611;
+  --surface: #152019;
+  --surface-2: #1c2a21;
+  --text: #e3ede5;
+  --muted: #a2b5a8;
+  --border: #2a3b30;
+  --control-border: #6b8273;
+  --accent: #82d39b;
+  --accent-hover: #a3e2b6;
+  --accent-soft: #163020;
+  --accent-contrast: #0a2414;
+  --c-flood: #7db8f0;
+  --c-air: #63c9d6;
+  --c-green: #8fd58f;
+  --c-noise: #f0b45e;
+  --c-fire: #ff9a76;
+  --c-solar: #f5cf55;
+  --c-solar-fill: #f5cf55;
+  --c-car_free: #d9ad82;
+  --c-transit: #ff9db3;
+  --sign: #6b4526;
+  --sign-ink: #ffffff;
+  --sign-muted: #eadbc8;
+  --sign-edge: #4a2e17;
+  --focus: #8ab4ff;
 
   --good: #8fdca9;
   --good-bg: #16301f;
@@ -101,8 +99,8 @@
   --info: #a9c9ec;
   --info-bg: #1a2836;
   --nodata: #c3c8c5;
-  --nodata-bg: #23272c;
-  --shadow: 0 1px 2px rgb(0 0 0 / 35%), 0 12px 28px -14px rgb(0 0 0 / 60%);
+  --nodata-bg: #222b27;
+  --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 20px -10px rgb(0 0 0 / 50%);
 }
 
 ::selection {
@@ -129,32 +127,31 @@ body {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 1.05;
+  line-height: 1.15;
   margin: 0 0 0.5rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  font-weight: 700;
   text-wrap: balance;
   font-variant-numeric: lining-nums proportional-nums;
 }
 
-h3 {
-  font-family: var(--font-text);
-  line-height: 1.2;
-  margin: 0 0 0.5rem;
-  font-size: 1.08rem;
-  font-weight: 650;
-  letter-spacing: -0.005em;
-  text-wrap: balance;
-}
-
 h1 {
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-weight: 750;
+  letter-spacing: -0.03em;
 }
 
 h2 {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-size: clamp(1.35rem, 3vw, 1.7rem);
+}
+
+h3 {
+  font-size: 1.12rem;
+  letter-spacing: -0.01em;
+  font-weight: 650;
 }
 
 p,
@@ -167,13 +164,9 @@ p {
 }
 
 a {
-  color: var(--link);
+  color: var(--accent);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
-}
-
-a:hover {
-  text-decoration-thickness: 2px;
 }
 
 :focus-visible {
@@ -237,9 +230,9 @@ a:hover {
   align-items: center;
   gap: 0.6rem;
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.45rem;
-  letter-spacing: -0.01em;
+  font-weight: 750;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
   color: var(--text);
   text-decoration: none;
   min-height: 44px;
@@ -621,9 +614,9 @@ select:hover {
   margin: 0;
 }
 
-/* Home: the question in large serif type, one search field, the guided finder as the
-   second way in, and every settlement of Croatia drawn beside them. Below, the six
-   measurements in the colours the report uses for them. */
+/* Home: a trailhead. The question, a signpost with two planks (the address is the
+   brown place plank, "Pronađi mjesto za mene" the jade trail plank) and every settlement
+   of Croatia drawn beside them. */
 
 .lead {
   font-size: 1.15rem;
@@ -632,54 +625,102 @@ select:hover {
   max-width: 34rem;
 }
 
-.hero {
+.trailhead {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
   align-items: center;
-  gap: 1rem 3rem;
+  gap: 1rem 2.5rem;
+  margin: 0.5rem 0 0;
   min-height: min(78vh, 760px);
 }
 
-.hero-text {
+.trailhead-text {
   position: relative;
   z-index: 2;
   padding: 1.5rem 0 1rem;
 }
 
-.hero h1 {
-  font-size: clamp(3.2rem, 7.4vw, 6rem);
-  line-height: 0.92;
-  letter-spacing: -0.02em;
-  margin: 0 0 1.5rem;
-  max-width: 8ch;
+.trailhead h1 {
+  font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 780;
+  font-variation-settings: 'opsz' 96;
+  margin: 0 0 1.25rem;
+  max-width: 9ch;
 }
 
-.hero h1 em {
-  font-style: italic;
-  color: var(--c-flood);
-}
-
-.hero-lead {
-  font-size: clamp(1.08rem, 1.6vw, 1.25rem);
+.trailhead-lead {
+  font-size: clamp(1.08rem, 1.6vw, 1.22rem);
   color: var(--muted);
   max-width: 31rem;
   margin: 0 0 2rem;
 }
 
-.hero-search {
+/* The signpost: a post on the left and planks bolted to it, each with an arrow tip. */
+.signpost {
+  position: relative;
+  display: grid;
+  gap: 0.85rem;
+  padding-left: 22px;
+  margin-right: 30px;
   max-width: 34rem;
 }
 
-.hero-search .search > label {
-  font-size: 0.95rem;
+.signpost::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -14px;
+  bottom: -26px;
+  width: 9px;
+  border-radius: 3px 3px 0 0;
+  background: var(--sign-edge);
 }
 
-.hero-search .search input {
-  min-height: 60px;
-  border: 2px solid var(--text);
-  border-radius: var(--radius);
-  font-size: 1.15rem;
-  box-shadow: var(--shadow);
+.plank {
+  position: relative;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.plank::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 0;
+  bottom: 0;
+  width: 26px;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.plank-place {
+  background: var(--sign);
+  color: var(--sign-ink);
+  padding: 0.9rem 1rem 1rem 1.1rem;
+  box-shadow: inset 0 -3px 0 var(--sign-edge);
+}
+
+.plank-place .search > label {
+  color: var(--sign-ink);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.plank-place .search-hint,
+.plank-place .search-status {
+  color: var(--sign-muted);
+}
+
+.plank-place .search input {
+  border-color: var(--sign-edge);
+  background: var(--surface);
+}
+
+.plank-place .suggestions {
+  z-index: 40;
 }
 
 .search-row {
@@ -697,24 +738,23 @@ select:hover {
   align-items: center;
   gap: 0.35rem;
   min-height: 56px;
-  padding: 0 1.1rem;
-  border: 2px solid var(--accent);
-  border-radius: var(--radius);
+  padding: 0 1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
   background: var(--accent);
   color: var(--accent-contrast);
   font: inherit;
-  font-weight: 650;
+  font-weight: 700;
   cursor: pointer;
   transition: background-color 160ms var(--ease-out);
 }
 
-.hero-search .search-go {
-  min-height: 60px;
-  padding: 0 1.4rem;
-}
-
 .search-go:hover {
   background: var(--accent-hover);
+}
+
+.plank-place .search-go {
+  border-color: var(--sign-edge);
 }
 
 @media (width <= 480px) {
@@ -728,45 +768,55 @@ select:hover {
   }
 }
 
-.hero-find {
+.mosaic-link {
+  display: block;
+  border-radius: var(--radius);
+}
+
+.mosaic-link:hover .mosaic-canvas {
+  filter: saturate(1.25) contrast(1.05);
+}
+
+.mosaic-link .mosaic-canvas {
+  transition: filter 220ms var(--ease-out);
+}
+
+.plank-go {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  column-gap: 1rem;
-  max-width: 34rem;
-  margin-top: 1rem;
-  padding: 0.85rem 1rem 0.85rem 1.2rem;
-  border: 1px solid var(--control-border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
+  column-gap: 0.75rem;
+  min-height: 64px;
+  padding: 0.75rem 0.75rem 0.75rem 1.1rem;
+  margin-right: 22%;
+  background: var(--plank-go, var(--accent));
+  color: var(--plank-go-ink, var(--accent-contrast));
   text-decoration: none;
-  transition: border-color 160ms var(--ease-out);
+  transition: background-color 160ms var(--ease-out), transform 220ms var(--ease-out);
 }
 
-.hero-find:hover {
-  border-color: var(--text);
+.plank-go:hover {
+  background: var(--plank-go-hover, var(--accent-hover));
+  transform: translateX(4px);
 }
 
-.hero-find-title {
-  font-weight: 650;
-  font-size: 1.08rem;
+.plank-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
-.hero-find-sub {
+.plank-sub {
   grid-column: 1;
-  color: var(--muted);
   font-size: 0.92rem;
+  opacity: 0.92;
 }
 
-.hero-find-arrow {
+.plank-arrow {
   grid-column: 2;
   grid-row: 1 / span 2;
-  transition: transform 220ms var(--ease-out);
-}
-
-.hero-find:hover .hero-find-arrow {
-  transform: translateX(4px);
 }
 
 .examples {
@@ -774,7 +824,7 @@ select:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0 0.35rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   color: var(--muted);
   font-size: 0.92rem;
 }
@@ -795,23 +845,10 @@ select:hover {
   padding: 0 0.45rem;
 }
 
-.mosaic-link {
-  display: block;
-  border-radius: var(--radius);
-}
-
-.mosaic-link .mosaic-canvas {
-  transition: filter 220ms var(--ease-out);
-}
-
-.mosaic-link:hover .mosaic-canvas {
-  filter: saturate(1.2) contrast(1.05);
-}
-
 /* The settlement mosaic bleeds off the right edge on wide screens. */
-.hero-map {
+.trailhead-map {
   position: relative;
-  margin: 0 calc(-1 * max(1.25rem, (100vw - var(--max)) / 2 + 1.25rem)) 0 -2rem;
+  margin: 0 calc(-1 * max(1.25rem, (100vw - var(--max)) / 2 + 1.25rem)) 0 -3rem;
   align-self: stretch;
   display: flex;
   flex-direction: column;
@@ -850,12 +887,13 @@ select:hover {
   }
 }
 
-.hero-map figcaption {
+.trailhead-map figcaption {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.4rem 0.75rem;
-  margin: 0.25rem 1.25rem 0 2rem;
+  margin: 0.25rem 1.25rem 0 3rem;
+  position: relative;
   color: var(--muted);
   font-size: 0.92rem;
 }
@@ -872,107 +910,11 @@ select:hover {
   height: 10px;
 }
 
-.hero-map figcaption a {
-  font-weight: 650;
+.trailhead-map figcaption a {
+  font-weight: 700;
 }
 
-/* Six measurements: each in its own colour, a legend for the report. */
-.measures {
-  margin: 4.5rem 0 1rem;
-}
-
-.measures h2 {
-  max-width: 18ch;
-  margin-bottom: 2rem;
-  font-size: clamp(2rem, 4.4vw, 3rem);
-}
-
-.measure-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2.25rem 2.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.measure {
-  position: relative;
-  padding-top: 1rem;
-  border-top: 3px solid var(--c, var(--text));
-}
-
-.measure h3 {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin: 0.6rem 0 0.35rem;
-  font-size: 1.15rem;
-}
-
-.measure-icon {
-  display: inline-grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--c) 13%, transparent);
-  color: var(--c);
-}
-
-.measure p {
-  margin: 0;
-  color: var(--muted);
-  max-width: 34ch;
-}
-
-.measure .measure-source {
-  margin-top: 0.5rem;
-  color: var(--c);
-  font-size: 0.85rem;
-  font-weight: 650;
-}
-
-.measures-more {
-  margin: 2.5rem 0 0;
-  max-width: 60ch;
-  font-size: 1.05rem;
-}
-
-/* Each measurement's colour, used wherever that measurement appears. */
-.cat-flood {
-  --c: var(--c-flood);
-}
-
-.cat-air {
-  --c: var(--c-air);
-}
-
-.cat-green {
-  --c: var(--c-green);
-}
-
-.cat-noise {
-  --c: var(--c-noise);
-}
-
-.cat-fire {
-  --c: var(--c-fire);
-}
-
-.cat-solar {
-  --c: var(--c-solar);
-}
-
-.cat-car_free {
-  --c: var(--c-car_free);
-}
-
-.cat-transit {
-  --c: var(--c-transit);
-}
-
-/* How it works: three numbered steps; the number is the order. */
+/* How it works: three stations along one trail. */
 .how {
   margin: 4.5rem 0 1rem;
   padding-top: 2.5rem;
@@ -980,36 +922,59 @@ select:hover {
 }
 
 .how h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
   margin-bottom: 1.75rem;
 }
 
 .stations {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2rem 2.5rem;
+  gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.stations::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 10%;
+  top: 21px;
+  height: 0;
+  border-top: 3px dashed var(--accent);
+}
+
+.station {
+  position: relative;
+}
+
 .station-mark {
-  display: block;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 3px solid var(--accent);
+  color: var(--accent);
   font-family: var(--font-display);
-  font-size: 3rem;
-  line-height: 1;
-  margin-bottom: 0.5rem;
-  color: var(--muted);
+  font-weight: 750;
+  font-size: 1.15rem;
+  position: relative;
 }
 
 .station h3 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   margin-bottom: 0.35rem;
 }
 
 .station p {
   color: var(--muted);
   margin: 0;
-  max-width: 32ch;
+  max-width: 30ch;
 }
 
 .how-more {
@@ -1017,16 +982,16 @@ select:hover {
 }
 
 .how-more a {
-  font-weight: 650;
+  font-weight: 700;
 }
 
 @media (width <= 900px) {
-  .hero {
+  .trailhead {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
   }
 
-  .hero-map {
+  .trailhead-map {
     margin: 0 -1.25rem;
   }
 
@@ -1034,20 +999,40 @@ select:hover {
     max-height: none;
   }
 
-  .hero-map figcaption {
+  .trailhead-map figcaption {
     margin: 0 1.25rem;
-  }
-
-  .measure-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (width <= 640px) {
-  .stations,
-  .measure-list {
+  .stations {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.75rem;
+    gap: 1.5rem;
+  }
+
+  .stations::before {
+    left: 20px;
+    right: auto;
+    top: 22px;
+    bottom: 22px;
+    width: 0;
+    height: auto;
+    border-top: 0;
+    border-left: 3px dashed var(--accent);
+  }
+
+  .station {
+    padding-left: 64px;
+  }
+
+  .station-mark {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .plank-go {
+    margin-right: 0;
   }
 }
 
@@ -1446,6 +1431,37 @@ details summary {
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
+}
+
+.score-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 88px;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+:root:not([data-theme='dark']) a.score-badge {
+  color: var(--accent-contrast);
+}
+
+.score-badge-number {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-badge-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 .life-score-head {
@@ -2101,79 +2117,52 @@ details summary {
   font-size: 0.85rem;
 }
 
-/* The top of a report: the address in large serif type over a ruled line, the score as
-   a readout beside it, then the summary and a strip of six key readings. Each reading
-   carries the colour of its measurement and jumps to its instrument below. */
+/* The place board: the top of a report, like the board at a trailhead. A brown band
+   names the place; below it, the summary in two or three sentences and six key facts. */
 .place-board {
-  margin: 0.5rem 0 0;
+  margin: 0.25rem 0 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: clip;
 }
 
 .board-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 1rem 2rem;
-  padding: 0 0 1.25rem;
-  border-bottom: 2px solid var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.4rem 1.5rem 1.3rem;
+  background: var(--sign);
+  color: var(--sign-ink);
+  box-shadow: inset 0 -4px 0 var(--sign-edge);
 }
 
 .board-band h1 {
   margin: 0;
-  font-size: clamp(2.4rem, 6vw, 4.4rem);
-  line-height: 0.98;
+  font-size: clamp(1.7rem, 4.4vw, 2.7rem);
+  color: var(--sign-ink);
 }
 
 .board-place {
-  margin: 0.6rem 0 0;
-  color: var(--muted);
-  font-size: 1.05rem;
+  margin: 0 0 0.35rem;
+  color: var(--sign-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
-.score-badge {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  min-width: 112px;
-  padding: 0.6rem 1rem 0.7rem;
-  border: 2px solid var(--text);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: background-color 160ms var(--ease-out);
-}
-
-a.score-badge:hover {
-  background: var(--surface-2);
-}
-
-.score-badge-number {
-  font-family: var(--font-display);
-  font-size: 3.2rem;
-  line-height: 0.95;
-}
-
-.score-badge-number::after {
-  content: '/100';
-  margin-left: 0.2rem;
-  font-family: var(--font-text);
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.score-badge-text {
-  font-size: 0.82rem;
-  font-weight: 650;
+.board-band .score-badge {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--sign-edge);
 }
 
 .board-body {
-  padding: 1.5rem 0 0;
+  padding: 1.25rem 1.5rem 1.4rem;
 }
 
 .board-summary {
-  font-size: clamp(1.1rem, 1.9vw, 1.3rem);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
   line-height: 1.5;
   max-width: 62ch;
 }
@@ -2183,64 +2172,65 @@ a.score-badge:hover {
 }
 
 .board-tags {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
-  gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
   list-style: none;
-  margin: 1.5rem 0 0;
+  margin: 1.1rem 0 0;
   padding: 0;
 }
 
-.board-tag a {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  height: 100%;
-  min-height: 44px;
-  padding: 0.7rem 0.85rem 0.8rem;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--c, var(--text));
+.board-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 36px;
+  padding: 0.3rem 0.7rem 0.3rem 0.55rem;
   border-radius: var(--radius-sm);
-  background: var(--surface);
+  background: var(--nodata-bg);
   color: var(--text);
-  text-decoration: none;
-  transition: border-color 160ms var(--ease-out), transform 220ms var(--ease-out);
+  font-size: 0.92rem;
 }
 
-.board-tag a:hover {
-  border-color: var(--c, var(--text));
-  transform: translateY(-2px);
+.board-tag svg {
+  flex: none;
 }
 
 .board-tag-label {
-  color: var(--c, var(--muted));
-  font-size: 0.85rem;
-  font-weight: 650;
+  color: var(--muted);
 }
 
 .board-tag-value {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.35rem;
-  font-weight: 650;
-  line-height: 1.3;
+  font-weight: 700;
 }
 
-.board-tag-value svg {
-  flex: none;
-  margin-top: 0.12rem;
+.tag-good {
+  background: var(--good-bg);
 }
 
 .tag-good svg {
   color: var(--good);
 }
 
+.tag-warning {
+  background: var(--warning-bg);
+}
+
 .tag-warning svg {
   color: var(--warning);
 }
 
+.tag-bad {
+  background: var(--bad-bg);
+}
+
 .tag-bad svg {
   color: var(--bad);
+}
+
+/* "Informacija": a fact without a sourced threshold, neutral as in the category status. */
+.tag-info {
+  background: var(--surface-2);
 }
 
 .tag-info svg {
@@ -2251,6 +2241,7 @@ a.score-badge:hover {
   color: var(--nodata);
 }
 
+/* The one moment the report makes: the board fills in when the report arrives. */
 .place-board[data-ready='true'] .board-summary {
   animation: board-in 520ms var(--ease-out) both;
 }
@@ -2258,87 +2249,6 @@ a.score-badge:hover {
 .place-board[data-ready='true'] .board-tag {
   animation: board-in 440ms var(--ease-out) both;
   animation-delay: calc(160ms + var(--i, 0) * 55ms);
-}
-
-/* Movement only: the text is readable at every frame. */
-@keyframes board-in {
-  from {
-    transform: translateY(10px) scale(0.97);
-  }
-}
-
-.summary-note {
-  color: var(--muted);
-  font-size: 0.85rem;
-  margin: 1rem 0 0 !important;
-}
-
-/* The report's sections as tabs that stay under the header and mark where you are. */
-.report-guide {
-  position: sticky;
-  top: 64px;
-  z-index: 20;
-  margin: 1.75rem 0 0;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-}
-
-.report-guide ol {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.report-guide a {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  padding: 0 0.9rem;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 160ms var(--ease-out);
-}
-
-.report-guide li:first-child a {
-  padding-left: 0;
-}
-
-.report-guide a:hover,
-.report-guide a[aria-current] {
-  color: var(--text);
-}
-
-.report-guide a[aria-current]::after {
-  content: '';
-  position: absolute;
-  left: 0.9rem;
-  right: 0.9rem;
-  bottom: -1px;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--text);
-}
-
-.report-guide li:first-child a[aria-current]::after {
-  left: 0;
-}
-
-section[aria-labelledby] > h2[id],
-#skor,
-#izvori {
-  scroll-margin-top: 130px;
-}
-
-.inst h3[id],
-.category h3[id] {
-  scroll-margin-top: 140px;
 }
 
 /* The instruments: one panel per measurement, a strip of its colour on top, the reading
@@ -2365,14 +2275,21 @@ section[aria-labelledby='carfree-title'] .card.category {
   overflow: hidden;
 }
 
-.inst::before,
-section[aria-labelledby='carfree-title'] .card.category::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  background: var(--c);
+.inst,
+section[aria-labelledby='carfree-title'] .card.category {
+  transition:
+    transform 260ms var(--ease-out),
+    box-shadow 260ms var(--ease-out),
+    border-color 200ms var(--ease-out);
 }
+
+.inst:hover,
+section[aria-labelledby='carfree-title'] .card.category:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--c) 45%, var(--border));
+  box-shadow: 0 2px 4px rgb(20 36 32 / 6%), 0 16px 32px -18px rgb(20 36 32 / 30%);
+}
+
 
 .inst {
   grid-column: span 4;
@@ -2430,6 +2347,11 @@ section[aria-labelledby='carfree-title'] .card.category.focused {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.65rem;
+  /* A tinted header, like the board of a trail sign in the measurement's colour. */
+  margin: -1.35rem -1.35rem 0;
+  padding: 0.75rem 1.35rem;
+  background: color-mix(in srgb, var(--c) 11%, var(--surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--c) 28%, var(--border));
 }
 
 .inst-head h3 {
@@ -2450,6 +2372,26 @@ section[aria-labelledby='carfree-title'] .card-icon {
   border-radius: 50%;
   background: color-mix(in srgb, var(--c) 13%, transparent);
   color: var(--c);
+}
+
+.inst-icon,
+.measure-icon {
+  background: var(--surface) !important;
+}
+
+.category-head {
+  display: contents;
+}
+
+section[aria-labelledby='carfree-title'] .card.category .card-top {
+  margin: -1.35rem -1.35rem 0.85rem;
+  padding: 0.75rem 1.35rem;
+  background: color-mix(in srgb, var(--c) 11%, var(--surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--c) 28%, var(--border));
+}
+
+section[aria-labelledby='carfree-title'] .card.category .card-icon {
+  background: var(--surface);
 }
 
 .inst .focus-tag {
@@ -2483,9 +2425,10 @@ section[aria-labelledby='carfree-title'] .card-icon {
 
 .readout-big {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 5.2vw, 4.2rem);
-  line-height: 0.92;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.6rem, 4.6vw, 3.6rem);
+  font-weight: 780;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
 }
 
 .readout-unit {
@@ -2708,6 +2651,12 @@ section[aria-labelledby='carfree-title'] .card-icon {
   bottom: -4px;
   width: 2px;
   margin-left: -1px;
+}
+
+.ruler-tick::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: var(--text);
 }
 
@@ -3079,14 +3028,6 @@ section[aria-labelledby='carfree-title'] .card-icon {
   .radar {
     justify-self: start;
   }
-
-  .board-band {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .score-badge {
-    justify-self: start;
-  }
 }
 
 .life-score-number {
@@ -3094,7 +3035,7 @@ section[aria-labelledby='carfree-title'] .card-icon {
   flex: none;
 }
 
-/* The other report sections: a rule above, the ground below. */
+/* The other report sections lose their card shells: a rule above, the ground below. */
 section[aria-labelledby='daily-title'] > .card,
 .life-score.card,
 .assistant.card {
@@ -3106,7 +3047,95 @@ section[aria-labelledby='daily-title'] > .card,
 }
 
 section[aria-labelledby='carfree-title'] .grid.two {
-  gap: 1rem;
+  gap: 2rem;
+}
+
+
+/* Movement only: the text is readable at every frame. */
+@keyframes board-in {
+  from {
+    transform: translateY(10px) scale(0.97);
+  }
+}
+
+.summary-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 1rem 0 0 !important;
+}
+
+/* "Ovdje ste": the report's sections as a short trail that stays under the header. */
+.report-guide {
+  position: sticky;
+  top: 64px;
+  z-index: 20;
+  margin: 1.25rem 0 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.report-guide ol {
+  mask-image: linear-gradient(90deg, #000 88%, transparent);
+  display: flex;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.report-guide a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 48px;
+  padding: 0 0.8rem 0 0;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.report-guide a:hover {
+  color: var(--accent);
+}
+
+.report-guide a[aria-current] {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Each section a station on the trail: a ring, filled where you are. */
+.report-guide a::before {
+  content: '';
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  background: var(--bg);
+}
+
+.report-guide a[aria-current]::before {
+  background: var(--sign);
+  border-color: var(--sign);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sign) 25%, transparent);
+}
+
+.report-guide li:not(:last-child) a::after {
+  content: '';
+  width: 1.4rem;
+  border-top: 3px dashed var(--control-border);
+  margin-left: 0.35rem;
+}
+
+section[aria-labelledby] > h2[id],
+#skor,
+#izvori {
+  scroll-margin-top: 130px;
 }
 
 .needs {
@@ -3762,40 +3791,339 @@ button.daily-row:hover .daily-show {
     grid-column: 1 / -1;
   }
 
-}
-
-/* Reduced motion: nothing moves or slides, but state still changes visibly (colour and
-   border transitions stay, as they are feedback, not movement). */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
+  .board-band {
+    padding: 1.1rem 1.1rem 1rem;
   }
 
-  .hero-find:hover .hero-find-arrow {
+  .board-body {
+    padding: 1.1rem;
+  }
+}
+
+/* Steady layout: the page keeps its width whether or not it scrolls, so moving between
+   pages never shifts the header or the content sideways. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Navigation: every link has the same weight, so the current page never pushes its
+   neighbours; the trail mark under it grows in, and half of it shows on hover. */
+.site-nav a,
+.site-nav a[aria-current='page'],
+.site-nav a[aria-current='true'] {
+  font-weight: 600;
+}
+
+.site-nav .nav-links a {
+  transition: color 180ms var(--ease-out);
+}
+
+.site-nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 260ms var(--ease-out);
+}
+
+.site-nav .nav-links a:hover::after {
+  transform: scaleX(0.4);
+}
+
+.site-nav .nav-links a[aria-current]::after {
+  transform: scaleX(1);
+}
+
+/* Smooth feedback on everything that can be pressed. */
+a {
+  transition:
+    color 160ms var(--ease-out),
+    text-decoration-color 160ms var(--ease-out);
+}
+
+.button,
+.search-go,
+.theme-toggle,
+.menu-toggle {
+  transition:
+    background-color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    transform 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+
+.button:hover:not(:disabled),
+.search-go:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px -10px rgb(20 36 32 / 45%);
+}
+
+.button:active:not(:disabled),
+.search-go:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.theme-toggle:hover,
+.menu-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chip {
+  transition:
+    background-color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+.chip:hover {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.choice,
+.find-result,
+.daily-row,
+.atlas-table tbody tr,
+.example-list a {
+  transition:
+    background-color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
+}
+
+.choice:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -16px rgb(20 36 32 / 45%);
+}
+
+.find-result:hover {
+  background: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+}
+
+.atlas-table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
+}
+
+/* The six key facts on the place board: each carries the dot of its measurement and
+   jumps to that instrument. */
+.board-tag {
+  padding: 0;
+  transition:
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
+}
+
+.board-tag a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 40px;
+  padding: 0.3rem 0.75rem 0.3rem 0.6rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.board-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -12px rgb(20 36 32 / 50%);
+}
+
+.board-tag-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.board-tag-label::before {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  background: var(--c, var(--muted));
+}
+
+/* Six measurements on the home page, each in the colour it has in the report. */
+.measures {
+  margin: 4.5rem 0 1rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.measures h2 {
+  max-width: 22ch;
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.measures-intro {
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0 0 1.75rem;
+}
+
+.measure-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.measure {
+  position: relative;
+  padding: 1.1rem 1.2rem 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition:
+    transform 260ms var(--ease-out),
+    box-shadow 260ms var(--ease-out),
+    border-color 200ms var(--ease-out);
+}
+
+
+.measure:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--c) 45%, var(--border));
+  box-shadow: 0 16px 30px -20px rgb(20 36 32 / 45%);
+}
+
+.measure h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: -1.1rem -1.2rem 0.85rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.12rem;
+  background: color-mix(in srgb, var(--c) 11%, var(--surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--c) 28%, var(--border));
+}
+
+.measure-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+  color: var(--c);
+  transition: transform 300ms var(--ease-out);
+}
+
+.measure:hover .measure-icon {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.measure p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.measure .measure-source {
+  margin-top: 0.6rem;
+  color: var(--c);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.measures-more {
+  margin: 1.5rem 0 0;
+  max-width: 62ch;
+}
+
+@media (width <= 900px) {
+  .measure-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width <= 640px) {
+  .measure-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Each measurement's colour, wherever that measurement appears. */
+.cat-flood {
+  --c: var(--c-flood);
+}
+
+.cat-air {
+  --c: var(--c-air);
+}
+
+.cat-green {
+  --c: var(--c-green);
+}
+
+.cat-noise {
+  --c: var(--c-noise);
+}
+
+.cat-fire {
+  --c: var(--c-fire);
+}
+
+.cat-solar {
+  --c: var(--c-solar);
+}
+
+.cat-car_free {
+  --c: var(--c-car_free);
+}
+
+.cat-transit {
+  --c: var(--c-transit);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:hover:not(:disabled),
+  .search-go:hover,
+  .chip:hover,
+  .choice:hover,
+  .board-tag:hover,
+  .measure:hover,
+  .measure:hover .measure-icon,
+  .inst:hover,
+  section[aria-labelledby='carfree-title'] .card.category:hover {
     transform: none;
   }
 
-  .mosaic[data-state='loading']::after {
-    animation: none;
+  .site-nav .nav-links a::after {
+    transition: none;
   }
 
   .inst *,
   .board-tag a {
     transition-property: color, background-color, border-color, opacity !important;
-    transform: none;
   }
 
-  .inst[data-on='true'] .needle-track {
+  .inst .needle-track {
     transform: translateX(var(--to));
   }
 
   .inst .road-line,
   .inst .dot {
     transform: scale(1);
+  }
+
+  .inst .sun-body {
+    transform: none;
   }
 }
 
@@ -3816,6 +4144,26 @@ button.daily-row:hover .daily-show {
 
   .inst .road-mark {
     opacity: 1;
+  }
+}
+
+/* Reduced motion: nothing moves or slides, but state still changes visibly (colour and
+   border transitions stay, as they are feedback, not movement). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+
+  .plank-go:hover {
+    transform: none;
+  }
+
+  .mosaic[data-state='loading']::after {
+    animation: none;
   }
 }
 

@@ -89,7 +89,7 @@ export function CroatiaMosaic() {
       ctx.clearRect(0, 0, width, height)
       ctx.lineJoin = 'round'
       ctx.lineWidth = 0.35
-      ctx.strokeStyle = theme === 'dark' ? 'rgb(17 19 22 / 70%)' : 'rgb(246 245 241 / 85%)'
+      ctx.strokeStyle = theme === 'dark' ? 'rgb(14 22 17 / 70%)' : 'rgb(238 243 234 / 85%)'
       return ctx
     }
 

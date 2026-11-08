@@ -109,7 +109,8 @@ Ako ponestane vremena, režem ovim redom:
     - **karta:** jezerska ljestvica, legenda uz kartu, kartica naselja sa smeđim pojasom;
     - **provjere:** kritika (dizajn i detektor) i popravci, detektor bez nalaza; `make verify` prolazi (pytest 149, Vitest 61, Playwright 60, axe u obje teme i 320 px); snimke prije u `docs/images/prije-redizajna/`, poslije u `docs/images/`.
     - **završni pregled (Impeccable, dva kruga):** riješeno tijelo izvještaja kao retci, staza „Dijelovi izvještaja”, gumb uz adresu na mobitelu; otvoreno (odluka tima): prijedlozi kao „iskaznice” sa smeđim pojasom, popis „Svakodnevni život” kao putokazi, oznaka „Predloži mjesto za život” iznad trake (drži je postojeći e2e test navigacije), nacrtana strelica padajućih izbornika.
-17. [x] Redizajn „Instrumenti” (8. 11., grana `feature/instrumenti`, zamjenjuje „Putokaz” na zahtjev korisnika):
-    - **izgled:** papir i tinta, svaka okolišna kategorija u vlastitoj boji, radnje u tinti; fontovi Instrument Serif i Instrument Sans (OFL, vlastiti poslužitelj); novi znak (brojčanik u šest boja); karte u žuto-zeleno-plavoj ljestvici;
-    - **izvještaj:** adresa velikim serifom, skor kao očitanje, traka od šest ključnih očitanja koja vode na svoj instrument; okolišni pregled kao instrumenti (vodomjer, ravnala zraka s pragovima, krug zelenila od točkica, ravnalo prometnice, radar požara, luk sunca) koji se animiraju jednom kad dođu u pogled;
-    - **naslovnica:** veliko pitanje, polje adrese, „Pronađi mjesto za mene”, mozaik naselja i „Šest mjerenja okoliša” u bojama izvještaja.
+17. [x] Zeleniji „Putokaz” s instrumentima (8. 11., grana `feature/instrumenti`; kratki smjer „Instrumenti” s papirom, tintom i serifom korisnik je odbio):
+    - **izgled:** putokaz s daskama i ploča mjesta vraćeni; šumska zelena za radnje i stazu, livadna podloga, boja prirode za svako mjerenje; zelena ljestvica karte;
+    - **izvještaj:** okolišni pregled kao instrumenti (vodomjer, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od točkica, ravnalo prometnice, radar požara, luk sunca) sa zaglavljem u boji mjerenja; ključne činjenice s točkom boje vode na svoj instrument;
+    - **naslovnica:** „Šest mjerenja okoliša za svaku adresu” u bojama izvještaja;
+    - **interakcija i poravnanje:** glatki prijelazi i podizanje ploča na hover, crta staze u navigaciji raste, iste težine poveznica i `scrollbar-gutter: stable` (ništa se ne pomiče između stranica); Impeccable detektor bez nalaza na naslovnici i izvještaju.

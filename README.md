@@ -185,7 +185,7 @@ Detalji, standardi te tehnički, organizacijski i pravni preduvjeti za uvođenje
 
 ## Tehnologije
 
-Python 3.12 · FastAPI · Pydantic · rasterio · Shapely · GeoPandas · pyosmium · PyArrow · httpx · pytest · ruff · mypy (strict) · Valhalla · React 19 + TypeScript (Vite) · React Router · TanStack Query · MapLibre GL JS · OpenFreeMap · fontovi Instrument Serif i Instrument Sans (OFL) · Playwright + axe-core · ESLint (typescript-eslint, jsx-a11y) · Docker Compose · Caddy
+Python 3.12 · FastAPI · Pydantic · rasterio · Shapely · GeoPandas · pyosmium · PyArrow · httpx · pytest · ruff · mypy (strict) · Valhalla · React 19 + TypeScript (Vite) · React Router · TanStack Query · MapLibre GL JS · OpenFreeMap · fontovi Bricolage Grotesque i Figtree (OFL) · Playwright + axe-core · ESLint (typescript-eslint, jsx-a11y) · Docker Compose · Caddy
 
 ## Pokretanje
 
