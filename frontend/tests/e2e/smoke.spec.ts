@@ -98,7 +98,9 @@ test('life score has visible, adjustable weights', async ({ page }) => {
 
 test('find a place to live ranks settlements with reasons', async ({ page }) => {
   await page.goto('/predlozi')
+  await page.getByRole('button', { name: 'Dalje' }).click()
   await page.getByLabel('Područje').selectOption({ label: 'Vukovarsko-srijemska županija' })
+  await page.getByRole('button', { name: 'Dalje' }).click()
   await page.getByRole('checkbox', { name: 'Vrtić' }).check()
   await page.getByRole('button', { name: 'Predloži mjesta' }).click()
   const results = page.locator('.find-results > li')
@@ -108,10 +110,35 @@ test('find a place to live ranks settlements with reasons', async ({ page }) => 
   await expect(page.getByText(/Prikazano je središte naselja/)).toBeVisible()
 })
 
+test('the finder walks one question at a time, keeps its answers in the address and goes back', async ({
+  page,
+}) => {
+  await page.goto('/predlozi')
+  const steps = page.getByRole('navigation', { name: 'Koraci' })
+  await expect(steps.locator('[aria-current="step"]')).toContainText('Tko traži')
+  await page.getByRole('radio', { name: /Umirovljenik/ }).check()
+  await page.getByRole('button', { name: 'Dalje' }).click()
+  await expect(page).toHaveURL(/korak=2/)
+  await expect(page).toHaveURL(/profil=umirovljenik/)
+  await expect(page.getByRole('heading', { level: 2, name: 'Gdje tražite?' })).toBeFocused()
+  await page.getByLabel('Područje').selectOption({ label: 'Osječko-baranjska županija' })
+  await page.getByRole('button', { name: 'Dalje' }).click()
+  // Weights only under "Napredno".
+  await expect(page.getByRole('slider').first()).toBeHidden()
+  await page.getByText('Napredno: težine u Skoru za život').click()
+  await expect(page.getByRole('slider', { name: /Poplave/ })).toBeVisible()
+  await page.goBack()
+  await expect(page.getByLabel('Područje')).toHaveValue('Osječko-baranjska županija')
+  await steps.getByRole('button', { name: /Tko traži/ }).click()
+  await expect(page.getByRole('radio', { name: /Umirovljenik/ })).toBeChecked()
+})
+
 test('listing filters close on a click outside or Escape and are shared by all places', async ({
   page,
 }) => {
   await page.goto('/predlozi')
+  await page.getByRole('button', { name: 'Dalje' }).click()
+  await page.getByRole('button', { name: 'Dalje' }).click()
   await page.getByRole('button', { name: 'Predloži mjesta' }).click()
   const cards = page.locator('.find-results > li')
   await expect(cards.nth(1)).toBeVisible()

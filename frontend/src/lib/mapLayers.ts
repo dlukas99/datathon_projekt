@@ -199,10 +199,13 @@ export function featureState(row: MapRow): Record<string, number> {
   return out
 }
 
-/** Sequential palettes, weakest to strongest. Neutral blues; no red or green verdict. */
+/**
+ * Sequential palettes, weakest to strongest: meadow yellow-green to deep forest green, no
+ * red-to-green verdict; grey is "no data".
+ */
 export const PALETTES: Record<'light' | 'dark', { steps: string[]; none: string }> = {
-  light: { steps: ['#e3eef8', '#a9cbe6', '#6aa6d3', '#2f78b6', '#0b4a8b'], none: '#c9c6bf' },
-  dark: { steps: ['#3b5878', '#4f7fb0', '#6fa9d6', '#a3cdec', '#dcefff'], none: '#343937' },
+  light: { steps: ['#eef5c8', '#bfe0a0', '#7dbf72', '#348c4a', '#14552c'], none: '#c6cfc4' },
+  dark: { steps: ['#1d3a25', '#2c5e36', '#448f4e', '#8ccf7c', '#dcf2a8'], none: '#2f3b33' },
 }
 
 /** Rows sorted by the layer, best first (or worst first); missing values always last. */

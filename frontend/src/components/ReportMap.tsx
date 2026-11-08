@@ -83,7 +83,31 @@ function useDocumentTheme(): Theme {
 }
 
 /** Sources and layers drawn over the base map, bottom to top. Added on every style load. */
-function addOverlays(map: maplibregl.Map, report: Report) {
+const ISO_OPACITY = 0.14
+
+function reducedMotion(): boolean {
+  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+/**
+ * The walking circles spread out one after the other, 5, then 10, then 15 minutes, once the
+ * map has arrived at the address. With reduced motion they are simply there.
+ */
+function revealIsochrones(map: maplibregl.Map) {
+  const still = reducedMotion()
+  ;[5, 10, 15].forEach((minutes, i) => {
+    const transition = { duration: still ? 0 : 520, delay: still ? 0 : 160 + i * 380 }
+    const fill = `iso-${String(minutes)}`
+    const line = `iso-line-${String(minutes)}`
+    if (!map.getLayer(fill) || !map.getLayer(line)) return
+    map.setPaintProperty(fill, 'fill-opacity-transition', transition)
+    map.setPaintProperty(line, 'line-opacity-transition', transition)
+    map.setPaintProperty(fill, 'fill-opacity', ISO_OPACITY)
+    map.setPaintProperty(line, 'line-opacity', 1)
+  })
+}
+
+function addOverlays(map: maplibregl.Map, report: Report, hidden: boolean) {
   const iso = report.isochrones
   if (iso) {
     map.addSource('iso', { type: 'geojson', data: iso as GeoJSON.FeatureCollection })
@@ -94,14 +118,14 @@ function addOverlays(map: maplibregl.Map, report: Report) {
         type: 'fill',
         source: 'iso',
         filter: ['==', ['get', 'minutes'], minutes],
-        paint: { 'fill-color': color, 'fill-opacity': 0.14 },
+        paint: { 'fill-color': color, 'fill-opacity': hidden ? 0 : ISO_OPACITY },
       })
       map.addLayer({
         id: `iso-line-${String(minutes)}`,
         type: 'line',
         source: 'iso',
         filter: ['==', ['get', 'minutes'], minutes],
-        paint: { 'line-color': color, 'line-width': 2 },
+        paint: { 'line-color': color, 'line-width': 2, 'line-opacity': hidden ? 0 : 1 },
       })
     }
   }
@@ -161,7 +185,8 @@ function fitIsochrones(map: maplibregl.Map, report: Report) {
     for (const poly of polygons)
       for (const ring of poly) for (const c of ring) bounds.extend(c as maplibregl.LngLatLike)
   }
-  if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 24, duration: 0 })
+  // The map arrives at the address from a wider view; reduced motion jumps straight there.
+  if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 24, duration: reducedMotion() ? 0 : 1400 })
 }
 
 function fitRoute(map: maplibregl.Map, report: Report, route: WalkRoute) {
@@ -245,7 +270,7 @@ export function ReportMap({
         container: container.current,
         style: STYLES[appliedTheme.current],
         center: [report.location.lon, report.location.lat],
-        zoom: 14.5,
+        zoom: reducedMotion() ? 14.5 : 11,
         attributionControl: { compact: false, customAttribution: ROUTE_ATTRIBUTION },
         cooperativeGestures: true,
         locale: MAP_LOCALE,
@@ -273,7 +298,7 @@ export function ReportMap({
     }
 
     map.on('style.load', () => {
-      addOverlays(map, report)
+      addOverlays(map, report, !loadedRef.current)
       styleReady.current = true
       setStyleVersion((v) => v + 1)
     })
@@ -282,6 +307,17 @@ export function ReportMap({
       const current = routeRef.current
       if (current) fitRoute(map, report, current)
       else fitIsochrones(map, report)
+      if (current || reducedMotion()) {
+        revealIsochrones(map)
+      } else {
+        // After the flight; the timer covers a camera that had nowhere to move.
+        const reveal = () => {
+          window.clearTimeout(timer)
+          revealIsochrones(map)
+        }
+        const timer = window.setTimeout(reveal, 1800)
+        map.once('moveend', reveal)
+      }
       for (const id of CLICKABLE_LAYERS) {
         map.on('mouseenter', id, () => {
           map.getCanvas().style.cursor = 'pointer'
@@ -336,7 +372,7 @@ export function ReportMap({
       onPickRef.current?.(e.lngLat.lat, e.lngLat.lng)
     })
 
-    const marker = new maplibregl.Marker({ color: '#1d2321', draggable: interactive })
+    const marker = new maplibregl.Marker({ color: '#5b3a1e', draggable: interactive })
       .setLngLat([report.location.lon, report.location.lat])
       .addTo(map)
     marker.on('dragend', () => {

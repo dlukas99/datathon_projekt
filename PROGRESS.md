@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-07 18:58
+Zadnje ažurirano: 2026-11-08 04:15
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -101,3 +101,16 @@ Ako ponestane vremena, režem ovim redom:
 - tumačenje slobodnog pitanja jezičnim modelom u tražilici mjesta (ostaje forma);
 - usporedba zraka s ostatkom RH;
 - Index Oglasi i Nekretnine.hr samo kao rezervna poveznica.
+16. [x] Redizajn „Putokaz” (7.–8. 11., grana `feature/redesign`, oznaka za povratak `pre-redesign`), uz Impeccable:
+    - **izgled:** sustav oznaka parka prirode: vapnenačka podloga, jezerska zelenoplava za radnje i stazu, smeđa turističkog putokaza za mjesto; fontovi Bricolage Grotesque i Figtree (OFL, vlastiti poslužitelj);
+    - **naslovnica:** pitanje „Kako je živjeti ovdje?”, putokaz s dvije daske (adresa s gumbom „Prikaži”, „Pronađi mjesto za mene”), svih 6.759 naselja na platnu koja se pune od istoka prema zapadu i vode na kartu, „Kako radi” u tri postaje;
+    - **Predloži mjesto:** čarobnjak s jednim pitanjem po koraku i trakom napretka, okoliš prvi, težine pod „Napredno”, stanje u URL-u, tipka natrag vraća korak; prijedlozi kao retci;
+    - **izvještaj:** iskaznica mjesta (smeđi pojas s adresom, sažetak iz predložaka, šest oznaka sa statusom, skor), traka „Dijelovi izvještaja”, karta doleti do adrese, a krugovi hoda šire se redom;
+    - **karta:** jezerska ljestvica, legenda uz kartu, kartica naselja sa smeđim pojasom;
+    - **provjere:** kritika (dizajn i detektor) i popravci, detektor bez nalaza; `make verify` prolazi (pytest 149, Vitest 61, Playwright 60, axe u obje teme i 320 px); snimke prije u `docs/images/prije-redizajna/`, poslije u `docs/images/`.
+    - **završni pregled (Impeccable, dva kruga):** riješeno tijelo izvještaja kao retci, staza „Dijelovi izvještaja”, gumb uz adresu na mobitelu; otvoreno (odluka tima): prijedlozi kao „iskaznice” sa smeđim pojasom, popis „Svakodnevni život” kao putokazi, oznaka „Predloži mjesto za život” iznad trake (drži je postojeći e2e test navigacije), nacrtana strelica padajućih izbornika.
+17. [x] Zeleniji „Putokaz” s instrumentima (8. 11., grana `feature/instrumenti`; kratki smjer „Instrumenti” s papirom, tintom i serifom korisnik je odbio):
+    - **izgled:** putokaz s daskama i ploča mjesta vraćeni; šumska zelena za radnje i stazu, livadna podloga, boja prirode za svako mjerenje; zelena ljestvica karte;
+    - **izvještaj:** okolišni pregled kao instrumenti (vodomjer, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od točkica, ravnalo prometnice, radar požara, luk sunca) sa zaglavljem u boji mjerenja; ključne činjenice s točkom boje vode na svoj instrument;
+    - **naslovnica:** „Šest mjerenja okoliša za svaku adresu” u bojama izvještaja;
+    - **interakcija i poravnanje:** glatki prijelazi i podizanje ploča na hover, crta staze u navigaciji raste, iste težine poveznica i `scrollbar-gutter: stable` (ništa se ne pomiče između stranica); Impeccable detektor bez nalaza na naslovnici i izvještaju.

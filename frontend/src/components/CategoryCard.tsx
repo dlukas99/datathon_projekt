@@ -1,11 +1,26 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, CircleCheck, CircleHelp, Info, OctagonAlert, TriangleAlert } from 'lucide-react'
 import type { Category, SourceInfo, Status, Value } from '../lib/api'
 import { formatDate, KIND_HELP, KIND_LABELS } from '../lib/format'
 import { CategoryIcon } from './Icons'
 import { ScaleBar } from './ScaleBar'
 
+const STATUS_ICONS = {
+  good: CircleCheck,
+  warning: TriangleAlert,
+  bad: OctagonAlert,
+  info: Info,
+  no_data: CircleHelp,
+} as const
+
+/** Status in colour, shape and words: never colour alone. */
 export function StatusBadge({ status, label }: { status: Status; label: string }) {
-  return <span className={`status status-${status}`}>{label}</span>
+  const Icon = STATUS_ICONS[status]
+  return (
+    <span className={`status status-${status}`}>
+      <Icon size={15} strokeWidth={2.4} aria-hidden="true" />
+      {label}
+    </span>
+  )
 }
 
 export type SourceMap = Record<string, SourceInfo | undefined>
@@ -85,9 +100,8 @@ const KEY_VALUE: Record<string, string> = {
 
 const FLOOD_RPS = [10, 100, 500]
 
-// Cards that show one rating and one sentence; their scales are details (air: two
-// pollutants with three limits each were too much at first glance).
-const SCALES_IN_DETAILS = new Set(['air'])
+// The environment instruments draw their own scales; none are repeated in the details.
+const SCALES_IN_DETAILS = new Set<string>()
 
 function FloodTable({ values }: { values: Value[] }) {
   const byKey = Object.fromEntries(values.map((v) => [v.key, v]))
@@ -195,24 +209,27 @@ export function CategoryCard({
   const key = category.values.find((v) => v.key === KEY_VALUE[category.id])
   return (
     <article
-      className={`card category status-edge-${category.status}${focused ? ' focused' : ''}`}
+      className={`card category${focused ? ' focused' : ''}`}
       aria-labelledby={titleId}
       data-category={category.id}
     >
-      <div className="card-top">
-        <span className="card-icon">
-          <CategoryIcon id={category.id} />
-        </span>
-        <StatusBadge status={category.status} label={category.status_label} />
+      {/* The name, status and key value; a column of its own where categories are rows. */}
+      <div className="category-head">
+        <div className="card-top">
+          <span className="card-icon">
+            <CategoryIcon id={category.id} />
+          </span>
+          <StatusBadge status={category.status} label={category.status_label} />
+        </div>
+        <h3 id={titleId}>{category.title}</h3>
+        {focused && <p className="focus-tag">Važno za odabrani profil</p>}
+        {key && (
+          <p className="key-value">
+            <span className="key-number">{key.display}</span>
+            <span className="key-label">{key.label}</span>
+          </p>
+        )}
       </div>
-      <h3 id={titleId}>{category.title}</h3>
-      {focused && <p className="focus-tag">Važno za odabrani profil</p>}
-      {key && (
-        <p className="key-value">
-          <span className="key-number">{key.display}</span>
-          <span className="key-label">{key.label}</span>
-        </p>
-      )}
       {!SCALES_IN_DETAILS.has(category.id) &&
         category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
       <p className="headline">{category.headline}</p>

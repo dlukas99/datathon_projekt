@@ -11,6 +11,7 @@ import {
   StatusBadge,
 } from '../components/CategoryCard'
 import { CategoryIcon } from '../components/Icons'
+import { InstrumentPanel } from '../components/Instruments'
 import { ListingLinks } from '../components/ListingLinks'
 import { FocusPicker } from '../components/ProfilePicker'
 import { type WalkFocus, WalkMap } from '../components/WalkMap'
@@ -28,6 +29,7 @@ import { categoryStats } from '../lib/places'
 import { focusList, getProfile, orderByFocus, profileWeights, PROFILES } from '../lib/profiles'
 import { decodeWeights, encodeWeights, lifeScore } from '../lib/score'
 import { LifeScore, ScoreBadge } from '../components/LifeScore'
+import { BoardTags, boardTags, ReportGuide } from '../components/PlaceBoard'
 import { comparePath } from '../lib/urls'
 
 const DAILY_ORDER = [
@@ -50,6 +52,14 @@ const CAR_FREE_NEEDS: [string, string][] = [
   ['osnovna škola', 'Škola'],
   ['park', 'Park'],
   ['stajalište s barem jednim polaskom na sat radnim danom', 'Prijevoz svaki sat'],
+]
+
+const GUIDE = [
+  { id: 'env-title', label: 'Okoliš' },
+  { id: 'carfree-title', label: 'Bez auta' },
+  { id: 'daily-title', label: 'Svakodnevica' },
+  { id: 'skor', label: 'Skor' },
+  { id: 'izvori', label: 'Izvori' },
 ]
 
 export function sourceMap(report: Report): SourceMap {
@@ -302,24 +312,11 @@ export function ReportView({
 
   return (
     <>
-      <section className="summary" aria-labelledby="summary-title">
-        <h2 id="summary-title" className="visually-hidden">
-          Sažetak
-        </h2>
-        {report.summary.map((s) => (
-          <p key={s}>{s}</p>
-        ))}
-        <p className="summary-note">
-          Informativni alat iz otvorenih podataka, a ne službena procjena.{' '}
-          <Link to="/o-alatu">Kako računamo</Link>
-        </p>
-      </section>
-
       <section className="section" aria-labelledby="env-title">
         <h2 id="env-title">Okolišni pregled</h2>
-        <div className="grid">
+        <div className="instruments">
           {environment.map((c) => (
-            <CategoryCard key={c.id} category={c} sources={sources} focused={focus.includes(c.id)} />
+            <InstrumentPanel key={c.id} category={c} sources={sources} focused={focus.includes(c.id)} />
           ))}
         </div>
       </section>
@@ -400,7 +397,7 @@ export function ReportView({
 export function SourcesList({ report }: { report: Report }) {
   const loc = report.location
   return (
-    <details className="section sources-fold">
+    <details id="izvori" className="section sources-fold">
       <summary>
         <h2>Izvori podataka ({report.sources.length})</h2>
       </summary>
@@ -503,57 +500,71 @@ export function ReportPage() {
 
   return (
     <>
-      <header className="report-header">
-        <div className="title-row">
-          <div>
-        <p className="eyebrow">Pregled adrese</p>
-        <h1>{label ?? (pointKind === 'karta' ? 'Odabrana točka' : `${lat.toFixed(5)}, ${lon.toFixed(5)}`)}</h1>
+      <header className="place-board" data-ready={report ? 'true' : undefined}>
+        <div className="board-band">
+          <div className="board-title">
+            <h1>
+              {label ??
+                (pointKind === 'karta' ? 'Odabrana točka' : `${lat.toFixed(5)}, ${lon.toFixed(5)}`)}
+            </h1>
+            <p className="board-place">
+              {report ? placeLine(report) : 'Pregled adrese'}
+              {report?.location.population && <> · {report.location.population.display}</>}
+            </p>
           </div>
           {score && <ScoreBadge result={score} />}
         </div>
-        {report && (
-          <p className="place-line">
-            {placeLine(report)}
-            {report.location.population && (
-              <> · {report.location.population.display}</>
-            )}
-          </p>
-        )}
-        {(pointKind === 'naselje' || pointKind === 'ulica') && (
-          <p className="notice">
-            Prikazano je {pointKind === 'naselje' ? 'središte naselja' : 'sredina ulice'}. Vrijednosti
-            na vašoj adresi mogu se razlikovati: za točan izvještaj upišite ulicu i kućni broj ili
-            kliknite na kartu.{' '}
-            <Link to="/">Nova pretraga</Link>
-          </p>
-        )}
-        <div className="report-tools no-print">
-          <label className="profile-select">
-            <span>Gledam kao</span>
-            <select
-              value={profile}
-              onChange={(e) => {
-                updateProfile(e.target.value, customIds)
+        <div className="board-body">
+          {report && (
+            <>
+              <div className="board-summary">
+                {report.summary.map((s) => (
+                  <p key={s}>{s}</p>
+                ))}
+              </div>
+              <BoardTags tags={boardTags(report)} />
+            </>
+          )}
+          {(pointKind === 'naselje' || pointKind === 'ulica') && (
+            <p className="notice">
+              Prikazano je {pointKind === 'naselje' ? 'središte naselja' : 'sredina ulice'}.
+              Vrijednosti na vašoj adresi mogu se razlikovati: za točan izvještaj upišite ulicu i
+              kućni broj ili kliknite na kartu. <Link to="/">Nova pretraga</Link>
+            </p>
+          )}
+          <div className="report-tools no-print">
+            <label className="profile-select">
+              <span>Gledam kao</span>
+              <select
+                value={profile}
+                onChange={(e) => {
+                  updateProfile(e.target.value, customIds)
+                }}
+              >
+                {PROFILES.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {report && <Actions report={report} />}
+          </div>
+          {profile === 'vlastiti' && (
+            <FocusPicker
+              custom={customIds}
+              onCustom={(ids) => {
+                updateProfile('vlastiti', ids)
               }}
-            >
-              {PROFILES.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          {report && <Actions report={report} />}
+            />
+          )}
+          <p className="summary-note">
+            Informativni alat iz otvorenih podataka, a ne službena procjena.{' '}
+            <Link to="/o-alatu">Kako računamo</Link>
+          </p>
         </div>
-        {profile === 'vlastiti' && (
-          <FocusPicker
-            custom={customIds}
-            onCustom={(ids) => {
-              updateProfile('vlastiti', ids)
-            }}
-          />
-        )}
       </header>
+      {report && <ReportGuide sections={GUIDE} />}
       {query.isPending && <LoadingReport />}
       {query.isError && <ReportError error={query.error} />}
       {report && (

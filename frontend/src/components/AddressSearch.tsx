@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { fetchSuggestions, type Suggestion } from '../lib/api'
 
@@ -17,11 +18,14 @@ export function AddressSearch({
   label = 'Adresa',
   initialValue = '',
   inputId,
+  submitLabel,
 }: {
   onSelect: (s: Suggestion) => void
   label?: string
   initialValue?: string
   inputId?: string
+  /** Shows a visible button that does what Enter does (open the best match). */
+  submitLabel?: string
 }) {
   const autoId = useId()
   const id = inputId ?? `search-${autoId}`
@@ -109,6 +113,22 @@ export function AddressSearch({
       })
   }
 
+  /** Enter or the button: the highlighted suggestion, else search the text as it is now. */
+  function submit(): boolean {
+    const q = query.trim()
+    const chosen = visible[active]
+    if (chosen) {
+      choose(chosen)
+    } else if (q.length >= 3 && itemsFor !== q) {
+      searchNow(q)
+    } else if (visible[0]) {
+      choose(visible[0])
+    } else {
+      return false
+    }
+    return true
+  }
+
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
@@ -118,18 +138,7 @@ export function AddressSearch({
       e.preventDefault()
       setActive((a) => Math.max(a - 1, 0))
     } else if (e.key === 'Enter') {
-      const q = query.trim()
-      const chosen = visible[active]
-      if (chosen) {
-        e.preventDefault()
-        choose(chosen)
-      } else if (q.length >= 3 && itemsFor !== q) {
-        e.preventDefault()
-        searchNow(q)
-      } else if (visible[0]) {
-        e.preventDefault()
-        choose(visible[0])
-      }
+      if (submit()) e.preventDefault()
     } else if (e.key === 'Escape') {
       setOpen(false)
     }
@@ -153,33 +162,47 @@ export function AddressSearch({
   return (
     <div className="search">
       <label htmlFor={id}>{label}</label>
-      <input
-        id={id}
-        type="text"
-        role="combobox"
-        aria-autocomplete="list"
-        aria-expanded={expanded}
-        aria-controls={listId}
-        aria-describedby={shown ? `${hintId} ${statusId}` : hintId}
-        aria-activedescendant={expanded && active >= 0 ? `${listId}-${String(active)}` : undefined}
-        autoComplete="off"
-        spellCheck={false}
-        placeholder="npr. Franje Kuhača 9, Osijek"
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value)
-          setOpen(true)
-        }}
-        onKeyDown={onKeyDown}
-        onFocus={() => {
-          setOpen(true)
-        }}
-        onBlur={() => {
-          window.setTimeout(() => {
-            setOpen(false)
-          }, 150)
-        }}
-      />
+      <div className={submitLabel ? 'search-row' : undefined}>
+        <input
+          id={id}
+          type="text"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={expanded}
+          aria-controls={listId}
+          aria-describedby={shown ? `${hintId} ${statusId}` : hintId}
+          aria-activedescendant={expanded && active >= 0 ? `${listId}-${String(active)}` : undefined}
+          autoComplete="off"
+          spellCheck={false}
+          placeholder="npr. Franje Kuhača 9, Osijek"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setOpen(true)
+          }}
+          onKeyDown={onKeyDown}
+          onFocus={() => {
+            setOpen(true)
+          }}
+          onBlur={() => {
+            window.setTimeout(() => {
+              setOpen(false)
+            }, 150)
+          }}
+        />
+        {submitLabel && (
+          <button
+            type="button"
+            className="search-go"
+            onClick={() => {
+              if (!submit()) document.getElementById(id)?.focus()
+            }}
+          >
+            {submitLabel}
+            <ArrowRight size={18} aria-hidden="true" />
+          </button>
+        )}
+      </div>
       <p id={hintId} className="search-hint">
         Upišite ulicu, kućni broj i mjesto. Adrese se ne spremaju.
       </p>

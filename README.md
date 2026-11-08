@@ -19,14 +19,14 @@ Ti podaci postoje, ali su rasuti po različitim institucijama i formatima: karte
 
 ## Rješenje
 
-Naslovnica ima četiri ulaza:
+Naslovnica postavlja jedno pitanje, „Kako je živjeti ovdje?”, i nudi dva puta:
 
-1. **Provjeri adresu:** kako je živjeti na određenoj adresi.
-2. **Predloži mjesto za život:** aplikacija predlaže naselja prema onome što vam treba.
-3. **Usporedi dvije lokacije:** dvije adrese jedna uz drugu.
-4. **Istraži kartu Hrvatske:** naselja obojena prema Skoru za život, zraku, poplavama, uslugama pješice ili javnom prijevozu.
+1. **Provjeri adresu:** jedno polje, odmah do izvještaja za tu adresu.
+2. **Pronađi mjesto za mene:** vođeni tok u tri pitanja (tko traži, gdje, što je važno), s prijedlogom naselja i razlozima.
 
-Izvještaj za adresu ima tri dijela:
+Uz to su na naslovnici sva naselja Hrvatske obojena prema Skoru za život, s poveznicom na **kartu Hrvatske** (slojevi: Skor za život, zrak, poplave, usluge pješice, javni prijevoz), i šest okolišnih mjerenja (svako u boji koju ima i u izvještaju) i kratko objašnjenje kako aplikacija radi. **Usporedba dviju lokacija** dostupna je iz izbornika i iz izvještaja.
+
+Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenice sažetka iz predložaka i šest ključnih očitanja sa statusom (poplave, zrak, drveće, prometnica, pješice, prijevoz), od kojih svako vodi na svoj instrument. Okolišni pregled je ploča instrumenata: vodomjer za poplave, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od 300 m, ravnalo do prometnice, radar požara i luk sunca, svaki nacrtan iz stvarnih vrijednosti za adresu. Ispod naslovnog dijela izvještaj ima tri dijela:
 
 1. **Okolišni pregled** (prvi ekran):
    - **poplave:** je li lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, razumljivo izraženo kao vjerojatnost barem jedne poplave u 30 godina (trajanje stambenog kredita), s poveznicom na službene karte Hrvatskih voda;
@@ -104,9 +104,15 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - stranica „Izvori”: datumi osvježavanja uživo preko CKAN API-ja Portala otvorenih podataka i nalazi o kvaliteti podataka
 - pristupačnost: WCAG 2.2 razine AA (axe bez nalaza na svim stranicama u svijetloj i tamnoj temi), mobilni prikaz od 320 px, tamna tema; sve što je na karti dostupno je i u tekstu
 
-| Naslovnica | Mobitel, tamna tema | Asistent |
+![Okolišni pregled kao ploča instrumenata: vodomjer za poplave, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od 300 m, ravnalo do prometnice, radar požara i luk sunca (Osijek, gradska uprava)](docs/images/okolis.png)
+
+| Naslovnica | Naslovnica na mobitelu | Iskaznica mjesta na mobitelu, tamna tema |
 |---|---|---|
-| ![Naslovnica s pretragom i odabirom profila](docs/images/naslovnica.png) | ![Izvještaj na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) | ![Asistent odgovara iz izračuna](docs/images/asistent.png) |
+| ![Naslovnica: pitanje, polje za adresu i vođeni tok, naselja Hrvatske prema Skoru za život](docs/images/naslovnica.png) | ![Naslovnica na mobitelu](docs/images/naslovnica-mobitel.png) | ![Iskaznica mjesta na vrhu izvještaja na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) |
+
+| Pronađi mjesto za mene: treći korak | Prijedlozi s razlozima | Asistent |
+|---|---|---|
+| ![Vođeni tok: traka napretka i pitanje „Što vam je važno?”](docs/images/predlozi.png) | ![Prijedlozi naselja s razlozima, izvještajem i oglasima](docs/images/predlozi-rezultati.png) | ![Asistent odgovara iz izračuna](docs/images/asistent.png) |
 
 | Karta Hrvatske | Karta na mobitelu |
 |---|---|
@@ -179,7 +185,7 @@ Detalji, standardi te tehnički, organizacijski i pravni preduvjeti za uvođenje
 
 ## Tehnologije
 
-Python 3.12 · FastAPI · Pydantic · rasterio · Shapely · GeoPandas · pyosmium · PyArrow · httpx · pytest · ruff · mypy (strict) · Valhalla · React 19 + TypeScript (Vite) · React Router · TanStack Query · MapLibre GL JS · OpenFreeMap · Playwright + axe-core · ESLint (typescript-eslint, jsx-a11y) · Docker Compose · Caddy
+Python 3.12 · FastAPI · Pydantic · rasterio · Shapely · GeoPandas · pyosmium · PyArrow · httpx · pytest · ruff · mypy (strict) · Valhalla · React 19 + TypeScript (Vite) · React Router · TanStack Query · MapLibre GL JS · OpenFreeMap · fontovi Bricolage Grotesque i Figtree (OFL) · Playwright + axe-core · ESLint (typescript-eslint, jsx-a11y) · Docker Compose · Caddy
 
 ## Pokretanje
 

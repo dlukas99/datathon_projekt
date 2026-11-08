@@ -116,7 +116,6 @@ export function MapPage() {
 
   return (
     <>
-      <p className="eyebrow">Karta</p>
       <h1>Istraži kartu Hrvatske</h1>
       <p className="lead left">
         Naselja obojena prema okolišu, uslugama i prijevozu. Kliknite naselje za kratak pregled ili
@@ -210,37 +209,37 @@ export function MapPage() {
             </p>
           )}
         </aside>
-      </div>
 
-      <section className="atlas-legend" aria-labelledby="legend-title">
-        <h2 id="legend-title" className="atlas-legend-title">
-          {layer.title}
-          {layer.id === 'score' && `: ${getProfile(profile).label}`}
-        </h2>
-        <ul className="legend-list">
-          {[...layer.classes].reverse().map((c) => (
-            <li key={c.label}>
-              <span className="legend-swatch" style={{ background: palette.steps[c.step] }} />
-              {c.label}
+        <section className="atlas-legend" aria-labelledby="legend-title">
+          <h2 id="legend-title" className="atlas-legend-title">
+            {layer.title}
+            {layer.id === 'score' && `: ${getProfile(profile).label}`}
+          </h2>
+          <ul className="legend-list">
+            {[...layer.classes].reverse().map((c) => (
+              <li key={c.label}>
+                <span className="legend-swatch" style={{ background: palette.steps[c.step] }} />
+                {c.label}
+              </li>
+            ))}
+            <li>
+              <span className="legend-swatch" style={{ background: palette.none }} />
+              Nema podataka
             </li>
-          ))}
-          <li>
-            <span className="legend-swatch" style={{ background: palette.none }} />
-            Nema podataka
-          </li>
-        </ul>
-        <p className="hint">
-          {layer.explain} Boja naselja prikazuje vrijednost u njegovu središtu.
-        </p>
-        <p className="fine-print">
-          Izvori:{' '}
-          {sources
-            .map((s) => `${s.title}${s.retrieved_at ? ` (preuzeto ${formatDate(s.retrieved_at) ?? ''})` : ''}`)
-            .join(' · ')}
-          {date && `. Izračun za naselja: ${date}`} Granice naselja: DGU. Detalji na stranici{' '}
-          <Link to="/o-alatu">Kako računamo</Link>.
-        </p>
-      </section>
+          </ul>
+          <p className="hint">
+            {layer.explain} Boja naselja prikazuje vrijednost u njegovu središtu.
+          </p>
+          <p className="fine-print">
+            Izvori:{' '}
+            {sources
+              .map((s) => `${s.title}${s.retrieved_at ? ` (preuzeto ${formatDate(s.retrieved_at) ?? ''})` : ''}`)
+              .join(' · ')}
+            {date && `. Izračun za naselja: ${date}`} Granice naselja: DGU. Detalji na stranici{' '}
+            <Link to="/o-alatu">Kako računamo</Link>.
+          </p>
+        </section>
+      </div>
 
       <section className="section" aria-labelledby="table-title">
         <h2 id="table-title">Naselja u tablici</h2>
