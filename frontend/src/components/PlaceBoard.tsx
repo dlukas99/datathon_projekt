@@ -66,13 +66,21 @@ export function BoardTags({ tags }: { tags: BoardTag[] }) {
       {tags.map((t, i) => {
         const Icon = STATUS_ICON[t.status]
         return (
-          <li key={t.id} className={`board-tag tag-${t.status}`} style={{ '--i': i } as CSSProperties}>
-            <Icon size={16} strokeWidth={2.4} aria-hidden="true" />
-            <span className="board-tag-label">{t.label}</span>
-            <span className="board-tag-value">{t.value}</span>
-            {t.status !== 'info' && t.status !== 'no_data' && (
-              <span className="visually-hidden"> ({STATUS_WORD[t.status]})</span>
-            )}
+          <li
+            key={t.id}
+            className={`board-tag tag-${t.status} cat-${t.id}`}
+            style={{ '--i': i } as CSSProperties}
+          >
+            <a href={`#cat-${t.id}`}>
+              <span className="board-tag-label">{t.label}</span>
+              <span className="board-tag-value">
+                <Icon size={16} strokeWidth={2.4} aria-hidden="true" />
+                {t.value}
+              </span>
+              {t.status !== 'info' && t.status !== 'no_data' && (
+                <span className="visually-hidden"> ({STATUS_WORD[t.status]})</span>
+              )}
+            </a>
           </li>
         )
       })}

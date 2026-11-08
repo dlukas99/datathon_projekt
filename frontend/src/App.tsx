@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { TrailMark } from './components/TrailMark'
+import { BrandMark } from './components/BrandMark'
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
 import { SiteNav, type Theme } from './components/SiteNav'
@@ -84,7 +84,7 @@ function Layout() {
       <header className="site-header">
         <div className="container header-row">
           <NavLink to="/" className="brand" aria-label={`${BRAND.name}, naslovnica`}>
-            <TrailMark />
+            <BrandMark />
             <span className="brand-name">{BRAND.name}</span>
           </NavLink>
           <SiteNav theme={theme} onToggleTheme={toggleTheme} />

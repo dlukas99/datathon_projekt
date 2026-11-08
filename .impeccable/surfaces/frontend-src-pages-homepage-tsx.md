@@ -10,14 +10,14 @@ Audience: citizens choosing where to live; mobile and desktop equally. Constrain
 
 ## Direction contract
 
-THESIS: The app is a trail system for Croatia: you stand at a trailhead, a signpost gives two directions (check an address, find a place for me), and every result is a place board. Refuses the split hero with a search card and a row of equal icon cards.
+THESIS: The report is an instrument panel for a place: each environmental measurement has its own drawn gauge that settles on the real value. Everything else is paper and ink so the readings are what you see. Replaces the "Putokaz" trail world, which the user found too generic.
 
-OWN-WORLD: Limestone ground #F0F3EF, forest ink #142420, lake jade #0B6B63 for actions, links and the trail line; brown tourist-sign #5B3A1E with white type only for place identity (signpost planks, place board band, you-are-here). Status colours separate, always with words. Bricolage Grotesque display, Figtree text (Atkinson was tried; its slashed zero reads as technical). Small 6px board corners, rules and stations instead of shadowed cards.
+OWN-WORLD: Paper #F6F5F1, ink #15171A, actions in ink, links blue. One colour per measurement and only for it: flood cobalt #1F55D0, air violet #6A46D1, green #18804A, roads amber #A85A00, fire #C4381A, sun #845800, walking teal, transit magenta. Status colours separate, always with icon and word. Instrument Serif (display, readouts) and Instrument Sans (text). Panels 14px corners with a 4px colour strip on top.
 
-STORY: In five seconds: what this is (big question), where to type (the signpost plank), the alternative (second plank). Then three stations explain how it works. The report opens as a place board with a template summary and status tags, environment first.
+STORY: Home: big serif question, one address field, the finder as second way in, the settlement mosaic, then the six measurements in their colours. Report: address, score readout, summary, six key readings that jump to their instruments, then the instruments.
 
-FIRST VIEWPORT: Desktop: h1 "Kako je živjeti ovdje?" huge top-left, one-sentence lead, a signpost post with two brown planks (address input plank, "Pronađi mjesto za mene" plank). The settlement mosaic of Croatia (6,759 polygons, jade scale by Skor za život) large to the right and bleeding, with a text caption and link to /karta. Mobile: question, signpost, then mosaic.
+FIRST VIEWPORT: Desktop home: question left, mosaic right bleeding off the edge. Report: address and score, summary, readings strip.
 
-FORM: Candidate 6 of 7 (national-park and trail wayfinding). seed:1418b3f28c73e0f6. Raises: palette roles one job each (teletext), guide line naming where you are in the report (lexicon), back retraces the exact path through the finder (HyperCard).
+FORM: Water gauge, rulers with WHO and EU marks and a needle, 300 m dot circle, road ruler, radar, sun arc. Drawings are aria-hidden; numbers and sentences carry the meaning.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

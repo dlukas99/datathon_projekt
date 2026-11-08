@@ -11,6 +11,7 @@ import {
   StatusBadge,
 } from '../components/CategoryCard'
 import { CategoryIcon } from '../components/Icons'
+import { InstrumentPanel } from '../components/Instruments'
 import { ListingLinks } from '../components/ListingLinks'
 import { FocusPicker } from '../components/ProfilePicker'
 import { type WalkFocus, WalkMap } from '../components/WalkMap'
@@ -313,9 +314,9 @@ export function ReportView({
     <>
       <section className="section" aria-labelledby="env-title">
         <h2 id="env-title">Okolišni pregled</h2>
-        <div className="grid">
+        <div className="instruments">
           {environment.map((c) => (
-            <CategoryCard key={c.id} category={c} sources={sources} focused={focus.includes(c.id)} />
+            <InstrumentPanel key={c.id} category={c} sources={sources} focused={focus.includes(c.id)} />
           ))}
         </div>
       </section>
@@ -502,14 +503,14 @@ export function ReportPage() {
       <header className="place-board" data-ready={report ? 'true' : undefined}>
         <div className="board-band">
           <div className="board-title">
-            <p className="board-place">
-              {report ? placeLine(report) : 'Pregled adrese'}
-              {report?.location.population && <> · {report.location.population.display}</>}
-            </p>
             <h1>
               {label ??
                 (pointKind === 'karta' ? 'Odabrana točka' : `${lat.toFixed(5)}, ${lon.toFixed(5)}`)}
             </h1>
+            <p className="board-place">
+              {report ? placeLine(report) : 'Pregled adrese'}
+              {report?.location.population && <> · {report.location.population.display}</>}
+            </p>
           </div>
           {score && <ScoreBadge result={score} />}
         </div>

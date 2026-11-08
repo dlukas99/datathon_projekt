@@ -1,25 +1,38 @@
-/* Calm and minimal. Colours meet WCAG 2.2 AA in both themes. */
+/* Instrumenti: paper, ink and one colour per thing measured. Actions are ink; colour is
+   reserved for the six environmental readings (and walking and transit), so wherever a
+   colour appears it names what is measured. Status keeps its own colours, always with an
+   icon and a word. Colours meet WCAG 2.2 AA in both themes. */
 
 :root {
   color-scheme: light;
-  /* Putokaz: one job per colour. Limestone ground, forest ink, lake jade for actions and
-     the trail, brown tourist-sign for the place itself. Status colours stay separate. */
-  --bg: #f0f3ef;
+  --bg: #f6f5f1;
   --surface: #ffffff;
-  --surface-2: #e3eae5;
-  --text: #142420;
-  --muted: #4a5c55;
-  --border: #d0dad4;
-  --control-border: #6c7f77;
-  --accent: #0b6b63;
-  --accent-hover: #08564f;
-  --accent-soft: #d3ece7;
+  --surface-2: #ecebe5;
+  --text: #15171a;
+  --muted: #55595f;
+  --border: #dcdad2;
+  --control-border: #7a7d82;
+  --accent: #15171a;
+  --accent-hover: #000000;
+  --accent-soft: #e7e6e0;
   --accent-contrast: #ffffff;
-  --sign: #5b3a1e;
-  --sign-ink: #ffffff;
-  --sign-muted: #e9d9c6;
-  --sign-edge: #3f2713;
-  --focus: #1a56c4;
+  --link: #1d4fc4;
+  --sign: #15171a;
+  --sign-ink: #f6f5f1;
+  --sign-muted: #c9c7bf;
+  --sign-edge: #000000;
+  --focus: #1d4fc4;
+
+  /* One colour per measurement (text-safe on paper and white). */
+  --c-flood: #1f55d0;
+  --c-air: #6a46d1;
+  --c-green: #18804a;
+  --c-noise: #a85a00;
+  --c-fire: #c4381a;
+  --c-solar: #845800;
+  --c-solar-fill: #f5b800;
+  --c-car_free: #0b7480;
+  --c-transit: #b02a6a;
 
   --good: #1d6b3a;
   --good-bg: #e1f0e4;
@@ -30,14 +43,14 @@
   --info: #2c4f72;
   --info-bg: #e3ecf4;
   --nodata: #545a57;
-  --nodata-bg: #e7e9e6;
+  --nodata-bg: #e8e7e2;
 
-  --radius: 6px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 2px rgb(20 36 32 / 6%), 0 6px 18px -8px rgb(20 36 32 / 14%);
-  --max: 1120px;
-  --font-text: 'Figtree Variable', system-ui, sans-serif;
-  --font-display: 'Bricolage Grotesque Variable', 'Figtree Variable', sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgb(21 23 26 / 6%), 0 10px 28px -14px rgb(21 23 26 / 22%);
+  --max: 1160px;
+  --font-text: 'Instrument Sans Variable', system-ui, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-text);
   font-size: 100%;
@@ -46,29 +59,38 @@
   background: var(--bg);
   font-variant-numeric: tabular-nums;
   accent-color: var(--accent);
+  font-synthesis: none;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --plank-go: #1d6a61;
-  --plank-go-hover: #23796f;
-  --plank-go-ink: #ffffff;
-  --bg: #0e1714;
-  --surface: #15211d;
-  --surface-2: #1c2a25;
-  --text: #e4ece7;
-  --muted: #a3b3ac;
-  --border: #2a3a34;
-  --control-border: #6b8279;
-  --accent: #6ccabc;
-  --accent-hover: #8fdacf;
-  --accent-soft: #143029;
-  --accent-contrast: #062420;
-  --sign: #6b4526;
-  --sign-ink: #ffffff;
-  --sign-muted: #eadbc8;
-  --sign-edge: #4a2e17;
-  --focus: #8ab4ff;
+  --bg: #111316;
+  --surface: #181b1f;
+  --surface-2: #22262b;
+  --text: #efede7;
+  --muted: #a9adb3;
+  --border: #2d3137;
+  --control-border: #7c8188;
+  --accent: #efede7;
+  --accent-hover: #ffffff;
+  --accent-soft: #2a2e34;
+  --accent-contrast: #111316;
+  --link: #8fb0ff;
+  --sign: #efede7;
+  --sign-ink: #111316;
+  --sign-muted: #4a4d52;
+  --sign-edge: #c9c7bf;
+  --focus: #8fb0ff;
+
+  --c-flood: #82a8ff;
+  --c-air: #b9a4ff;
+  --c-green: #6fd59b;
+  --c-noise: #ffb85c;
+  --c-fire: #ff8f6b;
+  --c-solar: #ffd04d;
+  --c-solar-fill: #ffd04d;
+  --c-car_free: #5fd0da;
+  --c-transit: #ff8fc2;
 
   --good: #8fdca9;
   --good-bg: #16301f;
@@ -79,8 +101,8 @@
   --info: #a9c9ec;
   --info-bg: #1a2836;
   --nodata: #c3c8c5;
-  --nodata-bg: #222b27;
-  --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 20px -10px rgb(0 0 0 / 50%);
+  --nodata-bg: #23272c;
+  --shadow: 0 1px 2px rgb(0 0 0 / 35%), 0 12px 28px -14px rgb(0 0 0 / 60%);
 }
 
 ::selection {
@@ -107,31 +129,32 @@ body {
 }
 
 h1,
-h2,
-h3 {
+h2 {
   font-family: var(--font-display);
-  line-height: 1.15;
+  font-weight: 400;
+  line-height: 1.05;
   margin: 0 0 0.5rem;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  letter-spacing: -0.01em;
   text-wrap: balance;
   font-variant-numeric: lining-nums proportional-nums;
 }
 
+h3 {
+  font-family: var(--font-text);
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  font-size: 1.08rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
 h1 {
-  font-size: clamp(2rem, 5vw, 3.1rem);
-  font-weight: 750;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
 }
 
 h2 {
-  font-size: clamp(1.35rem, 3vw, 1.7rem);
-}
-
-h3 {
-  font-size: 1.12rem;
-  letter-spacing: -0.01em;
-  font-weight: 650;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
 }
 
 p,
@@ -144,9 +167,13 @@ p {
 }
 
 a {
-  color: var(--accent);
+  color: var(--link);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
 }
 
 :focus-visible {
@@ -210,9 +237,9 @@ a {
   align-items: center;
   gap: 0.6rem;
   font-family: var(--font-display);
-  font-weight: 750;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
   color: var(--text);
   text-decoration: none;
   min-height: 44px;
@@ -594,9 +621,9 @@ select:hover {
   margin: 0;
 }
 
-/* Home: a trailhead. The question, a signpost with two planks (the address is the
-   brown place plank, "Pronađi mjesto za mene" the jade trail plank) and every settlement
-   of Croatia drawn beside them. */
+/* Home: the question in large serif type, one search field, the guided finder as the
+   second way in, and every settlement of Croatia drawn beside them. Below, the six
+   measurements in the colours the report uses for them. */
 
 .lead {
   font-size: 1.15rem;
@@ -605,102 +632,54 @@ select:hover {
   max-width: 34rem;
 }
 
-.trailhead {
+.hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: 1rem 2.5rem;
-  margin: 0.5rem 0 0;
+  gap: 1rem 3rem;
   min-height: min(78vh, 760px);
 }
 
-.trailhead-text {
+.hero-text {
   position: relative;
   z-index: 2;
   padding: 1.5rem 0 1rem;
 }
 
-.trailhead h1 {
-  font-size: clamp(2.6rem, 6.4vw, 5.4rem);
-  line-height: 0.98;
-  letter-spacing: -0.04em;
-  font-weight: 780;
-  font-variation-settings: 'opsz' 96;
-  margin: 0 0 1.25rem;
-  max-width: 9ch;
+.hero h1 {
+  font-size: clamp(3.2rem, 7.4vw, 6rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+  max-width: 8ch;
 }
 
-.trailhead-lead {
-  font-size: clamp(1.08rem, 1.6vw, 1.22rem);
+.hero h1 em {
+  font-style: italic;
+  color: var(--c-flood);
+}
+
+.hero-lead {
+  font-size: clamp(1.08rem, 1.6vw, 1.25rem);
   color: var(--muted);
   max-width: 31rem;
   margin: 0 0 2rem;
 }
 
-/* The signpost: a post on the left and planks bolted to it, each with an arrow tip. */
-.signpost {
-  position: relative;
-  display: grid;
-  gap: 0.85rem;
-  padding-left: 22px;
-  margin-right: 30px;
+.hero-search {
   max-width: 34rem;
 }
 
-.signpost::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: -14px;
-  bottom: -26px;
-  width: 9px;
-  border-radius: 3px 3px 0 0;
-  background: var(--sign-edge);
+.hero-search .search > label {
+  font-size: 0.95rem;
 }
 
-.plank {
-  position: relative;
-  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-}
-
-.plank::after {
-  content: '';
-  position: absolute;
-  left: 100%;
-  top: 0;
-  bottom: 0;
-  width: 26px;
-  background: inherit;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-}
-
-.plank-place {
-  background: var(--sign);
-  color: var(--sign-ink);
-  padding: 0.9rem 1rem 1rem 1.1rem;
-  box-shadow: inset 0 -3px 0 var(--sign-edge);
-}
-
-.plank-place .search > label {
-  color: var(--sign-ink);
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.plank-place .search-hint,
-.plank-place .search-status {
-  color: var(--sign-muted);
-}
-
-.plank-place .search input {
-  border-color: var(--sign-edge);
-  background: var(--surface);
-}
-
-.plank-place .suggestions {
-  z-index: 40;
+.hero-search .search input {
+  min-height: 60px;
+  border: 2px solid var(--text);
+  border-radius: var(--radius);
+  font-size: 1.15rem;
+  box-shadow: var(--shadow);
 }
 
 .search-row {
@@ -718,23 +697,24 @@ select:hover {
   align-items: center;
   gap: 0.35rem;
   min-height: 56px;
-  padding: 0 1rem;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
+  padding: 0 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
   background: var(--accent);
   color: var(--accent-contrast);
   font: inherit;
-  font-weight: 700;
+  font-weight: 650;
   cursor: pointer;
   transition: background-color 160ms var(--ease-out);
 }
 
-.search-go:hover {
-  background: var(--accent-hover);
+.hero-search .search-go {
+  min-height: 60px;
+  padding: 0 1.4rem;
 }
 
-.plank-place .search-go {
-  border-color: var(--sign-edge);
+.search-go:hover {
+  background: var(--accent-hover);
 }
 
 @media (width <= 480px) {
@@ -748,55 +728,45 @@ select:hover {
   }
 }
 
-.mosaic-link {
-  display: block;
-  border-radius: var(--radius);
-}
-
-.mosaic-link:hover .mosaic-canvas {
-  filter: saturate(1.25) contrast(1.05);
-}
-
-.mosaic-link .mosaic-canvas {
-  transition: filter 220ms var(--ease-out);
-}
-
-.plank-go {
+.hero-find {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  column-gap: 0.75rem;
-  min-height: 64px;
-  padding: 0.75rem 0.75rem 0.75rem 1.1rem;
-  margin-right: 22%;
-  background: var(--plank-go, var(--accent));
-  color: var(--plank-go-ink, var(--accent-contrast));
+  column-gap: 1rem;
+  max-width: 34rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem 0.85rem 1.2rem;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
   text-decoration: none;
-  transition: background-color 160ms var(--ease-out), transform 220ms var(--ease-out);
+  transition: border-color 160ms var(--ease-out);
 }
 
-.plank-go:hover {
-  background: var(--plank-go-hover, var(--accent-hover));
-  transform: translateX(4px);
+.hero-find:hover {
+  border-color: var(--text);
 }
 
-.plank-title {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+.hero-find-title {
+  font-weight: 650;
+  font-size: 1.08rem;
 }
 
-.plank-sub {
+.hero-find-sub {
   grid-column: 1;
+  color: var(--muted);
   font-size: 0.92rem;
-  opacity: 0.92;
 }
 
-.plank-arrow {
+.hero-find-arrow {
   grid-column: 2;
   grid-row: 1 / span 2;
+  transition: transform 220ms var(--ease-out);
+}
+
+.hero-find:hover .hero-find-arrow {
+  transform: translateX(4px);
 }
 
 .examples {
@@ -804,7 +774,7 @@ select:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0 0.35rem;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   color: var(--muted);
   font-size: 0.92rem;
 }
@@ -825,10 +795,23 @@ select:hover {
   padding: 0 0.45rem;
 }
 
+.mosaic-link {
+  display: block;
+  border-radius: var(--radius);
+}
+
+.mosaic-link .mosaic-canvas {
+  transition: filter 220ms var(--ease-out);
+}
+
+.mosaic-link:hover .mosaic-canvas {
+  filter: saturate(1.2) contrast(1.05);
+}
+
 /* The settlement mosaic bleeds off the right edge on wide screens. */
-.trailhead-map {
+.hero-map {
   position: relative;
-  margin: 0 calc(-1 * max(1.25rem, (100vw - var(--max)) / 2 + 1.25rem)) 0 -3rem;
+  margin: 0 calc(-1 * max(1.25rem, (100vw - var(--max)) / 2 + 1.25rem)) 0 -2rem;
   align-self: stretch;
   display: flex;
   flex-direction: column;
@@ -867,13 +850,12 @@ select:hover {
   }
 }
 
-.trailhead-map figcaption {
+.hero-map figcaption {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.4rem 0.75rem;
-  margin: 0.25rem 1.25rem 0 3rem;
-  position: relative;
+  margin: 0.25rem 1.25rem 0 2rem;
   color: var(--muted);
   font-size: 0.92rem;
 }
@@ -890,11 +872,107 @@ select:hover {
   height: 10px;
 }
 
-.trailhead-map figcaption a {
-  font-weight: 700;
+.hero-map figcaption a {
+  font-weight: 650;
 }
 
-/* How it works: three stations along one trail. */
+/* Six measurements: each in its own colour, a legend for the report. */
+.measures {
+  margin: 4.5rem 0 1rem;
+}
+
+.measures h2 {
+  max-width: 18ch;
+  margin-bottom: 2rem;
+  font-size: clamp(2rem, 4.4vw, 3rem);
+}
+
+.measure-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.25rem 2.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.measure {
+  position: relative;
+  padding-top: 1rem;
+  border-top: 3px solid var(--c, var(--text));
+}
+
+.measure h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.6rem 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.measure-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 13%, transparent);
+  color: var(--c);
+}
+
+.measure p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.measure .measure-source {
+  margin-top: 0.5rem;
+  color: var(--c);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.measures-more {
+  margin: 2.5rem 0 0;
+  max-width: 60ch;
+  font-size: 1.05rem;
+}
+
+/* Each measurement's colour, used wherever that measurement appears. */
+.cat-flood {
+  --c: var(--c-flood);
+}
+
+.cat-air {
+  --c: var(--c-air);
+}
+
+.cat-green {
+  --c: var(--c-green);
+}
+
+.cat-noise {
+  --c: var(--c-noise);
+}
+
+.cat-fire {
+  --c: var(--c-fire);
+}
+
+.cat-solar {
+  --c: var(--c-solar);
+}
+
+.cat-car_free {
+  --c: var(--c-car_free);
+}
+
+.cat-transit {
+  --c: var(--c-transit);
+}
+
+/* How it works: three numbered steps; the number is the order. */
 .how {
   margin: 4.5rem 0 1rem;
   padding-top: 2.5rem;
@@ -902,59 +980,36 @@ select:hover {
 }
 
 .how h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
   margin-bottom: 1.75rem;
 }
 
 .stations {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2rem;
+  gap: 2rem 2.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.stations::before {
-  content: '';
-  position: absolute;
-  left: 22px;
-  right: 10%;
-  top: 21px;
-  height: 0;
-  border-top: 3px dashed var(--accent);
-}
-
-.station {
-  position: relative;
-}
-
 .station-mark {
-  display: inline-grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  margin-bottom: 1rem;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 3px solid var(--accent);
-  color: var(--accent);
+  display: block;
   font-family: var(--font-display);
-  font-weight: 750;
-  font-size: 1.15rem;
-  position: relative;
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  color: var(--muted);
 }
 
 .station h3 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-bottom: 0.35rem;
 }
 
 .station p {
   color: var(--muted);
   margin: 0;
-  max-width: 30ch;
+  max-width: 32ch;
 }
 
 .how-more {
@@ -962,16 +1017,16 @@ select:hover {
 }
 
 .how-more a {
-  font-weight: 700;
+  font-weight: 650;
 }
 
 @media (width <= 900px) {
-  .trailhead {
+  .hero {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
   }
 
-  .trailhead-map {
+  .hero-map {
     margin: 0 -1.25rem;
   }
 
@@ -979,40 +1034,20 @@ select:hover {
     max-height: none;
   }
 
-  .trailhead-map figcaption {
+  .hero-map figcaption {
     margin: 0 1.25rem;
+  }
+
+  .measure-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (width <= 640px) {
-  .stations {
+  .stations,
+  .measure-list {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-  }
-
-  .stations::before {
-    left: 20px;
-    right: auto;
-    top: 22px;
-    bottom: 22px;
-    width: 0;
-    height: auto;
-    border-top: 0;
-    border-left: 3px dashed var(--accent);
-  }
-
-  .station {
-    padding-left: 64px;
-  }
-
-  .station-mark {
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
-
-  .plank-go {
-    margin-right: 0;
+    gap: 1.75rem;
   }
 }
 
@@ -1411,37 +1446,6 @@ details summary {
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
-}
-
-.score-badge {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 88px;
-  min-height: 88px;
-  padding: 0.5rem;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--accent-contrast);
-  text-decoration: none;
-  flex-shrink: 0;
-}
-
-:root:not([data-theme='dark']) a.score-badge {
-  color: var(--accent-contrast);
-}
-
-.score-badge-number {
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.score-badge-text {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-align: center;
 }
 
 .life-score-head {
@@ -2097,52 +2101,79 @@ details summary {
   font-size: 0.85rem;
 }
 
-/* The place board: the top of a report, like the board at a trailhead. A brown band
-   names the place; below it, the summary in two or three sentences and six key facts. */
+/* The top of a report: the address in large serif type over a ruled line, the score as
+   a readout beside it, then the summary and a strip of six key readings. Each reading
+   carries the colour of its measurement and jumps to its instrument below. */
 .place-board {
-  margin: 0.25rem 0 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: clip;
+  margin: 0.5rem 0 0;
 }
 
 .board-band {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.4rem 1.5rem 1.3rem;
-  background: var(--sign);
-  color: var(--sign-ink);
-  box-shadow: inset 0 -4px 0 var(--sign-edge);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1rem 2rem;
+  padding: 0 0 1.25rem;
+  border-bottom: 2px solid var(--text);
 }
 
 .board-band h1 {
   margin: 0;
-  font-size: clamp(1.7rem, 4.4vw, 2.7rem);
-  color: var(--sign-ink);
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 0.98;
 }
 
 .board-place {
-  margin: 0 0 0.35rem;
-  color: var(--sign-muted);
-  font-weight: 600;
-  font-size: 0.95rem;
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
 }
 
-.board-band .score-badge {
-  background: var(--accent);
-  box-shadow: 0 0 0 3px var(--sign-edge);
+.score-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 112px;
+  padding: 0.6rem 1rem 0.7rem;
+  border: 2px solid var(--text);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background-color 160ms var(--ease-out);
+}
+
+a.score-badge:hover {
+  background: var(--surface-2);
+}
+
+.score-badge-number {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 0.95;
+}
+
+.score-badge-number::after {
+  content: '/100';
+  margin-left: 0.2rem;
+  font-family: var(--font-text);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.score-badge-text {
+  font-size: 0.82rem;
+  font-weight: 650;
 }
 
 .board-body {
-  padding: 1.25rem 1.5rem 1.4rem;
+  padding: 1.5rem 0 0;
 }
 
 .board-summary {
-  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  font-size: clamp(1.1rem, 1.9vw, 1.3rem);
   line-height: 1.5;
   max-width: 62ch;
 }
@@ -2152,65 +2183,64 @@ details summary {
 }
 
 .board-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 0.5rem;
   list-style: none;
-  margin: 1.1rem 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
 }
 
-.board-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 36px;
-  padding: 0.3rem 0.7rem 0.3rem 0.55rem;
+.board-tag a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  height: 100%;
+  min-height: 44px;
+  padding: 0.7rem 0.85rem 0.8rem;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--c, var(--text));
   border-radius: var(--radius-sm);
-  background: var(--nodata-bg);
+  background: var(--surface);
   color: var(--text);
-  font-size: 0.92rem;
+  text-decoration: none;
+  transition: border-color 160ms var(--ease-out), transform 220ms var(--ease-out);
 }
 
-.board-tag svg {
-  flex: none;
+.board-tag a:hover {
+  border-color: var(--c, var(--text));
+  transform: translateY(-2px);
 }
 
 .board-tag-label {
-  color: var(--muted);
+  color: var(--c, var(--muted));
+  font-size: 0.85rem;
+  font-weight: 650;
 }
 
 .board-tag-value {
-  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  font-weight: 650;
+  line-height: 1.3;
 }
 
-.tag-good {
-  background: var(--good-bg);
+.board-tag-value svg {
+  flex: none;
+  margin-top: 0.12rem;
 }
 
 .tag-good svg {
   color: var(--good);
 }
 
-.tag-warning {
-  background: var(--warning-bg);
-}
-
 .tag-warning svg {
   color: var(--warning);
 }
 
-.tag-bad {
-  background: var(--bad-bg);
-}
-
 .tag-bad svg {
   color: var(--bad);
-}
-
-/* "Informacija": a fact without a sourced threshold, neutral as in the category status. */
-.tag-info {
-  background: var(--surface-2);
 }
 
 .tag-info svg {
@@ -2221,7 +2251,6 @@ details summary {
   color: var(--nodata);
 }
 
-/* The one moment the report makes: the board fills in when the report arrives. */
 .place-board[data-ready='true'] .board-summary {
   animation: board-in 520ms var(--ease-out) both;
 }
@@ -2229,102 +2258,6 @@ details summary {
 .place-board[data-ready='true'] .board-tag {
   animation: board-in 440ms var(--ease-out) both;
   animation-delay: calc(160ms + var(--i, 0) * 55ms);
-}
-
-/* The report below its board: categories as ruled rows on the ground, not white cards.
-   Name, status and the key value on the left; the explanation and details on the right. */
-section[aria-labelledby='env-title'] > .grid {
-  display: block;
-  border-top: 2px solid var(--text);
-}
-
-section[aria-labelledby='env-title'] .category.card {
-  display: grid;
-  grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
-  grid-auto-flow: dense;
-  column-gap: 2rem;
-  align-items: start;
-  padding: 1.25rem 0 1.1rem;
-  background: none;
-  border: 0;
-  border-bottom: 1px solid var(--border);
-  border-radius: 0;
-}
-
-section[aria-labelledby='env-title'] .category.card.focused {
-  box-shadow: none;
-}
-
-.category-head {
-  display: contents;
-}
-
-section[aria-labelledby='env-title'] .category > .category-head {
-  display: block;
-  grid-column: 1;
-  grid-row: 1 / span 6;
-}
-
-section[aria-labelledby='env-title'] .category .card-top {
-  justify-content: flex-start;
-  gap: 0.6rem;
-  margin-bottom: 0.4rem;
-}
-
-section[aria-labelledby='env-title'] .category > :not(.category-head) {
-  grid-column: 2;
-}
-
-section[aria-labelledby='env-title'] .category > .headline {
-  margin-top: 0.15rem;
-  font-size: 1.02rem;
-}
-
-section[aria-labelledby='env-title'] .category .key-value {
-  margin: 0.4rem 0 0;
-}
-
-/* In a row the value is a figure beside the sentence, not a headline over it. */
-section[aria-labelledby='env-title'] .category .key-number {
-  font-size: 1.4rem;
-  line-height: 1.2;
-}
-
-.life-score-number {
-  white-space: nowrap;
-  flex: none;
-}
-
-@media (width <= 640px) {
-  section[aria-labelledby='env-title'] .category.card {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  section[aria-labelledby='env-title'] .category > * {
-    grid-column: 1 !important;
-    grid-row: auto !important;
-  }
-}
-
-/* The other report sections lose their card shells: a rule above, the ground below. */
-section[aria-labelledby='carfree-title'] .card,
-section[aria-labelledby='daily-title'] > .card,
-.life-score.card,
-.assistant.card {
-  background: none;
-  border: 0;
-  border-top: 2px solid var(--text);
-  border-radius: 0;
-  padding: 1.1rem 0 0;
-}
-
-section[aria-labelledby='carfree-title'] .grid.two {
-  gap: 2rem;
-}
-
-section[aria-labelledby='carfree-title'] .card.focused {
-  box-shadow: none;
-  border-top-color: var(--accent);
 }
 
 /* Movement only: the text is readable at every frame. */
@@ -2340,20 +2273,18 @@ section[aria-labelledby='carfree-title'] .card.focused {
   margin: 1rem 0 0 !important;
 }
 
-/* "Ovdje ste": the report's sections as a short trail that stays under the header. */
+/* The report's sections as tabs that stay under the header and mark where you are. */
 .report-guide {
   position: sticky;
   top: 64px;
   z-index: 20;
-  margin: 1.25rem 0 0;
+  margin: 1.75rem 0 0;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
 
 .report-guide ol {
-  mask-image: linear-gradient(90deg, #000 88%, transparent);
   display: flex;
-  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -2365,53 +2296,817 @@ section[aria-labelledby='carfree-title'] .card.focused {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
   min-height: 48px;
-  padding: 0 0.8rem 0 0;
-  color: var(--text);
+  padding: 0 0.9rem;
+  color: var(--muted);
   font-weight: 600;
   font-size: 0.95rem;
   text-decoration: none;
   white-space: nowrap;
+  transition: color 160ms var(--ease-out);
 }
 
-.report-guide a:hover {
-  color: var(--accent);
+.report-guide li:first-child a {
+  padding-left: 0;
 }
 
+.report-guide a:hover,
 .report-guide a[aria-current] {
   color: var(--text);
-  font-weight: 700;
 }
 
-/* Each section a station on the trail: a ring, filled where you are. */
-.report-guide a::before {
+.report-guide a[aria-current]::after {
   content: '';
-  flex: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 3px solid var(--accent);
-  background: var(--bg);
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: -1px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--text);
 }
 
-.report-guide a[aria-current]::before {
-  background: var(--sign);
-  border-color: var(--sign);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sign) 25%, transparent);
-}
-
-.report-guide li:not(:last-child) a::after {
-  content: '';
-  width: 1.4rem;
-  border-top: 3px dashed var(--control-border);
-  margin-left: 0.35rem;
+.report-guide li:first-child a[aria-current]::after {
+  left: 0;
 }
 
 section[aria-labelledby] > h2[id],
 #skor,
 #izvori {
   scroll-margin-top: 130px;
+}
+
+.inst h3[id],
+.category h3[id] {
+  scroll-margin-top: 140px;
+}
+
+/* The instruments: one panel per measurement, a strip of its colour on top, the reading
+   in large serif figures and a drawn gauge that settles on the value when it comes into
+   view. */
+.instruments {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: 1rem;
+}
+
+.inst,
+section[aria-labelledby='carfree-title'] .card.category {
+  --c: var(--text);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.35rem 1.35rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.inst::before,
+section[aria-labelledby='carfree-title'] .card.category::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--c);
+}
+
+.inst {
+  grid-column: span 4;
+}
+
+.inst-flood,
+.inst-air {
+  grid-column: span 6;
+}
+
+.inst-solar {
+  grid-column: span 12;
+}
+
+.inst-flood {
+  --c: var(--c-flood);
+}
+
+.inst-air {
+  --c: var(--c-air);
+}
+
+.inst-green {
+  --c: var(--c-green);
+}
+
+.inst-noise {
+  --c: var(--c-noise);
+}
+
+.inst-fire {
+  --c: var(--c-fire);
+}
+
+.inst-solar {
+  --c: var(--c-solar);
+}
+
+section[aria-labelledby='carfree-title'] [data-category='car_free'] {
+  --c: var(--c-car_free);
+}
+
+section[aria-labelledby='carfree-title'] [data-category='transit'] {
+  --c: var(--c-transit);
+}
+
+.inst.focused,
+section[aria-labelledby='carfree-title'] .card.category.focused {
+  border-color: var(--c);
+  box-shadow: inset 0 0 0 1px var(--c);
+}
+
+.inst-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+}
+
+.inst-head h3 {
+  flex: 1 1 9rem;
+  min-width: 0;
+  margin: 0;
+  font-size: 1.08rem;
+  overflow-wrap: normal;
+}
+
+.inst-icon,
+section[aria-labelledby='carfree-title'] .card-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 13%, transparent);
+  color: var(--c);
+}
+
+.inst .focus-tag {
+  margin-top: 0.5rem;
+}
+
+.inst-body {
+  display: grid;
+  gap: 1.1rem;
+  align-items: center;
+  margin: 1.1rem 0 0.4rem;
+}
+
+.inst-flood .inst-body,
+.inst-air .inst-body,
+.inst-solar .inst-body {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+
+.inst-fire .inst-body {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 8.5rem);
+}
+
+.readout-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.4rem;
+  margin: 0;
+}
+
+.readout-big {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5.2vw, 4.2rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+}
+
+.readout-unit {
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+.readout-label {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 32ch;
+}
+
+.readout-facts {
+  display: grid;
+  gap: 0.3rem;
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.readout-facts li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.readout-facts li::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c);
+  transform: translateY(-1px);
+}
+
+.inst .headline {
+  margin: 0.5rem 0 0;
+  font-size: 0.98rem;
+}
+
+.gauge-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gauge-svg text {
+  font-family: var(--font-text);
+  fill: var(--muted);
+}
+
+/* Poplave */
+.flood-gauge {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.water {
+  fill: var(--c);
+}
+
+.w500 {
+  opacity: 0.14;
+}
+
+.w100 {
+  opacity: 0.2;
+}
+
+.w10 {
+  opacity: 0.32;
+}
+
+.flood-water {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.8s var(--ease-out) 0.15s;
+}
+
+.inst[data-on='true'] .flood-water {
+  clip-path: inset(0 0 0 0);
+}
+
+.flood-level line {
+  stroke: var(--c);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.flood-level text {
+  font-size: 13px;
+}
+
+.flood-house path {
+  fill: var(--surface);
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.flood-house line {
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.flood-rows {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.flood-rows > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.flood-rows dt {
+  font-weight: 650;
+}
+
+.flood-rows dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.flood-rows strong {
+  color: var(--text);
+}
+
+/* Zrak */
+.air-rulers {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.air-ruler {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0 0.75rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.6rem 0.85rem 1.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+}
+
+.air-ruler:hover {
+  border-color: var(--c);
+}
+
+.air-ruler[aria-pressed='true'] {
+  border-color: var(--c);
+  box-shadow: inset 0 0 0 1px var(--c);
+  background: color-mix(in srgb, var(--c) 6%, var(--surface));
+}
+
+.air-name {
+  font-weight: 700;
+}
+
+.air-value {
+  justify-self: end;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.ruler {
+  position: relative;
+  grid-column: 1 / -1;
+  height: 10px;
+  margin-top: 1.5rem;
+  border-radius: 5px;
+  background: var(--surface-2);
+}
+
+.ruler-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--c);
+}
+
+.band-0 {
+  opacity: 0.16;
+  border-radius: 5px 0 0 5px;
+}
+
+.band-1 {
+  opacity: 0.32;
+}
+
+.band-2 {
+  opacity: 0.56;
+}
+
+.band-3 {
+  opacity: 0.85;
+  border-radius: 0 5px 5px 0;
+}
+
+.ruler-tick {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--text);
+}
+
+.ruler-tick-label {
+  position: absolute;
+  top: 17px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.ruler-tick.up .ruler-tick-label {
+  top: auto;
+  bottom: 17px;
+}
+
+.needle-track {
+  position: absolute;
+  inset: 0;
+  transform: translateX(0);
+  transition: transform 1.4s var(--ease-out) 0.2s;
+}
+
+.inst[data-on='true'] .needle-track {
+  transform: translateX(var(--to));
+}
+
+.needle {
+  position: absolute;
+  left: 0;
+  top: -8px;
+  width: 6px;
+  height: 26px;
+  margin-left: -3px;
+  border-radius: 3px;
+  background: var(--text);
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+/* Zelenilo */
+.green-gauge {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.dots-edge {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 0.06;
+  stroke-dasharray: 0.25 0.25;
+}
+
+.dot {
+  fill: none;
+  stroke: var(--control-border);
+  stroke-width: 0.06;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition:
+    transform 0.5s var(--ease-out) calc(var(--i) * 8ms),
+    opacity 160ms var(--ease-out);
+}
+
+.inst[data-on='true'] .dot {
+  transform: scale(1);
+}
+
+.d-tree {
+  fill: var(--c);
+  stroke: none;
+}
+
+.d-grass {
+  fill: color-mix(in srgb, var(--c) 42%, var(--surface));
+  stroke: none;
+}
+
+.d-built {
+  fill: color-mix(in srgb, var(--muted) 55%, var(--surface));
+  stroke: none;
+}
+
+.dots-home {
+  fill: var(--text);
+  stroke: var(--surface);
+  stroke-width: 0.18;
+}
+
+.dots-legend {
+  display: grid;
+  gap: 0.3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.dots-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dots-legend li::before {
+  content: '';
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.lg-tree::before {
+  background: var(--c);
+}
+
+.lg-grass::before {
+  background: color-mix(in srgb, var(--c) 42%, var(--surface));
+}
+
+.lg-built::before {
+  background: color-mix(in srgb, var(--muted) 55%, var(--surface));
+}
+
+.lg-other::before {
+  border: 1px solid var(--control-border);
+}
+
+/* Pointing at a legend entry picks out its dots. */
+.inst-green:has(.lg-tree:hover) .dot:not(.d-tree),
+.inst-green:has(.lg-grass:hover) .dot:not(.d-grass, .d-tree),
+.inst-green:has(.lg-built:hover) .dot:not(.d-built),
+.inst-green:has(.lg-other:hover) .dot:not(.d-other) {
+  opacity: 0.18;
+}
+
+/* Prometnica */
+.road-ruler {
+  position: relative;
+  height: 62px;
+  margin: 0.25rem 0.25rem 0 0.5rem;
+}
+
+.road-ruler::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 23px;
+  height: 2px;
+  background: var(--border);
+}
+
+.road-zone {
+  position: absolute;
+  top: 18px;
+  height: 12px;
+}
+
+.z-near {
+  left: 0;
+  border-radius: 6px 0 0 6px;
+  background: color-mix(in srgb, var(--c) 30%, transparent);
+}
+
+.z-edge {
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+}
+
+.road-line {
+  position: absolute;
+  left: 0;
+  top: 22px;
+  height: 4px;
+  width: calc(var(--at) * 100%);
+  border-radius: 2px;
+  background: var(--c);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1.2s var(--ease-out) 0.15s;
+}
+
+.inst[data-on='true'] .road-line {
+  transform: scaleX(1);
+}
+
+.road-home {
+  position: absolute;
+  left: -7px;
+  top: 17px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow: 0 0 0 3px var(--surface);
+}
+
+.road-mark {
+  position: absolute;
+  left: calc(var(--at) * 100%);
+  top: 8px;
+  width: 8px;
+  height: 32px;
+  margin-left: -4px;
+  border-radius: 3px;
+  background: var(--c);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out) 1.1s;
+}
+
+.inst[data-on='true'] .road-mark {
+  opacity: 1;
+}
+
+.road-tick {
+  position: absolute;
+  top: 40px;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.road-tick::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -9px;
+  width: 1px;
+  height: 7px;
+  background: var(--muted);
+}
+
+.road-tick.end {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.road-tick.end::before {
+  left: auto;
+  right: 0;
+}
+
+/* Požari */
+.radar {
+  max-width: 8.5rem;
+  justify-self: end;
+}
+
+.radar circle,
+.radar line {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+.radar text {
+  font-size: 8px;
+}
+
+.radar .radar-home {
+  fill: var(--text);
+  stroke: none;
+  opacity: 1;
+}
+
+.radar-sweep {
+  fill: var(--c);
+  opacity: 0.16;
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.inst[data-on='true'] .radar-sweep {
+  animation: radar-sweep 2.4s var(--ease-out) both;
+}
+
+@keyframes radar-sweep {
+  from {
+    transform: rotate(-150deg);
+    opacity: 0.4;
+  }
+}
+
+/* Sunce */
+.sun {
+  max-width: 22rem;
+  justify-self: center;
+}
+
+.sun-arc {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 5;
+}
+
+.sun-ground {
+  stroke: var(--text);
+  stroke-width: 2;
+}
+
+.sun-body circle {
+  fill: var(--c-solar-fill);
+  stroke: var(--c);
+  stroke-width: 1.5;
+}
+
+.sun-body {
+  transform-box: view-box;
+  transform-origin: 120px 110px;
+  transform: rotate(-80deg);
+  transition: transform 1.8s var(--ease-out) 0.1s;
+}
+
+.inst[data-on='true'] .sun-body {
+  transform: rotate(0deg);
+}
+
+.sun-panel {
+  stroke: var(--text);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.sun-angle {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.sun text {
+  font-size: 11px;
+}
+
+@media (width <= 980px) {
+  .inst,
+  .inst-flood,
+  .inst-air {
+    grid-column: span 6;
+  }
+
+  .inst-solar {
+    grid-column: span 12;
+  }
+
+  .inst-flood .inst-body,
+  .inst-air .inst-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (width <= 680px) {
+  .instruments .inst {
+    grid-column: 1 / -1;
+  }
+
+  .inst-solar .inst-body,
+  .inst-fire .inst-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .radar {
+    justify-self: start;
+  }
+
+  .board-band {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .score-badge {
+    justify-self: start;
+  }
+}
+
+.life-score-number {
+  white-space: nowrap;
+  flex: none;
+}
+
+/* The other report sections: a rule above, the ground below. */
+section[aria-labelledby='daily-title'] > .card,
+.life-score.card,
+.assistant.card {
+  background: none;
+  border: 0;
+  border-top: 2px solid var(--text);
+  border-radius: 0;
+  padding: 1.1rem 0 0;
+}
+
+section[aria-labelledby='carfree-title'] .grid.two {
+  gap: 1rem;
 }
 
 .needs {
@@ -3067,13 +3762,6 @@ button.daily-row:hover .daily-show {
     grid-column: 1 / -1;
   }
 
-  .board-band {
-    padding: 1.1rem 1.1rem 1rem;
-  }
-
-  .board-body {
-    padding: 1.1rem;
-  }
 }
 
 /* Reduced motion: nothing moves or slides, but state still changes visibly (colour and
@@ -3087,12 +3775,47 @@ button.daily-row:hover .daily-show {
     scroll-behavior: auto !important;
   }
 
-  .plank-go:hover {
+  .hero-find:hover .hero-find-arrow {
     transform: none;
   }
 
   .mosaic[data-state='loading']::after {
     animation: none;
+  }
+
+  .inst *,
+  .board-tag a {
+    transition-property: color, background-color, border-color, opacity !important;
+    transform: none;
+  }
+
+  .inst[data-on='true'] .needle-track {
+    transform: translateX(var(--to));
+  }
+
+  .inst .road-line,
+  .inst .dot {
+    transform: scale(1);
+  }
+}
+
+@media print {
+  .inst .flood-water {
+    clip-path: none;
+  }
+
+  .inst .needle-track {
+    transform: translateX(var(--to));
+  }
+
+  .inst .road-line,
+  .inst .dot,
+  .inst .sun-body {
+    transform: none;
+  }
+
+  .inst .road-mark {
+    opacity: 1;
   }
 }
 

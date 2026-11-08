@@ -62,7 +62,20 @@ test('report desktop', async ({ page }) => {
   await page.goto(reportUrl(byId('osijek')))
   await expect(page.getByText('Okolišni pregled')).toBeVisible()
   await settle(page)
+  // Each instrument moves to its reading once it has been on screen: show them all first.
+  for (const inst of await page.locator('.inst').all()) {
+    await inst.scrollIntoViewIfNeeded()
+    await page.waitForTimeout(300)
+  }
+  await page.waitForTimeout(2200)
+  await page.evaluate(() => {
+    window.scrollTo(0, 0)
+  })
   await page.screenshot({ path: `${OUT}/izvjestaj.png`, fullPage: true })
+  await page.locator('section[aria-labelledby="env-title"]').screenshot({
+    path: `${OUT}/okolis.png`,
+    style: '.site-header, .report-guide { position: static !important; }',
+  })
   await page.locator('.map-wrap').scrollIntoViewIfNeeded()
   await settle(page)
   // The section is taller than the window: keep the sticky header out of the picture.

@@ -372,7 +372,7 @@ export function ReportMap({
       onPickRef.current?.(e.lngLat.lat, e.lngLat.lng)
     })
 
-    const marker = new maplibregl.Marker({ color: '#5b3a1e', draggable: interactive })
+    const marker = new maplibregl.Marker({ color: '#15171a', draggable: interactive })
       .setLngLat([report.location.lon, report.location.lat])
       .addTo(map)
     marker.on('dragend', () => {

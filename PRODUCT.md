@@ -42,7 +42,7 @@ Uspjeh: korisnik prije potpisa ugovora razumije što ga na adresi čeka, u apsol
 
 ## Capabilities and Constraints
 
-- **Stog:** React 19, TypeScript, Vite, React Router, TanStack Query, MapLibre GL JS s podlogom OpenFreeMap; backend FastAPI. Fontovi Bricolage Grotesque (naslovi) i Figtree (tekst), OFL, s vlastitog poslužitelja.
+- **Stog:** React 19, TypeScript, Vite, React Router, TanStack Query, MapLibre GL JS s podlogom OpenFreeMap; backend FastAPI. Fontovi Instrument Serif (naslovi i velike brojke) i Instrument Sans (tekst), OFL, s vlastitog poslužitelja.
 - **Kategorije i statusi:** svaka kategorija ima status (dobro, upozorenje, loše ili nema podataka) prema pragu s izvorom. „Nema podataka” se uvijek prikazuje, nikad se kategorija tiho ne izostavlja.
 - **Skor za život (0–100):** sažima kategorije s vidljivim i podesivim težinama profila (obitelj s djecom, umirovljenik, student, rad od kuće, vlastiti). Profil mijenja redoslijed i naglasak, nikad vrijednosti.
 - **Pragovi:** zrak prema WHO 2021 i EU 2030; buka prema smjernicama WHO 2018. Svi pragovi i izvori su u `docs/METODOLOGIJA.md`.
