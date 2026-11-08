@@ -232,6 +232,7 @@ export function ReportMap({
   /** Destination of the route (enlarged, with a white ring). */
   target: Place | null
   route: WalkRoute | null
+  /** Called when the marker is dragged to a new point (clicks on the map never move it). */
   onPick?: (lat: number, lon: number) => void
   onShowRoute: (place: Place) => void
   /** Shown under the map and kept on screen in full-screen mode. */
@@ -262,6 +263,7 @@ export function ReportMap({
 
   useEffect(() => {
     if (!container.current || !frame.current) return
+    const frameEl = frame.current
     let map: maplibregl.Map
     appliedTheme.current = currentTheme()
     styleReady.current = false
@@ -304,6 +306,8 @@ export function ReportMap({
     })
     map.once('load', () => {
       loadedRef.current = true
+      // For tests and tools: the map now takes clicks.
+      frameEl.dataset.ready = 'true'
       const current = routeRef.current
       if (current) fitRoute(map, report, current)
       else fitIsochrones(map, report)
@@ -328,7 +332,9 @@ export function ReportMap({
       }
     })
 
-    // A click on a point opens its details; only a click elsewhere moves the report point.
+    // A click on a point opens its details. A click (or double click) anywhere else does
+    // nothing: the report point moves only when the marker is dragged, so a stray click or a
+    // double click to zoom never throws away the report being read.
     map.on('click', (e) => {
       if (!styleReady.current) return
       const { x, y } = e.point
@@ -342,34 +348,31 @@ export function ReportMap({
             { layers },
           )
         : []
-      if (hits.length > 0) {
-        // Of the points near the click, the one closest to it.
-        let place: Place | undefined
-        let best = Infinity
-        for (const p of placesRef.current) {
-          if (!hits.some((f) => f.properties.key === placeKey(p))) continue
-          const at = map.project([p.lon, p.lat])
-          const distance = Math.hypot(at.x - x, at.y - y)
-          if (distance < best) {
-            best = distance
-            place = p
-          }
+      if (hits.length === 0) return
+      // Of the points near the click, the one closest to it.
+      let place: Place | undefined
+      let best = Infinity
+      for (const p of placesRef.current) {
+        if (!hits.some((f) => f.properties.key === placeKey(p))) continue
+        const at = map.project([p.lon, p.lat])
+        const distance = Math.hypot(at.x - x, at.y - y)
+        if (distance < best) {
+          best = distance
+          place = p
         }
-        closePopup()
-        if (place) {
-          popup = new maplibregl.Popup({ offset: 10, maxWidth: '280px' })
-            .setLngLat([place.lon, place.lat])
-            .setDOMContent(
-              popupContent(place, () => {
-                closePopup()
-                onShowRouteRef.current(place)
-              }),
-            )
-            .addTo(map)
-        }
-        return
       }
-      onPickRef.current?.(e.lngLat.lat, e.lngLat.lng)
+      closePopup()
+      if (place) {
+        popup = new maplibregl.Popup({ offset: 10, maxWidth: '280px' })
+          .setLngLat([place.lon, place.lat])
+          .setDOMContent(
+            popupContent(place, () => {
+              closePopup()
+              onShowRouteRef.current(place)
+            }),
+          )
+          .addTo(map)
+      }
     })
 
     const marker = new maplibregl.Marker({ color: '#5b3a1e', draggable: interactive })
@@ -385,6 +388,7 @@ export function ReportMap({
     }
     document.addEventListener('keydown', onKey)
     return () => {
+      delete frameEl.dataset.ready
       document.removeEventListener('keydown', onKey)
       mapRef.current = null
       loadedRef.current = false

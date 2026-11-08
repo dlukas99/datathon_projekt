@@ -529,7 +529,7 @@ export function ReportPage() {
             <p className="notice">
               Prikazano je {pointKind === 'naselje' ? 'središte naselja' : 'sredina ulice'}.
               Vrijednosti na vašoj adresi mogu se razlikovati: za točan izvještaj upišite ulicu i
-              kućni broj ili kliknite na kartu. <Link to="/">Nova pretraga</Link>
+              kućni broj ili povucite oznaku na karti. <Link to="/">Nova pretraga</Link>
             </p>
           )}
           <div className="report-tools no-print">
