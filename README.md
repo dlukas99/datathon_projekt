@@ -32,7 +32,7 @@ Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenic
    - **poplave:** je li lokacija ili njezina okolica od 100 m u modeliranom poplavnom području za povratna razdoblja od 10, 100 i 500 godina, razumljivo izraženo kao vjerojatnost barem jedne poplave u 30 godina (trajanje stambenog kredita), s poveznicom na službene karte Hrvatskih voda;
    - **zrak:** jedna ocjena (vrlo dobar, dobar, umjeren, loš) i rečenica o tome što znači kroz godinu; godišnji PM2,5 i NO2 s granicama Svjetske zdravstvene organizacije i EU-a u detaljima;
    - **zelenilo i hlad:** udio drveća, zelenih i izgrađenih površina kopna u krugu od 300 m i najbliži park, prema pravilu 3-30-300 (temperaturu ne mjerimo; drveće je pokazatelj hlada);
-   - **udaljenost od prometnica:** udaljenost od autocesta, brzih, državnih i županijskih cesta (u gradovima i glavnih gradskih ulica) te pruga, s vrstom i oznakom ceste (npr. državna cesta D8) i pojasevima 300/500 m (procjena, ne mjerenje buke);
+   - **udaljenost od prometnica:** udaljenost od autocesta, brzih i državnih cesta te glavnih gradskih ulica i pruga, s vrstom i oznakom ceste (npr. državna cesta D8) i pojasevima 300/500 m (procjena, ne mjerenje buke); županijske ceste s oznakom Ž se ne broje, a za naselje (karta, „Predloži mjesto”) računa se udio svih adresa u svakom pojasu;
    - **požari raslinja:** opožarene površine u krugu od 2 km od 2016. (Copernicus EFFIS);
    - **sunce na krovu:** procijenjena godišnja proizvodnja solarne elektrane po kilovatu (JRC PVGIS).
 2. **Život bez auta:**
@@ -65,11 +65,11 @@ Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izrač
 | Poplave | **Dobro:** izvan modeliranih područja za 10, 100 i 500 godina, i u krugu od 100 m | **Dobro:** isto |
 | Zrak (godišnji prosjek 2024.) | **Umjeren:** PM2,5 18,2 µg/m³ (unutar današnje granice EU-a od 25, iznad granice za 2030. od 10), NO2 17,5 µg/m³ (niska razina) | **Umjeren:** PM2,5 18,6 µg/m³, NO2 16,5 µg/m³ |
 | Zelenilo i hlad (300 m) | **Upozorenje:** drveće 7 %, izgrađeno 90 %; park 2 min hoda | **Loše:** drveće 20 %; najbliži park udaljen 6,1 km |
-| Udaljenost od prometnica | **Blizu prometnice:** županijska cesta Ž4290, 10 m; pruga 1,4 km | **Blizu prometnice:** županijska cesta Ž4224, 20 m |
+| Udaljenost od prometnica | **Podalje od prometnica:** najbliža velika cesta 790 m (glavna gradska cesta); pruga 1,4 km. Županijska cesta Ž4290 uz zgradu se od 8. 11. ne broji | **Blizu prometnice:** glavna cesta, 40 m |
 | Sunce na krovu | oko 1.251 kWh po kWp godišnje, nagib 37° | oko 1.245 kWh po kWp godišnje, nagib 36° |
 | Život bez auta | 6 od 7 potreba unutar 15 min; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
 | Najbliži vrtić / škola / liječnik | 7 / 4 / 5 min hoda | 12 / 3 / 4 min hoda |
-| Skor za život (profil „Općenito”) | 67 | 60 |
+| Skor za život (profil „Općenito”) | 77 | 60 |
 
 Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (Vinkovci) i `GET /api/report?lat=45.140273&lon=19.034942` (Nijemci). Svih šest demo adresa nalazi se u [scripts/demo_addresses.json](scripts/demo_addresses.json), a njihovi rezultati provjeravaju se zlatnim testovima.
 
@@ -85,7 +85,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
 - odabir točke povlačenjem oznake na karti
-- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
+- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika; svaki profil ima obavezne uvjete (npr. Student: studiji u mjestu ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 min hoda) i važne kriterije uz Skor za život, a uz svaki prijedlog piše zašto je predložen i što nedostaje
 - **Karta Hrvatske** (`/karta`):
   - naselja obojena prema odabranom sloju (Skor za život za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;
   - klik daje kratku karticu naselja (na mobitelu kao donji list) s oznakama i gumbima „Otvori puni izvještaj” i „Pogledaj oglase”;
@@ -127,6 +127,7 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | DGU (data.gov.hr) | Adrese INSPIRE, Upravne jedinice INSPIRE | geokodiranje; naselje, grad ili općina i županija za adresu |
 | DZS (data.gov.hr) | Popis stanovništva 2021., stanovništvo po naseljima | broj stanovnika naselja |
 | Ministarstvo znanosti, obrazovanja i mladih (data.gov.hr) | Registar dječjih vrtića, popis osnovnih škola | vrtići i škole (geokodirani) |
+| Ministarstvo znanosti, obrazovanja i mladih (data.gov.hr) | Ustanove iz sustava visokog obrazovanja, Studijski programi visokih učilišta | profil Student u „Predloži mjesto” (studiji u mjestu i izbor studija) |
 | Grad Zagreb (data.gov.hr) | Geoportal: dječji vrtići, osnovne škole, reciklažna dvorišta | vrtići, škole i reciklaža u Zagrebu |
 | HZZO | ugovorne ordinacije opće/obiteljske medicine i pedijatrije, ugovorne ljekarne | liječnici, pedijatri i ljekarne (geokodirani) |
 | JRC | karte opasnosti od riječnih poplava za Europu | poplave |
@@ -138,7 +139,7 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | JRC PVGIS | sunčev potencijal (API) | sunce na krovu |
 | Copernicus EFFIS | opožarene površine (WFS) | požari raslinja |
 | ZET, HŽPP (GTFS), Autotrolej (JSON, data.gov.hr) | vozni redovi | polasci na sat |
-| OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža, središta naselja | mreža hoda, svakodnevne potrebe, udaljenost od prometnica, središte naselja |
+| OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža, središta naselja, bolnice, studentski domovi i menze | mreža hoda, svakodnevne potrebe, udaljenost od prometnica, središte naselja; bolnica za profil Umirovljenik, dom i menza kao činjenica za Studenta |
 | Općine i gradovi (data.gov.hr) | reciklažna dvorišta i zeleni otoci (11 skupova s koordinatama) | reciklaža |
 | Portal otvorenih podataka | CKAN API | pretraga skupova i datumi osvježavanja uživo |
 
@@ -270,7 +271,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - Ovo je informativni alat, a ne službena procjena rizika, geodetski ni građevinski pregled. Ne zamjenjuje karte i upozorenja Hrvatskih voda, DHMZ-a i civilne zaštite.
 - Karte poplava su modelirane i obuhvaćaju samo riječne poplave većih vodotoka (bez bujica i poplava mora). Lokacija izvan modeliranog područja ne znači da rizika nema.
 - Kvaliteta zraka prikazuje se kao godišnji prosjek modelirane karte na mreži od 1 km, a ne kao mjerenje na samoj adresi.
-- „Udaljenost od prometnica” je procjena, a ne mjerenje buke: strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
+- „Udaljenost od prometnica” je procjena, a ne mjerenje buke: strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo. Županijske ceste (Ž) se ne broje jer kroz gotovo svako selo prolazi neka; zato se ni prometnija županijska cesta kroz središte grada (npr. Ž4290 u Vinkovcima) ne vidi kao prometnica.
 - Karta zraka prikazuje pozadinsku razinu; uz prometne ulice NO2 može biti znatno viši (provjera uz službene postaje u [docs/METODOLOGIJA.md](docs/METODOLOGIJA.md)). ML model nije ušao u aplikaciju jer nije bio bolji za obje tvari ([docs/ML.md](docs/ML.md)).
 - „Predloži mjesto za život” računa za središte naselja s najmanje 200 stanovnika, bez sunca na krovu; za konkretnu adresu treba otvoriti izvještaj.
 - Karta Hrvatske boji svih 6.759 naselja prema vrijednosti u središtu naselja, a ne za svaku kuću u njemu; za konkretnu adresu kartica nudi puni izvještaj.

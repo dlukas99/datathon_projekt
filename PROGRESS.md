@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-08 04:15
+Zadnje ažurirano: 2026-11-08 17:30
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -114,3 +114,11 @@ Ako ponestane vremena, režem ovim redom:
     - **izvještaj:** okolišni pregled kao instrumenti (vodomjer, ravnala zraka s pragovima WHO-a i EU-a, krug zelenila od točkica, ravnalo prometnice, radar požara, luk sunca) sa zaglavljem u boji mjerenja; ključne činjenice s točkom boje vode na svoj instrument;
     - **naslovnica:** „Šest mjerenja okoliša za svaku adresu” u bojama izvještaja;
     - **interakcija i poravnanje:** glatki prijelazi i podizanje ploča na hover, crta staze u navigaciji raste, iste težine poveznica i `scrollbar-gutter: stable` (ništa se ne pomiče između stranica); Impeccable detektor bez nalaza na naslovnici i izvještaju.
+18. [x] Pravila profila u „Predloži mjesto” (8. 11., grana `feature/profili-uvjeti`): za Studenta je prije prvi bio Kastav jer je profil mijenjao samo težine.
+    - **pravila:** `config/finder_rules.json` po profilu ima obavezne uvjete, važne kriterije s težinama i obrazloženje (Student: studiji u naselju ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 min hoda; Obitelj: vrtić i škola do 15 min hoda; Općenito i Rad od kuće: trgovina pješice); uz manje od 5 naselja koja ispunjavaju uvjete dodaju se ona kojima nedostaje jedan uvjet, s napomenom;
+    - **novi izvori:** MZOM „Ustanove iz sustava visokog obrazovanja” i „Studijski programi visokih učilišta” (data.gov.hr, Otvorena dozvola; 28 mjesta, svih 28 spareno s naseljima DGU-a), OSM opće i kliničke bolnice (35), studentski domovi (21) i studentske menze (4); planirana optika nema otvoreni skup pa se ne boduje;
+    - **profili naselja** dobili minute hoda do najbližeg mjesta svake vrste (ponovni izračun 783 s, svih 6.759 naselja s mrežom hoda, postojeće vrijednosti nepromijenjene);
+    - **čarobnjak:** uz svaki profil piše što zahtijeva, uz prijedlog „Zašto je predloženo” s vrijednostima i „Što nedostaje”; broj uz prijedlog je „za profil”;
+    - **provjera smislenosti:** top 10 za svaki profil u RH i Osječko-baranjskoj; Student: Zagreb, Split, Osijek, Rijeka, Zadar, Pula, Dubrovnik, Velika Gorica, Zaprešić, Varaždin (u OBŽ Osijek pa njegova predgrađa i Đakovo); testovi pravila u `backend/tests/test_finder_rules.py` (pytest 165, Vitest 64, Playwright 60, `make verify` prolazi);
+    - **prometnice (8. 11.):** Split je bio prvi gotovo u svakom profilu jer mu je središte u pješačkoj staroj jezgri (100/100), a 79 % naselja bilo je „blizu prometnice” zbog županijske ceste kroz selo. Sad se županijske ceste (Ž) ne broje, a za naselje se računa udio svih 1.683.411 adresa DGU-a po pojasevima (`ingest/settlement_traffic.py`, 19 s); Split ima 48/100 (57 % adresa do 300 m od velike ceste), Zagreb 70, Osijek 46. Zlatni testovi ažurirani (Vinkovci, Nijemci), novi `tests/test_traffic.py`;
+    - **usput:** `deploy/Dockerfile.web` kopira `config/`, bez čega se frontend ne bi izgradio u Dockeru (uvozi `profiles.json` i `finder_rules.json`).

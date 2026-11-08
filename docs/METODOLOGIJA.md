@@ -132,7 +132,7 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 
 ## Udaljenost od prometnica (procjena; ranije „Promet u blizini” i „Buka”)
 
-- **Podaci:** ceste `highway=motorway|trunk|primary|secondary` i pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa. Ostale ulice se ne broje.
+- **Podaci:** ceste `highway=motorway|trunk|primary` i `secondary` bez županijske oznake (glavne gradske ulice) te pruge (`railway=rail`, bez sporednih kolosijeka) iz OpenStreetMapa. Županijske ceste (`secondary` s četveroznamenkastom oznakom Ž) i ostale ulice se od 8. 11. 2026. ne broje: kroz gotovo svako selo prolazi neka županijska cesta, pa je 79 % naselja bilo „blizu prometnice” i podatak nije razlikovao mirna mjesta od prometnih.
 - **Vrsta ceste** prema hrvatskim pravilima označavanja u OSM-u (wiki „Croatia/Ceste”):
 
 | OSM | U izvještaju | Primjer |
@@ -141,8 +141,8 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 | `trunk` | brza cesta i oznaka | brza cesta D1 |
 | `primary` s oznakom D | državna cesta i oznaka | državna cesta D8 |
 | `primary` bez oznake D | glavna cesta | |
-| `secondary` s četveroznamenkastom oznakom | županijska cesta (Ž i oznaka) | županijska cesta Ž2001 |
-| `secondary` bez oznake | županijska ili glavna gradska cesta (bivše županijske ceste u gradovima) | |
+| `secondary` s četveroznamenkastom oznakom | ne broji se (županijska cesta) | županijska cesta Ž2001 |
+| `secondary` bez oznake | glavna gradska cesta (bivše županijske ceste u gradovima) | |
 
   U podacima 19.042 dionice `primary` imaju oznaku D, a 16.463 dionice `secondary` županijsku oznaku; 3.910 dionica `secondary` nema oznaku, uglavnom u gradovima.
 - **Izračun:** zračna udaljenost od lokacije (adrese ili središta naselja) do najbliže točke osi takve ceste i do najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”. Za središta naselja udaljenost je često 0 m jer OSM čvor naselja leži na samoj cesti; za adresu uz cestu nekoliko je metara (točka adrese je na zgradi).
@@ -158,7 +158,8 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
 - **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - **Smjer podskora:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
-- **Popis „Predloži mjesto” i izvještaj:** popis računa za središte naselja, a izvještaj za odabranu adresu, pa se brojke mogu razlikovati (Split: središte 530 m od državne ceste, adresa uz tu cestu nekoliko metara).
+- **Naselje (karta i „Predloži mjesto”):** jedna točka ne opisuje naselje (središte Splita je u pješačkoj staroj jezgri, a središte gotovo svakog sela na cesti kroz selo), pa se za svako naselje računa pojas za **svaku adresu DGU-a** u njemu (1.683.411 adresa, `ingest/settlement_traffic.py`). Podskor naselja je prosjek podskorova adresa (100, 60 ili 25), a uz prijedlog piše koliki udio adresa je do 300 m i koliki dalje od 500 m od velike prometnice. Naselja bez adresa (17) zadržavaju vrijednost u središtu. Izvještaj za adresu i dalje računa za tu adresu.
+- **Ograničenje:** prometnija županijska cesta kroz središte grada (npr. Ž4290 u Vinkovcima) ne broji se kao prometnica; buku i broj vozila ne mjerimo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
 ## Požari raslinja
@@ -249,13 +250,35 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 
 - **Obuhvat:** profili se računaju za svih 6.759 naselja (za kartu), a tražilica rangira naselja s najmanje 200 stanovnika (2.347 naselja, 92 % stanovništva Hrvatske prema Popisu 2021.). Manja naselja rijetko imaju ikakve usluge, a s čistim zrakom i bez poplava inače bi zauzela vrh popisa.
 - **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, zelenilo, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi podskorovi. Sunce na krovu se izostavlja jer je PVGIS servis uživo.
-- **Rang** (`app/finder.py`):
+- **Rang** (`app/finder.py`, `app/finder_rules.py`):
   1. filtri: županija, veličina (do 2.000, 2.000–20.000, više od 20.000 stanovnika), što mora biti do 15 minuta hoda od središta, najviša dopuštena razina zraka, izvan modeliranih poplavnih područja;
-  2. Skor za život s težinama odabranog profila;
-  3. pri jednakom skoru prednost ima veće naselje.
+  2. **obavezni uvjeti profila** (vidi „Pravila profila u Predloži mjesto”): naselje koje ih ne ispunjava ne ulazi u prijedloge;
+  3. rang za profil: ponderirani prosjek podskorova Skora za život s težinama profila i **važnih kriterija profila** s težinama iz `config/finder_rules.json`;
+  4. pri jednakom rangu prednost ima veće naselje.
 
-  Izračun je deterministički: isti upit uvijek daje isti poredak.
-- **Razlozi:** dvije kategorije s najvećim pozitivnim doprinosom i jedna s najvećim negativnim, uz kratke činjenice iz izračuna (poplave, zrak, hod, prijevoz, drveće).
+  Izračun je deterministički: isti upit uvijek daje isti poredak. Jezični model ne sudjeluje u rangu.
+- **Razlozi:** uz svaki prijedlog „Zašto je predloženo” (ispunjeni obavezni uvjeti s vrijednostima, npr. „Ljekarna: 4 min hoda”, „Studiji u naselju: 156 studijskih programa, npr. Sveučilište Josipa Jurja Strossmayera u Osijeku”) i „Što nedostaje” (neispunjeni uvjet i važni kriteriji koje naselje nema), zatim dvije kategorije s najvećim pozitivnim doprinosom i jedna s najvećim negativnim, uz kratke činjenice iz izračuna (poplave, zrak, hod, prijevoz, drveće; za umirovljenika najbliža bolnica, za studenta studentski dom i menza iz OSM-a).
+
+### Pravila profila u Predloži mjesto
+
+Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovjek („Osijek je studentski grad jer ima studije”) i važne kriterije koji podižu rang. Sva pravila, pragovi i obrazloženja su u jednoj datoteci, `config/finder_rules.json`; čarobnjak iz nje prikazuje što profil zahtijeva.
+
+| Profil | Obavezno | Važno (uz težine Skora za život profila) |
+|---|---|---|
+| Općenito | trgovina namirnicama do 15 min hoda | ljekarna (1) i liječnik (1) pješice; uravnoteženo, sve kategorije Skora za život |
+| Obitelj s djecom | vrtić i osnovna škola do 15 min hoda | pedijatar (2), igralište (1) i park (1) pješice; zrak, poplave i zelenilo s pojačanim težinama |
+| Umirovljenik | trgovina, ljekarna i obiteljski liječnik do 15 min hoda | opća ili klinička bolnica u blizini (2), park pješice (1); zelenilo i hlad, javni prijevoz s pojačanim težinama |
+| Student | studiji u naselju, ili veće studijsko središte (barem 20 studijskih programa) do 15 km zračne linije uz stajalište javnog prijevoza do 10 min hoda | izbor studija (8); javni prijevoz i život bez auta s pojačanim težinama |
+| Rad od kuće | trgovina namirnicama do 15 min hoda | park (1), ljekarna (1) i liječnik (1) pješice; mir (udaljenost od prometnica) i zelenilo s pojačanim težinama |
+
+- **Pješice (15 min):** isti prag i ista mreža hoda kao „Život bez auta” (vidi „Mreža hoda”). Važni kriteriji pješice boduju se po minutama do najbližeg mjesta: 100 do 5 minuta, linearno do 0 na 30 minuta (naša prozirna normalizacija, kao kod ostalih podskorova).
+- **Izbor studija:** broj preddiplomskih, diplomskih, integriranih, kratkih i specijalističkih diplomskih stručnih programa koji se izvode u naselju (MZOM, „Studijski programi visokih učilišta”; poslijediplomski se ne broje). Podskor je 60 + 40 · ln(1 + n) / ln(1 + 200), najviše 100: svaki studij daje čvrstu osnovu, a veći izbor podiže rang sve do 200 programa (Osijek, Rijeka i Split su blizu, Zagreb iznad). Mjesta s jednim programom (60–65) tako su ispod sveučilišnih gradova (90–100).
+- **Predgrađe za studenta:** ulazi samo ako je do 15 km zračne linije od središta naselja s barem 20 programa i ima stajalište javnog prijevoza do 10 minuta hoda. Podskor mu je podskor tog središta × 0,75 × (1 − 0,5 · km / 15), pa je predgrađe uvijek ispod svojeg grada i pada s udaljenošću. Vrijeme vožnje se ne računa: otvoreni vozni redovi postoje samo za ZET, Autotrolej i HŽPP, pa za ostala mjesta pišemo udaljenost i postoji li stajalište, a ne izmišljamo minute.
+- **Bolnica za umirovljenika:** najbliža opća ili klinička bolnica iz OSM-a (`amenity=hospital`, bez specijalnih, psihijatrijskih, lječilišta i bolnica preko granice), zračna linija od središta naselja: 100 do 10 km, linearno do 0 na 40 km (prozirna normalizacija).
+- **Studentski dom i menza** (OSM, prema nazivu) prikazuju se kao činjenica uz prijedlog, ali se ne boduju: OSM ih ne bilježi potpuno, pa bi bodovanje kažnjavalo gradove u kojima ih nitko nije ucrtao.
+- **Premalo rezultata:** ako na odabranom području obavezne uvjete ispunjava manje od 5 naselja, ispod njih se prikazuju naselja kojima nedostaje točno jedan uvjet, uz napomenu na vrhu i oznaku „Ne ispunjava jedan uvjet profila” s opisom što nedostaje.
+- **Što se ne boduje:** planirana optička mreža za rad od kuće (nema otvorenog skupa na data.gov.hr; provjereno 8. 11. 2026.), sunce na krovu (PVGIS je servis uživo).
+- **Provjera smislenosti:** `backend/tests/test_finder_rules.py` provjerava pravila, ne gradove (svaki prijedlog za studenta ima studije u naselju ili u dosegu, svaki za umirovljenika trgovinu, ljekarnu i liječnika pješice, svaki za obitelj vrtić i školu, grad sa studijima je iznad svojeg predgrađa), a nad stvarnim podacima i to da top 10 za svaki profil u Hrvatskoj i u Osječko-baranjskoj županiji poštuje obavezne uvjete.
 - **Jezični model** (neobavezan): samo pretvara slobodno pitanje u iste filtre (`POST /api/find/parse`). Ne vidi podatke i ne piše brojke. Bez modela radi forma.
 - **Ograničenje:** vrijednosti vrijede za središte naselja; za konkretnu adresu treba otvoriti izvještaj.
 

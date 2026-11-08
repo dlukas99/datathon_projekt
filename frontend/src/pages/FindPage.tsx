@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Minus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { ListingLinks } from '../components/ListingLinks'
 import { type FindRequest, fetchFindOptions, findPlaces, parseFindQuestion } from '../lib/api'
+import { finderRationale, finderSummary } from '../lib/finderRules'
 import { PROFILES, SCORE_CATEGORIES, profileWeights } from '../lib/profiles'
 import { decodeWeights, encodeWeights } from '../lib/score'
 import { reportPath } from '../lib/urls'
@@ -196,7 +197,7 @@ export function FindPage() {
                 </h2>
               </legend>
               <p className="step-intro">
-                Profil mijenja što se gleda prvo i težine u Skoru za život, nikad same vrijednosti.
+                Profil određuje obavezne uvjete i što podiže rang mjesta, nikad same vrijednosti.
               </p>
               <div className="choices">
                 {FIND_PROFILES.map((p) => (
@@ -211,7 +212,7 @@ export function FindPage() {
                       }}
                     />
                     <span className="choice-title">{p.label}</span>
-                    <span className="choice-text">{p.description}</span>
+                    <span className="choice-text">{finderSummary(p.id)}</span>
                   </label>
                 ))}
               </div>
@@ -451,6 +452,10 @@ export function FindPage() {
             )}
             {results.data && (
               <>
+                <p className="find-rule">{finderRationale(form.profile)}</p>
+                {results.data.relaxed_note && (
+                  <p className="find-relaxed-note">{results.data.relaxed_note}</p>
+                )}
                 <p className="section-intro find-criteria">
                   {results.data.criteria.join(' · ')}{' '}
                   <button
@@ -477,7 +482,7 @@ export function FindPage() {
                         {r.score !== null && (
                           <span className="score-badge small">
                             <span className="score-badge-number">{r.score}</span>
-                            <span className="score-badge-text">Skor</span>
+                            <span className="score-badge-text">za profil</span>
                           </span>
                         )}
                         <p className="place-line">
@@ -485,6 +490,35 @@ export function FindPage() {
                           {r.county} · {r.population.toLocaleString('hr-HR')} stanovnika
                         </p>
                       </div>
+                      {r.relaxed && (
+                        <p className="find-relaxed">Ne ispunjava jedan uvjet profila</p>
+                      )}
+                      {r.met.length > 0 && (
+                        <>
+                          <h4 className="find-list-title">Zašto je predloženo</h4>
+                          <ul className="find-checks">
+                            {r.met.map((m) => (
+                              <li key={m} className="find-met">
+                                <Check size={16} aria-hidden="true" />
+                                <span>{m}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                      {r.missing.length > 0 && (
+                        <>
+                          <h4 className="find-list-title">Što nedostaje</h4>
+                          <ul className="find-checks">
+                            {r.missing.map((m) => (
+                              <li key={m} className="find-missing">
+                                <Minus size={16} aria-hidden="true" />
+                                <span>{m}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                       {r.reasons.length > 0 && (
                         <p className="find-reasons">{r.reasons.join(' · ')}</p>
                       )}

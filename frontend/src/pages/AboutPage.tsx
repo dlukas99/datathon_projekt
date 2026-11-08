@@ -90,8 +90,9 @@ export function AboutPage() {
               <tr>
                 <th scope="row">Udaljenost od prometnica</th>
                 <td>
-                  Zračna udaljenost od lokacije do autocesta, brzih, državnih i županijskih cesta te pruga
-                  (OpenStreetMap). Ne mjerimo buku; to je zamjenski pokazatelj.
+                  Zračna udaljenost od lokacije do autocesta, brzih, državnih i glavnih gradskih cesta te
+                  pruga (OpenStreetMap); županijske ceste s oznakom Ž se ne broje. Za naselje se
+                  računa za svaku adresu. Ne mjerimo buku; to je zamjenski pokazatelj.
                 </td>
                 <td>
                   Do 300 m: blizu prometnice; 300–500 m: rub zone prometa; dalje: podalje od

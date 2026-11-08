@@ -225,7 +225,14 @@ export interface FindResult {
   population: number
   lat: number
   lon: number
+  /** Rank for the chosen profile, 0–100. */
   score: number | null
+  /** Mandatory requirements met, with their values. */
+  met: string[]
+  /** Requirements not met and important criteria the place does poorly on. */
+  missing: string[]
+  /** Misses one requirement; shown only because too few places meet them all. */
+  relaxed: boolean
   reasons: string[]
   facts: string[]
 }
@@ -234,6 +241,8 @@ export interface FindResponse {
   matching: number
   searched: number
   criteria: string[]
+  requirements: string[]
+  relaxed_note: string | null
   results: FindResult[]
   note: string
 }

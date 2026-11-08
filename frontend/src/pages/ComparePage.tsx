@@ -39,7 +39,9 @@ function CompareTable({ a, b, ra, rb }: { a: Point; b: Point; ra: Report; rb: Re
   const dailyValue = (r: Report, key: string) =>
     cat(r, 'daily')?.values.find((v) => v.key === `nearest_${key}`)
   return (
-    <div style={{ overflowX: 'auto' }}>
+    // A scrollable region must be reachable by keyboard (axe: scrollable-region-focusable).
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- see the line above
+    <div className="table-scroll" role="region" aria-label="Tablica usporedbe" tabIndex={0}>
       <table className="compare-table">
         <caption className="visually-hidden">Usporedba dviju adresa po kategorijama</caption>
         <thead>

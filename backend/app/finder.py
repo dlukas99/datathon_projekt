@@ -1,8 +1,11 @@
 """Predloži mjesto za život: deterministic ranking of settlements.
 
-Filters and the weighted Skor za život run over precomputed settlement profiles
-(ingest/settlement_profiles.py). A language model, when configured, may only turn
-a free-text question into these filters; it never sees or produces numbers.
+Each profile has mandatory requirements and extra criteria (config/finder_rules.json,
+app/finder_rules.py). Settlements that meet the requirements are ranked by the
+weighted Skor za život sub-scores plus the profile's criteria, all over precomputed
+settlement profiles (ingest/settlement_profiles.py, ingest/facilities.py). A language
+model, when configured, may only turn a free-text question into these filters; it
+never sees or produces numbers.
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ from pydantic import BaseModel, Field, ValidationError
 
 from analysis import score
 from analysis.environment import AIR_RATINGS
+from app import finder_rules as fr
 from app import fmt
 from app.config import get_settings
 from app.profiles import load as load_profiles
@@ -74,7 +78,12 @@ class FindResult(BaseModel):
     population: int
     lat: float
     lon: float
-    score: int | None
+    score: int | None = Field(description="Rang za profil, 0–100")
+    met: list[str] = Field(default=[], description="Ispunjeni obavezni uvjeti s vrijednostima")
+    missing: list[str] = Field(default=[], description="Neispunjeni uvjeti i slabi kriteriji")
+    relaxed: bool = Field(
+        default=False, description="Ne ispunjava jedan obavezni uvjet; prikazano uz napomenu"
+    )
     reasons: list[str]
     facts: list[str]
 
@@ -83,6 +92,8 @@ class FindResponse(BaseModel):
     matching: int
     searched: int
     criteria: list[str]
+    requirements: list[str] = []
+    relaxed_note: str | None = None
     results: list[FindResult]
     note: str
 
@@ -102,10 +113,23 @@ MIN_POPULATION = 200
 @lru_cache
 def profiles() -> pd.DataFrame:
     """Profiles of all settlements (also used by the map of Croatia)."""
-    path = get_settings().processed_dir / "settlement_profiles.parquet"
+    d = get_settings().processed_dir
+    path = d / "settlement_profiles.parquet"
     if not path.exists():
         return pd.DataFrame()
-    return pd.read_parquet(path)
+    df = pd.read_parquet(path)
+    facilities = d / "settlement_facilities.parquet"
+    if facilities.exists():
+        df = df.merge(pd.read_parquet(facilities), on="code", how="left")
+    traffic = d / "settlement_traffic.parquet"
+    if traffic.exists():
+        # Distance from major roads over every address of the settlement replaces the
+        # value at its single centre point (ingest/settlement_traffic.py).
+        t = pd.read_parquet(traffic).rename(columns={"score_noise": "score_noise_addr"})
+        df = df.merge(t, on="code", how="left")
+        df["score_noise"] = df["score_noise_addr"].fillna(df["score_noise"])
+        df = df.drop(columns="score_noise_addr")
+    return df
 
 
 def ranked() -> pd.DataFrame:
@@ -132,6 +156,7 @@ def _criteria(req: FindRequest) -> list[str]:
         (p["label"] for p in load_profiles()["profiles"] if p["id"] == req.profile), req.profile
     )
     out = [f"profil: {label}", f"područje: {req.county or 'cijela Hrvatska'}"]
+    out.append("uvjet profila: " + fr.profile_rules(req.profile)["summary"].rstrip("."))
     out.append(f"veličina: {SIZE_LABELS[req.size]}")
     if req.must:
         out.append("pješice do 15 min: " + ", ".join(NEED_LABELS[n] for n in req.must))
@@ -154,6 +179,13 @@ def _facts(row: pd.Series) -> list[str]:
         facts.append(
             f"Zrak: {AIR_RATINGS.get(row['air_band'], row['air_band']).lower()} "
             f"(PM2,5 {fmt.num(float(row['pm25']), 1)} µg/m³)."
+        )
+    near, far = row.get("near_share"), row.get("far_share")
+    if near is not None and far is not None and pd.notna(near) and pd.notna(far):
+        facts.append(
+            f"Prometnice: {fmt.num(100 * float(near))} % adresa naselja je do 300 m, a "
+            f"{fmt.num(100 * float(far))} % dalje od 500 m od autoceste, brze, državne ili "
+            "glavne gradske ceste."
         )
     if pd.notna(row["needs_15min"]):
         facts.append(f"Pješice do 15 min: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")
@@ -188,16 +220,36 @@ def _reasons(row: pd.Series, weights: dict[str, float], total: int | None) -> li
     return out
 
 
+def _requirement_label(req: str) -> str:
+    walk = int(fr.rules()["walk_minutes"])
+    if req.startswith("walk:"):
+        return f"{fr.WALK_LABELS[req.split(':', 1)[1]][0]} do {walk} min hoda"
+    km = fmt.num(float(fr.rules()["higher_ed"]["max_km"]))
+    return (
+        f"Studiji u naselju ili veće studijsko središte do {km} km, uz stajalište javnog prijevoza"
+    )
+
+
 def find(req: FindRequest) -> FindResponse:
     df = ranked()
     note = (
         "Rang je izračun nad unaprijed pripremljenim podacima za središte svakog naselja s "
         "najmanje 200 stanovnika. Za konkretnu adresu otvorite izvještaj."
     )
+    rules = fr.profile_rules(req.profile)
+    requirements = [_requirement_label(r) for r in rules["requires"]]
     if df.empty:
-        return FindResponse(matching=0, searched=0, criteria=_criteria(req), results=[], note=note)
+        return FindResponse(
+            matching=0,
+            searched=0,
+            criteria=_criteria(req),
+            requirements=requirements,
+            results=[],
+            note=note,
+        )
     weights = {**profile_weights(req.profile), **(req.weights or {})}
     weights = {k: v for k, v in weights.items() if k in SCORED}
+    extra = {c["id"]: float(c["weight"]) for c in rules["criteria"]}
     sel = df
     if req.county:
         sel = sel[sel["county"] == req.county]
@@ -215,33 +267,66 @@ def find(req: FindRequest) -> FindResponse:
         sel = sel[sel["air_band"].isin(allowed)]
     if req.avoid_flood:
         sel = sel[sel["flood_status"] == "good"]
-    scored = []
+    strict: list[tuple[float | None, pd.Series, list[fr.Check]]] = []
+    near: list[tuple[float | None, pd.Series, list[fr.Check]]] = []
     for _, row in sel.iterrows():
-        subs = {
+        checks = [fr.check_requirement(r, row) for r in rules["requires"]]
+        failed = sum(not c.ok for c in checks)
+        if failed > 1:
+            continue
+        subs: dict[str, float | None] = {
             c: (None if pd.isna(row.get(f"score_{c}")) else float(row[f"score_{c}"]))
             for c in SCORED
         }
-        scored.append((score.weighted(subs, weights), row))
-    scored.sort(key=lambda x: (x[0] if x[0] is not None else -1, x[1]["population"]), reverse=True)
-    results = [
-        FindResult(
-            code=str(row["code"]),
-            name=str(row["name"]),
-            municipality=str(row["municipality"]),
-            county=str(row["county"]),
-            population=int(row["population"]),
-            lat=float(row["lat"]),
-            lon=float(row["lon"]),
-            score=None if s is None else int(s),
-            reasons=_reasons(row, weights, None if s is None else int(s)),
-            facts=_facts(row),
+        for cid in extra:
+            subs[cid] = fr.criterion_score(cid, row)
+        rank = score.weighted(subs, {**weights, **extra})
+        (strict if failed == 0 else near).append((rank, row, checks))
+
+    def order(item: tuple[float | None, pd.Series, list[fr.Check]]) -> tuple[float, int]:
+        rank, row, _ = item
+        return (rank if rank is not None else -1.0, int(row["population"]))
+
+    strict.sort(key=order, reverse=True)
+    near.sort(key=order, reverse=True)
+    picked = [(x, False) for x in strict[: req.limit]]
+    relaxed_note = None
+    min_strict = int(fr.rules()["min_strict_results"])
+    if len(strict) < min_strict and near:
+        fill = near[: req.limit - len(picked)]
+        picked += [(x, True) for x in fill]
+        relaxed_note = (
+            f"Obavezne uvjete profila ispunjava samo {fmt.num(len(strict))} "
+            f"{fmt.plural(len(strict), 'naselje', 'naselja', 'naselja')} na odabranom području, "
+            "pa su ispod njih i naselja kojima nedostaje jedan uvjet; to piše uz svako od njih."
         )
-        for s, row in scored[: req.limit]
-    ]
+    results = []
+    for (s, row, checks), relaxed in picked:
+        gaps = [c.text for c in checks if not c.ok]
+        gaps += [g for cid in extra if (g := fr.criterion_gap(cid, row)) is not None]
+        results.append(
+            FindResult(
+                code=str(row["code"]),
+                name=str(row["name"]),
+                municipality=str(row["municipality"]),
+                county=str(row["county"]),
+                population=int(row["population"]),
+                lat=float(row["lat"]),
+                lon=float(row["lon"]),
+                score=None if s is None else int(s),
+                met=[c.text for c in checks if c.ok],
+                missing=list(dict.fromkeys(gaps)),
+                relaxed=relaxed,
+                reasons=_reasons(row, weights, None if s is None else int(s)),
+                facts=fr.profile_facts(req.profile, row) + _facts(row),
+            )
+        )
     return FindResponse(
-        matching=len(scored),
+        matching=len(strict),
         searched=len(df),
         criteria=_criteria(req),
+        requirements=requirements,
+        relaxed_note=relaxed_note,
         results=results,
         note=note,
     )

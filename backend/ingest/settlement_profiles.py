@@ -83,6 +83,11 @@ def profile(row: dict[str, Any]) -> dict[str, Any]:
     for need in DAILY_NEEDS:
         out[f"has_{need}"] = bool(reach.within(need, 15.0))
     out["has_park"] = bool(reach.within("park", 15.0))
+    out["has_playground"] = bool(reach.within("playground", 15.0))
+    # Walking minutes to the nearest place of each kind, for the reasons in the finder.
+    for need in (*DAILY_NEEDS, "park", "playground"):
+        nearest = reach.nearest(need)
+        out[f"min_{need}"] = None if nearest is None else nearest.walk_minutes
     for cid, cat in cats.items():
         out[f"score_{cid}"] = score.subscore(cat)
     return out

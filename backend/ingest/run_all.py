@@ -11,12 +11,14 @@ from ingest import (
     dgu,
     dzs,
     effis,
+    facilities,
     osm,
     pois,
     rasters,
     recycling,
     registries,
     settlement_profiles,
+    settlement_traffic,
     stations,
     transit,
 )
@@ -34,6 +36,8 @@ STEPS: list[tuple[str, Callable[[], None]]] = [
     ("Reciklaža (općinski skupovi s Portala i OSM)", recycling.run),
     ("Spajanje točaka", pois.run),
     ("Profili naselja (treba pokrenutu Valhallu)", settlement_profiles.run),
+    ("Visoka učilišta, bolnice i studentski domovi (MZOM, OSM)", facilities.run),
+    ("Udaljenost adresa naselja od prometnica (DGU, OSM)", settlement_traffic.run),
 ]
 
 
