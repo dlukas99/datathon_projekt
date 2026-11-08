@@ -2240,7 +2240,7 @@ section[aria-labelledby='env-title'] > .grid {
 
 section[aria-labelledby='env-title'] .category.card {
   display: grid;
-  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
   grid-auto-flow: dense;
   column-gap: 2rem;
   align-items: start;
@@ -2282,6 +2282,17 @@ section[aria-labelledby='env-title'] .category > .headline {
 
 section[aria-labelledby='env-title'] .category .key-value {
   margin: 0.4rem 0 0;
+}
+
+/* In a row the value is a figure beside the sentence, not a headline over it. */
+section[aria-labelledby='env-title'] .category .key-number {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.life-score-number {
+  white-space: nowrap;
+  flex: none;
 }
 
 @media (width <= 640px) {

@@ -108,3 +108,4 @@ Ako ponestane vremena, režem ovim redom:
     - **izvještaj:** iskaznica mjesta (smeđi pojas s adresom, sažetak iz predložaka, šest oznaka sa statusom, skor), traka „Dijelovi izvještaja”, karta doleti do adrese, a krugovi hoda šire se redom;
     - **karta:** jezerska ljestvica, legenda uz kartu, kartica naselja sa smeđim pojasom;
     - **provjere:** kritika (dizajn i detektor) i popravci, detektor bez nalaza; `make verify` prolazi (pytest 149, Vitest 61, Playwright 60, axe u obje teme i 320 px); snimke prije u `docs/images/prije-redizajna/`, poslije u `docs/images/`.
+    - **završni pregled (Impeccable, dva kruga):** riješeno tijelo izvještaja kao retci, staza „Dijelovi izvještaja”, gumb uz adresu na mobitelu; otvoreno (odluka tima): prijedlozi kao „iskaznice” sa smeđim pojasom, popis „Svakodnevni život” kao putokazi, oznaka „Predloži mjesto za život” iznad trake (drži je postojeći e2e test navigacije), nacrtana strelica padajućih izbornika.
