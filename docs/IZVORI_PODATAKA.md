@@ -27,6 +27,9 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 | Liječnici | HZZO, ugovoreni timovi opće/obiteljske medicine i pedijatrije | radi | nije navedena (vidi napomenu) | ordinacije (geokodirane) |
 | Ljekarne | HZZO, popis ugovorenih ljekarni | djelomično (zastarjelo, 2023.) | nije navedena | ljekarne (geokodirane), dopunjene OSM-om |
 | Trgovine, igrališta, parkovi | OpenStreetMap | radi | ODbL 1.0 | svakodnevne potrebe |
+| Visoka učilišta | MZOM, Ustanove iz sustava visokog obrazovanja | radi | Otvorena dozvola RH | profil Student u „Predloži mjesto” |
+| Studijski programi | MZOM, Studijski programi visokih učilišta | radi | Otvorena dozvola RH | izbor studija po mjestu (profil Student) |
+| Bolnice, studentski domovi, menze | OpenStreetMap | radi (nepotpuno) | ODbL 1.0 | bolnica za umirovljenika; dom i menza samo kao činjenica |
 | Javni prijevoz, Zagreb | ZET GTFS | radi | Otvorena dozvola RH | polasci po satu |
 | Javni prijevoz, vlak | HŽPP GTFS | radi | nije navedena (vidi napomenu) | polasci po satu |
 | Javni prijevoz, Rijeka | Autotrolej, vozni red radnim danom (JSON) | radi | CC BY 4.0 | polasci po satu |
@@ -120,6 +123,20 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)`, ponovno k
 - Bez koordinata: geokodiraju se vlastitim geokoderom nad DGU adresama. Registar vrtića navodi pravne osobe, a ne sve objekte, pa se dopunjuje OSM-om i podacima Grada Zagreba.
 - Zagreb: Geoportal dječji vrtići (CC BY 4.0, 323 objekta s koordinatama) i Geoportal osnovne škole (Otvorena dozvola, 177 točaka).
 - Rezervni plan: OSM `amenity=kindergarten`, `amenity=school`.
+
+### MZOM: visoka učilišta i studijski programi
+- Ustanove: https://data.gov.hr/ckan/dataset/ustanove-iz-sustava-visokog-obrazovanja (JSON, 133 ustanove: `NazivUstanove, VrstaUstanove, NadredjenaUstanova, Adresa, Mjesto, …`).
+- Programi: https://data.gov.hr/ckan/dataset/studijski-programi-visokih-ucilista (JSON, 1.727 programa: `Naziv, VrstaSP, Izvodjac, Nositelj, IzvodjacMjesto, …`).
+- Licenca: Otvorena dozvola RH (provjereno preko CKAN API-ja 8. 11. 2026.). Zadnja izmjena oba resursa: 15. 4. 2025.
+- Kao primjer uz mjesto navodi se nositelj s najviše programa u tom mjestu (npr. Sveučilište u Zagrebu).
+- Ustanove i programi se vežu uz naselje DGU-a po nazivu mjesta (`Mjesto`, `IzvodjacMjesto`); svih 28 mjesta je spareno. Adrese se ne geokodiraju jer pravila trebaju samo naselje. Ustanove „u osnivanju” se ne broje, a za izbor studija broje se preddiplomski, diplomski, integrirani, kratki i specijalistički diplomski stručni programi (poslijediplomski ne).
+- Ograničenje: integrirano sveučilište (npr. Sveučilište u Zadru) u registru ustanova je jedna ustanova, pa se izbor mjeri brojem programa, a ne brojem ustanova.
+- Rezervni plan (nije bio potreban): OSM `amenity=university|college`.
+
+### OpenStreetMap: bolnice, studentski domovi i menze
+- Iz istog izvatka Geofabrika (`ingest/facilities.py`): `amenity=hospital` s nazivom opće, kliničke ili županijske bolnice (35 točaka nakon uklanjanja specijalnih, psihijatrijskih, lječilišta i bolnica preko granice), studentski domovi (naziv počinje sa „Studentski dom”, 21) i studentske menze (naziv sa „studentski restoran” ili „menza studentskog …”, 4; sama „Menza” je često menza tvrtke ili bolnice pa se ne broji).
+- Licenca: ODbL 1.0.
+- Ograničenje: OSM nije potpun. Bolnica se boduje samo za umirovljenika (blizina), a dom i menza prikazuju se kao činjenica i ne boduju se. Službeni popis bolnica HZZO-a na data.gov.hr je iz 2013. (XLS), a adresari domova zdravlja postoje samo za pojedine gradove, pa se ne koriste.
 
 ### HZZO: ugovorne ordinacije i ljekarne
 - Opća/obiteljska medicina: https://hzzo.hr/sites/default/files/web_opca_092026_0.xlsx (2.274 tima).

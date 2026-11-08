@@ -85,7 +85,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 - pretraga adrese s prijedlozima nad 1,7 milijuna adresa Državne geodetske uprave (bez vanjskog geokodera); naselje se prikazuje u svojem stvarnom središtu
 - odabir točke klikom na kartu ili povlačenjem oznake
-- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika rangirano prema filtrima i Skoru za život, s razlozima
+- **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika; svaki profil ima obavezne uvjete (npr. Student: studiji u mjestu ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 min hoda) i važne kriterije, a uz svaki prijedlog piše zašto je predložen i što nedostaje
 - **Karta Hrvatske** (`/karta`):
   - naselja obojena prema odabranom sloju (Skor za život za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;
   - klik daje kratku karticu naselja (na mobitelu kao donji list) s oznakama i gumbima „Otvori puni izvještaj” i „Pogledaj oglase”;
@@ -127,6 +127,7 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | DGU (data.gov.hr) | Adrese INSPIRE, Upravne jedinice INSPIRE | geokodiranje; naselje, grad ili općina i županija za adresu |
 | DZS (data.gov.hr) | Popis stanovništva 2021., stanovništvo po naseljima | broj stanovnika naselja |
 | Ministarstvo znanosti, obrazovanja i mladih (data.gov.hr) | Registar dječjih vrtića, popis osnovnih škola | vrtići i škole (geokodirani) |
+| Ministarstvo znanosti, obrazovanja i mladih (data.gov.hr) | Ustanove iz sustava visokog obrazovanja, Studijski programi visokih učilišta | profil Student u „Predloži mjesto” (studiji u mjestu i izbor studija) |
 | Grad Zagreb (data.gov.hr) | Geoportal: dječji vrtići, osnovne škole, reciklažna dvorišta | vrtići, škole i reciklaža u Zagrebu |
 | HZZO | ugovorne ordinacije opće/obiteljske medicine i pedijatrije, ugovorne ljekarne | liječnici, pedijatri i ljekarne (geokodirani) |
 | JRC | karte opasnosti od riječnih poplava za Europu | poplave |
@@ -138,7 +139,7 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | JRC PVGIS | sunčev potencijal (API) | sunce na krovu |
 | Copernicus EFFIS | opožarene površine (WFS) | požari raslinja |
 | ZET, HŽPP (GTFS), Autotrolej (JSON, data.gov.hr) | vozni redovi | polasci na sat |
-| OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža, središta naselja | mreža hoda, svakodnevne potrebe, udaljenost od prometnica, središte naselja |
+| OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža, središta naselja, bolnice, studentski domovi i menze | mreža hoda, svakodnevne potrebe, udaljenost od prometnica, središte naselja; bolnica za profil Umirovljenik, dom i menza kao činjenica za Studenta |
 | Općine i gradovi (data.gov.hr) | reciklažna dvorišta i zeleni otoci (11 skupova s koordinatama) | reciklaža |
 | Portal otvorenih podataka | CKAN API | pretraga skupova i datumi osvježavanja uživo |
 

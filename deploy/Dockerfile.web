@@ -5,6 +5,8 @@ COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 COPY frontend ./
 COPY scripts/demo_addresses.json /src/scripts/demo_addresses.json
+# Profiles and finder rules are shared with the backend (src/lib/profiles.ts, finderRules.ts).
+COPY config /src/config
 RUN npx vite build
 
 FROM caddy:2

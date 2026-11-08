@@ -1723,6 +1723,7 @@ details summary {
   grid-template-columns: auto 1fr;
   column-gap: 0.7rem;
   align-items: baseline;
+  align-content: start;
   padding: 0.9rem 1rem;
   border: 1px solid var(--control-border);
   border-radius: var(--radius-sm);
@@ -1995,6 +1996,66 @@ details summary {
 .find-reasons {
   font-weight: 600;
   margin: 0.75rem 0 0;
+}
+
+/* What the profile requires, and per place what it meets and what it lacks. */
+.find-rule {
+  max-width: 68ch;
+  margin: 0.25rem 0 0.75rem;
+  color: var(--muted);
+}
+
+.find-relaxed-note {
+  max-width: 68ch;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.find-relaxed {
+  display: inline-block;
+  margin: 0.75rem 0 0;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--control-border);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.find-list-title {
+  margin: 0.9rem 0 0.3rem;
+  font-family: var(--font-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.find-checks {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.find-checks li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.find-checks svg {
+  margin-top: 0.25rem;
+}
+
+.find-met svg {
+  color: var(--accent);
+}
+
+.find-missing {
+  color: var(--muted);
 }
 
 .score-badge.small {
