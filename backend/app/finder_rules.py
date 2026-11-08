@@ -116,7 +116,7 @@ def _higher_ed_text(place: dict[str, Any]) -> str:
     example = f", npr. {place['example']}" if place.get("example") else ""
     count = _programmes(int(place["programmes"]))
     if place["km"] == 0:
-        return f"Studiji u naselju: {count}{example}"
+        return f"Studiji u mjestu: {count}{example}"
     return (
         f"Studiji u blizini: {place['name']}, {fmt.num(float(place['km']), 1)} km zračne linije "
         f"od središta naselja ({count}{example})"
@@ -130,7 +130,7 @@ def check_requirement(req: str, row: pd.Series) -> Check:
         label, genitive = WALK_LABELS[need]
         minutes = _num(row, f"min_{need}")
         if _flag(row, f"has_{need}"):
-            when = fmt.minutes(minutes) if minutes is not None else f"do {walk} min"
+            when = fmt.minutes(minutes) if minutes is not None else f"do {walk} minuta"
             return Check(True, f"{label}: {when} hoda")
         nearest = ""
         if minutes is not None:
@@ -138,7 +138,7 @@ def check_requirement(req: str, row: pd.Series) -> Check:
             nearest = (
                 " (najbliže više od sat hoda)" if far else f" (najbliže {fmt.minutes(minutes)})"
             )
-        return Check(False, f"Nema {genitive} do {walk} min hoda{nearest}")
+        return Check(False, f"Nema {genitive} do {walk} minuta hoda{nearest}")
     if req == "higher_ed":
         place = best_higher_ed(row)
         max_km = fmt.num(float(rules()["higher_ed"]["max_km"]))
@@ -151,9 +151,11 @@ def check_requirement(req: str, row: pd.Series) -> Check:
         if not _flag(row, "has_stops"):
             return Check(
                 False,
-                _higher_ed_text(place) + ", ali nema stajališta javnog prijevoza do 10 min hoda",
+                _higher_ed_text(place) + ", ali nema stajališta javnog prijevoza do 10 minuta hoda",
             )
-        return Check(True, _higher_ed_text(place) + "; stajalište javnog prijevoza do 10 min hoda")
+        return Check(
+            True, _higher_ed_text(place) + "; stajalište javnog prijevoza do 10 minuta hoda"
+        )
     raise ValueError(f"Nepoznat uvjet: {req}")
 
 
@@ -215,3 +217,142 @@ def profile_facts(profile_id: str, row: pd.Series) -> list[str]:
                     f"{fmt.num(km, 1)} km zračne linije."
                 )
     return out
+
+
+# --- Plain-language reasons for a proposal ------------------------------------------------
+# Two or three short reasons in the order that matters for the profile, and one honest
+# caution. Every phrase is a template over the same values as the details below it.
+
+PROFILE_HIGHLIGHTS: dict[str, tuple[str, ...]] = {
+    "student": ("transit", "all_walk", "grocery", "air", "green", "quiet"),
+    "umirovljenik": ("hospital", "green", "quiet", "air", "park", "transit", "no_flood"),
+    "obitelj": ("pediatrician", "playground", "air", "green", "no_flood", "quiet", "park"),
+    "rad-od-kuce": ("quiet", "green", "air", "park", "grocery", "no_flood"),
+    "opci": ("all_walk", "air", "green", "quiet", "no_flood", "grocery"),
+}
+PROFILE_CAUTIONS: dict[str, tuple[str, ...]] = {
+    "student": ("flood", "transit", "traffic", "air_bad", "air_ok"),
+    "umirovljenik": ("flood", "hospital", "traffic", "air_bad", "shade", "air_ok"),
+    "obitelj": ("flood", "pediatrician", "air_bad", "traffic", "shade", "air_ok"),
+    "rad-od-kuce": ("flood", "traffic", "air_bad", "shade", "doctor", "air_ok"),
+    "opci": ("flood", "traffic", "air_bad", "shade", "doctor", "air_ok"),
+}
+
+
+def _minutes_on_foot(row: pd.Series, need: str) -> str | None:
+    m = _num(row, f"min_{need}")
+    if m is None:
+        return None
+    return "manje od minute pješice" if m < 1 else f"{fmt.minutes(m)} pješice"
+
+
+def _highlight(key: str, row: pd.Series) -> str | None:
+    walk = int(rules()["walk_minutes"])
+    air = row.get("air_band")
+    if key == "studies":
+        place = best_higher_ed(row)
+        if place is None:
+            return None
+        who = place.get("example") or "visoko učilište"
+        if place["km"] == 0:
+            return f"Studiji u mjestu: {who}"
+        return f"Do studija u mjestu {place['name']} oko {fmt.num(float(place['km']), 0)} km"
+    if key == "transit":
+        dep = _num(row, "max_departures")
+        if dep is None or dep < 1:
+            return None
+        every = round(60 / dep)
+        if every < 5:
+            return "Javni prijevoz svakih nekoliko minuta"
+        if dep >= 2:
+            return f"Javni prijevoz otprilike svakih {fmt.minutes_word(every)}"
+        return "Javni prijevoz barem jednom na sat"
+    if key == "all_walk":
+        n = _num(row, "needs_15min")
+        return f"Sve za svaki dan pješice unutar {walk} minuta" if n == 7 else None
+    if key == "grocery":
+        m = _minutes_on_foot(row, "grocery")
+        if m is None or not _flag(row, "has_grocery"):
+            return None
+        return (
+            f"Trgovina odmah do vas, {m}"
+            if (_num(row, "min_grocery") or 99) < 3
+            else f"Trgovina {m}"
+        )
+    if key == "air":
+        # Most of Croatia has "good" air; only "very good" is worth naming as a reason.
+        return "Čist zrak" if air == "vrlo niska" else None
+    if key == "green":
+        s = _num(row, "score_green")
+        return "Puno zelenila i hlada" if s is not None and s >= 90 else None
+    if key == "quiet":
+        s = _num(row, "score_noise")
+        return (
+            "Mirno, većina kuća je podalje od velikih cesta" if s is not None and s >= 85 else None
+        )
+    if key == "no_flood":
+        return "Izvan područja riječnih poplava" if row.get("flood_status") == "good" else None
+    if key == "hospital":
+        km = _num(row, "hospital_km")
+        if km is None or km > float(rules()["hospital"]["full_km"]):
+            return None
+        return f"Bolnica blizu: {row['hospital_name']}, oko {fmt.num(km, 0)} km"
+    if key in ("pediatrician", "playground", "park"):
+        if not _flag(row, f"has_{key}"):
+            return None
+        label = {"pediatrician": "Pedijatar", "playground": "Igralište", "park": "Park"}[key]
+        m = _minutes_on_foot(row, key)
+        return f"{label} {m}" if m else f"{label} pješice"
+    return None
+
+
+def _caution(key: str, row: pd.Series) -> str | None:
+    air = row.get("air_band")
+    walk = int(rules()["walk_minutes"])
+    if key == "flood":
+        status = row.get("flood_status")
+        if status == "bad":
+            return "središte mjesta je u području riječnih poplava"
+        if status == "warning":
+            return "središte mjesta je blizu područja riječnih poplava"
+        return None
+    if key == "traffic":
+        s = _num(row, "score_noise")
+        return "dosta kuća je uz veliku cestu" if s is not None and s < 50 else None
+    if key == "air_bad":
+        return {"umjerena": "zrak je osrednji", "visoka": "zrak je loš"}.get(str(air))
+    if key == "air_ok":
+        return "zrak je dobar, ali ne izvrstan" if air == "niska" else None
+    if key == "shade":
+        s = _num(row, "score_green")
+        return "malo je drveća i hlada" if s is not None and s < 40 else None
+    if key == "transit":
+        dep = _num(row, "max_departures")
+        if dep is None:
+            return "vozni red javnog prijevoza nije dostupan, pa ga nismo mogli provjeriti"
+        return "javni prijevoz vozi rjeđe od jednom na sat" if dep < 1 else None
+    if key == "hospital":
+        km = _num(row, "hospital_km")
+        if km is None or km <= 25:
+            return None
+        return f"najbliža bolnica je daleko, oko {fmt.num(km, 0)} km"
+    if key in ("pediatrician", "doctor"):
+        if _flag(row, f"has_{key}"):
+            return None
+        return f"nema {WALK_LABELS[key][1]} do {walk} minuta pješice"
+    return None
+
+
+def highlights(profile_id: str, row: pd.Series, limit: int = 3) -> list[str]:
+    order = PROFILE_HIGHLIGHTS.get(profile_id, PROFILE_HIGHLIGHTS["opci"])
+    out = [h for key in order if (h := _highlight(key, row)) is not None]
+    return out[:limit]
+
+
+def caution(profile_id: str, row: pd.Series) -> str | None:
+    order = PROFILE_CAUTIONS.get(profile_id, PROFILE_CAUTIONS["opci"])
+    for key in order:
+        found = _caution(key, row)
+        if found is not None:
+            return f"Na što obratiti pažnju: {found}."
+    return None

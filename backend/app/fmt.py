@@ -8,12 +8,18 @@ def num(value: float, decimals: int = 0) -> str:
     return text.replace(",", "\x00").replace(".", ",").replace("\x00", ".")
 
 
+def minutes_word(n: int) -> str:
+    """1 minuta, 2 minute, 5 minuta, 21 minuta, 22 minute."""
+    return f"{num(n)} {plural(n, 'minuta', 'minute', 'minuta')}"
+
+
 def minutes(value: float | None) -> str:
+    """Walking time in words: "manje od minute", "1 minuta", "4 minute", "12 minuta"."""
     if value is None:
         return "nije izračunato"
     if value < 1:
-        return "manje od 1 min"
-    return f"{num(round(value))} min"
+        return "manje od minute"
+    return minutes_word(round(value))
 
 
 def metres(value: float | None) -> str:

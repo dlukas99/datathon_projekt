@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-08 17:30
+Zadnje ažurirano: 2026-11-08 21:30
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -122,3 +122,10 @@ Ako ponestane vremena, režem ovim redom:
     - **provjera smislenosti:** top 10 za svaki profil u RH i Osječko-baranjskoj; Student: Zagreb, Split, Osijek, Rijeka, Zadar, Pula, Dubrovnik, Velika Gorica, Zaprešić, Varaždin (u OBŽ Osijek pa njegova predgrađa i Đakovo); testovi pravila u `backend/tests/test_finder_rules.py` (pytest 165, Vitest 64, Playwright 60, `make verify` prolazi);
     - **prometnice (8. 11.):** Split je bio prvi gotovo u svakom profilu jer mu je središte u pješačkoj staroj jezgri (100/100), a 79 % naselja bilo je „blizu prometnice” zbog županijske ceste kroz selo. Sad se županijske ceste (Ž) ne broje, a za naselje se računa udio svih 1.683.411 adresa DGU-a po pojasevima (`ingest/settlement_traffic.py`, 19 s); Split ima 48/100 (57 % adresa do 300 m od velike ceste), Zagreb 70, Osijek 46. Zlatni testovi ažurirani (Vinkovci, Nijemci), novi `tests/test_traffic.py`;
     - **usput:** `deploy/Dockerfile.web` kopira `config/`, bez čega se frontend ne bi izgradio u Dockeru (uvozi `profiles.json` i `finder_rules.json`).
+19. [x] Dorada sučelja prema primjedbama korisnika (8. 11., grana `feature/dorada-sucelja`):
+    - **naslovnica:** bez primjera adresa i bez retka s izjavom; izjava ostaje jednom na dnu izvještaja, u podnožju (dva retka) i na „O alatu”;
+    - **izvještaj:** kraći i topliji sažetak iz predložaka (poplava prva samo kad prijeti); poplave i požari jednom rečenicom bez crteža, zrak ocjenom riječju i ljestvicom od četiri razine, brojke i pragovi pod „Detalji i izvor”; požari pošteno: EFFIS bilježi uglavnom požare od otprilike 30 ha naviše; karta hoda kao jedan popis „Najbliže pješice” (npr. „Trgovina – 3 minute”), pojasevi 5/10/15 u detaljima, jedna uputa;
+    - **svugdje „minuta”:** `fmt.minutes` i `minutesText` („manje od minute”, „1 minuta”, „4 minute”, „12 minuta”); „Split” umjesto „Split, Split”;
+    - **Karta:** pet najbolje ocijenjenih naselja (najmanje 200 stanovnika) ili pet rezultata pretrage; jednostavnije kartice naselja; razlika Skora na Karti (naselje, 83 za Split) i u izvještaju (točka, 92) objašnjena na kartici i u izvještaju;
+    - **Predloži mjesto:** uz prijedlog uvjeti profila (✓), dva do tri obična razloga, jedna napomena „Na što obratiti pažnju”, brojke pod „Detalji”;
+    - **usput:** CSS točkica zelenila skrivao je točkice boje na karti hoda (greška iz prošlog redizajna); `make verify` prolazi (pytest 170, Vitest 64, Playwright 60), snimke osvježene.

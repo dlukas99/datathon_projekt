@@ -4670,3 +4670,90 @@ a {
   color: var(--text);
   text-decoration: underline;
 }
+
+/* Plain cards (8. 11.): floods and fires say it in one sentence, air in one word and one
+   simple scale; numbers, limits and sources are under "Detalji i izvor". */
+.inst-flood .inst-body,
+.inst-air .inst-body,
+.inst-fire .inst-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.statement-main {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  font-weight: 720;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.statement .readout-label {
+  max-width: 48ch;
+}
+
+.inst-air .readout-big {
+  font-size: clamp(2rem, 3.6vw, 2.6rem);
+}
+
+.inst-air .readout-label {
+  max-width: 48ch;
+}
+
+.air-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.air-step {
+  padding: 0.45rem 0.3rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--c) 10%, var(--surface));
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.air-step[aria-current='true'] {
+  background: var(--c);
+  color: var(--surface);
+  font-weight: 750;
+}
+
+.walk-more {
+  margin-top: 0.75rem;
+}
+
+.find-why {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.find-caution {
+  margin: 0.75rem 0 0;
+  max-width: 62ch;
+  font-weight: 600;
+}
+
+.find-more {
+  margin: 0.75rem 0 0.9rem;
+}
+
+/* Footer links read as one line separated by dots. */
+.site-footer nav li + li::before {
+  content: '·';
+  color: var(--muted);
+}
+
+/* The colour dots of the walking-map list are spans; the land-cover dots of the greenery
+   card are SVG circles that grow in. Only the circles start hidden. */
+span.dot {
+  transform: none;
+}

@@ -11,7 +11,7 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
    - `measured` (izmjereno): vrijednost iz mjerenja, voznog reda ili službenog registra;
    - `modelled` (modelirano): izračun modelom (karte poplava i zraka, satelitski pokrov tla, vrijeme hoda po mreži);
    - `estimate` (procjena): zamjenski podatak, npr. udaljenost od prometnice umjesto razine buke ili zračna udaljenost kad usmjerivač ne radi.
-5. **Sažetak se slaže iz predložaka.** Dvije do tri rečenice sažetka su naslovne rečenice kategorija poplava, zraka i života bez auta. Jezični model ne piše tekst.
+5. **Sažetak se slaže iz predložaka.** Dvije do četiri kratke rečenice nad statusima kategorija (`app/report.py`): ako je lokacija u poplavnom području ili blizu njega, to je prva rečenica („Pažnja: …”); zatim ono što je stvarno dobro (mirno, čist ili dobar zrak, puno zelenila, bez opasnosti od poplava), svakodnevne potrebe pješice i najviše jedna napomena „Na što obratiti pažnju: …” (velika cesta blizu, osrednji ili loš zrak, malo drveća). Kad je jedino dobro to što nema poplava, to ide u kratku rečenicu na kraju, da poplava ne bude uvijek prva. Jezični model ne piše tekst.
 
 ## Lokacija
 
@@ -167,7 +167,9 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Podaci:** EFFIS (Copernicus European Forest Fire Information System), opožarene površine kartirane iz satelitskih snimaka MODIS, sloj `ms:modis.ba.poly` preuzet preko javnog WFS-a za Hrvatsku (1.030 površina od 2016.). Skupno preuzimanje traži račun, a WFS ne.
 - **Izračun:** opožarene površine čiji poligon dodiruje krug od 2 km oko točke: broj, godine, najbliža (udaljenost do ruba) i najveća (ha).
 - **Status:** „Informacija”, jer za broj prošlih požara ne postoji prag s izvorom. Prošli požari pokazuju izloženost, a ne predviđaju buduće.
-- **Ograničenja:** satelitsko kartiranje ne bilježi sve manje požare; podaci počinju 2016.
+- **Najmanja površina:** EFFIS-ova procjena štete bilježila je do 2017. požare od otprilike 30 ha naviše; od 2018. snimke Sentinel-2 hvataju i neke manje (EFFIS, „Rapid damage assessment”, https://forest-fire.emergency.copernicus.eu/about-effis/technical-background/rapid-damage-assessment, provjereno 8. 11. 2026.). U našem izvatku 410 od 1.030 površina ima manje od 30 ha, pa prag nije tvrd. Kartica zato piše „veći požar” i „satelit bilježi uglavnom požare od otprilike 30 hektara naviše, pa manji požari ovdje nisu vidljivi”, a ne „nijedan požar”.
+- **Kartica:** jedna rečenica (nije zabilježen veći požar od 2016. ili broj, godine i najveća izgorjela površina) i rečenica o veličini; broj, najbliža i najveća površina pod „Detalji i izvor”.
+- **Ograničenja:** podaci počinju 2016.
 
 ## Sunce na krovu
 
@@ -259,6 +261,8 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
   Izračun je deterministički: isti upit uvijek daje isti poredak. Jezični model ne sudjeluje u rangu.
 - **Razlozi:** uz svaki prijedlog „Zašto je predloženo” (ispunjeni obavezni uvjeti s vrijednostima, npr. „Ljekarna: 4 min hoda”, „Studiji u naselju: 156 studijskih programa, npr. Sveučilište Josipa Jurja Strossmayera u Osijeku”) i „Što nedostaje” (neispunjeni uvjet i važni kriteriji koje naselje nema), zatim dvije kategorije s najvećim pozitivnim doprinosom i jedna s najvećim negativnim, uz kratke činjenice iz izračuna (poplave, zrak, hod, prijevoz, drveće; za umirovljenika najbliža bolnica, za studenta studentski dom i menza iz OSM-a).
 
+- **Opis uz prijedlog** (`app/finder_rules.py`, `highlights` i `caution`): uvjeti profila koje mjesto ispunjava (s vrijednostima), zatim dva do tri kratka razloga redoslijedom važnim za profil (npr. za umirovljenika bolnica blizu, zelenilo, mir; za obitelj pedijatar i igralište; za studenta javni prijevoz i sve pješice) i najviše jedna napomena „Na što obratiti pažnju: …”. Razlozi nemaju bodove ni postotke; brojke su pod „Detalji”. „Dobar zrak” nije razlog, jer ga ima većina Hrvatske; razlog je samo „čist zrak” (vrlo dobar), a „dobar, ali ne izvrstan” je napomena.
+
 ### Pravila profila u Predloži mjesto
 
 Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovjek („Osijek je studentski grad jer ima studije”) i važne kriterije koji podižu rang. Sva pravila, pragovi i obrazloženja su u jednoj datoteci, `config/finder_rules.json`; čarobnjak iz nje prikazuje što profil zahtijeva.
@@ -295,6 +299,8 @@ Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovj
 | Usluge pješice | 0–1, 2–3, 4–5, 6–7 od 7 svakodnevnih potreba do 15 min | brojanje iz Života bez auta; parovi služe samo prikazu |
 | Javni prijevoz | nema stajališta do 10 min; stajališta bez voznog reda; manje od 1 polaska na sat; 1 do 6; 6 i više | 1 na sat iz Života bez auta, 6 na sat iz Skora za život |
 
+- **Popis ispod karte:** pet najbolje ocijenjenih naselja s najmanje 200 stanovnika za odabrani sloj (kao u „Predloži mjesto”), ili prvih pet rezultata pretrage. Pretraga postoji da se do svakog naselja može doći i bez karte (pristupačnost).
+- **Skor na Karti i u izvještaju:** Karta i kartica naselja daju Skor za naselje (udaljenost od prometnica za sve adrese naselja, ostalo za središte, bez sunca na krovu jer je PVGIS servis uživo). Izvještaj računa za jednu točku i uključuje sunce, pa se brojevi razlikuju (npr. Split); kartica i izvještaj to pišu.
 - **Boje:** plava ljestvica u pet koraka (u tamnoj temi svjetlija je bolja) i siva za „nema podataka”. Boja nije jedini nositelj informacije: legenda ima nazive, a tablica ispod karte daje iste vrijednosti riječima.
 - **Klik na kartu** (`GET /api/map/point`):
   - točka u naselju, a u njezinoj ili susjednoj ćeliji od 150 m postoji kućni broj (DGU ili OSM): kartica naselja;

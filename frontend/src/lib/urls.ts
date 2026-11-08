@@ -1,5 +1,10 @@
 // The report state lives in the URL, so every report can be shared or bookmarked.
 
+/** "Tenja, Osijek", but just "Split" when the settlement and the town share the name. */
+export function placeName(settlement: string, municipality: string | null | undefined): string {
+  return municipality && municipality !== settlement ? `${settlement}, ${municipality}` : settlement
+}
+
 export function reportPath(
   lat: number,
   lon: number,

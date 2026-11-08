@@ -66,7 +66,10 @@ def test_filters_and_ranking_are_deterministic() -> None:
 @pytest.mark.usefixtures("data")
 def test_results_explain_themselves() -> None:
     top = finder.find(finder.FindRequest()).results[0]
-    assert top.reasons and top.reasons[0].startswith("Najjače:")
+    # Plain reasons without scores, one caution at most, numbers only in the details.
+    assert top.reasons
+    assert not any("/100" in r or "%" in r for r in top.reasons)
+    assert top.caution is None or top.caution.startswith("Na što obratiti pažnju:")
     assert any("poplavnom" in f for f in top.facts)
 
 

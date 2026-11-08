@@ -7,8 +7,12 @@ def test_num_uses_croatian_separators() -> None:
 
 
 def test_minutes_and_metres() -> None:
-    assert fmt.minutes(0.4) == "manje od 1 min"
-    assert fmt.minutes(7.6) == "8 min"
+    assert fmt.minutes(0.4) == "manje od minute"
+    assert fmt.minutes(1.2) == "1 minuta"
+    assert fmt.minutes(3.6) == "4 minute"
+    assert fmt.minutes(7.6) == "8 minuta"
+    assert fmt.minutes(21) == "21 minuta"
+    assert fmt.minutes(22) == "22 minute"
     assert fmt.metres(1260) == "1,3 km"
     assert fmt.metres(234) == "230 m"
     assert fmt.metres(999.6) == "1,0 km"

@@ -233,7 +233,11 @@ export interface FindResult {
   missing: string[]
   /** Misses one requirement; shown only because too few places meet them all. */
   relaxed: boolean
+  /** Two or three short reasons for the chosen profile. */
   reasons: string[]
+  /** One honest note, "Na što obratiti pažnju: …", or null. */
+  caution: string | null
+  /** Numbers and sources, shown under "Detalji". */
   facts: string[]
 }
 

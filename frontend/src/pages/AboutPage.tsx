@@ -6,9 +6,9 @@ export function AboutPage() {
     <>
       <h1>O alatu i metodologiji</h1>
       <p className="lead">
-        {BRAND.name} spaja otvorene podatke o okolišu, prostoru i uslugama u jedan pregled za
-        jednu adresu. Namijenjen je kupcima i najmoprimcima koji žele znati više prije nego što
-        potpišu ugovor.
+        {BRAND.name} iz otvorenih podataka pokazuje kako je živjeti na nekoj adresi: kakav je
+        okoliš i što vam je pješice na dohvat ruke. Pomaže i pronaći mjesto za život koje
+        odgovara vama, bilo da ste obitelj, student, umirovljenik ili radite od kuće.
       </p>
       <p className="disclaimer">
         Ovo je informativni alat, a ne službena procjena rizika, geodetski ni građevinski
@@ -30,7 +30,10 @@ export function AboutPage() {
           </li>
           <li>
             Profil (obitelj, umirovljenik, student, rad od kuće ili vlastiti) mijenja redoslijed,
-            naglasak i težine u skoru, nikad vrijednosti.
+            naglasak i težine u skoru, nikad vrijednosti. U „Predloži mjesto” profil ima i
+            obavezne uvjete: student mjesto sa studijima ili veće studijsko središte do 15 km uz
+            stajalište, umirovljenik trgovinu, ljekarnu i liječnika do 15 minuta pješice, obitelj
+            vrtić i osnovnu školu do 15 minuta pješice, a ostali trgovinu do 15 minuta pješice.
           </li>
           <li>„Nema podataka” uvijek se prikazuje; kategorija se nikad tiho ne izostavlja.</li>
           <li>
@@ -42,7 +45,7 @@ export function AboutPage() {
 
       <section className="section" aria-labelledby="thresholds">
         <h2 id="thresholds">Kategorije i pragovi</h2>
-        <div style={{ overflowX: 'auto' }}>
+        <div className="table-scroll">
           <table className="place-table">
             <caption className="visually-hidden">Kategorije, način izračuna i pragovi s izvorom</caption>
             <thead>
@@ -60,19 +63,19 @@ export function AboutPage() {
                   m) za povratna razdoblja od 10, 100 i 500 godina.
                 </td>
                 <td>
-                  Loše: točka je u području od 10 ili 100 godina (velika i srednja vjerojatnost).
-                  Upozorenje: područje od 500 godina ili poplavno područje unutar 100 m. Scenariji
-                  prema opisu karata opasnosti od poplava Hrvatskih voda.
+                  Loše: točka je u području od 10 ili 100 godina (10 % ili 1 % vjerojatnosti svake
+                  godine). Upozorenje: područje od 500 godina ili poplavno područje unutar 100 m.
+                  Na kartici se prikazuje jedna rečenica i vjerojatnost u 30 godina.
                 </td>
               </tr>
               <tr>
                 <th scope="row">Kvaliteta zraka</th>
                 <td>Godišnji prosjek PM2,5 i NO2 iz interpoliranih karata EEA-e za 2024. (1 km).</td>
                 <td>
-                  Ocjena zraka, lošija od ocjena za PM2,5 i NO2: vrlo dobar do smjernice WHO-a
+                  Jedna ocjena, lošija od ocjena za PM2,5 i NO2: vrlo dobar do preporuke WHO-a
                   (PM2,5 5, NO2 10 µg/m³), dobar do granice EU-a za 2030. (10 i 20), umjeren do
                   granice EU-a koja vrijedi danas (25 i 40, Direktiva (EU) 2024/2881), loš iznad
-                  toga.
+                  toga. Brojke i pragovi su pod „Detalji i izvor”.
                 </td>
               </tr>
               <tr>
@@ -103,10 +106,14 @@ export function AboutPage() {
               <tr>
                 <th scope="row">Požari raslinja</th>
                 <td>
-                  Opožarene površine u krugu od 2 km od 2016. iz europskog sustava EFFIS
-                  (satelitsko kartiranje).
+                  Veći požari raslinja u krugu od 2 km od 2016. iz europskog sustava EFFIS
+                  (satelitsko kartiranje): broj, godine i najveća izgorjela površina.
                 </td>
-                <td>Informacija (nema službenog praga). Prošli požari pokazuju izloženost, a ne predviđaju buduće.</td>
+                <td>
+                  Informacija (nema službenog praga). EFFIS bilježi uglavnom požare od otprilike
+                  30 ha naviše (od 2018. i neke manje), pa manji požari nedostaju. Prošli požari
+                  pokazuju izloženost, a ne predviđaju buduće.
+                </td>
               </tr>
               <tr>
                 <th scope="row">Sunce na krovu</th>
@@ -117,7 +124,7 @@ export function AboutPage() {
                 <th scope="row">Život bez auta</th>
                 <td>
                   Koliko od sedam svakodnevnih potreba je unutar 15 minuta hoda po mreži ulica
-                  (Valhalla nad OpenStreetMapom, 4,5 km/h).
+                  (Valhalla nad OpenStreetMapom, 4,5 km/h) i koliko minuta je do najbližeg.
                 </td>
                 <td>Informacija; prikazuje se „X od 7” i što nedostaje.</td>
               </tr>

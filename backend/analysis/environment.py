@@ -198,34 +198,21 @@ def flood_category(lon: float, lat: float) -> Category:
     status: Status
     if by_rp[10].depth_at_point is not None:
         status = "bad"
-        headline = (
-            "Lokacija je u modeliranom poplavnom području velike vjerojatnosti "
-            "(povratno razdoblje 10 godina)."
-        )
+        headline = "U području čestih riječnih poplava."
     elif by_rp[100].depth_at_point is not None:
         status = "bad"
-        headline = (
-            "Lokacija je u modeliranom poplavnom području srednje vjerojatnosti "
-            "(povratno razdoblje 100 godina)."
-        )
+        headline = "U području riječnih poplava."
     elif by_rp[500].depth_at_point is not None:
         status = "warning"
-        headline = (
-            "Lokacija je u modeliranom poplavnom području male vjerojatnosti "
-            "(povratno razdoblje 500 godina)."
-        )
+        headline = "U području rijetkih velikih riječnih poplava."
     elif any(r.max_depth_100m is not None for r in readings):
         status = "warning"
-        rp = min(r.rp for r in readings if r.max_depth_100m is not None)
-        headline = (
-            "Lokacija nije u modeliranom poplavnom području, ali je unutar 100 m od područja "
-            f"s povratnim razdobljem od {rp} godina."
-        )
+        headline = "Blizu područja riječnih poplava: ono je unutar 100 m."
     else:
         status = "good"
         headline = (
-            "Lokacija nije u modeliranom području riječnih poplava ni za povratno razdoblje "
-            "od 500 godina."
+            "Nije u području riječnih poplava. Prema europskom modelu rijeka ovdje ne dolazi "
+            "ni u rijetkim velikim poplavama."
         )
     # Translate the return period into the chance of at least one such flood during
     # a 30-year housing loan: 1 - (1 - 1/T)^30.
@@ -252,9 +239,11 @@ def flood_category(lon: float, lat: float) -> Category:
                 ),
             ),
         )
+        yearly = 100.0 / rp_for_chance
         headline += (
-            f" To znači oko {fmt.num(round(chance * 100))} % vjerojatnosti da u 30 godina "
-            f"(trajanje stambenog kredita) {where} bude barem jedna takva poplava."
+            f" {'Ovdje' if zone_rp else 'Tamo'} svake godine postoji oko "
+            f"{fmt.num(yearly, 1 if yearly < 1 else 0)} % vjerojatnosti poplave, a u 30 godina "
+            f"(trajanje stambenog kredita) oko {fmt.num(round(chance * 100))} %."
         )
     notes.append(
         "Povratno razdoblje od 100 godina ne znači poplavu jednom u sto godina, nego 1 % "
@@ -335,6 +324,18 @@ AIR_RATINGS: dict[str, str] = {
     "niska": "Dobar",
     "umjerena": "Umjeren",
     "visoka": "Loš",
+}
+AIR_PLAIN: dict[str, str] = {
+    "vrlo niska": "Zrak je čist, kakav preporučuje Svjetska zdravstvena organizacija.",
+    "niska": (
+        "Zrak je dobar, ali ne izvrstan: nešto je onečišćeniji nego što preporučuje "
+        "Svjetska zdravstvena organizacija."
+    ),
+    "umjerena": (
+        "Zrak je osrednji: onečišćeniji je nego što preporučuje Svjetska zdravstvena "
+        "organizacija i nego što EU dopušta od 2030."
+    ),
+    "visoka": "Zrak je loš: onečišćeniji je nego što EU danas dopušta.",
 }
 AIR_SENTENCES: dict[str, str] = {
     "vrlo niska": (
@@ -449,11 +450,12 @@ def air_category(lon: float, lat: float) -> Category:
         title="Kvaliteta zraka",
         status=worst[1],
         status_label=AIR_RATINGS[worst[0]],
-        headline=AIR_SENTENCES[worst[0]],
+        headline=AIR_PLAIN[worst[0]],
         values=values,
         links=links,
         scales=scales,
         notes=[
+            AIR_SENTENCES[worst[0]],
             "Ocjena je lošija od ocjena za PM2,5 i NO2 (godišnji prosjek, karta EEA-e za "
             f"2024.): vrlo dobar do smjernice Svjetske zdravstvene organizacije "
             f"({_pair(WHO_2021)}), dobar do granične vrijednosti EU-a za 2030. "
@@ -757,6 +759,13 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
 # --- Wildfires (burnt areas) ---------------------------------------------------------------
 
 FIRE_RADIUS_M = 2000.0
+# EFFIS Rapid Damage Assessment: fires of about 30 ha or larger until 2017; since 2018
+# Sentinel-2 also catches some below 30 ha (EFFIS, "Rapid damage assessment", checked
+# 2026-11-08). Small fires are therefore often missing.
+FIRE_SIZE_NOTE = (
+    "Satelit bilježi uglavnom požare od otprilike 30 hektara naviše, pa manji požari ovdje "
+    "nisu vidljivi."
+)
 EFFIS_VIEWER = "https://forest-fire.emergency.copernicus.eu/apps/effis_current_situation/"
 
 
@@ -826,13 +835,15 @@ def fire_category(lon: float, lat: float, layers: Layers) -> Category:
         )
         years = sorted({h[0][:4] for h in hits})
         n = len(hits)
-        verb = fmt.plural(n, "zabilježena je", "zabilježene su", "zabilježeno je")
-        noun = fmt.plural(n, "opožarena površina", "opožarene površine", "opožarenih površina")
+        verb = fmt.plural(n, "zabilježen je", "zabilježena su", "zabilježeno je")
+        noun = fmt.plural(n, "veći požar", "veća požara", "većih požara")
+        when = years[0] + "." if len(years) == 1 else f"{years[0]}. do {years[-1]}."
         headline = (
-            f"U krugu od 2 km satelitom {verb} {n} {noun} ({', '.join(y + '.' for y in years)})."
+            f"U krugu od 2 km {verb} {fmt.num(n)} {noun} raslinja ({when}); najveći je "
+            f"zahvatio oko {fmt.num(largest[1])} ha. {FIRE_SIZE_NOTE}"
         )
     else:
-        headline = "U krugu od 2 km satelitom nije zabilježena nijedna opožarena površina od 2016."
+        headline = f"U krugu od 2 km nije zabilježen veći požar raslinja od 2016. {FIRE_SIZE_NOTE}"
     return Category(
         id="fire",
         group="environment",
@@ -843,7 +854,9 @@ def fire_category(lon: float, lat: float, layers: Layers) -> Category:
         values=values,
         links=links,
         notes=[
-            "Opožarene površine kartira EFFIS iz satelitskih snimaka od 2016.; manji požari "
-            "mogu nedostajati. Prošli požari pokazuju izloženost, a ne predviđaju buduće.",
+            "Opožarene površine kartira EFFIS (Copernicus) iz satelitskih snimaka. Do 2017. "
+            "bilježio je požare od otprilike 30 ha naviše, a od 2018. snimke Sentinel-2 "
+            "hvataju i neke manje; male požare zato ne vidimo. Prošli požari pokazuju "
+            "izloženost, a ne predviđaju buduće.",
         ],
     )

@@ -105,7 +105,7 @@ test('find a place to live ranks settlements with reasons', async ({ page }) => 
   await page.getByRole('button', { name: 'Predloži mjesta' }).click()
   const results = page.locator('.find-results > li')
   await expect(results.first()).toBeVisible()
-  await expect(results.first().getByText(/Najjače:/)).toBeVisible()
+  await expect(results.first().getByText('Ispunjava uvjete profila')).toBeVisible()
   await results.first().getByRole('link', { name: 'Otvori izvještaj' }).click()
   await expect(page.getByText(/Prikazano je središte naselja/)).toBeVisible()
 })
@@ -306,7 +306,7 @@ test('map of Croatia: the table carries the same data and works with the keyboar
 }) => {
   await page.goto('/karta?sloj=needs')
   const table = page.locator('.atlas-table')
-  await expect(table.locator('tbody tr')).toHaveCount(50)
+  await expect(table.locator('tbody tr')).toHaveCount(5)
   await expect(table.locator('thead th').last()).toHaveText('Usluge pješice')
   // Best first: the first row has at least as many needs as the last one shown.
   const values = await table.locator('tbody tr td:last-child').allInnerTexts()
@@ -341,11 +341,11 @@ test('walking route to the nearest place of a kind, from the legend and the dail
   page,
 }) => {
   await page.goto(reportUrl)
-  const chip = page.getByRole('button', { name: /^Ljekarna ·/ })
+  const chip = page.getByRole('button', { name: /^Ljekarna –/ })
   await chip.click()
   await expect(chip).toHaveAttribute('aria-pressed', 'true')
   const panel = page.getByRole('group', { name: 'Pješački put' })
-  await expect(panel).toContainText(/\d+ min · [\d,]+ k?m pješice/)
+  await expect(panel).toContainText(/(\d+ minut[ae]?|manje od minute) · [\d,]+ k?m pješice/)
   await expect(page.locator('.map-wrap [role="status"]')).toContainText('Pješački put do odredišta')
   await expectNoAxeViolations(page)
   await page.keyboard.press('Escape')
@@ -353,7 +353,7 @@ test('walking route to the nearest place of a kind, from the legend and the dail
   await expect(chip).toHaveAttribute('aria-pressed', 'false')
 
   await page.locator('.daily-list').getByRole('button', { name: /Ljekarna/ }).click()
-  await expect(panel).toContainText(/\d+ min · [\d,]+ k?m pješice/)
+  await expect(panel).toContainText(/(\d+ minut[ae]?|manje od minute) · [\d,]+ k?m pješice/)
   await expect(panel).toBeFocused()
 })
 

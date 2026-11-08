@@ -25,10 +25,14 @@ export const KIND_HELP: Record<Kind, string> = {
   estimate: 'Gruba procjena iz zamjenskih podataka; tumačite je s oprezom.',
 }
 
+/** Walking time in words, everywhere in the interface: "manje od minute", "1 minuta",
+ * "4 minute", "12 minuta", "21 minuta". */
+export function minutesText(minutes: number): string {
+  return minutes < 1 ? 'manje od minute' : minutesSpoken(minutes)
+}
+
 export function minutesLabel(minutes: number | null): string {
-  if (minutes === null) return 'nije izračunato'
-  if (minutes < 1) return 'manje od 1 min'
-  return `${String(Math.round(minutes))} min`
+  return minutes === null ? 'nije izračunato' : minutesText(minutes)
 }
 
 export function metresLabel(metres: number | null): string {

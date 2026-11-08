@@ -1,5 +1,5 @@
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from 'react'
-import type { Category, Scale, Value } from '../lib/api'
+import type { Category, Value } from '../lib/api'
 import { MoreDetails, type SourceMap, StatusBadge } from './CategoryCard'
 import { CategoryIcon } from './Icons'
 
@@ -79,203 +79,40 @@ function Readout({ big, unit, label, extra }: ReadoutProps) {
   )
 }
 
-/* Poplave: a water gauge. The three modelled floods are three water layers, the frequent
-   one deepest; the house sits at the level of the first flood that reaches the address. */
+/* Poplave, zrak i požari: one plain sentence first, one short explanation under it.
+   The scenario table, numbers, limits and sources stay under "Detalji i izvor". */
 
-const FLOOD_RPS = [10, 100, 500] as const
-const LEVEL_Y: Record<number, number> = { 500: 40, 100: 72, 10: 104 }
-
-function floodFacts(c: Category) {
-  const flag = (k: string) => {
-    const v = valueOf(c, k)?.value
-    return typeof v === 'boolean' ? v : null
-  }
-  const rows = FLOOD_RPS.map((rp) => ({
-    rp,
-    point: flag(`flood_rp${String(rp)}_point`),
-    near: flag(`flood_rp${String(rp)}_100m`),
-  }))
-  const known = rows.some((r) => r.point !== null)
-  const first = rows.find((r) => r.point === true)?.rp ?? null
-  return { rows, known, first }
-}
-
-function FloodGauge({ c }: { c: Category }) {
-  const { rows, known, first } = floodFacts(c)
-  // House base: under the first flood that reaches it, or above the highest one.
-  const base = first === null ? 36 : (LEVEL_Y[first] ?? 36) + 10
+function Statement({ text }: { text: string }) {
+  // A sentence ends at a full stop followed by a capital letter ("2016. Satelit"), not at
+  // an ordinal date inside it ("2017. do 2021.").
+  const m = /\.\s+(?=[A-ZČĆĐŠŽ])/.exec(text)
+  const first = m ? text.slice(0, m.index + 1) : text
+  const rest = m ? text.slice(m.index + m[0].length) : ''
   return (
-    <div className="flood-gauge">
-      <svg viewBox="0 0 320 150" className="gauge-svg" aria-hidden="true" focusable="false">
-        <g className="flood-water">
-          <path className="water w500" d="M40 40 Q 60 34 80 40 T 120 40 T 160 40 T 200 40 T 240 40 T 280 40 T 320 40 V 150 H 40 Z" />
-          <rect className="water w100" x="40" y="72" width="280" height="78" />
-          <rect className="water w10" x="40" y="104" width="280" height="46" />
-        </g>
-        {FLOOD_RPS.map((rp) => (
-          <g key={rp} className="flood-level">
-            <line x1="40" x2="320" y1={LEVEL_Y[rp]} y2={LEVEL_Y[rp]} />
-            <text x="0" y={(LEVEL_Y[rp] ?? 0) + 4}>
-              {rp} g
-            </text>
-          </g>
-        ))}
-        <g className="flood-house" style={{ '--base': `${String(base)}px` } as CSSProperties}>
-          <path d={`M222 ${String(base)} V ${String(base - 20)} L 240 ${String(base - 34)} L 258 ${String(base - 20)} V ${String(base)} Z`} />
-          <line x1="212" x2="268" y1={base} y2={base} />
-        </g>
-      </svg>
-      {known && (
-        <dl className="flood-rows">
-          {[...rows].reverse().map((r) => (
-            <div key={r.rp} className={r.point ? 'wet' : r.near ? 'near' : undefined}>
-              <dt>{r.rp} godina</dt>
-              <dd>
-                adresa: <strong>{r.point === null ? '?' : r.point ? 'da' : 'ne'}</strong>
-                <span aria-hidden="true"> · </span>
-                <span className="visually-hidden">, </span>
-                do 100 m: <strong>{r.near === null ? '?' : r.near ? 'da' : 'ne'}</strong>
-              </dd>
-            </div>
-          ))}
-        </dl>
-      )}
+    <div className="readout statement">
+      <p className="statement-main">{first}</p>
+      {rest && <p className="readout-label">{rest}</p>}
     </div>
   )
 }
 
-function floodReadout(c: Category): ReadoutProps {
-  const { known, first, rows } = floodFacts(c)
-  if (!known) return { big: 'Nema podataka', label: 'za modelirana poplavna područja' }
-  if (first !== null)
-    return {
-      big: 'Unutar',
-      label: `modeliranog poplavnog područja za povratno razdoblje od ${String(first)} godina`,
-    }
-  const near = rows.find((r) => r.near)?.rp
-  return {
-    big: 'Izvan',
-    label: near
-      ? `modeliranih poplavnih područja; područje za ${String(near)} godina je unutar 100 m`
-      : 'modeliranih poplavnih područja za 10, 100 i 500 godina',
-  }
-}
-
 /* Zrak: two rulers with the WHO and EU limits; the needle settles at the annual mean. */
 
-const POLLUTANT: Record<string, ReactNode> = {
-  pm25: 'PM2,5',
-  no2: (
-    <>
-      NO<sub>2</sub>
-    </>
-  ),
-}
-
-function rulerMax(scale: Scale): number {
-  const finite = scale.bands.map((b) => b.upto).filter((u): u is number => u !== null)
-  const last = finite[finite.length - 1] ?? scale.value
-  return Math.max(last * 1.3, scale.value * 1.1)
-}
-
-function AirRuler({
-  scale,
-  selected,
-  onSelect,
-}: {
-  scale: Scale
-  selected: boolean
-  onSelect: () => void
-}) {
-  const max = rulerMax(scale)
-  const pct = (v: number) => `${String(Math.min(v / max, 1) * 100)}%`
-  const ends = scale.bands.map((b) => Math.min(b.upto ?? max, max))
-  return (
-    <button type="button" className="air-ruler" aria-pressed={selected} onClick={onSelect}>
-      <span className="air-name">{POLLUTANT[scale.key] ?? scale.label}</span>
-      <span className="air-value">
-        {num(scale.value)} {scale.unit} · {scale.band}
-      </span>
-      <span className="ruler" aria-hidden="true">
-        {scale.bands.map((b, i) => {
-          const start = i === 0 ? 0 : (ends[i - 1] ?? 0)
-          const end = ends[i] ?? max
-          return (
-            <span
-              key={b.label}
-              className={`ruler-band band-${String(i)}`}
-              style={{ left: pct(start), width: `${String(((end - start) / max) * 100)}%` }}
-            />
-          )
-        })}
-        {scale.markers.map((m, i) => (
-          <span
-            key={m.label}
-            className={i % 2 ? 'ruler-tick up' : 'ruler-tick'}
-            style={{ left: pct(m.value) }}
-          >
-            <span className="ruler-tick-label">
-              {m.label} {num(m.value)}
-            </span>
-          </span>
-        ))}
-        <span className="needle-track" style={{ '--to': pct(scale.value) } as CSSProperties}>
-          <span className="needle" />
-        </span>
-      </span>
-    </button>
-  )
-}
+const AIR_STEPS = ['Vrlo dobar', 'Dobar', 'Umjeren', 'Loš'] as const
 
 function AirInstrument({ c }: { c: Category }) {
-  const scales = c.scales ?? []
-  const [pick, setPick] = useState(scales[0]?.key ?? '')
-  const scale = scales.find((s) => s.key === pick) ?? scales[0]
-  if (!scale) return <Readout big="Nema podataka" label="za kvalitetu zraka" />
-  const who = scale.markers.find((m) => m.label === 'WHO')
-  const eu = scale.markers.find((m) => m.label.startsWith('EU 2030'))
-  const valueLabel = c.values.find((v) => v.key.startsWith(scale.key))?.label
-  const ratio = who ? scale.value / who.value : null
+  const at = AIR_STEPS.findIndex((s) => s === c.status_label)
+  if (at === -1) return <Readout big="Nema podataka" label="za kvalitetu zraka" />
   return (
     <>
-      <Readout
-        big={num(scale.value)}
-        unit={scale.unit}
-        label={
-          <>
-            {POLLUTANT[scale.key]}, {valueLabel?.split(', ').slice(1).join(', ') ?? 'godišnji prosjek'}
-          </>
-        }
-        extra={
-          <ul className="readout-facts">
-            {who && ratio !== null && (
-              <li>
-                {ratio > 1
-                  ? `${num(ratio)} puta više od preporuke WHO-a (${num(who.value)} ${scale.unit})`
-                  : `unutar preporuke WHO-a (${num(who.value)} ${scale.unit})`}
-              </li>
-            )}
-            {eu && (
-              <li>
-                {scale.value > eu.value ? 'iznad' : 'unutar'} granice EU-a za 2030. ({num(eu.value)}{' '}
-                {scale.unit})
-              </li>
-            )}
-          </ul>
-        }
-      />
-      <div className="air-rulers" role="group" aria-label="Onečišćivač za prikaz">
-        {scales.map((s) => (
-          <AirRuler
-            key={s.key}
-            scale={s}
-            selected={s.key === scale.key}
-            onSelect={() => {
-              setPick(s.key)
-            }}
-          />
+      <Readout big={c.status_label} label={c.headline} />
+      <ol className="air-steps" aria-label="Ljestvica kvalitete zraka">
+        {AIR_STEPS.map((step, i) => (
+          <li key={step} className={`air-step step-${String(i)}`} aria-current={i === at ? 'true' : undefined}>
+            {step}
+          </li>
         ))}
-      </div>
+      </ol>
     </>
   )
 }
@@ -393,28 +230,6 @@ function NoiseInstrument({ c }: { c: Category }) {
   )
 }
 
-/* Požari: a radar of the 2 km circle; it sweeps once. Positions of fires are not drawn. */
-
-function FireInstrument({ c }: { c: Category }) {
-  const burnt = valueOf(c, 'burnt_areas_2km')
-  if (!burnt || burnt.value === null) return <Readout big="Nema podataka" label="za opožarene površine" />
-  return (
-    <>
-      <Readout big={burnt.display} label={burnt.label.toLowerCase()} />
-      <svg viewBox="-60 -60 120 120" className="gauge-svg radar" aria-hidden="true" focusable="false">
-        <circle r="56" />
-        <circle r="28" />
-        <line x1="-56" x2="56" y1="0" y2="0" />
-        <line y1="-56" y2="56" x1="0" x2="0" />
-        <path className="radar-sweep" d="M0 0 L0 -56 A56 56 0 0 1 48.5 -28 Z" />
-        <circle className="radar-home" r="3.5" />
-        <text x="3" y="-31">1 km</text>
-        <text x="3" y="-59">2 km</text>
-      </svg>
-    </>
-  )
-}
-
 /* Sunce: the sun's arc over a panel at the optimal slope. */
 
 function SolarInstrument({ c }: { c: Category }) {
@@ -461,9 +276,12 @@ const INSTRUMENTS: Record<string, (props: { c: Category }) => ReactNode> = {
   air: AirInstrument,
   green: GreenInstrument,
   noise: NoiseInstrument,
-  fire: FireInstrument,
   solar: SolarInstrument,
 }
+
+// These categories say everything in their sentence; the headline is not repeated below.
+const SENTENCE_ONLY = new Set(['flood', 'fire'])
+const NO_HEADLINE = new Set(['flood', 'fire', 'air'])
 
 export function InstrumentPanel({
   category,
@@ -494,16 +312,13 @@ export function InstrumentPanel({
       </div>
       {focused && <p className="focus-tag">Važno za odabrani profil</p>}
       <div className="inst-body">
-        {category.id === 'flood' ? (
-          <>
-            <Readout {...floodReadout(category)} />
-            <FloodGauge c={category} />
-          </>
+        {SENTENCE_ONLY.has(category.id) ? (
+          <Statement text={category.headline} />
         ) : Body ? (
           <Body c={category} />
         ) : null}
       </div>
-      <p className="headline">{category.headline}</p>
+      {!NO_HEADLINE.has(category.id) && <p className="headline">{category.headline}</p>}
       <MoreDetails category={category} sources={sources} />
     </article>
   )

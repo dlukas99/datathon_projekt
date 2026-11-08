@@ -7,7 +7,7 @@ import { type FindRequest, fetchFindOptions, findPlaces, parseFindQuestion } fro
 import { finderRationale, finderSummary } from '../lib/finderRules'
 import { PROFILES, SCORE_CATEGORIES, profileWeights } from '../lib/profiles'
 import { decodeWeights, encodeWeights } from '../lib/score'
-import { reportPath } from '../lib/urls'
+import { placeName, reportPath } from '../lib/urls'
 
 type Need = FindRequest['must'][number]
 
@@ -486,8 +486,13 @@ export function FindPage() {
                           </span>
                         )}
                         <p className="place-line">
-                          {r.municipality !== r.name ? `${r.municipality}, ` : ''}
-                          {r.county} · {r.population.toLocaleString('hr-HR')} stanovnika
+                          {[
+                            r.municipality !== r.name ? r.municipality : '',
+                            r.county !== r.municipality ? r.county : '',
+                            `${r.population.toLocaleString('hr-HR')} stanovnika`,
+                          ]
+                            .filter(Boolean)
+                            .join(' · ')}
                         </p>
                       </div>
                       {r.relaxed && (
@@ -495,7 +500,7 @@ export function FindPage() {
                       )}
                       {r.met.length > 0 && (
                         <>
-                          <h4 className="find-list-title">Zašto je predloženo</h4>
+                          <h4 className="find-list-title">Ispunjava uvjete profila</h4>
                           <ul className="find-checks">
                             {r.met.map((m) => (
                               <li key={m} className="find-met">
@@ -507,33 +512,41 @@ export function FindPage() {
                         </>
                       )}
                       {r.missing.length > 0 && (
+                        <ul className="find-checks">
+                          {r.missing.map((m) => (
+                            <li key={m} className="find-missing">
+                              <Minus size={16} aria-hidden="true" />
+                              <span>{m}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {r.reasons.length > 0 && (
                         <>
-                          <h4 className="find-list-title">Što nedostaje</h4>
-                          <ul className="find-checks">
-                            {r.missing.map((m) => (
-                              <li key={m} className="find-missing">
-                                <Minus size={16} aria-hidden="true" />
-                                <span>{m}</span>
-                              </li>
+                          <h4 className="find-list-title">Zašto vam odgovara</h4>
+                          <ul className="find-why">
+                            {r.reasons.map((m) => (
+                              <li key={m}>{m}</li>
                             ))}
                           </ul>
                         </>
                       )}
-                      {r.reasons.length > 0 && (
-                        <p className="find-reasons">{r.reasons.join(' · ')}</p>
-                      )}
-                      <ul className="notes">
-                        {r.facts.map((f) => (
-                          <li key={f}>{f}</li>
-                        ))}
-                      </ul>
+                      {r.caution && <p className="find-caution">{r.caution}</p>}
+                      <details className="more find-more">
+                        <summary>Detalji</summary>
+                        <ul className="notes">
+                          {r.facts.map((f) => (
+                            <li key={f}>{f}</li>
+                          ))}
+                        </ul>
+                      </details>
                       <div className="button-row">
                         <Link
                           className="button"
                           to={reportPath(
                             r.lat,
                             r.lon,
-                            `${r.name}, ${r.municipality}`,
+                            placeName(r.name, r.municipality),
                             form.profile,
                             [],
                             'settlement',

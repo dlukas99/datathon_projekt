@@ -109,8 +109,8 @@ function Layout() {
       <footer className="site-footer">
         <div className="container footer-row">
           <p>
-            {BRAND.name} · informativni alat iz otvorenih podataka, nije službena procjena. U
-            hitnoj situaciji nazovite 112.
+            {BRAND.name} · informativni alat, nije službena procjena · U hitnoj situaciji
+            nazovite 112
           </p>
           <nav aria-label="Podnožje">
             <ul>
@@ -123,12 +123,10 @@ function Layout() {
               <li>
                 <a href="/api/docs">API</a>
               </li>
+              <li>© suradnici OpenStreetMapa (ODbL)</li>
+              <li>kod EUPL-1.2</li>
             </ul>
           </nav>
-          <p className="footer-small">
-            © suradnici OpenStreetMapa (ODbL) · podloga karte OpenFreeMap, OpenMapTiles · kod
-            EUPL-1.2 · adrese i pitanja se ne spremaju
-          </p>
         </div>
       </footer>
     </>

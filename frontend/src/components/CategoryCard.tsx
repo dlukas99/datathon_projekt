@@ -100,8 +100,8 @@ const KEY_VALUE: Record<string, string> = {
 
 const FLOOD_RPS = [10, 100, 500]
 
-// The environment instruments draw their own scales; none are repeated in the details.
-const SCALES_IN_DETAILS = new Set<string>()
+// Air shows only a rating on its card; the WHO and EU scales are in the details.
+const SCALES_IN_DETAILS = new Set<string>(['air'])
 
 function FloodTable({ values }: { values: Value[] }) {
   const byKey = Object.fromEntries(values.map((v) => [v.key, v]))

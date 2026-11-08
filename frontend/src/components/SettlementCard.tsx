@@ -5,7 +5,7 @@ import type { MapPoint, MapRow } from '../lib/api'
 import { formatDate } from '../lib/format'
 import { AIR_RATING, FLOOD_SHORT, transitText } from '../lib/mapLayers'
 import { getProfile } from '../lib/profiles'
-import { reportPath } from '../lib/urls'
+import { placeName, reportPath } from '../lib/urls'
 import { CategoryIcon } from './Icons'
 import { ListingLinks } from './ListingLinks'
 
@@ -22,13 +22,23 @@ interface Tag {
   text: string
 }
 
+// The 3-30-300 rule asks for at least 30 % tree cover around the home.
+const TREE_TARGET = 30
+
+function needsText(needs: number | null): string {
+  if (needs === null) return 'nema podataka'
+  if (needs >= 7) return 'sve za svaki dan pješice unutar 15 minuta'
+  if (needs >= 4) return 'većina potreba pješice unutar 15 minuta'
+  return 'za većinu potreba treba auto ili prijevoz'
+}
+
 function tags(row: MapRow, profile: string): Tag[] {
   const score = row.scores[profile] ?? null
   return [
     {
       id: 'air',
       title: 'Zrak',
-      text: row.air ? (AIR_RATING[row.air] ?? row.air) : 'nema podataka',
+      text: row.air ? (AIR_RATING[row.air] ?? row.air).toLowerCase() : 'nema podataka',
     },
     {
       id: 'flood',
@@ -41,13 +51,11 @@ function tags(row: MapRow, profile: string): Tag[] {
       text:
         row.tree === null
           ? 'nema podataka'
-          : `drveće ${row.tree.toLocaleString('hr-HR', { maximumFractionDigits: 0 })} % u krugu 300 m`,
+          : row.tree >= TREE_TARGET
+            ? 'puno drveća i hlada'
+            : 'manje drveća nego što se preporučuje',
     },
-    {
-      id: 'car_free',
-      title: 'Usluge pješice',
-      text: row.needs === null ? 'nema podataka' : `${String(row.needs)} od 7 do 15 min`,
-    },
+    { id: 'car_free', title: 'Pješice', text: needsText(row.needs) },
     { id: 'transit', title: 'Prijevoz', text: transitText(row) },
     {
       id: 'score',
@@ -139,7 +147,7 @@ export function SettlementCard({
   const reportUrl =
     picked.from === 'map'
       ? reportPath(picked.lat, picked.lon, null, profile, [], 'map')
-      : reportPath(picked.lat, picked.lon, `${name}, ${municipality}`, profile, [], 'settlement')
+      : reportPath(picked.lat, picked.lon, placeName(name, municipality), profile, [], 'settlement')
   const date = formatDate(profilesDate)
 
   return (
@@ -190,7 +198,9 @@ export function SettlementCard({
             ))}
           </ul>
           <p className="fine-print">
-            Vrijednosti za središte naselja; skor za profil „{getProfile(profile).label}”.
+            Skor za profil „{getProfile(profile).label}” vrijedi za naselje: prometnice za sve
+            njegove adrese, ostalo za središte, bez sunca na krovu. Puni izvještaj računa za jednu
+            točku, pa mu Skor može biti drukčiji.
             {date && ` Izračun ${date}`}, izvori na stranici <Link to="/izvori">Izvori</Link>.
           </p>
         </>
