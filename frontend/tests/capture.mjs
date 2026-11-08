@@ -16,6 +16,8 @@ const report =
 const shots = [
   ['home', '/', null],
   ['find', '/predlozi', null],
+  ['find3', '/predlozi?korak=3&profil=obitelj&podrucje=' + encodeURIComponent('Osječko-baranjska županija') + '&mora=kindergarten', null],
+  ['find4', '/predlozi?korak=4&profil=obitelj&podrucje=' + encodeURIComponent('Osječko-baranjska županija') + '&mora=kindergarten', '.find-results li'],
   ['report', report, 'article'],
   ['map', '/karta', '.atlas-map-wrap[data-ready="true"]'],
   ['compare', '/usporedi', null],

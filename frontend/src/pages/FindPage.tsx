@@ -68,10 +68,14 @@ export function FindPage() {
   // wait for the navigation, and back/forward still restores what the URL says.
   const search = params.toString()
   const [form, setForm] = useState<FindRequest>(() => readRequest(params))
-  const [synced, setSynced] = useState(search)
-  if (search !== synced) {
-    setSynced(search)
-    setForm(readRequest(params))
+  // The URL last seen, and the one this page last wrote. Only a URL the page did not write
+  // (back, forward, a pasted link) replaces the answers; until a write lands, the URL still
+  // shows the old answers and must not undo the new ones.
+  const [seen, setSeen] = useState(search)
+  const [written, setWritten] = useState(search)
+  if (search !== seen) {
+    setSeen(search)
+    if (search !== written) setForm(readRequest(params))
   }
   const [question, setQuestion] = useState('')
   // Which way the trail was walked, for the direction of the step transition.
@@ -107,7 +111,7 @@ export function FindPage() {
 
   function go(next: number, request: FindRequest = form) {
     const p = writeRequest(request, next)
-    setSynced(p.toString())
+    setWritten(p.toString())
     setForm(request)
     setParams(p)
   }
@@ -115,7 +119,7 @@ export function FindPage() {
   function update(change: Partial<FindRequest>) {
     const request = { ...form, ...change }
     const p = writeRequest(request, step)
-    setSynced(p.toString())
+    setWritten(p.toString())
     setForm(request)
     setParams(p, { replace: true })
   }
@@ -125,15 +129,17 @@ export function FindPage() {
   return (
     <div className="wizard">
       <h1>Gdje bih mogao živjeti?</h1>
-      <p className="lead left">
-        Tri kratka pitanja, a aplikacija predlaže naselja u kojima je ispunjeno ono što vam je
-        važno, s razlozima i poveznicom na cijeli izvještaj.
-      </p>
+      {step === 1 && (
+        <p className="lead left">
+          Tri kratka pitanja, a aplikacija predlaže naselja u kojima je ispunjeno ono što vam je
+          važno, s razlozima i poveznicom na cijeli izvještaj.
+        </p>
+      )}
 
       <nav className="trail" aria-label="Koraci">
         <p className="eyebrow trail-name">Predloži mjesto za život</p>
         <p className="trail-count" aria-live="polite">
-          Korak {step} od {LAST}: {STEPS[step - 1]}
+          {step < LAST ? `Pitanje ${String(step)} od ${String(LAST - 1)}` : 'Prijedlozi'}
         </p>
         <ol className="trail-stations">
           {STEPS.map((title, i) => {
@@ -320,6 +326,34 @@ export function FindPage() {
             <h2 id="step-title" ref={headingRef} tabIndex={-1}>
               Što vam je važno?
             </h2>
+            <fieldset className="profiles find-env">
+              <legend>Okoliš</legend>
+              <div className="find-env-row">
+                <label className="chip find-flood">
+                  <input
+                    type="checkbox"
+                    checked={form.avoid_flood}
+                    onChange={(e) => {
+                      update({ avoid_flood: e.target.checked })
+                    }}
+                  />
+                  Izvan modeliranih poplavnih područja
+                </label>
+                <label className="find-air">
+                  Zrak
+                  <select
+                    value={form.max_air}
+                    onChange={(e) => {
+                      update({ max_air: oneOf(e.target.value, AIRS, 'any') })
+                    }}
+                  >
+                    <option value="any">Bilo koji</option>
+                    <option value="umjerena">Umjeren ili bolji</option>
+                    <option value="niska">Dobar ili bolji</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
             <fieldset className="profiles">
               <legend>Pješice do 15 minuta mora biti</legend>
               <div className="chips">
@@ -341,33 +375,9 @@ export function FindPage() {
                 ))}
               </div>
             </fieldset>
-            <label className="chip find-flood">
-              <input
-                type="checkbox"
-                checked={form.avoid_flood}
-                onChange={(e) => {
-                  update({ avoid_flood: e.target.checked })
-                }}
-              />
-              Izvan modeliranih poplavnih područja
-            </label>
-
             <details className="advanced">
-              <summary>Napredno: zrak i težine</summary>
+              <summary>Napredno: težine u Skoru za život</summary>
               <div className="advanced-body">
-                <label>
-                  Zrak
-                  <select
-                    value={form.max_air}
-                    onChange={(e) => {
-                      update({ max_air: oneOf(e.target.value, AIRS, 'any') })
-                    }}
-                  >
-                    <option value="any">Bilo koji</option>
-                    <option value="umjerena">Umjeren ili bolji</option>
-                    <option value="niska">Dobar ili bolji</option>
-                  </select>
-                </label>
                 <fieldset className="find-weights">
                   <legend>Koliko je što važno u Skoru za život</legend>
                   {SCORE_CATEGORIES.map((c) => {
@@ -441,30 +451,39 @@ export function FindPage() {
             )}
             {results.data && (
               <>
-                <p className="section-intro">{results.data.criteria.join(' · ')}</p>
+                <p className="section-intro find-criteria">
+                  {results.data.criteria.join(' · ')}{' '}
+                  <button
+                    type="button"
+                    className="link-button"
+                    onClick={() => {
+                      go(3)
+                    }}
+                  >
+                    Promijeni uvjete
+                  </button>
+                </p>
                 {results.data.results.length === 0 && (
                   <p>Uklonite jedan od uvjeta ili proširite područje.</p>
                 )}
                 <ol className="find-results">
                   {results.data.results.map((r, i) => (
-                    <li key={r.code} className="card">
+                    <li key={r.code} className="find-result">
                       <div className="find-head">
                         <span className="find-rank" aria-hidden="true">
                           {i + 1}
                         </span>
-                        <div>
-                          <h3>{r.name}</h3>
-                          <p className="place-line">
-                            {r.municipality !== r.name ? `${r.municipality}, ` : ''}
-                            {r.county} · {r.population.toLocaleString('hr-HR')} stanovnika
-                          </p>
-                        </div>
+                        <h3>{r.name}</h3>
                         {r.score !== null && (
                           <span className="score-badge small">
                             <span className="score-badge-number">{r.score}</span>
                             <span className="score-badge-text">Skor</span>
                           </span>
                         )}
+                        <p className="place-line">
+                          {r.municipality !== r.name ? `${r.municipality}, ` : ''}
+                          {r.county} · {r.population.toLocaleString('hr-HR')} stanovnika
+                        </p>
                       </div>
                       {r.reasons.length > 0 && (
                         <p className="find-reasons">{r.reasons.join(' · ')}</p>

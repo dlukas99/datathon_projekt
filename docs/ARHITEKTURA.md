@@ -103,7 +103,8 @@ Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti sko
   - granice se učitavaju jednom, a boja svakog naselja za svaki sloj i profil zapisuje se u MapLibreovo stanje značajki (`feature-state`), pa promjena sloja mijenja samo izraz boje, bez novog zahtjeva;
   - podloga se učitava paralelno s podacima;
   - detaljne granice dohvaćaju se tek pri približavanju (zoom 8,5).
-- Font Inter (OFL) poslužuje se iz vlastitog builda.
+- Fontovi Bricolage Grotesque (naslovi) i Figtree (tekst), oba pod licencom OFL-1.1, poslužuju se iz vlastitog builda (paketi `@fontsource-variable`), bez vanjskih poslužitelja fontova.
+- Naslovnica crta sva naselja na `<canvas>` iz istih zahtjeva kao karta (`/api/map/geometry/overview` i `/api/map/settlements`); TanStack Query ih sprema, pa se karta nakon naslovnice otvara bez novog preuzimanja.
 - Stanje izvještaja (koordinate, adresa, profil) je u URL-u, pa se svaka stranica može podijeliti ili ispisati.
 
 ### Postavljanje (`deploy/`)

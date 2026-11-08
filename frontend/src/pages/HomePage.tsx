@@ -27,6 +27,10 @@ export function HomePage() {
   const navigate = useNavigate()
   const theme = useDocumentTheme()
   const [first, second] = demo.addresses
+  // One example per town (Vinkovci has two public institutions in the demo list).
+  const examples = demo.addresses.filter(
+    (d, i, all) => all.findIndex((x) => x.address.split(', ').pop() === d.address.split(', ').pop()) === i,
+  )
 
   function open(s: Suggestion) {
     void navigate(reportPath(s.lat, s.lon, s.label, 'opci', [], s.kind))
@@ -44,7 +48,12 @@ export function HomePage() {
 
           <div className="signpost">
             <div className="plank plank-place">
-              <AddressSearch onSelect={open} label="Adresa ili naselje" inputId="home-search" />
+              <AddressSearch
+                onSelect={open}
+                label="Adresa ili naselje"
+                inputId="home-search"
+                submitLabel="Prikaži"
+              />
             </div>
             <Link className="plank plank-go" to="/predlozi">
               <span className="plank-title">Pronađi mjesto za mene</span>
@@ -58,7 +67,7 @@ export function HomePage() {
               Ili pogledajte primjer:
             </span>
             <ul className="example-list" aria-labelledby="demo-title">
-              {demo.addresses.map((d) => (
+              {examples.map((d) => (
                 <li key={d.id}>
                   <Link to={reportPath(d.lat, d.lon, d.address, 'opci')}>
                     {d.institution.replace(/ \(.*\)$/, '')}
@@ -70,7 +79,9 @@ export function HomePage() {
         </div>
 
         <figure className="trailhead-map">
-          <CroatiaMosaic />
+          <Link to="/karta" className="mosaic-link" aria-label="Istraži kartu Hrvatske: sva naselja prema Skoru za život">
+            <CroatiaMosaic />
+          </Link>
           <figcaption>
             <span className="mosaic-scale" aria-hidden="true">
               {PALETTES[theme].steps.map((c) => (

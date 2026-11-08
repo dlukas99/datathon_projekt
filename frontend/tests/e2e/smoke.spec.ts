@@ -125,7 +125,7 @@ test('the finder walks one question at a time, keeps its answers in the address 
   await page.getByRole('button', { name: 'Dalje' }).click()
   // Weights only under "Napredno".
   await expect(page.getByRole('slider').first()).toBeHidden()
-  await page.getByText('Napredno: zrak i težine').click()
+  await page.getByText('Napredno: težine u Skoru za život').click()
   await expect(page.getByRole('slider', { name: /Poplave/ })).toBeVisible()
   await page.goBack()
   await expect(page.getByLabel('Područje')).toHaveValue('Osječko-baranjska županija')

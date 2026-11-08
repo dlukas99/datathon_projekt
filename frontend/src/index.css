@@ -50,6 +50,9 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
+  --plank-go: #1d6a61;
+  --plank-go-hover: #23796f;
+  --plank-go-ink: #ffffff;
   --bg: #0e1714;
   --surface: #15211d;
   --surface-2: #1c2a25;
@@ -447,6 +450,11 @@ select {
   caret-color: var(--accent);
 }
 
+::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
 input[type='text']:hover,
 input[type='search']:hover,
 textarea:hover,
@@ -475,7 +483,7 @@ select:hover {
 .search-hint,
 .hint {
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   margin: 0.4rem 0 0;
 }
 
@@ -695,6 +703,59 @@ select:hover {
   z-index: 40;
 }
 
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 56px;
+  padding: 0 1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out);
+}
+
+.search-go:hover {
+  background: var(--accent-hover);
+}
+
+.plank-place .search-go {
+  border-color: var(--sign-edge);
+}
+
+@media (width <= 420px) {
+  .search-go {
+    padding: 0 0.75rem;
+  }
+}
+
+.mosaic-link {
+  display: block;
+  border-radius: var(--radius);
+}
+
+.mosaic-link:hover .mosaic-canvas {
+  filter: saturate(1.25) contrast(1.05);
+}
+
+.mosaic-link .mosaic-canvas {
+  transition: filter 220ms var(--ease-out);
+}
+
 .plank-go {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -703,14 +764,14 @@ select:hover {
   min-height: 64px;
   padding: 0.75rem 0.75rem 0.75rem 1.1rem;
   margin-right: 22%;
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--plank-go, var(--accent));
+  color: var(--plank-go-ink, var(--accent-contrast));
   text-decoration: none;
   transition: background-color 160ms var(--ease-out), transform 220ms var(--ease-out);
 }
 
 .plank-go:hover {
-  background: var(--accent-hover);
+  background: var(--plank-go-hover, var(--accent-hover));
   transform: translateX(4px);
 }
 
@@ -856,9 +917,8 @@ select:hover {
   left: 22px;
   right: 10%;
   top: 21px;
-  height: 3px;
-  border-radius: 2px;
-  background: repeating-linear-gradient(90deg, var(--accent) 0 14px, transparent 14px 22px);
+  height: 0;
+  border-top: 3px dashed var(--accent);
 }
 
 .station {
@@ -930,9 +990,10 @@ select:hover {
     right: auto;
     top: 22px;
     bottom: 22px;
-    width: 3px;
+    width: 0;
     height: auto;
-    background: repeating-linear-gradient(180deg, var(--accent) 0 14px, transparent 14px 22px);
+    border-top: 0;
+    border-left: 3px dashed var(--accent);
   }
 
   .station {
@@ -1373,7 +1434,7 @@ details summary {
 }
 
 .score-badge-text {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 600;
   text-align: center;
 }
@@ -1502,13 +1563,13 @@ details summary {
   left: 44px;
   right: 2px;
   top: 20px;
-  height: 3px;
-  border-radius: 2px;
-  background: repeating-linear-gradient(90deg, var(--control-border) 0 8px, transparent 8px 14px);
+  height: 0;
+  border-top: 3px dashed var(--control-border);
 }
 
 .trail-station[data-state='done']::after {
-  background: var(--accent);
+  border-top-style: solid;
+  border-top-color: var(--accent);
 }
 
 .trail-station > button,
@@ -1808,12 +1869,49 @@ details summary {
   margin: 1rem 0;
 }
 
+/* Suggestions as ruled rows along one list, not a stack of identical cards. */
 .find-results {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0;
+  margin: 1.25rem 0 0;
   display: grid;
-  gap: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.find-result {
+  padding: 1.25rem 0 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.find-result .notes {
+  margin: 0.6rem 0 0.9rem;
+}
+
+.find-result:first-child .find-rank {
+  background: var(--sign);
+  border-color: var(--sign);
+  color: var(--sign-ink);
+}
+
+.find-env-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1.25rem;
+}
+
+.find-env-row .find-flood {
+  margin: 0;
+}
+
+.find-air {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 14rem;
+}
+
+.find-env {
+  margin-bottom: 1.5rem;
 }
 
 .find-head {
@@ -1825,7 +1923,35 @@ details summary {
 
 .find-head h3 {
   font-size: 1.35rem;
-  margin: 0.1rem 0 0.15rem;
+  margin: 0.25rem 0 0;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.find-head .score-badge {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+
+.find-head .place-line {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: -0.75rem;
+}
+
+.find-criteria .link-button {
+  font-weight: 700;
+}
+
+@media (width <= 560px) {
+  .find-head .place-line {
+    grid-column: 1 / -1;
+    margin-top: -0.25rem;
+  }
+
+  .find-head .score-badge {
+    grid-row: 1;
+  }
 }
 
 .find-rank {
@@ -2122,6 +2248,7 @@ details summary {
 }
 
 .report-guide ol {
+  mask-image: linear-gradient(90deg, #000 88%, transparent);
   display: flex;
   gap: 0.25rem;
   list-style: none;
@@ -2801,16 +2928,58 @@ button.daily-row:hover .daily-show {
   .profile-select {
     width: 100%;
   }
+
+  /* On a phone: the main action and the listings across the full width, copy and print
+     side by side. */
+  .report-tools .actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .report-tools .actions .listings > .button {
+    width: 100%;
+  }
+
+  .report-tools .actions > .button:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .report-tools .actions .button {
+    padding: 0 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  .report-tools .actions > :last-child:not(.button) {
+    grid-column: 1 / -1;
+  }
+
+  .board-band {
+    padding: 1.1rem 1.1rem 1rem;
+  }
+
+  .board-body {
+    padding: 1.1rem;
+  }
 }
 
+/* Reduced motion: nothing moves or slides, but state still changes visibly (colour and
+   border transitions stay, as they are feedback, not movement). */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .plank-go:hover {
+    transform: none;
+  }
+
+  .mosaic[data-state='loading']::after {
+    animation: none;
   }
 }
 
@@ -2879,12 +3048,30 @@ button.daily-row:hover .daily-show {
   gap: 0.3rem;
 }
 
+/* Map on the left; on the right the selected settlement above the legend, so what the
+   colours mean is always in view beside the map. */
 .atlas {
   scroll-margin-top: 5rem;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-rows: auto 1fr;
   gap: 1rem;
   align-items: start;
+}
+
+.atlas-map-wrap {
+  grid-row: 1 / span 2;
+}
+
+.atlas-panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.atlas > .atlas-legend {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0;
 }
 
 .atlas-map-wrap {
@@ -3142,6 +3329,14 @@ button.daily-row:hover .daily-show {
 @media (width <= 760px) {
   .atlas {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .atlas-map-wrap,
+  .atlas-panel,
+  .atlas > .atlas-legend {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .atlas-map {
@@ -3186,9 +3381,11 @@ button.daily-row:hover .daily-show {
   }
 
   /* One row of layer buttons that scrolls sideways, so the map starts higher up */
+  /* The faded right edge says the row continues sideways. */
   .atlas-layers .chips {
     flex-wrap: nowrap;
     overflow-x: auto;
+    mask-image: linear-gradient(90deg, #000 82%, transparent);
     padding: 3px 3px 6px;
     margin: -3px;
   }
@@ -3215,7 +3412,16 @@ button.daily-row:hover .daily-show {
   }
 }
 
-/* Links in the map attribution are told apart from its text by more than colour. */
-.atlas-map .maplibregl-ctrl-attrib a {
+/* Map attribution on every map, in the page's colours (MapLibre's own half-white panel
+   fails contrast in the dark theme); links told apart by more than colour. */
+.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib,
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--text);
+  padding-block: 2px;
+}
+
+.maplibregl-map .maplibregl-ctrl-attrib a {
+  color: var(--text);
   text-decoration: underline;
 }
