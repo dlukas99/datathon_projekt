@@ -18,11 +18,11 @@ Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svak
 
 Ti podaci postoje, ali su rasuti po institucijama i formatima i običnom čovjeku nisu ni razumljivi ni usporedivi. Ljudi okolišne rizike i ovisnost o autu najčešće otkriju tek kad usele.
 
-Uspjeh: korisnik prije potpisa ugovora razumije što ga na adresi čeka, u apsolutnim i provjerljivim izrazima, s izvorom za svaku brojku.
+Uspjeh: korisnik razumije kako je živjeti na adresi i koje mu mjesto odgovara, u apsolutnim i provjerljivim izrazima, s izvorom za svaku brojku.
 
 ## Positioning
 
-- Jedno mjesto koje spaja više od 30 otvorenih skupova podataka (DGU, EEA, JRC, ESA WorldCover, Copernicus EFFIS, PVGIS, GTFS voznih redova, registri ustanova, OSM) u izvještaj za točnu adresu, a ne za općinu ili prosjek.
+- Jedno mjesto koje spaja 33 skupa podataka (DGU, EEA, JRC, ESA WorldCover, Copernicus EFFIS, PVGIS, GTFS voznih redova, registri ustanova, OSM) u izvještaj za točnu adresu, a ne za općinu ili prosjek.
 - Apsolutno značenje ispred relativnog ranga: „u modeliranom poplavnom području za povratno razdoblje od 100 godina: da” umjesto „rizik iznad prosjeka”.
 - Svaka vrijednost nosi izvor, datum preuzimanja i vrstu (izmjereno, modelirano ili procjena).
 - Okoliš je uvijek prvi i najvažniji (izazov B). Svakodnevne potrebe su dodatak; proizvod ne smije izgledati kao aplikacija za škole i trgovine.
@@ -31,11 +31,11 @@ Uspjeh: korisnik prije potpisa ugovora razumije što ga na adresi čeka, u apsol
 
 - Ulazi s naslovnice:
   - Provjeri adresu: izvještaj za adresu.
-  - Predloži mjesto za život: rangirana naselja prema profilu.
-  - Usporedi dvije lokacije: dvije adrese jedna uz drugu.
+  - Pronađi mjesto za mene: rangirana naselja prema profilu i njegovim obaveznim uvjetima.
   - Istraži kartu Hrvatske: svih 6.759 naselja obojeno po sloju.
+- Usporedba dviju lokacija je u izborniku i u izvještaju.
 - Izvještaj ima stalan redoslijed: okolišni pregled (prvi ekran), život bez auta, svakodnevni život, izvori.
-- Točka se bira upisom adrese, klikom na kartu ili povlačenjem oznake.
+- Točka se bira upisom adrese ili povlačenjem oznake na karti.
 - „Pogledaj oglase” samo slaže poveznicu na vanjsku pretragu oglasa; aplikacija ne prikazuje oglase.
 - Asistent odgovara na pitanja o lokaciji; brojke dolaze iz predložaka nad rezultatima alata, ne iz jezičnog modela.
 - Ostale stranice: Izvori (datumi osvježavanja uživo preko CKAN API-ja data.gov.hr), O alatu, ispis i dijeljenje stanja preko URL-a.

@@ -23,36 +23,60 @@ Pravila natjecanja traže:
 | Pristupačnost | `docs/PRISTUPACNOST.md` |
 | Asistent i testna pitanja | `docs/ASISTENT.md` |
 | Odluke tijekom izrade | `docs/ODLUKE.md` |
+| Alati, biblioteke i AI alati s licencama | `docs/ALATI_I_LICENCE.md` |
+| Model za zrak (evaluacija) | `docs/ML.md` |
+| Pokretanje za razvoj | `docs/RAZVOJ.md` |
+| Nalazi testiranja | `docs/NALAZI_TESTIRANJA.md` |
 | Upute za postavljanje | `docs/DEPLOY.md` |
 | Snimke zaslona | `docs/images/` (`make screenshots`) |
 | Scenarij videa | `docs/VIDEO_SCENARIJ.md` |
 
+## Tim
+
+- **Tim „Požega”:** Domagoj Lukas i Fabio Mandić, studenti diplomskog studija Računarstvo, smjer Podatkovna znanost.
+- **Mentor i voditelj tima:** dr. sc. Matej Džijan (FERIT).
+- **Visoko učilište:** Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek (FERIT), Sveučilište J. J. Strossmayera u Osijeku.
+
 ## Što moraju napraviti ljudi
 
-Redoslijed je važan; uz svaku stavku je preporučeni rok.
+Rok predaje je **ponedjeljak 9. 11. 2026. u 24:00**. Uz svaku stavku je preporučeni rok.
 
-1. **Imena tima, mentora i visokog učilišta** (do 6. 11.): upisati u `README.md` umjesto oznaka `TODO(tim)`.
-2. **`CONTACT_EMAIL`** (do 6. 11.): upisati u `.env` i na poslužitelju. Adresa ide u User-Agent prema izvorima podataka.
-3. **Javni repozitorij na GitHubu** (do 6. 11.):
-   - kod je na https://github.com/dlukas99/datathon_projekt (grana `main`); repozitorij treba postaviti kao **javni** (Settings → General → Danger Zone → Change visibility) prije predaje;
-   - provjeriti da u repozitoriju nema `.env` ni mape `data/` (u `.gitignore` su).
-4. **Poslužitelj i domena** (do 7. 11.): prema `docs/DEPLOY.md`.
-   - Treba Linux s Dockerom, 2 vCPU, 4 GB RAM-a i 10 GB diska, te domena s DNS zapisom na poslužitelj.
-   - Podaci se prenose skriptom `scripts/upload_data.sh` ili pripremaju na poslužitelju s `make data`.
-   - Provjeriti `https://DOMENA/api/health` i izvještaj za svih pet demo adresa iz `scripts/demo_addresses.json`.
-5. **Demo URL u README-u** (odmah nakon postavljanja): zamijeniti `TODO(ljudi)` u odjeljku „Demo” javnim URL-om.
-6. **Ključ za jezični model** (neobavezno): ako želite asistenta s modelom, u `.env` na poslužitelju postaviti `LLM_BASE_URL`, `LLM_API_KEY` i `LLM_MODEL` (bilo koji OpenAI-kompatibilni API, npr. lokalni Ollama s otvorenim modelom). Bez ključa asistent radi s pravilima.
-7. **Snimanje videa** (do 8. 11.): prema `docs/VIDEO_SCENARIJ.md`, do 3 minute. Objaviti ga (npr. YouTube kao „neizlistano”) i poveznicu upisati u `README.md` (redak „Prezentacija rješenja” u tablici kriterija).
-8. **Završna provjera** (9. 11. do 18:00):
-   - `make verify` na čistom klonu s pripremljenim podacima;
-   - `python scripts/check_readme.py` ispisuje preostale oznake `TODO(tim)` i `TODO(ljudi)`; sve trebaju biti zamijenjene.
-9. **Slanje e-pošte** (9. 11., najkasnije do 24:00) na **open.data@mpudt.hr**, s naslovom npr. „Datathon 2026 – izazov B – Dobro mjesto”. Sadržaj:
-   - naziv rješenja i izazov (B: Okoliš i održivi prostor);
-   - imena članova tima, mentora i visokog učilišta;
-   - poveznica na javni repozitorij;
-   - poveznica na demo;
-   - poveznica na video;
-   - poveznice na dokumentaciju u repozitoriju (`README.md`, `docs/ARHITEKTURA.md`, `docs/IZVORI_PODATAKA.md`).
+1. **Javni repozitorij** (9. 11. do 12:00): https://github.com/dlukas99/datathon_projekt, grana `main`. Postaviti ga kao **javni** (Settings → General → Danger Zone → Change visibility) i provjeriti da u njemu nema `.env` ni mape `data/` (u `.gitignore` su).
+2. **Poslužitelj i domena** (9. 11. do 14:00) prema [DEPLOY.md](DEPLOY.md): Linux s Dockerom, 2 vCPU, 4 GB RAM-a, 10 GB diska i domena s DNS zapisom. Podatke prenijeti skriptom `scripts/upload_data.sh` (ili `make data` na poslužitelju). U `.env` na poslužitelju upisati `CONTACT_EMAIL` (ide u User-Agent prema izvorima podataka) i `DOMAIN`.
+   - Provjeriti `https://DOMENA/api/health` te izvještaj za svih šest demo adresa iz `scripts/demo_addresses.json`, „Predloži mjesto” i kartu.
+3. **Demo URL u README-u** (odmah nakon postavljanja): u `README.md` zamijeniti obje oznake `TODO(ljudi)` za demo javnim URL-om.
+4. **Ključ za jezični model** (neobavezno): `LLM_BASE_URL`, `LLM_API_KEY` i `LLM_MODEL` u `.env` na poslužitelju (bilo koji OpenAI-kompatibilni API, npr. lokalni Ollama s otvorenim modelom). Bez ključa asistent radi s pravilima.
+5. **Video** (9. 11. do 18:00): snimiti prema [VIDEO_SCENARIJ.md](VIDEO_SCENARIJ.md), do 3 minute, na javnoj demo inačici. Objaviti (npr. YouTube kao „neizlistano”) i poveznicu upisati u `README.md` umjesto `TODO(ljudi)` u retku „Prezentacija rješenja”.
+6. **Završna provjera** (9. 11. do 20:00): `python scripts/check_readme.py` ne smije ispisati nijednu oznaku `TODO(ljudi)`; commit i push na `main`.
+7. **Slanje e-pošte** (mentor, 9. 11. najkasnije do 24:00, preporuka do 21:00) na **open.data@mpudt.hr**, prema nacrtu ispod.
+
+## Nacrt e-pošte (šalje mentor)
+
+**Prima:** open.data@mpudt.hr
+**Predmet:** Datathon Portala otvorenih podataka 2026 – Izazov B – Tim Požega – Dobro mjesto
+
+> Poštovani,
+>
+> u ime tima „Požega” šaljem rješenje za Datathon Portala otvorenih podataka 2026., izazov B: Okoliš i održivi prostor.
+>
+> **Rješenje:** Dobro mjesto, web aplikacija koja za bilo koju adresu u Hrvatskoj iz otvorenih podataka pokazuje okoliš (poplave, zrak, zelenilo, udaljenost od prometnica, požari, sunce) i što je pješice na dohvat ruke, a za odabrani profil (obitelj, umirovljenik, student, rad od kuće) predlaže mjesta za život s obrazloženjem.
+>
+> **Poveznice:**
+> - javni repozitorij (izvorni kod, licenca EUPL-1.2): https://github.com/dlukas99/datathon_projekt
+> - demo: [javni URL]
+> - video (do 3 minute): [poveznica na video]
+> - dokumentacija: README (https://github.com/dlukas99/datathon_projekt#readme), arhitektura (docs/ARHITEKTURA.md), skupovi podataka s izvorima i licencama (docs/IZVORI_PODATAKA.md), metodologija (docs/METODOLOGIJA.md), alati i licence (docs/ALATI_I_LICENCE.md)
+>
+> **Tim:** Domagoj Lukas i Fabio Mandić, studenti diplomskog studija Računarstvo, smjer Podatkovna znanost, Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek (FERIT), Sveučilište J. J. Strossmayera u Osijeku.
+> **Mentor i voditelj tima:** dr. sc. Matej Džijan (FERIT).
+>
+> **AI alati:** pri izradi koda i dokumentacije korišten je Claude Code (Anthropic), a za pregled dizajna sučelja dodatak (skill) Impeccable (Apache-2.0). Asistent u aplikaciji može koristiti bilo koji jezični model preko OpenAI-kompatibilnog API-ja, a bez modela radi s pravilima; brojke u odgovorima uvijek dolaze iz izračuna, ne iz modela. Popis je u docs/ALATI_I_LICENCE.md.
+>
+> Molim potvrdu primitka.
+>
+> Srdačan pozdrav,
+> dr. sc. Matej Džijan
+> FERIT, Sveučilište J. J. Strossmayera u Osijeku
 
 ## Poznata ograničenja koja treba imati na umu
 

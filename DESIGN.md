@@ -1,5 +1,5 @@
 ---
-name: Prije potpisa
+name: Dobro mjesto
 description: Okolišni pregled i pregled svakodnevnog života za bilo koju adresu u Hrvatskoj, kao sustav planinarskih putokaza.
 colors:
   limestone: "#eef3ea"
@@ -200,7 +200,7 @@ components:
     size: "42px"
 ---
 
-# Design System: Prije potpisa
+# Design System: Dobro mjesto
 
 ## Overview
 
@@ -349,7 +349,7 @@ Prijedlozi naselja su redovi na jednom popisu odvojeni tankim linijama, ne niz j
 Ljepljiva traka odjeljaka izvještaja ispod zaglavlja (visina poveznice 48 px). Svaki odjeljak je postaja: prsten od 12 px s obrubom od 3 px u žadu, a odjeljci su spojeni isprekidanom crtom od 3 px u `control-border`. Trenutni odjeljak ima punu smeđu postaju s prstenom („ovdje ste”) i tekst težine 700. Na uskom zaslonu se pomiče vodoravno s izblijedjelim desnim rubom.
 
 ### Instrumenti okolišnog pregleda
-Svaki crtež je `aria-hidden`, a brojke i rečenice uz njega nose značenje. Poplave: vodomjer s tri modelirana sloja vode (10, 100, 500 godina) i kućom na razini prve poplave koja doseže adresu. Zrak: ravnala PM2,5 i NO2 s pragovima WHO-a i EU-a i iglom na godišnjem prosjeku; pritisak na ravnalo bira onečišćivač, a uz brojku stoji omjer prema preporuci WHO-a. Zelenilo: krug od 300 m kao stotinjak točkica po udjelima pokrova; prijelaz preko legende ističe točkice. Prometnica: ravnalo do 700 m. Požari: radar kruga od 2 km bez položaja požara. Sunce: luk i panel pod optimalnim nagibom. Instrument se jednom pomakne na vrijednost kad dođe u pogled; uz smanjene animacije i za ispis odmah stoji na vrijednosti.
+Svaki crtež je `aria-hidden`, a brojke i rečenice uz njega nose značenje. Poplave: jedna rečenica i kratko objašnjenje, bez crteža. Zrak: ocjena riječju, jedna rečenica i ljestvica od četiri razine; brojke i pragovi su pod „Detalji i izvor”. Zelenilo: krug od 300 m kao stotinjak točkica po udjelima pokrova; prijelaz preko legende ističe točkice. Prometnica: ravnalo do 700 m. Požari: jedna rečenica o većim požarima u krugu od 2 km i o tome što satelit bilježi. Sunce: luk i panel pod optimalnim nagibom. Instrument se jednom pomakne na vrijednost kad dođe u pogled; uz smanjene animacije i za ispis odmah stoji na vrijednosti.
 
 ### Interakcija
 Sve što se može pritisnuti ima glatku povratnu informaciju (200–260 ms, eksponencijalno usporavanje): gumbi se podignu za 1 px, ploče instrumenata i kartice mjerenja za 3 px uz mekanu sjenu i rub u boji mjerenja, ključne činjenice za 2 px, čipovi i izbori u vodiču također. Crta staze ispod poveznice u navigaciji raste s lijeva (pola na hover, cijela za trenutnu stranicu). Sve poveznice navigacije imaju istu težinu i stranica uvijek čuva mjesto za traku pomicanja (`scrollbar-gutter: stable`), pa se ništa ne pomiče pri prelasku između stranica. Uz smanjene animacije nema pomaka, samo promjena boje.

@@ -1,5 +1,7 @@
 # Nalazi testiranja i popravci
 
+> Stanje 6. 11. 2026. Kasnije izmjene (npr. pravila za prometnice, prikaz poplava, zraka i požara) opisane su u [ODLUKE.md](ODLUKE.md) od 8. 11.
+
 Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje je u kodu, što je stvarni uzrok, kako ga popraviti, koliko je to zahtjevno i što se time može pokvariti. Popravci su zatim napravljeni redom, od najlakšeg prema težem, svaki u zasebnom commitu. Ono što ovisi o vanjskim podacima, licenci ili ključu nije napravljeno; to je opisano kao prijedlog.
 
 | # | Problem | Uzrok ukratko | Procjena | Stanje |

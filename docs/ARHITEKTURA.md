@@ -11,6 +11,7 @@ flowchart LR
     OSM[OpenStreetMap<br/>Geofabrik PBF]
     TT[ZET, HŽPP GTFS<br/>Autotrolej JSON]
     CK[Portal otvorenih podataka<br/>CKAN API]
+    EU[DZS, EFFIS WFS,<br/>EEA mjerne postaje]
   end
   subgraph Obrada["Obrada (make data, backend/ingest)"]
     ING[konektori, isijecanje rastera,<br/>geokodiranje registara, spajanje točaka]
@@ -21,13 +22,15 @@ flowchart LR
   OSM --> ING
   TT --> ING
   CK --> ING
+  EU --> ING
   ING --> PD[(data/processed<br/>GeoParquet, GeoTIFF, manifest.json)]
-  OSM --> VH[Valhalla<br/>pješačka mreža]
   subgraph Posluzitelj["Poslužitelj (Docker Compose)"]
+    VH[Valhalla<br/>pješačka mreža]
     CADDY[Caddy<br/>HTTPS, frontend] --> API[FastAPI<br/>backend/app + analysis]
     API --> PD
     API --> VH
   end
+  OSM --> VH
   API --> PV[JRC PVGIS API<br/>uživo, predmemorija]
   API --> CK
   API -.-> LLM[Jezični model<br/>opcionalno, OpenAI-kompatibilan]
@@ -53,6 +56,11 @@ Rješenje ima dva dijela:
 | `recycling.py` | CKAN pretraga općinskih skupova + OSM | `recycling.parquet`, `recycling_ckan.json` |
 | `centers.py` | OSM čvorovi `place` | stvarna središta naselja u `settlements.parquet` |
 | `stations.py` | EEA Air Quality Download Service | `stations_2024.parquet`: godišnji prosjeci službenih postaja |
+| `dzs.py` | DZS Popis 2021. | `settlement_population.parquet` |
+| `effis.py` | EFFIS WFS | `effis_burnt.parquet`: opožarene površine |
+| `facilities.py` | MZOM visoka učilišta i studijski programi, OSM bolnice, domovi i menze | `higher_ed_places.parquet`, `osm_facilities.parquet`, `settlement_facilities.parquet` |
+| `settlement_traffic.py` | DGU adrese, OSM prometnice | `settlement_traffic.parquet`: udaljenost svih adresa naselja od velikih prometnica |
+| `listing_locations.py` | Index Oglasi (održavanje, ne dio `make data`) | `config/listing_locations.json` |
 | `settlement_profiles.py` | sve gore (treba Valhallu) | `settlement_profiles.parquet`: profil središta svih 6.759 naselja za kartu i tražilicu (tražilica uzima 2.347 naselja s najmanje 200 stanovnika) |
 | `pois.py` | sve gore | `pois.parquet`: jedan sloj točaka s prednošću službenih izvora |
 | `common.py` | — | pristojno preuzimanje (User-Agent, razmak između zahtjeva, ponavljanje, nastavak prekinutog preuzimanja) i `manifest.json` s izvorom, licencom i datumom preuzimanja |
@@ -73,6 +81,7 @@ Rješenje ima dva dijela:
 
 | Ruta | Opis |
 |---|---|
+| `GET /api/health` | stanje servisa |
 | `GET /api/geocode?q=` | prijedlozi adresa, ulica i naselja; kad kućnog broja ili ulice nema u registru, prijedlog ulice ili naselja s napomenom (`note`) |
 | `GET /api/reverse?lat=&lon=` | naselje, grad ili općina, županija |
 | `GET /api/report?lat=&lon=[&format=geojson]` | cijeli izvještaj; svaka vrijednost ima `source`, `retrieved_at` i `kind`; `nearby_places` su mjesta za kartu |
@@ -89,7 +98,8 @@ Rješenje ima dva dijela:
 ### Zajednička konfiguracija (`config/`)
 
 - `profiles.json`: profili i težine za Skor za život; čitaju ga i backend (`app/profiles.py`) i frontend.
-- `listings.json`: slaganje poveznica na oglasnike (samo URL, bez dohvaćanja): kategorije, parametri filtara i iznimke slugova po oglasniku.
+- `finder_rules.json`: obavezni uvjeti, važni kriteriji i obrazloženja profila za „Predloži mjesto” (`app/finder_rules.py`, čarobnjak).
+- `listings.json`: slaganje poveznica na oglasnike (samo URL, bez dohvaćanja): kategorije, parametri filtara i iznimke oblika naziva mjesta u URL-u (slug) po oglasniku.
 - `listing_locations.json`: UUID-ovi mjesta za Index Oglasi i imena gradova i općina koja postoje u više županija; puni ga `backend/ingest/listing_locations.py`, a aplikacija ga samo čita.
 
 Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti skor koriste izvještaj i tražilica mjesta.
@@ -103,7 +113,7 @@ Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti sko
   - granice se učitavaju jednom, a boja svakog naselja za svaki sloj i profil zapisuje se u MapLibreovo stanje značajki (`feature-state`), pa promjena sloja mijenja samo izraz boje, bez novog zahtjeva;
   - podloga se učitava paralelno s podacima;
   - detaljne granice dohvaćaju se tek pri približavanju (zoom 8,5).
-- Fontovi Bricolage Grotesque (naslovi i velike brojke) i Figtree (tekst), oba pod licencom OFL-1.1, poslužuju se iz vlastitog builda (paketi `@fontsource-variable`), bez vanjskih poslužitelja fontova.
+- Fontovi Bricolage Grotesque (naslovi i velike brojke) i Figtree (tekst), oba pod licencom OFL-1.1, poslužuju se iz vlastite izgradnje (paketi `@fontsource-variable`), bez vanjskih poslužitelja fontova.
 - Naslovnica crta sva naselja na `<canvas>` iz istih zahtjeva kao karta (`/api/map/geometry/overview` i `/api/map/settlements`); TanStack Query ih sprema, pa se karta nakon naslovnice otvara bez novog preuzimanja.
 - Stanje izvještaja (koordinate, adresa, profil) je u URL-u, pa se svaka stranica može podijeliti ili ispisati.
 
@@ -150,12 +160,12 @@ Isti izvještaj dostupan je kao JSON za aplikacije i kao GeoJSON za GIS alate (Q
   - ODbL 1.0 (OpenStreetMap, JRC poplave): izvedene baze podataka iz OSM-a moraju ostati pod ODbL-om.
 - **Izvori bez navedene licence** (HZZO, HŽPP GTFS): prije službenog uvođenja potrebna je pisana potvrda izdavača. Karte Hrvatskih voda samo se povezuju.
 - **Ograničenje odgovornosti:** alat je informativan i ne zamjenjuje službene karte, procjene ni stručne preglede. Napomena je na svakom izvještaju.
-- **Zaštita osobnih podataka (GDPR):** upisane adrese, koordinate i pitanja ne spremaju se, a pristupni zapisi su isključeni. Nema kolačića za praćenje ni analitike. Iz HZZO-ovih popisa ne prikazuju se imena liječnika. Iz popisa škola ne prikazuju se imena ravnatelja.
+- **Zaštita osobnih podataka (GDPR):** upisane adrese, koordinate i pitanja ne spremaju se, a pristupni zapisi su isključeni. Pločice podloge preglednik dohvaća izravno s OpenFreeMapa, PVGIS dobiva koordinate zaokružene na 0,01°, a uz uključen jezični model njegovu pružatelju ide samo tekst pitanja. Nema kolačića za praćenje ni analitike. Iz HZZO-ovih popisa ne prikazuju se imena liječnika. Iz popisa škola ne prikazuju se imena ravnatelja.
 - **Kod** je objavljen pod licencom EUPL-1.2.
 - **Pristupačnost:** Zakon o pristupačnosti mrežnih stranica i programskih rješenja za pokretne uređaje tijela javnog sektora (NN 17/19) traži usklađenost s normom EN 301 549 (WCAG). Rješenje je izrađeno prema WCAG 2.2 AA (vidi [PRISTUPACNOST.md](PRISTUPACNOST.md)).
 
 ## Kvaliteta koda
 
-- **Backend:** ruff, mypy `--strict` i pytest. Testovi obuhvaćaju jedinične testove pragova, API ugovor, 20 pitanja asistenta i zlatne testove izvještaja za demo adrese.
+- **Backend:** ruff, mypy `--strict` i pytest. Testovi obuhvaćaju jedinične testove pragova, API ugovor, 30 pitanja asistenta i zlatne testove izvještaja za demo adrese.
 - **Frontend:** ESLint (typescript-eslint strict s provjerom tipova i jsx-a11y strict), `tsc`, Vitest i Playwright s axe-core. Provjerava se glavni tok, usporedba, asistent, pogreške, 320 px bez vodoravnog pomicanja te axe na svim stranicama u svijetloj i tamnoj temi, na desktopu i mobitelu.
 - `make verify` pokreće sve provjere i provjeru README-a.

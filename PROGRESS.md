@@ -44,7 +44,6 @@ Zadnje ažurirano: 2026-11-08 21:30
 
 ## Za ljude
 - Upisati `CONTACT_EMAIL` u `.env` (ide u User-Agent prema izvorima podataka).
-- Imena tima, mentora i visokog učilišta u README (`TODO(tim)`).
 - Javni repozitorij na GitHubu i push grane `main`.
 - Poslužitelj, domena i postavljanje prema `docs/DEPLOY.md`; demo URL u README (`TODO(ljudi)`).
 - Po želji ključ za jezični model (`LLM_*`); prijedlog asistenta koji odgovara iz podataka i cijene modela su u `docs/NALAZI_TESTIRANJA.md` (točka 8).

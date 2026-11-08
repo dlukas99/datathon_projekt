@@ -55,7 +55,7 @@
     },
     "rad-od-kuce": {
       "summary": "Mirna i zelena mjesta s trgovinom do 15 minuta hoda.",
-      "rationale": "Tko radi od kuće, provodi dan u mjestu: trgovina pješice je minimum, ljekarna i liječnik pješice podižu rang, a mir (podalje od prometnica), zelenilo i zrak boduje Skor za život s pojačanim težinama. Podaci o planiranoj optičkoj mreži nisu dostupni kao otvoreni skup, pa se ne boduju.",
+      "rationale": "Tko radi od kuće, provodi dan u mjestu: trgovina pješice je minimum, ljekarna i liječnik pješice podižu rang, a mir (podalje od prometnica), zelenilo i zrak boduje Skor za život s pojačanim težinama. Optička mreža se ne boduje: otvoreni podaci govore samo o planovima gradnje, a ne o tome ima li adresa optiku danas.",
       "requires": ["walk:grocery"],
       "criteria": [
         { "id": "walk:park", "weight": 1, "why": "park za stanku blizu doma" },
