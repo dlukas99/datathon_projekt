@@ -333,8 +333,34 @@ test('map of Croatia: the table carries the same data and works with the keyboar
 
 test('assistant answers from the report', async ({ page }) => {
   await page.goto(reportUrl)
-  await page.getByRole('button', { name: 'Je li ova kuća u poplavnom području?' }).click()
-  await expect(page.getByText(/Za ovu adresu \(poplave/)).toBeVisible()
+  await page.getByRole('button', { name: 'Je li u poplavnom području?' }).click()
+  const flood = page.locator('section.assistant').getByRole('article', { name: 'Poplave' })
+  await expect(flood.locator('.answer-text')).toHaveText(/^(Da|Ne) – /)
+})
+
+test('assistant: several topics, a follow-up, sources folded and accessible', async ({ page }) => {
+  await page.goto(reportUrl)
+  const assistant = page.locator('section.assistant')
+  const input = assistant.getByRole('textbox', { name: 'Pitanje' })
+  await input.fill('Kakav je zrak i ima li ljekarna blizu?')
+  await input.press('Enter')
+  const air = assistant.getByRole('article', { name: 'Kvaliteta zraka' })
+  await expect(air).toBeVisible()
+  await expect(assistant.getByRole('article', { name: 'Ljekarna' })).toContainText(/min hoda/)
+  await expect(air.locator('.answer-lines dt', { hasText: 'PM2,5' })).toBeVisible()
+
+  // Sources are closed by default and open from the keyboard.
+  const summary = air.getByText('Izvori i metoda')
+  await expect(air.locator('details')).not.toHaveAttribute('open')
+  await summary.focus()
+  await page.keyboard.press('Enter')
+  await expect(air.locator('details')).toHaveAttribute('open')
+
+  await input.fill('A škola?')
+  await input.press('Enter')
+  await expect(assistant.getByRole('article', { name: 'Osnovna škola' })).toContainText(/min hoda/)
+  await expect(page.getByText(/nije službena procjena ni savjet/)).toHaveCount(1)
+  await expectNoAxeViolations(page)
 })
 
 test('walking route to the nearest place of a kind, from the legend and the daily list', async ({
@@ -441,3 +467,20 @@ test('no horizontal scrolling at 320 px', async ({ page }) => {
     expect(overflow, url).toBeLessThanOrEqual(0)
   }
 })
+
+for (const theme of ['light', 'dark'] as const) {
+  test.describe(`assistant answer accessibility (${theme})`, () => {
+    test.use({ colorScheme: theme })
+    test('blocks, chips and open sources have no axe violations', async ({ page }) => {
+      await page.goto(reportUrl)
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme)
+      const assistant = page.locator('section.assistant')
+      const input = assistant.getByRole('textbox', { name: 'Pitanje' })
+      await input.fill('Mogu li živjeti bez auta i što ne znaš?')
+      await input.press('Enter')
+      await expect(assistant.getByRole('article', { name: 'Što ne znamo' })).toBeVisible()
+      for (const summary of await assistant.getByText('Izvori i metoda').all()) await summary.click()
+      await expectNoAxeViolations(page)
+    })
+  })
+}

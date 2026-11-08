@@ -116,8 +116,12 @@ test('compare', async ({ page }) => {
 test('assistant', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.goto(reportUrl(byId('zagreb')))
-  await page.getByRole('button', { name: 'Mogu li ovdje živjeti bez auta?' }).click()
-  await expect(page.getByText(/Za ovu adresu \(život bez auta/)).toBeVisible()
+  const input = page.getByRole('textbox', { name: 'Pitanje' })
+  await input.fill('Kakav je zrak i mogu li ovdje živjeti bez auta?')
+  await input.press('Enter')
+  await expect(
+    page.locator('section.assistant').getByRole('article', { name: 'Život bez auta' }),
+  ).toBeVisible()
   const section = page.locator('section', { has: page.getByRole('heading', { name: 'Pitajte asistenta' }) })
   await section.screenshot({ path: `${OUT}/asistent.png` })
 })

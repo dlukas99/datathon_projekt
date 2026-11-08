@@ -128,9 +128,38 @@ export interface LiveSources {
   datasets: LiveSource[]
 }
 
+export interface AssistantFact {
+  text: string
+  source: string
+  retrieved_at: string | null
+  kind: Kind
+}
+
+/** The answer to one topic of a question. */
+export interface AssistantBlock {
+  topic: string
+  title: string
+  /** "Adresa A (…)" when two addresses are compared. */
+  address: string | null
+  status: Status | null
+  status_label: string | null
+  text: string
+  lines: { label: string; value: string }[]
+  chips: { label: string; tone: 'good' | 'missing' | 'unknown' }[]
+  links: Link[]
+  sources: AssistantFact[]
+  method: string[]
+}
+
 export interface AssistantReply {
+  /** The whole answer as plain text. */
   answer: string
-  facts: { text: string; source: string; retrieved_at: string | null; kind: Kind }[]
+  summary: string | null
+  blocks: AssistantBlock[]
+  /** Send back as `context` with the next question, for "A škola?". */
+  topics: string[]
+  suggestions: string[]
+  facts: AssistantFact[]
   links: Link[]
   mode: 'rules' | 'llm'
 }
@@ -188,11 +217,12 @@ export function fetchLiveSources(signal?: AbortSignal): Promise<LiveSources> {
 export async function askAssistant(
   question: string,
   points: { lat: number; lon: number; label: string | null }[],
+  context: string[] = [],
 ): Promise<AssistantReply> {
   const response = await fetch('/api/assistant', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question, locations: points }),
+    body: JSON.stringify({ question, locations: points, context }),
   })
   return handle<AssistantReply>(response)
 }

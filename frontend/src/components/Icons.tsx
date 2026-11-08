@@ -1,8 +1,15 @@
 import {
   Baby,
+  Ban,
   Blocks,
+  BookOpen,
   Bus,
+  CircleHelp,
+  ClipboardList,
   Flame,
+  ListChecks,
+  MapPin,
+  Users,
   Footprints,
   Map as MapIcon,
   Pill,
@@ -41,6 +48,18 @@ const ICONS: Record<string, LucideIcon> = {
   compare: Scale,
   find: Search,
   map: MapIcon,
+  // assistant answers that are not a report category
+  overview: ClipboardList,
+  pros_cons: ListChecks,
+  nearby: MapPin,
+  population: Users,
+  limits: CircleHelp,
+  unknown: CircleHelp,
+  uncovered: CircleHelp,
+  no_data: CircleHelp,
+  purchase: Ban,
+  scope: Ban,
+  explain: BookOpen,
 }
 
 /** Decorative icon for a category; the text next to it always carries the meaning. */

@@ -3673,6 +3673,175 @@ button.daily-row:hover .daily-show {
   justify-self: end;
 }
 
+.assistant-turn {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.answer {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.answer-summary {
+  margin: 0;
+  font-weight: 600;
+}
+
+.answer-block {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.answer-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+}
+
+.answer-address {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.answer-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.answer-text {
+  margin: 0;
+}
+
+.answer-lines {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.answer-lines div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.4rem;
+}
+
+.answer-lines dt {
+  color: var(--muted);
+}
+
+.answer-lines dt::after {
+  content: ':';
+}
+
+.answer-lines dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.answer-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chip-good {
+  color: var(--good);
+  background: var(--good-bg);
+}
+
+.chip-missing {
+  color: var(--warning);
+  background: var(--warning-bg);
+}
+
+.chip-unknown {
+  color: var(--nodata);
+  background: var(--nodata-bg);
+}
+
+.answer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.answer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.answer-sources {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.answer-sources summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* The marker says it opens; the default one is gone with display: inline-flex. */
+.answer-sources summary::before {
+  content: '▸';
+}
+
+.answer-sources[open] summary::before {
+  content: '▾';
+}
+
+.answer-sources ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.answer-sources li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+}
+
+.answer-sources p {
+  margin: 0.35rem 0 0;
+}
+
+.assistant-disclaimer {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .assistant-form {
   display: flex;
   gap: 0.5rem;

@@ -47,7 +47,7 @@ Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenic
 - Točka se može odabrati i povlačenjem oznake na karti. Klik na kartu izvan točaka ne mijenja lokaciju, pa se izvještaj ne izgubi slučajnim klikom ili dvostrukim klikom za zum.
 - Za upisano naselje prikazuje se njegovo stvarno središte, uz napomenu da za točan izvještaj treba upisati adresu.
 - Gumb „Pogledaj oglase” otvara pretragu oglasa za to mjesto. Aplikacija samo slaže poveznicu i ne prikazuje oglase.
-- Asistent odgovara na pitanja poput „Je li ova kuća u poplavnom području?”.
+- Asistent odgovara na pitanja poput „Je li ova kuća u poplavnom području?”, i na više tema u jednoj poruci („Kakav je zrak i ima li ljekarna blizu?”) te na nastavna pitanja („A škola?”). Svaka tema dobiva kratak odgovor s ključnim brojevima, a izvori su u sklopivom dijelu.
 
 Svaka brojka ima izvor, datum i vrstu (izmjereno, modelirano ili procjena). Brojke računa backend iz podataka, a ne jezični model.
 
@@ -179,7 +179,7 @@ flowchart LR
 - **Obrada podataka** jednom preuzima i priprema nacionalne slojeve. Odgovor za adresu zato ne ovisi o dostupnosti izvora u trenutku upita. Cijela obrada pokreće se naredbom `make data`.
 - **Mreža hoda** računa se u Valhalli, otvorenom usmjerivaču nad OpenStreetMapom. Jedan izvještaj šalje jedan upit matrice za sve ustanove i jedan upit izokrona; izmjereno trajanje izvještaja je oko 1 s. Pješački put do pojedinog mjesta računa se tek na klik, istim usmjerivačem i istom brzinom hoda.
 - **API** je REST s OpenAPI opisom (`/api/docs`). Svaka vrijednost u odgovoru nosi izvor, datum i vrstu (izmjereno, modelirano ili procjena).
-- **Asistent** je opcionalan i koristi bilo koji model preko OpenAI-kompatibilnog API-ja. Bez modela pitanja razumiju jednostavna pravila. Brojke uvijek dolaze iz predložaka.
+- **Asistent** pitanja razumije pravilima (početci riječi bez dijakritika, sinonimi, više tema po poruci, nastavna pitanja). Jezični model preko OpenAI-kompatibilnog API-ja je opcionalan i pita se samo kad pravila ne prepoznaju ništa. Brojke uvijek dolaze iz predložaka.
 
 Detalji, standardi te tehnički, organizacijski i pravni preduvjeti za uvođenje nalaze se u [docs/ARHITEKTURA.md](docs/ARHITEKTURA.md).
 
