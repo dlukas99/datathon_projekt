@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-07 18:58
+Zadnje ažurirano: 2026-11-08 04:15
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -101,3 +101,10 @@ Ako ponestane vremena, režem ovim redom:
 - tumačenje slobodnog pitanja jezičnim modelom u tražilici mjesta (ostaje forma);
 - usporedba zraka s ostatkom RH;
 - Index Oglasi i Nekretnine.hr samo kao rezervna poveznica.
+16. [x] Redizajn „Putokaz” (7.–8. 11., grana `feature/redesign`, oznaka za povratak `pre-redesign`), uz Impeccable:
+    - **izgled:** sustav oznaka parka prirode: vapnenačka podloga, jezerska zelenoplava za radnje i stazu, smeđa turističkog putokaza za mjesto; fontovi Bricolage Grotesque i Figtree (OFL, vlastiti poslužitelj);
+    - **naslovnica:** pitanje „Kako je živjeti ovdje?”, putokaz s dvije daske (adresa s gumbom „Prikaži”, „Pronađi mjesto za mene”), svih 6.759 naselja na platnu koja se pune od istoka prema zapadu i vode na kartu, „Kako radi” u tri postaje;
+    - **Predloži mjesto:** čarobnjak s jednim pitanjem po koraku i trakom napretka, okoliš prvi, težine pod „Napredno”, stanje u URL-u, tipka natrag vraća korak; prijedlozi kao retci;
+    - **izvještaj:** iskaznica mjesta (smeđi pojas s adresom, sažetak iz predložaka, šest oznaka sa statusom, skor), traka „Dijelovi izvještaja”, karta doleti do adrese, a krugovi hoda šire se redom;
+    - **karta:** jezerska ljestvica, legenda uz kartu, kartica naselja sa smeđim pojasom;
+    - **provjere:** kritika (dizajn i detektor) i popravci, detektor bez nalaza; `make verify` prolazi (pytest 149, Vitest 61, Playwright 60, axe u obje teme i 320 px); snimke prije u `docs/images/prije-redizajna/`, poslije u `docs/images/`.

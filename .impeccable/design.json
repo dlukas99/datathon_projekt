@@ -1,0 +1,1090 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-08T03:11:15+00:00",
+  "title": "Design System: Prije potpisa",
+  "extensions": {
+    "colorMeta": {
+      "limestone": {
+        "role": "neutral",
+        "displayName": "Vapnenac",
+        "canonical": "#f0f3ef",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#242524",
+          "#414340",
+          "#60625f",
+          "#818380",
+          "#a4a6a3",
+          "#c8cac7",
+          "#edefed"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Bijela ploča",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "stone-mist": {
+        "role": "neutral",
+        "displayName": "Kamena izmaglica",
+        "canonical": "#e3eae5",
+        "tonalRamp": [
+          "#0a0c0a",
+          "#232624",
+          "#3f4340",
+          "#5d635f",
+          "#7e8480",
+          "#a1a6a3",
+          "#c6cac7",
+          "#ecefed"
+        ]
+      },
+      "forest-ink": {
+        "role": "neutral",
+        "displayName": "Šumska tinta",
+        "canonical": "#142420",
+        "tonalRamp": [
+          "#070d0b",
+          "#1e2725",
+          "#384542",
+          "#556561",
+          "#768782",
+          "#9aa9a5",
+          "#c0ccc9",
+          "#e8f1ee"
+        ]
+      },
+      "moss-muted": {
+        "role": "neutral",
+        "displayName": "Mahovinasto siva",
+        "canonical": "#4a5c55",
+        "tonalRamp": [
+          "#070d0a",
+          "#1e2824",
+          "#384540",
+          "#55665f",
+          "#758780",
+          "#9aa9a3",
+          "#c0ccc7",
+          "#e8f1ed"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Tanka linija",
+        "canonical": "#d0dad4",
+        "tonalRamp": [
+          "#090c0a",
+          "#222624",
+          "#3d4440",
+          "#5b635f",
+          "#7c8580",
+          "#a0a7a3",
+          "#c5cbc7",
+          "#ebf0ed"
+        ]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Rub kontrole",
+        "canonical": "#6c7f77",
+        "tonalRamp": [
+          "#070d0a",
+          "#1e2824",
+          "#384540",
+          "#55665f",
+          "#758780",
+          "#9aa9a3",
+          "#c0cdc7",
+          "#e8f1ed"
+        ]
+      },
+      "lake-jade": {
+        "role": "primary",
+        "displayName": "Jezerski žad",
+        "canonical": "#0b6b63",
+        "tonalRamp": [
+          "#000f0d",
+          "#012c28",
+          "#0b4c47",
+          "#226f67",
+          "#489189",
+          "#78b2aa",
+          "#a6d4ce",
+          "#d4f7f2"
+        ]
+      },
+      "lake-jade-deep": {
+        "role": "primary",
+        "displayName": "Duboki žad",
+        "canonical": "#08564f",
+        "tonalRamp": [
+          "#000f0d",
+          "#052c28",
+          "#1a4b46",
+          "#316d66",
+          "#538f87",
+          "#7fb0a9",
+          "#abd3cd",
+          "#d8f6f1"
+        ]
+      },
+      "lake-jade-soft": {
+        "role": "primary",
+        "displayName": "Blagi žad",
+        "canonical": "#d3ece7",
+        "tonalRamp": [
+          "#060d0c",
+          "#1c2826",
+          "#364643",
+          "#526662",
+          "#728883",
+          "#98aaa6",
+          "#becdca",
+          "#e6f1ef"
+        ]
+      },
+      "on-jade": {
+        "role": "primary",
+        "displayName": "Tekst na žadu",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "sign-brown": {
+        "role": "secondary",
+        "displayName": "Smeđa turistička signalizacija",
+        "canonical": "#5b3a1e",
+        "tonalRamp": [
+          "#140802",
+          "#332011",
+          "#553c27",
+          "#7a593f",
+          "#9d7a5f",
+          "#bc9e87",
+          "#ddc4b1",
+          "#feebdc"
+        ]
+      },
+      "sign-ink": {
+        "role": "secondary",
+        "displayName": "Tekst na tabli",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "sign-muted": {
+        "role": "secondary",
+        "displayName": "Sporedni tekst na tabli",
+        "canonical": "#e9d9c6",
+        "tonalRamp": [
+          "#0f0a05",
+          "#2b241b",
+          "#4a4034",
+          "#6c5f50",
+          "#8d8070",
+          "#afa395",
+          "#d1c7bc",
+          "#f5ede4"
+        ]
+      },
+      "sign-edge": {
+        "role": "secondary",
+        "displayName": "Rub table i stup",
+        "canonical": "#3f2713",
+        "tonalRamp": [
+          "#120903",
+          "#302216",
+          "#513d2e",
+          "#755b48",
+          "#977c68",
+          "#b7a08f",
+          "#d8c5b7",
+          "#faebe0"
+        ]
+      },
+      "focus-blue": {
+        "role": "tertiary",
+        "displayName": "Fokusno plava",
+        "canonical": "#1a56c4",
+        "tonalRamp": [
+          "#000827",
+          "#021f5a",
+          "#113c8b",
+          "#245abf",
+          "#457ee6",
+          "#72a4fc",
+          "#accaff",
+          "#e6efff"
+        ]
+      },
+      "good": {
+        "role": "tertiary",
+        "displayName": "Status dobro",
+        "canonical": "#1d6b3a",
+        "tonalRamp": [
+          "#001004",
+          "#032e14",
+          "#184e2b",
+          "#2e7144",
+          "#519364",
+          "#7db48b",
+          "#aad6b4",
+          "#d7f9de"
+        ]
+      },
+      "good-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: dobro",
+        "canonical": "#e1f0e4",
+        "tonalRamp": [
+          "#080c09",
+          "#202722",
+          "#3c453d",
+          "#59655b",
+          "#7a867c",
+          "#9ea8a0",
+          "#c3ccc5",
+          "#eaf1eb"
+        ]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Status upozorenje",
+        "canonical": "#7a5300",
+        "tonalRamp": [
+          "#120900",
+          "#332101",
+          "#583c05",
+          "#7e5a1a",
+          "#a17b3f",
+          "#c09f6e",
+          "#dfc59e",
+          "#feecd1"
+        ]
+      },
+      "warning-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: upozorenje",
+        "canonical": "#fbefd0",
+        "tonalRamp": [
+          "#0e0b03",
+          "#2a2516",
+          "#49412e",
+          "#6a6048",
+          "#8c8268",
+          "#ada48e",
+          "#d0c9b7",
+          "#f4eee0"
+        ]
+      },
+      "bad": {
+        "role": "tertiary",
+        "displayName": "Status loše",
+        "canonical": "#a3231c",
+        "tonalRamp": [
+          "#1f0000",
+          "#4b0504",
+          "#771c16",
+          "#a6332a",
+          "#ce584b",
+          "#ea8477",
+          "#ffb3a8",
+          "#fee9e6"
+        ]
+      },
+      "bad-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: loše",
+        "canonical": "#fbe4e0",
+        "tonalRamp": [
+          "#100908",
+          "#2c2221",
+          "#4c3e3c",
+          "#6e5c59",
+          "#907d7a",
+          "#b1a19e",
+          "#d3c6c3",
+          "#f6ecea"
+        ]
+      },
+      "info": {
+        "role": "tertiary",
+        "displayName": "Status informacija",
+        "canonical": "#2c4f72",
+        "tonalRamp": [
+          "#020c18",
+          "#132639",
+          "#2b445e",
+          "#436486",
+          "#6486a9",
+          "#8ba8c7",
+          "#b4cce5",
+          "#e3f0ff"
+        ]
+      },
+      "info-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: informacija",
+        "canonical": "#e3ecf4",
+        "tonalRamp": [
+          "#090b0e",
+          "#222629",
+          "#3d4348",
+          "#5b6268",
+          "#7c838a",
+          "#9fa6ac",
+          "#c4cacf",
+          "#ebeff3"
+        ]
+      },
+      "nodata": {
+        "role": "tertiary",
+        "displayName": "Nema podataka",
+        "canonical": "#545a57",
+        "tonalRamp": [
+          "#0a0c0b",
+          "#232624",
+          "#3f4341",
+          "#5d6360",
+          "#7e8481",
+          "#a1a6a4",
+          "#c6cac8",
+          "#ecefee"
+        ]
+      },
+      "nodata-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: nema podataka",
+        "canonical": "#e7e9e6",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#242524",
+          "#414241",
+          "#60625f",
+          "#818380",
+          "#a4a5a3",
+          "#c8c9c8",
+          "#eeefed"
+        ]
+      },
+      "dark-limestone": {
+        "role": "neutral",
+        "displayName": "Vapnenac (tamna tema)",
+        "canonical": "#0e1714",
+        "tonalRamp": [
+          "#080c0b",
+          "#212724",
+          "#3c4441",
+          "#5a6460",
+          "#7b8581",
+          "#9ea7a4",
+          "#c4cbc8",
+          "#eaf0ee"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Bijela ploča (tamna tema)",
+        "canonical": "#15211d",
+        "tonalRamp": [
+          "#080c0b",
+          "#202724",
+          "#3b4541",
+          "#586560",
+          "#798681",
+          "#9da8a4",
+          "#c2ccc8",
+          "#e9f0ee"
+        ]
+      },
+      "dark-stone-mist": {
+        "role": "neutral",
+        "displayName": "Kamena izmaglica (tamna tema)",
+        "canonical": "#1c2a25",
+        "tonalRamp": [
+          "#070d0b",
+          "#1f2724",
+          "#3a4541",
+          "#576560",
+          "#778681",
+          "#9ca8a3",
+          "#c1ccc8",
+          "#e8f1ed"
+        ]
+      },
+      "dark-forest-ink": {
+        "role": "neutral",
+        "displayName": "Šumska tinta (tamna tema)",
+        "canonical": "#e4ece7",
+        "tonalRamp": [
+          "#090c0a",
+          "#222624",
+          "#3e4340",
+          "#5d635f",
+          "#7e8480",
+          "#a1a7a3",
+          "#c6cac7",
+          "#ecefed"
+        ]
+      },
+      "dark-moss-muted": {
+        "role": "neutral",
+        "displayName": "Mahovinasto siva (tamna tema)",
+        "canonical": "#a3b3ac",
+        "tonalRamp": [
+          "#080c0a",
+          "#1f2724",
+          "#3a4540",
+          "#57655f",
+          "#788680",
+          "#9ca8a3",
+          "#c2ccc7",
+          "#e9f1ed"
+        ]
+      },
+      "dark-hairline": {
+        "role": "neutral",
+        "displayName": "Tanka linija (tamna tema)",
+        "canonical": "#2a3a34",
+        "tonalRamp": [
+          "#070d0a",
+          "#1e2724",
+          "#394540",
+          "#56655f",
+          "#768780",
+          "#9ba9a3",
+          "#c1ccc8",
+          "#e8f1ed"
+        ]
+      },
+      "dark-control-border": {
+        "role": "neutral",
+        "displayName": "Rub kontrole (tamna tema)",
+        "canonical": "#6b8279",
+        "tonalRamp": [
+          "#060d0a",
+          "#1c2824",
+          "#364640",
+          "#52675f",
+          "#738880",
+          "#98aaa3",
+          "#becdc7",
+          "#e6f2ed"
+        ]
+      },
+      "dark-lake-jade": {
+        "role": "primary",
+        "displayName": "Jezerski žad (tamna tema)",
+        "canonical": "#6ccabc",
+        "tonalRamp": [
+          "#000f0c",
+          "#012c27",
+          "#024d45",
+          "#0b7166",
+          "#3c9387",
+          "#70b4a9",
+          "#a1d6cc",
+          "#d1f8f1"
+        ]
+      },
+      "dark-lake-jade-deep": {
+        "role": "primary",
+        "displayName": "Duboki žad (tamna tema)",
+        "canonical": "#8fdacf",
+        "tonalRamp": [
+          "#000f0c",
+          "#002c28",
+          "#134c46",
+          "#296e66",
+          "#4d9087",
+          "#7bb1a9",
+          "#a8d4cd",
+          "#d6f7f1"
+        ]
+      },
+      "dark-lake-jade-soft": {
+        "role": "primary",
+        "displayName": "Blagi žad (tamna tema)",
+        "canonical": "#143029",
+        "tonalRamp": [
+          "#040d0b",
+          "#192924",
+          "#324741",
+          "#4d6860",
+          "#6e8981",
+          "#94aba4",
+          "#bbcec8",
+          "#e4f2ee"
+        ]
+      },
+      "dark-on-jade": {
+        "role": "primary",
+        "displayName": "Tekst na žadu (tamna tema)",
+        "canonical": "#062420",
+        "tonalRamp": [
+          "#040d0c",
+          "#192926",
+          "#314743",
+          "#4c6863",
+          "#6d8984",
+          "#93aba6",
+          "#baceca",
+          "#e3f2ef"
+        ]
+      },
+      "dark-plank-go": {
+        "role": "primary",
+        "displayName": "Daska staze (tamna tema)",
+        "canonical": "#1d6a61",
+        "tonalRamp": [
+          "#000f0c",
+          "#022c27",
+          "#164c45",
+          "#2c6e65",
+          "#4f9087",
+          "#7cb1a9",
+          "#a9d3cc",
+          "#d7f6f1"
+        ]
+      },
+      "dark-plank-go-hover": {
+        "role": "primary",
+        "displayName": "Daska staze, hover (tamna tema)",
+        "canonical": "#23796f",
+        "tonalRamp": [
+          "#000f0c",
+          "#012c27",
+          "#0c4d46",
+          "#226f66",
+          "#489187",
+          "#78b2a9",
+          "#a6d4cd",
+          "#d4f7f1"
+        ]
+      },
+      "dark-sign-brown": {
+        "role": "secondary",
+        "displayName": "Smeđa turistička signalizacija (tamna tema)",
+        "canonical": "#6b4526",
+        "tonalRamp": [
+          "#150801",
+          "#34200f",
+          "#573b24",
+          "#7d583c",
+          "#a0795c",
+          "#bf9e85",
+          "#dfc3af",
+          "#feeadc"
+        ]
+      },
+      "dark-sign-muted": {
+        "role": "secondary",
+        "displayName": "Sporedni tekst na tabli (tamna tema)",
+        "canonical": "#eadbc8",
+        "tonalRamp": [
+          "#0f0a05",
+          "#2b241b",
+          "#4a4034",
+          "#6b5f50",
+          "#8d8070",
+          "#aea395",
+          "#d1c8bc",
+          "#f4ede5"
+        ]
+      },
+      "dark-sign-edge": {
+        "role": "secondary",
+        "displayName": "Rub table i stup (tamna tema)",
+        "canonical": "#4a2e17",
+        "tonalRamp": [
+          "#130803",
+          "#312114",
+          "#533d2c",
+          "#775a45",
+          "#9a7b65",
+          "#ba9f8c",
+          "#dac4b4",
+          "#fcebdf"
+        ]
+      },
+      "dark-focus-blue": {
+        "role": "tertiary",
+        "displayName": "Fokusno plava (tamna tema)",
+        "canonical": "#8ab4ff",
+        "tonalRamp": [
+          "#010921",
+          "#102347",
+          "#264071",
+          "#3d609e",
+          "#5d82c3",
+          "#86a6de",
+          "#b0caf9",
+          "#e6efff"
+        ]
+      },
+      "dark-good": {
+        "role": "tertiary",
+        "displayName": "Status dobro (tamna tema)",
+        "canonical": "#8fdca9",
+        "tonalRamp": [
+          "#001005",
+          "#022e16",
+          "#154e2e",
+          "#2b7148",
+          "#4f9368",
+          "#7cb48f",
+          "#a9d6b7",
+          "#d7f9e0"
+        ]
+      },
+      "dark-good-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: dobro (tamna tema)",
+        "canonical": "#16301f",
+        "tonalRamp": [
+          "#050e07",
+          "#1a291f",
+          "#34483a",
+          "#4f6856",
+          "#708a77",
+          "#95ac9b",
+          "#bccfc1",
+          "#e5f3e8"
+        ]
+      },
+      "dark-warning": {
+        "role": "tertiary",
+        "displayName": "Status upozorenje (tamna tema)",
+        "canonical": "#f2cc72",
+        "tonalRamp": [
+          "#110a00",
+          "#302300",
+          "#533f03",
+          "#7a5d02",
+          "#9e7d28",
+          "#bda261",
+          "#ddc794",
+          "#feedc6"
+        ]
+      },
+      "dark-warning-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: upozorenje (tamna tema)",
+        "canonical": "#352a10",
+        "tonalRamp": [
+          "#0f0b03",
+          "#2b2416",
+          "#4a412d",
+          "#6b6047",
+          "#8d8167",
+          "#aea48e",
+          "#d1c8b6",
+          "#f4eee0"
+        ]
+      },
+      "dark-bad": {
+        "role": "tertiary",
+        "displayName": "Status loše (tamna tema)",
+        "canonical": "#ffaaa1",
+        "tonalRamp": [
+          "#1b0303",
+          "#3e1714",
+          "#65302b",
+          "#8f4a44",
+          "#b46b64",
+          "#d2928b",
+          "#efbab4",
+          "#ffe9e6"
+        ]
+      },
+      "dark-bad-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: loše (tamna tema)",
+        "canonical": "#3a1b18",
+        "tonalRamp": [
+          "#140706",
+          "#321f1d",
+          "#553a37",
+          "#795753",
+          "#9c7874",
+          "#bc9c98",
+          "#dcc2bf",
+          "#fde9e6"
+        ]
+      },
+      "dark-info": {
+        "role": "tertiary",
+        "displayName": "Status informacija (tamna tema)",
+        "canonical": "#a9c9ec",
+        "tonalRamp": [
+          "#040c16",
+          "#172636",
+          "#2f445a",
+          "#496480",
+          "#6a85a3",
+          "#90a8c2",
+          "#b8cbe1",
+          "#e3f0fe"
+        ]
+      },
+      "dark-info-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: informacija (tamna tema)",
+        "canonical": "#1a2836",
+        "tonalRamp": [
+          "#070c11",
+          "#1e262e",
+          "#38434f",
+          "#546372",
+          "#758494",
+          "#99a7b4",
+          "#c0cbd6",
+          "#e7f0f8"
+        ]
+      },
+      "dark-nodata": {
+        "role": "tertiary",
+        "displayName": "Nema podataka (tamna tema)",
+        "canonical": "#c3c8c5",
+        "tonalRamp": [
+          "#0a0c0b",
+          "#232624",
+          "#404341",
+          "#5e6260",
+          "#7f8381",
+          "#a2a6a4",
+          "#c7cac8",
+          "#edefee"
+        ]
+      },
+      "dark-nodata-bg": {
+        "role": "tertiary",
+        "displayName": "Podloga: nema podataka (tamna tema)",
+        "canonical": "#222b27",
+        "tonalRamp": [
+          "#090c0a",
+          "#212624",
+          "#3d4441",
+          "#5a645f",
+          "#7b8580",
+          "#9fa7a3",
+          "#c4cbc8",
+          "#ebf0ed"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Samo pitanje na ishodištu naslovnice."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Naslov stranice; na ploči mjesta manji i bijel na smeđoj traci."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Naslovi odjeljaka i pitanja vodiča."
+      },
+      "title-sm": {
+        "displayName": "Title small",
+        "purpose": "Naslovi kartica, postaja i dasaka."
+      },
+      "key-number": {
+        "displayName": "Key number",
+        "purpose": "Glavna brojka kategorije."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Sav tekst, tablične brojke."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Oznake polja, postaja, vodiča i ključnih činjenica."
+      },
+      "status": {
+        "displayName": "Status",
+        "purpose": "Tekst statusne oznake."
+      }
+    },
+    "shadows": [
+      {
+        "name": "board",
+        "value": "0 1px 2px rgb(20 36 32 / 6%), 0 6px 18px -8px rgb(20 36 32 / 14%)",
+        "purpose": "Ploča mjesta, kartica naselja, padajući slojevi (svijetla tema)."
+      },
+      {
+        "name": "board-dark",
+        "value": "0 1px 2px rgb(0 0 0 / 30%), 0 8px 20px -10px rgb(0 0 0 / 50%)",
+        "purpose": "Isto u tamnoj temi."
+      },
+      {
+        "name": "map-popup",
+        "value": "0 4px 18px rgb(0 0 0 / 22%)",
+        "purpose": "Skočni prozor karte."
+      },
+      {
+        "name": "bottom-sheet",
+        "value": "0 -8px 24px rgb(0 0 0 / 18%)",
+        "purpose": "Kartica naselja kao donja ploča na mobitelu."
+      },
+      {
+        "name": "sign-edge",
+        "value": "inset 0 -3px 0 var(--sign-edge)",
+        "purpose": "Donji rub smeđih dasaka i traka (4 px na ploči mjesta)."
+      },
+      {
+        "name": "selected-card",
+        "value": "inset 0 0 0 1px var(--accent)",
+        "purpose": "Odabrana kartica: linija u žadu, ne sjena."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 3px solid var(--focus); outline-offset: 2px",
+        "purpose": "Fokus tipkovnicom na svemu."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Jedino ublažavanje za prijelaze i geste."
+      },
+      {
+        "name": "state-change",
+        "value": "160ms",
+        "purpose": "Prijelaz boje i ruba gumba, čipova i izbora; ostaje i uz smanjene animacije."
+      },
+      {
+        "name": "plank-nudge",
+        "value": "translateX(4px) 220ms",
+        "purpose": "Daska staze na hover; ukinuto uz smanjene animacije."
+      },
+      {
+        "name": "trail-dot",
+        "value": "240ms",
+        "purpose": "Promjena stanja postaje."
+      },
+      {
+        "name": "step-in",
+        "value": "translateX(±28px), opacity 0→1, 360ms",
+        "purpose": "Korak vodiča ulazi u smjeru hoda."
+      },
+      {
+        "name": "board-in",
+        "value": "translateY(10px) scale(0.97), 440–520ms, odmak 160ms + i×55ms",
+        "purpose": "Ploča mjesta se popuni; samo pokret, bez prozirnosti."
+      },
+      {
+        "name": "mosaic-reveal",
+        "value": "1600ms, eksponencijalno usporavanje, istok prema zapadu",
+        "purpose": "Mozaik naselja na naslovnici; uz smanjene animacije odmah cijel."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation-duration 0.01ms; bez transform pomaka; karte bez leta",
+        "purpose": "Ništa se ne pomiče, promjena stanja i dalje vidljiva."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "min-width",
+        "value": "320px"
+      },
+      {
+        "name": "xs",
+        "value": "420px"
+      },
+      {
+        "name": "brand-collapse",
+        "value": "440px"
+      },
+      {
+        "name": "sm",
+        "value": "560px"
+      },
+      {
+        "name": "md",
+        "value": "640px"
+      },
+      {
+        "name": "nav",
+        "value": "760px"
+      },
+      {
+        "name": "trailhead",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primarni gumb",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Glavna radnja na ekranu; žad, bijeli tekst.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Prikaži izvještaj</button>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:0 1.1rem;border-radius:var(--radius-sm);font:inherit;font-family:var(--font-text);font-weight:700;cursor:pointer;transition:background-color 160ms var(--ease-out),border-color 160ms var(--ease-out),color 160ms var(--ease-out);}.ds-btn-primary{border:1px solid var(--accent);background:var(--accent);color:var(--accent-contrast);}.ds-btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);}:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}"
+    },
+    {
+      "name": "Sekundarni gumb",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Sporedne radnje (kopiraj, ispiši, natrag); bijela ploča, rub kontrole, žad na hover.",
+      "html": "<button class=\"ds-btn ds-btn-secondary\">Natrag</button>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:0 1.1rem;border-radius:var(--radius-sm);font:inherit;font-family:var(--font-text);font-weight:700;cursor:pointer;transition:background-color 160ms var(--ease-out),border-color 160ms var(--ease-out),color 160ms var(--ease-out);}.ds-btn-secondary{border:1px solid var(--control-border);background:var(--surface);color:var(--text);}.ds-btn-secondary:hover{border-color:var(--accent);color:var(--accent);}:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}"
+    },
+    {
+      "name": "Polje pretrage adrese",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Polje adrese visine 56 px s gumbom; oznaka iznad, uputa ispod.",
+      "html": "<div class=\"ds-search\"><label for=\"ds-q\">Upišite adresu</label><div class=\"ds-row\"><input id=\"ds-q\" type=\"search\" placeholder=\"Ulica i kućni broj, naselje\"><button class=\"ds-go\">Traži <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button></div><p class=\"ds-hint\">Ulica i kućni broj, pa naselje.</p></div>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-search{font-family:var(--font-text);color:var(--text);}.ds-search label{display:block;font-weight:600;margin-bottom:.4rem;}.ds-row{display:flex;gap:.5rem;}.ds-search input{flex:1;min-width:0;min-height:56px;padding:.75rem 1.1rem;font:inherit;font-size:1.1rem;border:1px solid var(--control-border);border-radius:var(--radius);background:var(--surface);color:var(--text);caret-color:var(--accent);}.ds-search input::placeholder{color:var(--muted);}.ds-search input:hover{border-color:var(--text);}.ds-go{display:inline-flex;align-items:center;gap:.35rem;min-height:56px;padding:0 1rem;border:1px solid var(--accent);border-radius:var(--radius-sm);background:var(--accent);color:var(--accent-contrast);font:inherit;font-weight:700;cursor:pointer;transition:background-color 160ms var(--ease-out);}.ds-go:hover{background:var(--accent-hover);}.ds-hint{color:var(--muted);font-size:.92rem;margin:.4rem 0 0;}:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}"
+    },
+    {
+      "name": "Navigacija",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Zaglavlje sa znakom putokaza; trenutna stranica deblja i s crtom staze ispod.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><svg width=\"30\" height=\"30\" viewBox=\"0 0 32 32\" aria-hidden=\"true\"><rect x=\"7\" y=\"4\" width=\"3.2\" height=\"25\" rx=\"1.2\" fill=\"currentColor\"/><path d=\"M5 7.5h17.5l5 4.5-5 4.5H5z\" fill=\"#5b3a1e\"/><path d=\"M12 12h9\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><path d=\"M5 19.5h12.5l3.6 3.25-3.6 3.25H5z\" fill=\"#0b6b63\"/></svg>Dobro mjesto</a><nav><a href=\"#\" aria-current=\"page\">Provjeri adresu</a><a href=\"#\">Predloži mjesto</a><a href=\"#\">Karta</a><a href=\"#\">Izvori</a></nav></header>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-nav{display:flex;align-items:center;justify-content:space-between;gap:.5rem;min-height:64px;padding:0 1.25rem;background:var(--bg);border-bottom:1px solid var(--border);font-family:var(--font-text);}.ds-brand{display:inline-flex;align-items:center;gap:.6rem;min-height:44px;font-family:var(--font-display);font-weight:750;font-size:1.15rem;letter-spacing:-.02em;color:var(--text);text-decoration:none;}.ds-nav nav{display:flex;gap:.15rem;}.ds-nav nav a{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:var(--radius-sm);color:var(--text);text-decoration:none;font-weight:500;}.ds-nav nav a:hover{color:var(--accent);}.ds-nav nav a[aria-current]{font-weight:700;}.ds-nav nav a[aria-current]::after{content:'';position:absolute;left:.75rem;right:.75rem;bottom:6px;height:3px;border-radius:2px;background:var(--accent);}:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}"
+    },
+    {
+      "name": "Čip profila",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Odabir profila ili sloja; kut 6 px, ne pilula; odabran ima žad rub i blagi žad.",
+      "html": "<div class=\"ds-chips\"><label class=\"ds-chip\"><input type=\"radio\" name=\"p\" checked> Obitelj s djecom</label><label class=\"ds-chip\"><input type=\"radio\" name=\"p\"> Umirovljenik</label><label class=\"ds-chip\"><input type=\"radio\" name=\"p\"> Student</label></div>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-chips{display:flex;flex-wrap:wrap;gap:.4rem;font-family:var(--font-text);color:var(--text);}.ds-chip{display:inline-flex;align-items:center;gap:.45rem;min-height:44px;padding:0 .9rem;border:1px solid var(--control-border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;font-weight:500;}.ds-chip:hover{border-color:var(--accent);}.ds-chip:has(input:checked){border-color:var(--accent);background:var(--accent-soft);font-weight:650;}.ds-chip:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px;}.ds-chip input{accent-color:var(--accent);margin:0;}"
+    },
+    {
+      "name": "Statusne oznake",
+      "kind": "chip",
+      "refersTo": "status-good",
+      "description": "Status bojom, oblikom ikone i riječju; nikad samo bojom.",
+      "html": "<div class=\"ds-tags\"><span class=\"ds-status ds-good\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg>Dobro</span><span class=\"ds-status ds-warning\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/></svg>Upozorenje</span><span class=\"ds-status ds-bad\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 16h.01\"/><path d=\"M12 8v4\"/><path d=\"M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z\"/></svg>Loše</span><span class=\"ds-status ds-nodata\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3\"/><path d=\"M12 17h.01\"/></svg>Nema podataka</span></div>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-tags{display:flex;flex-wrap:wrap;gap:.4rem;font-family:var(--font-text);}.ds-status{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .65rem;border-radius:var(--radius-sm);font-weight:650;font-size:.8rem;white-space:nowrap;}.ds-good{color:var(--good);background:var(--good-bg);}.ds-warning{color:var(--warning);background:var(--warning-bg);}.ds-bad{color:var(--bad);background:var(--bad-bg);}.ds-nodata{color:var(--nodata);background:var(--nodata-bg);}"
+    },
+    {
+      "name": "Ploča kategorije",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Ravna ploča: bijela, tanka linija, bez sjene; glavna brojka u Bricolageu. Brojke u primjeru su ilustracija oblika, ne podatak.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-top\"><h3>Zrak</h3><span class=\"ds-status\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg>Dobro</span></div><p class=\"ds-num\">0,0 <span>µg/m³ PM2,5</span></p><p class=\"ds-text\">Jedna jasna rečenica ispred stručnih brojki.</p></article>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.3rem;font-family:var(--font-text);color:var(--text);max-width:340px;}.ds-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.6rem;}.ds-card h3{margin:0;font-family:var(--font-display);font-size:1.2rem;font-weight:650;letter-spacing:-.01em;}.ds-status{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .65rem;border-radius:var(--radius-sm);font-weight:650;font-size:.8rem;color:var(--good);background:var(--good-bg);}.ds-num{font-family:var(--font-display);font-size:1.9rem;font-weight:750;letter-spacing:-.03em;line-height:1.15;margin:.75rem 0 .25rem;}.ds-num span{font-family:var(--font-text);font-size:1rem;font-weight:600;color:var(--muted);letter-spacing:0;}.ds-text{margin:0;font-size:.98rem;}"
+    },
+    {
+      "name": "Putokaz",
+      "kind": "custom",
+      "refersTo": "plank-place",
+      "description": "Stup i dvije daske sa šiljkom: smeđa nosi adresu (mjesto), žad vodi na stazu.",
+      "html": "<div class=\"ds-signpost\"><div class=\"ds-plank ds-place\"><label for=\"ds-a\">Provjeri adresu</label><input id=\"ds-a\" type=\"search\" placeholder=\"Ulica i broj, naselje\"></div><a class=\"ds-plank ds-go\" href=\"#\"><span class=\"ds-t\">Pronađi mjesto za mene</span><span class=\"ds-s\">Tri pitanja, pa prijedlog naselja s razlozima</span><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a></div>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-signpost{position:relative;display:grid;gap:.85rem;padding-left:22px;margin:16px 30px 28px 0;max-width:34rem;font-family:var(--font-text);}.ds-signpost::before{content:'';position:absolute;left:0;top:-14px;bottom:-26px;width:9px;border-radius:3px 3px 0 0;background:var(--sign-edge);}.ds-plank{position:relative;border-radius:var(--radius-sm) 0 0 var(--radius-sm);}.ds-plank::after{content:'';position:absolute;left:100%;top:0;bottom:0;width:26px;background:inherit;clip-path:polygon(0 0,100% 50%,0 100%);}.ds-place{background:var(--sign);color:var(--sign-ink);padding:.9rem 1rem 1rem 1.1rem;box-shadow:inset 0 -3px 0 var(--sign-edge);}.ds-place label{display:block;margin-bottom:.4rem;font-family:var(--font-display);font-size:1.2rem;font-weight:700;letter-spacing:-.01em;}.ds-place input{width:100%;min-height:56px;padding:.75rem 1.1rem;font:inherit;font-size:1.1rem;border:1px solid var(--sign-edge);border-radius:var(--radius);background:var(--surface);color:var(--text);}.ds-go{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:.75rem;min-height:64px;padding:.75rem .75rem .75rem 1.1rem;margin-right:22%;background:var(--accent);color:var(--accent-contrast);text-decoration:none;transition:background-color 160ms var(--ease-out),transform 220ms var(--ease-out);}.ds-go:hover{background:var(--accent-hover);transform:translateX(4px);}.ds-go svg{grid-column:2;grid-row:1/span 2;}.ds-t{font-family:var(--font-display);font-size:1.2rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;}.ds-s{grid-column:1;font-size:.92rem;opacity:.92;}:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}@media (prefers-reduced-motion:reduce){.ds-go:hover{transform:none;}}"
+    },
+    {
+      "name": "Ploča mjesta",
+      "kind": "card",
+      "refersTo": "place-board-band",
+      "description": "Vrh izvještaja: smeđa traka s nazivom i skorom, sažetak i ključne činjenice sa statusom. Sadržaj primjera je ilustracija oblika, ne podatak.",
+      "html": "<section class=\"ds-board\"><div class=\"ds-band\"><div><p class=\"ds-place\">Naselje, općina, županija</p><h1>Naziv mjesta</h1></div><span class=\"ds-score\"><b>00</b><small>Skor za život</small></span></div><div class=\"ds-body\"><p>Sažetak od dvije do tri rečenice iz predložaka nad statusima.</p><ul><li class=\"ds-tag ds-good\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg><span class=\"ds-l\">Poplave</span><b>dobro</b></li><li class=\"ds-tag ds-warning\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/></svg><span class=\"ds-l\">Zrak</span><b>upozorenje</b></li><li class=\"ds-tag ds-nodata\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3\"/><path d=\"M12 17h.01\"/></svg><span class=\"ds-l\">Prijevoz</span><b>nema podataka</b></li></ul></div></section>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-board{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:clip;font-family:var(--font-text);color:var(--text);}.ds-band{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding:1.4rem 1.5rem 1.3rem;background:var(--sign);color:var(--sign-ink);box-shadow:inset 0 -4px 0 var(--sign-edge);}.ds-band h1{margin:0;font-family:var(--font-display);font-size:clamp(1.7rem,4.4vw,2.7rem);font-weight:750;letter-spacing:-.03em;line-height:1.15;}.ds-place{margin:0 0 .35rem;color:var(--sign-muted);font-weight:600;font-size:.95rem;}.ds-score{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:88px;min-height:88px;padding:.5rem;border-radius:var(--radius);background:var(--accent);color:var(--accent-contrast);box-shadow:0 0 0 3px var(--sign-edge);}.ds-score b{font-size:2rem;font-weight:800;line-height:1;}.ds-score small{font-size:.78rem;font-weight:600;}.ds-body{padding:1.25rem 1.5rem 1.4rem;}.ds-body p{font-size:1.1rem;line-height:1.5;max-width:62ch;margin:0;}.ds-body ul{display:flex;flex-wrap:wrap;gap:.45rem;list-style:none;margin:1.1rem 0 0;padding:0;}.ds-tag{display:inline-flex;align-items:center;gap:.4rem;min-height:36px;padding:.3rem .7rem .3rem .55rem;border-radius:var(--radius-sm);font-size:.92rem;background:var(--nodata-bg);}.ds-l{color:var(--muted);}.ds-good{background:var(--good-bg);}.ds-good svg{color:var(--good);}.ds-warning{background:var(--warning-bg);}.ds-warning svg{color:var(--warning);}.ds-nodata svg{color:var(--nodata);}"
+    },
+    {
+      "name": "Staza s postajama",
+      "kind": "custom",
+      "refersTo": "trail-dot",
+      "description": "Vodič u četiri koraka: pređeno žad i puna crta, trenutno smeđe, ispred isprekidano.",
+      "html": "<ol class=\"ds-trail\"><li data-state=\"done\"><button><span class=\"ds-dot\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><span class=\"ds-lab\">Prvi korak</span></button></li><li data-state=\"current\"><span aria-current=\"step\"><span class=\"ds-dot\">2</span><span class=\"ds-lab\">Drugi korak</span></span></li><li data-state=\"next\"><span><span class=\"ds-dot\">3</span><span class=\"ds-lab\">Treći korak</span></span></li><li data-state=\"next\"><span><span class=\"ds-dot\">4</span><span class=\"ds-lab\">Prijedlozi</span></span></li></ol>",
+      "css": ":host{--bg:#f0f3ef;--surface:#fff;--surface-2:#e3eae5;--text:#142420;--muted:#4a5c55;--border:#d0dad4;--control-border:#6c7f77;--accent:#0b6b63;--accent-hover:#08564f;--accent-soft:#d3ece7;--accent-contrast:#fff;--sign:#5b3a1e;--sign-ink:#fff;--sign-muted:#e9d9c6;--sign-edge:#3f2713;--focus:#1a56c4;--good:#1d6b3a;--good-bg:#e1f0e4;--warning:#7a5300;--warning-bg:#fbefd0;--bad:#a3231c;--bad-bg:#fbe4e0;--nodata:#545a57;--nodata-bg:#e7e9e6;--radius:6px;--radius-sm:6px;--ease-out:cubic-bezier(0.16,1,0.3,1);--font-text:'Figtree Variable',system-ui,sans-serif;--font-display:'Bricolage Grotesque Variable','Figtree Variable',sans-serif;--shadow:0 1px 2px rgb(20 36 32 / 6%),0 6px 18px -8px rgb(20 36 32 / 14%);}.ds-trail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;margin:0;padding:0;font-family:var(--font-text);max-width:640px;}.ds-trail li{position:relative;}.ds-trail li:not(:last-child)::after{content:'';position:absolute;left:44px;right:2px;top:20px;border-top:3px dashed var(--control-border);}.ds-trail li[data-state=done]::after{border-top-style:solid;border-top-color:var(--accent);}.ds-trail button,.ds-trail li>span{display:inline-flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;}.ds-trail button{cursor:pointer;}.ds-dot{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:3px solid var(--control-border);background:var(--bg);color:var(--muted);font-family:var(--font-display);font-weight:750;transition:background-color 240ms var(--ease-out),border-color 240ms var(--ease-out);}.ds-trail [data-state=done] .ds-dot{border-color:var(--accent);background:var(--accent);color:var(--accent-contrast);}.ds-trail [data-state=current] .ds-dot{border-color:var(--sign);background:var(--sign);color:var(--sign-ink);box-shadow:0 0 0 4px color-mix(in srgb,var(--sign) 22%,transparent);}.ds-lab{font-size:.92rem;font-weight:600;color:var(--muted);}.ds-trail [data-state=current] .ds-lab{color:var(--text);font-weight:700;}.ds-trail button:hover .ds-lab{color:var(--accent);text-decoration:underline;}:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Putokaz",
+    "overview": "Aplikacija je sustav planinarskih staza za Hrvatsku. Korisnik stoji na ishodištu staze, putokaz mu nudi dva smjera (provjeri adresu, pronađi mjesto za mene), a svaki rezultat je ploča mjesta kakva stoji na ulazu u park prirode. Svijet je posuđen iz označavanja staza i nacionalnih parkova: vapnenačka podloga, šumska tinta, jezerski žad za stazu i radnje, smeđa turistička signalizacija za identitet mjesta. Ništa ne glumi službeni znak; to je jezik orijentacije, ne jezik tijela vlasti.\n\nGustoća je mirna i čitljiva: jedna jasna rečenica ispred brojki, ravnala i redovi izravno na vapnencu umjesto lebdećih kartica, crte i postaje umjesto ikona u redu. Boja ima točno jedan posao. Svaki status nosi i oblik ikone i riječ, nikad samo boju. Pokret je jedna gesta po trenutku (ploča se popuni kad stigne izvještaj, karta Hrvatske izađe od istoka prema zapadu, korak vodiča klizne u smjeru hoda) i potpuno nestaje uz smanjene animacije.\n\nOdbijeno: podijeljeni hero s karticom za pretragu i redom jednakih kartica s ikonama; crveno-zelena presuda na karti; sve što sugerira službeni status.",
+    "keyCharacteristics": [
+      "Jedna boja, jedan posao: žad za radnje, poveznice i stazu; smeđa samo za identitet mjesta; statusi zasebno.",
+      "Putokaz s daskama, ploča mjesta, staza s postajama i ravnani redovi kao potpisni oblici.",
+      "Ravnala i redovi na podlozi umjesto bijelih kartica; sjena samo na pločama koje nose identitet mjesta i na plutajućim slojevima.",
+      "Bricolage Grotesque za naslove i brojke, Figtree za tekst, oba s vlastitog poslužitelja (OFL).",
+      "Svijetla i tamna tema jednako dovršene; WCAG 2.2 AA, ciljevi dodira 44 px, 320 px bez vodoravnog pomicanja."
+    ],
+    "rules": [
+      {
+        "name": "The One Job Rule",
+        "body": "Svaka boja ima jedan posao. Žad znači „ovuda se ide ili ovo se može pritisnuti”, smeđa znači „ovo je mjesto”, statusne boje znače stanje. Žad nikad ne označava status, smeđa nikad radnju.",
+        "section": "colors"
+      },
+      {
+        "name": "The Colour Plus Shape Plus Word Rule",
+        "body": "Status je uvijek boja, oblik ikone i riječ zajedno. Gdje je riječ vizualno izostavljena (ključne činjenice ploče), stoji u skrivenom tekstu za čitač zaslona.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Verdict Map Rule",
+        "body": "Karte boje jednom nijansom žada od slabijeg prema jačem; crveno-zelena ljestvica se ne koristi.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Tekst koristi tablične brojke (`tabular-nums`) kako bi se brojke u redovima i tablicama poravnale; naslovi koriste proporcionalne brojke s poravnatom visinom.",
+        "section": "typography"
+      },
+      {
+        "name": "The Display Earns Its Size Rule",
+        "body": "Display veličina postoji samo za jedno pitanje na naslovnici. Ostali naslovi ostaju na Headline ljestvici.",
+        "section": "typography"
+      },
+      {
+        "name": "The Boards Not Cards Rule",
+        "body": "Ispod ploče mjesta izvještaj nema bijelih kartica: svaki odjeljak otvara ravnalo od 2 px u tinti, a kategorije su redovi na vapnencu odvojeni tankom linijom. Gdje ploča ostaje (stranice izvan izvještaja), ravna je: bijela podloga, jedna tanka linija, bez sjene. Odabrano dobiva žad, ne sjenu.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** koristiti žad (`lake-jade`) za svaku radnju, poveznicu i crtu staze, i samo za to.",
+      "**Do** koristiti smeđu tablu (`sign-brown` s bijelim tekstom i rubom `sign-edge`) za naziv i identitet mjesta: daska adrese, traka ploče mjesta, naslov kartice naselja, „ovdje ste”, prvo mjesto u rangu.",
+      "**Do** prikazati svaki status bojom, oblikom ikone i riječju; „nema podataka” uvijek prikazati.",
+      "**Do** držati svaki interaktivni cilj na najmanje 44 px i fokus kao obris od 3 px u `focus-blue`.",
+      "**Do** koristiti pokret samo kao gestu (ploča se popuni, korak klizne, mozaik izađe), s `cubic-bezier(0.16, 1, 0.3, 1)`; uz `prefers-reduced-motion` ukinuti pomake i animacije, a prijelaze boje i ruba zadržati jer su povratna informacija.",
+      "**Do** provjeriti svaki novi par boja za kontrast od 4,5:1 u svijetloj i tamnoj temi, i rasporede na 320 px bez vodoravnog pomicanja.",
+      "**Do** slagati rezultate i kategorije kao ravnane redove na jednom popisu, a odjeljke izvještaja otvarati ravnalom od 2 px u tinti."
+    ],
+    "donts": [
+      "**Don't** koristiti žad za status ili smeđu za radnju (osim smeđe daske adrese koja nosi polje, ne gumb).",
+      "**Don't** bojiti karte crveno-zelenom ljestvicom; jedna nijansa žada, siva za „nema podataka”.",
+      "**Don't** graditi podijeljeni hero s karticom za pretragu i redom jednakih kartica s ikonama.",
+      "**Don't** vraćati bijele kartice u izvještaj ispod ploče mjesta ni dodavati sjenu pločama; sjena pripada pločama mjesta i plutajućim slojevima.",
+      "**Don't** praviti čipove kao pilule; kut je 6 px.",
+      "**Don't** animirati prozirnost teksta koji se mora pročitati.",
+      "**Don't** koristiti maskotu, emojije, grb ili oznake koje sugeriraju službeni status."
+    ]
+  }
+}

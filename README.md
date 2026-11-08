@@ -104,9 +104,13 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - stranica „Izvori”: datumi osvježavanja uživo preko CKAN API-ja Portala otvorenih podataka i nalazi o kvaliteti podataka
 - pristupačnost: WCAG 2.2 razine AA (axe bez nalaza na svim stranicama u svijetloj i tamnoj temi), mobilni prikaz od 320 px, tamna tema; sve što je na karti dostupno je i u tekstu
 
-| Naslovnica | Mobitel, tamna tema | Asistent |
+| Naslovnica | Naslovnica na mobitelu | Iskaznica mjesta na mobitelu, tamna tema |
 |---|---|---|
-| ![Naslovnica s pretragom i odabirom profila](docs/images/naslovnica.png) | ![Izvještaj na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) | ![Asistent odgovara iz izračuna](docs/images/asistent.png) |
+| ![Naslovnica: pitanje, putokaz s poljem za adresu i vođenim tokom, naselja Hrvatske prema Skoru za život](docs/images/naslovnica.png) | ![Naslovnica na mobitelu](docs/images/naslovnica-mobitel.png) | ![Iskaznica mjesta na vrhu izvještaja na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) |
+
+| Pronađi mjesto za mene: treći korak | Prijedlozi s razlozima | Asistent |
+|---|---|---|
+| ![Vođeni tok: traka napretka i pitanje „Što vam je važno?”](docs/images/predlozi.png) | ![Prijedlozi naselja s razlozima, izvještajem i oglasima](docs/images/predlozi-rezultati.png) | ![Asistent odgovara iz izračuna](docs/images/asistent.png) |
 
 | Karta Hrvatske | Karta na mobitelu |
 |---|---|

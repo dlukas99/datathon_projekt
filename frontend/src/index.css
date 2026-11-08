@@ -32,7 +32,7 @@
   --nodata: #545a57;
   --nodata-bg: #e7e9e6;
 
-  --radius: 10px;
+  --radius: 6px;
   --radius-sm: 6px;
   --shadow: 0 1px 2px rgb(20 36 32 / 6%), 0 6px 18px -8px rgb(20 36 32 / 14%);
   --max: 1120px;
@@ -737,9 +737,14 @@ select:hover {
   border-color: var(--sign-edge);
 }
 
-@media (width <= 420px) {
+@media (width <= 480px) {
+  .search-row {
+    flex-direction: column;
+  }
+
   .search-go {
-    padding: 0 0.75rem;
+    justify-content: center;
+    min-height: 48px;
   }
 }
 
@@ -1902,6 +1907,7 @@ details summary {
 
 .find-env-row .find-flood {
   margin: 0;
+  min-height: 48px;
 }
 
 .find-air {
@@ -2202,12 +2208,13 @@ details summary {
   color: var(--bad);
 }
 
+/* "Informacija": a fact without a sourced threshold, neutral as in the category status. */
 .tag-info {
-  background: var(--info-bg);
+  background: var(--surface-2);
 }
 
 .tag-info svg {
-  color: var(--info);
+  color: var(--muted);
 }
 
 .tag-no_data svg {
@@ -2222,6 +2229,91 @@ details summary {
 .place-board[data-ready='true'] .board-tag {
   animation: board-in 440ms var(--ease-out) both;
   animation-delay: calc(160ms + var(--i, 0) * 55ms);
+}
+
+/* The report below its board: categories as ruled rows on the ground, not white cards.
+   Name, status and the key value on the left; the explanation and details on the right. */
+section[aria-labelledby='env-title'] > .grid {
+  display: block;
+  border-top: 2px solid var(--text);
+}
+
+section[aria-labelledby='env-title'] .category.card {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  grid-auto-flow: dense;
+  column-gap: 2rem;
+  align-items: start;
+  padding: 1.25rem 0 1.1rem;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+}
+
+section[aria-labelledby='env-title'] .category.card.focused {
+  box-shadow: none;
+}
+
+.category-head {
+  display: contents;
+}
+
+section[aria-labelledby='env-title'] .category > .category-head {
+  display: block;
+  grid-column: 1;
+  grid-row: 1 / span 6;
+}
+
+section[aria-labelledby='env-title'] .category .card-top {
+  justify-content: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+section[aria-labelledby='env-title'] .category > :not(.category-head) {
+  grid-column: 2;
+}
+
+section[aria-labelledby='env-title'] .category > .headline {
+  margin-top: 0.15rem;
+  font-size: 1.02rem;
+}
+
+section[aria-labelledby='env-title'] .category .key-value {
+  margin: 0.4rem 0 0;
+}
+
+@media (width <= 640px) {
+  section[aria-labelledby='env-title'] .category.card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  section[aria-labelledby='env-title'] .category > * {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+/* The other report sections lose their card shells: a rule above, the ground below. */
+section[aria-labelledby='carfree-title'] .card,
+section[aria-labelledby='daily-title'] > .card,
+.life-score.card,
+.assistant.card {
+  background: none;
+  border: 0;
+  border-top: 2px solid var(--text);
+  border-radius: 0;
+  padding: 1.1rem 0 0;
+}
+
+section[aria-labelledby='carfree-title'] .grid.two {
+  gap: 2rem;
+}
+
+section[aria-labelledby='carfree-title'] .card.focused {
+  box-shadow: none;
+  border-top-color: var(--accent);
 }
 
 /* Movement only: the text is readable at every frame. */
@@ -2250,7 +2342,7 @@ details summary {
 .report-guide ol {
   mask-image: linear-gradient(90deg, #000 88%, transparent);
   display: flex;
-  gap: 0.25rem;
+  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -2262,11 +2354,12 @@ details summary {
   position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0 0.7rem;
-  color: var(--muted);
+  gap: 0.45rem;
+  min-height: 48px;
+  padding: 0 0.8rem 0 0;
+  color: var(--text);
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -2280,15 +2373,28 @@ details summary {
   font-weight: 700;
 }
 
-.report-guide a[aria-current]::after {
+/* Each section a station on the trail: a ring, filled where you are. */
+.report-guide a::before {
   content: '';
-  position: absolute;
-  left: 0.7rem;
-  right: 0.7rem;
-  bottom: -1px;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--accent);
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  background: var(--bg);
+}
+
+.report-guide a[aria-current]::before {
+  background: var(--sign);
+  border-color: var(--sign);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sign) 25%, transparent);
+}
+
+.report-guide li:not(:last-child) a::after {
+  content: '';
+  width: 1.4rem;
+  border-top: 3px dashed var(--control-border);
+  margin-left: 0.35rem;
 }
 
 section[aria-labelledby] > h2[id],
@@ -2915,10 +3021,6 @@ button.daily-row:hover .daily-show {
 
   .compare-table tbody th {
     width: auto;
-  }
-
-  .search-card {
-    padding: 1.1rem;
   }
 
   .report-tools {

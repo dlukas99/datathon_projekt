@@ -210,24 +210,27 @@ export function CategoryCard({
   const key = category.values.find((v) => v.key === KEY_VALUE[category.id])
   return (
     <article
-      className={`card category status-edge-${category.status}${focused ? ' focused' : ''}`}
+      className={`card category${focused ? ' focused' : ''}`}
       aria-labelledby={titleId}
       data-category={category.id}
     >
-      <div className="card-top">
-        <span className="card-icon">
-          <CategoryIcon id={category.id} />
-        </span>
-        <StatusBadge status={category.status} label={category.status_label} />
+      {/* The name, status and key value; a column of its own where categories are rows. */}
+      <div className="category-head">
+        <div className="card-top">
+          <span className="card-icon">
+            <CategoryIcon id={category.id} />
+          </span>
+          <StatusBadge status={category.status} label={category.status_label} />
+        </div>
+        <h3 id={titleId}>{category.title}</h3>
+        {focused && <p className="focus-tag">Važno za odabrani profil</p>}
+        {key && (
+          <p className="key-value">
+            <span className="key-number">{key.display}</span>
+            <span className="key-label">{key.label}</span>
+          </p>
+        )}
       </div>
-      <h3 id={titleId}>{category.title}</h3>
-      {focused && <p className="focus-tag">Važno za odabrani profil</p>}
-      {key && (
-        <p className="key-value">
-          <span className="key-number">{key.display}</span>
-          <span className="key-label">{key.label}</span>
-        </p>
-      )}
       {!SCALES_IN_DETAILS.has(category.id) &&
         category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
       <p className="headline">{category.headline}</p>
