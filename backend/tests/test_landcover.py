@@ -151,3 +151,37 @@ def test_settlement_values_are_medians_with_quartiles() -> None:
     assert row["nature_med"] == 84.0
     assert row["urban_share"] == 0.0
     assert row["air_band_med"] == "umjerena"
+
+
+def test_house_numbers_are_counted_and_named() -> None:
+    from analysis.environment import houses_text, share_text
+    from app.address_grid import AddressGrid
+    from app.geo import to_htrs
+
+    assert [houses_text(n) for n in (1, 3, 11, 14, 21, 22, 25)] == [
+        "1 kućni broj",
+        "3 kućna broja",
+        "11 kućnih brojeva",
+        "14 kućnih brojeva",
+        "21 kućni broj",
+        "22 kućna broja",
+        "25 kućnih brojeva",
+    ]
+    assert share_text(99.7) == "99 %"  # never "100 %" while some land is not nature
+    assert share_text(100.0) == "100 %"
+    x0, y0 = to_htrs(18.08, 45.38)
+    xs = np.array([x0 + 10, x0 - 250, x0 + 299, x0 + 301, x0 + 900])
+    ys = np.array([y0, y0, y0, y0, y0 - 900])
+    grid = AddressGrid.from_points(xs, ys)
+    assert grid.count_within(18.08, 45.38, 300.0) == 3
+
+
+@needs_data
+def test_a_village_card_says_there_are_houses() -> None:
+    # Mokreš (Čaglin): houses among meadows and trees, almost no "built-up" pixels.
+    cat = green_category(18.082674, 45.377593, None, houses=14)
+    assert cat.status == "good"
+    assert "oko kuća" in cat.headline
+    assert "100 %" not in cat.headline
+    values = {v.key: v.display for v in cat.values}
+    assert values["houses_300m"] == "14 kućnih brojeva"

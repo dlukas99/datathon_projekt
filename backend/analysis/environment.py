@@ -636,6 +636,23 @@ def green_status(cover: dict[str, float], park_distance_m: float | None) -> Stat
     return "good" if cover["nature"] >= 50.0 else "info"
 
 
+def share_text(x: float) -> str:
+    """Whole percent, but never "100 %" for a share that is not all: houses among the
+    trees are often not seen as built up, so "100 % nature" would read as "no houses"."""
+    return "99 %" if 99.0 <= x < 100.0 else f"{fmt.num(x)} %"
+
+
+def houses_text(n: int) -> str:
+    """'1 kućni broj', '3 kućna broja', '14 kućnih brojeva'."""
+    if n % 10 == 1 and n % 100 != 11:
+        word = "kućni broj"
+    elif n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14):
+        word = "kućna broja"
+    else:
+        word = "kućnih brojeva"
+    return f"{fmt.num(n)} {word}"
+
+
 def _share_value(cover: dict[str, float], key: str, title: str, note: str | None = None) -> Value:
     src = "worldcover"
     x = cover[key]
@@ -644,7 +661,7 @@ def _share_value(cover: dict[str, float], key: str, title: str, note: str | None
         label=title,
         value=round(x, 1),
         unit="%",
-        display=f"{fmt.num(x)} %",
+        display=share_text(x),
         source=src,
         retrieved_at=retrieved_at(src),
         kind="modelled",
@@ -652,7 +669,9 @@ def _share_value(cover: dict[str, float], key: str, title: str, note: str | None
     )
 
 
-def green_category(lon: float, lat: float, nearest_park: Place | None) -> Category:
+def green_category(
+    lon: float, lat: float, nearest_park: Place | None, houses: int | None = None
+) -> Category:
     cover = read_landcover(lon, lat)
     src = "worldcover"
     if cover is None:
@@ -685,6 +704,20 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
                 "water",
                 "Voda u krugu od 300 m (more, rijeke, jezera)",
                 "Udio cijelog kruga; ne ulazi u udjele kopna.",
+            )
+        )
+    if houses is not None:
+        values.append(
+            Value(
+                key="houses_300m",
+                label="Kućni brojevi u krugu od 300 m",
+                value=houses,
+                display=houses_text(houses),
+                source="dgu_ad",
+                retrieved_at=retrieved_at("dgu_ad"),
+                kind="measured",
+                note="Iz registra adresa Državne geodetske uprave. Satelitska karta pojedinačne "
+                "kuće među vrtovima i drvećem često ne prepoznaje kao izgrađeno.",
             )
         )
     values.append(
@@ -740,9 +773,16 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
             f"(preporuka za gradove je najmanje {fmt.num(TREE_COVER_TARGET_PCT)} %)."
             f"{park_txt}"
         )
+    elif status == "good" and houses:
+        # Say that there are houses: the satellite map counts single village houses
+        # among gardens and trees as nature.
+        headline = (
+            f"Okruženo prirodom: oko kuća su {nature_parts(cover)} "
+            f"({share_text(cover['nature'])} površine u krugu od 300 m)."
+        )
     elif status == "good":
         headline = (
-            f"Okruženo prirodom: {nature_parts(cover)} čine {fmt.num(cover['nature'])} % "
+            f"Okruženo prirodom: {nature_parts(cover)} čine {share_text(cover['nature'])} "
             "površine u krugu od 300 m."
         )
     else:
@@ -779,7 +819,8 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
             "od 300 m; more i druge vodene površine nisu uračunate. Piksel je „drveće” kad "
             "drveće pokriva barem 10 % njegove površine, pa udio drveća nije isto što i "
             "gustoća krošnji. Karta ne vidi pojedinačna stabla u dvorištima i uz ulice kad je "
-            "oko njih izgrađeno.",
+            "oko njih izgrađeno, a pojedinačne kuće među vrtovima i drvećem često broji kao "
+            "prirodu; zato navodimo i broj kućnih brojeva iz registra adresa DGU-a.",
         ],
     )
 

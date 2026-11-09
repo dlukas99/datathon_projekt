@@ -31,6 +31,7 @@
         "meadow_share_300m": 2.1,
         "crop_share_300m": 0.0,
         "built_share_300m": 90.3,
+        "houses_300m": 293,
         "urban_area": 1.0,
         "nearest_park": 1.8
       }
