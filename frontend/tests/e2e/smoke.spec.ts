@@ -85,15 +85,22 @@ test('profile changes order, not values', async ({ page }) => {
   await expect(cards.first().getByText('Važno za odabrani profil')).toBeVisible()
 })
 
-test('life score has visible, adjustable weights', async ({ page }) => {
+test('the rating of a place explains itself in words, importance is adjustable', async ({ page }) => {
   await page.goto(reportUrl)
-  const section = page.locator('#skor')
-  await expect(section.getByRole('heading', { name: 'Skor za život' })).toBeVisible()
-  await expect(section.getByText(/Najviše (podiže|spušta)/)).toBeVisible()
+  const section = page.locator('#ocjena')
+  await expect(section.getByRole('heading', { name: 'Ocjena mjesta' })).toBeVisible()
+  await expect(section.locator('.life-score-number')).toContainText('od 100')
+  await expect(section.locator('.life-score-why')).toContainText(/Najbolje:|Najslabije:/)
+  await expect(section).not.toContainText('/100')
+  // Importance is folded away under "Prilagodi važnost".
   const slider = section.getByRole('slider', { name: /Poplave/ })
+  await expect(slider).toBeHidden()
+  await section.getByText('Prilagodi važnost').click()
+  await expect(section.getByText('Koliko vam je važno')).toBeVisible()
   await slider.fill('0')
+  await expect(slider).toHaveAttribute('aria-valuetext', 'nije važno')
   await expect(page).toHaveURL(/tezine=/)
-  await expect(section.getByRole('button', { name: 'Vrati težine profila' })).toBeVisible()
+  await expect(section.getByRole('button', { name: 'Vrati važnost iz profila' })).toBeVisible()
 })
 
 test('find a place to live ranks settlements with reasons', async ({ page }) => {
@@ -125,7 +132,7 @@ test('the finder walks one question at a time, keeps its answers in the address 
   await page.getByRole('button', { name: 'Dalje' }).click()
   // Weights only under "Napredno".
   await expect(page.getByRole('slider').first()).toBeHidden()
-  await page.getByText('Napredno: težine u Skoru za život').click()
+  await page.getByText('Napredno: koliko vam je što važno').click()
   await expect(page.getByRole('slider', { name: /Poplave/ })).toBeVisible()
   await page.goBack()
   await expect(page.getByLabel('Područje')).toHaveValue('Osječko-baranjska županija')
@@ -258,7 +265,7 @@ test('map of Croatia: layers, legend, a click on a town, a forest, the sea and a
 
   // Legend follows the layer, with the report's names, a source and a date.
   const legend = page.locator('.atlas-legend')
-  await expect(legend.getByRole('heading')).toHaveText('Skor za život: Općenito')
+  await expect(legend.getByRole('heading')).toHaveText('Ocjena mjesta: Općenito')
   await page.getByRole('radio', { name: 'Kvaliteta zraka' }).click()
   await expect(page).toHaveURL(/sloj=air/)
   await expect(page.getByRole('radio', { name: 'Kvaliteta zraka' })).toBeChecked()
@@ -271,8 +278,8 @@ test('map of Croatia: layers, legend, a click on a town, a forest, the sea and a
     'Nema podataka',
   ])
   await expect(legend).toContainText('EEA, karta PM2,5 za 2024. (preuzeto')
-  await page.getByRole('radio', { name: 'Skor za život' }).click()
-  await expect(page.getByRole('radio', { name: 'Skor za život' })).toBeChecked()
+  await page.getByRole('radio', { name: 'Ocjena mjesta' }).click()
+  await expect(page.getByRole('radio', { name: 'Ocjena mjesta' })).toBeChecked()
 
   const card = page.locator('.atlas-card')
   await clickOnMap(page, VINKOVCI)
@@ -334,7 +341,14 @@ test('map of Croatia: the table carries the same data and works with the keyboar
 test('assistant answers from the report', async ({ page }) => {
   await page.goto(reportUrl)
   await page.getByRole('button', { name: 'Je li ova kuća u poplavnom području?' }).click()
-  await expect(page.getByText(/Za ovu adresu \(poplave/)).toBeVisible()
+  const assistant = page.locator('.assistant')
+  // A short direct answer, one source line, details folded, the disclaimer once.
+  await expect(assistant.getByText(/Ne\. Nije u području riječnih poplava/)).toBeVisible()
+  await expect(assistant.getByText(/Izvor: Karte opasnosti od riječnih poplava/)).toBeVisible()
+  await expect(assistant.getByText(/povratno razdoblje 10 godina/).first()).toBeHidden()
+  await assistant.getByText('Prikaži detalje').click()
+  await expect(assistant.getByText(/povratno razdoblje 10 godina/).first()).toBeVisible()
+  await expect(assistant.getByText(/službena procjena ni savjet/)).toHaveCount(1)
 })
 
 test('walking route to the nearest place of a kind, from the legend and the daily list', async ({

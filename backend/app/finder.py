@@ -2,7 +2,7 @@
 
 Each profile has mandatory requirements and extra criteria (config/finder_rules.json,
 app/finder_rules.py). Settlements that meet the requirements are ranked by the
-weighted Skor za život sub-scores plus the profile's criteria, all over precomputed
+weighted rating (Ocjena mjesta) sub-scores plus the profile's criteria, all over precomputed
 settlement profiles (ingest/settlement_profiles.py, ingest/facilities.py). A language
 model, when configured, may only turn a free-text question into these filters; it
 never sees or produces numbers.

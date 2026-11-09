@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-09 14:30
+Zadnje ažurirano: 2026-11-09 17:30
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -22,7 +22,7 @@ Zadnje ažurirano: 2026-11-09 14:30
 
 ## P1
 - [x] **Buka:** EEA karte nisu otvorene licence (samo poveznica); procjena prema udaljenosti od autocesta, glavnih i važnijih cesta te pruga iz OSM-a, oznaka „procjena”.
-- [x] **Asistent:** `POST /api/assistant`; OpenAI-kompatibilni model samo za namjeru i kategorije, bez ključa pravila; odgovori iz predložaka; 20 testnih pitanja u `docs/ASISTENT.md` (sva prolaze).
+- [x] **Asistent:** `POST /api/assistant`; OpenAI-kompatibilni model samo za namjeru i kategorije, bez ključa pravila; odgovori iz predložaka; 20 testnih pitanja u `docs/ASISTENT.md` (sva prolaze). Od 9. 11. kratki odgovori (jedna do dvije rečenice, redak „Izvor”, detalji na klik, izjava jednom ispod razgovora); „Skor za život” je „Ocjena mjesta” s objašnjenjem riječima; vrste vrijednosti „izmjereno / procjena modela / gruba procjena”.
 - [x] **Reciklaža:** CKAN pretraga 33 općinska skupa, 11 s koordinatama (45 točaka), spojeno s 2.071 OSM točkom; nalazi u `docs/KVALITETA_PODATAKA.md`.
 - [x] **Profili:** obitelj s djecom, umirovljenik, student, rad od kuće i vlastiti; mijenjaju samo redoslijed i naglasak (provjereno e2e testom).
 - [x] **Ispis i dijeljenje:** CSS za ispis, stanje izvještaja (koordinate, adresa, profil) u URL-u, kopiranje poveznice, preuzimanje GeoJSON-a.

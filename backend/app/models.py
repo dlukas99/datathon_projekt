@@ -82,7 +82,7 @@ class Category(BaseModel):
     links: list[Link] = []
     scales: list[Scale] = []
     subscore: float | None = Field(
-        default=None, description="Podskor 0–100 za Skor za život (docs/METODOLOGIJA.md)"
+        default=None, description="Bodovi kategorije 0–100 za ocjenu mjesta (docs/METODOLOGIJA.md)"
     )
 
 

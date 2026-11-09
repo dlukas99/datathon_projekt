@@ -6,12 +6,14 @@ Ovaj dokument opisuje kako se računa svaka kategorija pregleda, koji se pragovi
 
 1. **Apsolutno značenje ispred relativnog ranga.** Pregled kaže, na primjer, „lokacija je u modeliranom poplavnom području za povratno razdoblje od 100 godina”, a ne „rizik iznad prosjeka”.
 2. **Svaka kategorija ima status** prema pragu s izvorom: dobro, upozorenje, loše ili nema podataka. Kategorije za koje ne postoji općeprihvaćen prag (sunce, požari, život bez auta, javni prijevoz, svakodnevni život) imaju status „Informacija” i prikazuju samo podatak, bez ocjene. „Nema podataka” se uvijek prikazuje; kategorija se nikad tiho ne izostavlja.
-3. **Skupna ocjena samo s vidljivim težinama.** Kategorije se prikazuju zasebno; „Skor za život” (odjeljak niže) je ponderirani prosjek s vidljivim i podesivim težinama. Profil mijenja redoslijed, naglasak i težine, nikad vrijednosti ni statuse.
+3. **Skupna ocjena samo s vidljivim težinama.** Kategorije se prikazuju zasebno; „ocjena mjesta” (odjeljak niže) je ponderirani prosjek s vidljivim i podesivim težinama. Profil mijenja redoslijed, naglasak i težine, nikad vrijednosti ni statuse.
 4. **Svaka vrijednost ima izvor, datum preuzimanja i vrstu.** Vrste su:
-   - `measured` (izmjereno): vrijednost iz mjerenja, voznog reda ili službenog registra;
-   - `modelled` (modelirano): izračun modelom (karte poplava i zraka, satelitski pokrov tla, vrijeme hoda po mreži);
-   - `estimate` (procjena): zamjenski podatak, npr. udaljenost od prometnice umjesto razine buke ili zračna udaljenost kad usmjerivač ne radi.
-5. **Sažetak se slaže iz predložaka.** Dvije do četiri kratke rečenice nad statusima kategorija (`app/report.py`): ako je lokacija u poplavnom području ili blizu njega, to je prva rečenica („Pažnja: …”); zatim ono što je stvarno dobro (mirno, čist ili dobar zrak, puno zelenila, bez opasnosti od poplava), svakodnevne potrebe pješice i najviše jedna napomena „Na što obratiti pažnju: …” (velika cesta blizu, osrednji ili loš zrak, malo drveća). Kad je jedino dobro to što nema poplava, to ide u kratku rečenicu na kraju, da poplava ne bude uvijek prva. Jezični model ne piše tekst.
+   - `measured`, u sučelju „izmjereno”: vrijednost iz mjerenja, voznog reda ili službenog registra;
+   - `modelled`, u sučelju „procjena modela”: izračun iz karata i modela (karte poplava i zraka, satelitski pokrov tla, vrijeme hoda po mreži), a ne mjerenje na adresi;
+   - `estimate`, u sučelju „gruba procjena”: zamjenski podatak, npr. udaljenost od prometnice umjesto razine buke ili zračna udaljenost kad usmjerivač ne radi.
+
+   Od 9. 11. 2026. oznaka vrste prikazuje se jednom uz glavnu brojku kategorije i u „Detalji i izvor”, a ne uz svaki redak; prelazak mišem, dodir ili fokus tipkovnicom otvara kratko objašnjenje. API polje `kind` je isto.
+5. **Sažetak se slaže iz predložaka.** Dvije do četiri kratke rečenice nad statusima kategorija (`app/report.py`): ako je lokacija u poplavnom području ili blizu njega, to je prva rečenica („Pažnja: …”); zatim ono što je stvarno dobro (mirno, čist ili dobar zrak, puno prirode ili drveća i hlada, bez opasnosti od poplava), svakodnevne potrebe pješice i najviše jedna napomena „Na što obratiti pažnju: …” (velika cesta blizu, osrednji ili loš zrak, malo drveća). Kad je jedino dobro to što nema poplava, to ide u kratku rečenicu na kraju, da poplava ne bude uvijek prva. Jezični model ne piše tekst.
 
 ## Lokacija
 
@@ -155,12 +157,12 @@ Jedna točka (središte) ne opisuje naselje: središte sela je njegov najizgrađ
 | Vrijednost | Adrese | Sažetak |
 |---|---|---|
 | priroda, drveće i izgrađeno u krugu od 300 m | sve adrese naselja, a u naseljima s više od 100 adresa slučajni uzorak od 100 (sjeme 2026) | medijan i kvartili; udio adresa u gusto izgrađenom području |
-| podskor „Priroda i hlad” | isto | medijan podskorova adresa |
-| PM2,5 i NO2 (EEA, 1 km) | isto | medijan i kvartili; ocjena zraka iz medijana; medijan podskorova |
-| udaljenost od velike ceste | sve adrese (1.683.411) | medijan i kvartili; udjeli adresa do 300 m, 300–500 m i dalje od 500 m; medijan podskorova |
+| bodovi „Priroda i hlad” | isto | medijan bodova adresa |
+| PM2,5 i NO2 (EEA, 1 km) | isto | medijan i kvartili; ocjena zraka iz medijana; medijan bodova |
+| udaljenost od velike ceste | sve adrese (1.683.411) | medijan i kvartili; udjeli adresa do 300 m, 300–500 m i dalje od 500 m; medijan bodova |
 
 - **Zašto medijan:** nekoliko adresa uz šumu ili veliku cestu pomaknulo bi prosjek, a medijan je vrijednost tipične adrese. Raspon pokazuje koliko se adrese razlikuju.
-- **Skor za život naselja** je ponderirani prosjek medijana podskorova po kategorijama: za svaku kategoriju najprije medijan adresa, a zatim težine profila kao u izvještaju. Tako skor naselja odgovara izvještaju za tipičnu adresu.
+- **Ocjena mjesta naselja** je ponderirani prosjek medijana bodova po kategorijama: za svaku kategoriju najprije medijan adresa, a zatim težine profila kao u izvještaju. Tako ocjena naselja odgovara izvještaju za tipičnu adresu.
 - **Uzorak:** pola naselja ima 96 adresa ili manje i ulazi cijelo. Uzorak od 100 adresa (ukupno 494.166 točaka sa središtima naselja bez adresa) računa se oko 21 minutu na 8 jezgri. Provjera na naseljima Čaglin (253 adrese), Nijemci (729) i Vinkovci (9.385): medijani uzorka razlikuju se od medijana svih adresa najviše 2,1 postotna boda (priroda u Vinkovcima 42,0 % prema 39,9 %).
 - **Samo iz središta naselja** (uz oznaku u sučelju) ostaju: poplave, požari raslinja, minute hoda do usluga, „X od 7” i javni prijevoz. Hod se računa usmjerivačem (Valhalla) za svaku točku, pa bi uzorak adresa za 6.759 naselja trajao satima; vrijednosti su zato za središte naselja.
 - **Prosjek** ostaje samo za udjele (udio adresa u pojasu uz cestu, udio gradskih adresa), jer je to prosjek oznaka da/ne, i za broj polazaka na sat, koji je sam prosjek po satu.
@@ -180,7 +182,7 @@ Jedna točka (središte) ne opisuje naselje: središte sela je njegov najizgrađ
 | `secondary` bez oznake | glavna gradska cesta (bivše županijske ceste u gradovima) | |
 
   U podacima 19.042 dionice `primary` imaju oznaku D, a 16.463 dionice `secondary` županijsku oznaku; 3.910 dionica `secondary` nema oznaku, uglavnom u gradovima.
-- **Izračun:** zračna udaljenost od lokacije (adrese ili središta naselja) do najbliže točke osi takve ceste i do najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „procjena”. Za središta naselja udaljenost je često 0 m jer OSM čvor naselja leži na samoj cesti; za adresu uz cestu nekoliko je metara (točka adrese je na zgradi).
+- **Izračun:** zračna udaljenost od lokacije (adrese ili središta naselja) do najbliže točke osi takve ceste i do najbliže pruge, do 2 km. Buku ne mjerimo; udaljenost je zamjenski pokazatelj, vrste „gruba procjena” (`estimate`). Za središta naselja udaljenost je često 0 m jer OSM čvor naselja leži na samoj cesti; za adresu uz cestu nekoliko je metara (točka adrese je na zgradi).
 - **Pojasevi:**
 
 | Udaljenost od ceste | Oznaka | Status |
@@ -192,8 +194,8 @@ Jedna točka (središte) ne opisuje naselje: središte sela je njegov najizgrađ
 - **Izvor pojaseva:** Health Effects Institute (2010.), *Traffic-Related Air Pollution: A Critical Review of the Literature on Emissions, Exposure, and Health Effects*, Special Report 17. Zona najjačeg utjecaja prometa je približno 300 do 500 m od autoceste ili velike prometnice, a dalje koncentracije padaju na pozadinsku razinu.
 - **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
 - **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
-- **Smjer podskora:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
-- **Naselje (karta i „Predloži mjesto”):** jedna točka ne opisuje naselje (središte Splita je u pješačkoj staroj jezgri, a središte gotovo svakog sela na cesti kroz selo), pa se za svako naselje računa pojas za **svaku adresu DGU-a** u njemu (1.683.411 adresa, `ingest/settlement_traffic.py`). Od 9. 11. 2026. podskor naselja je medijan podskorova adresa (100, 60 ili 25), a ne prosjek, i uz prijedlog piše medijan udaljenosti s rasponom (kod polovice adresa između 25. i 75. percentila) te koliki udio adresa je do 300 m i koliki dalje od 500 m od velike prometnice. Udaljenosti se za naselja mjere do 5 km. Naselja bez adresa (17) zadržavaju vrijednost u središtu. Izvještaj za adresu i dalje računa za tu adresu.
+- **Smjer bodovia:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
+- **Naselje (karta i „Predloži mjesto”):** jedna točka ne opisuje naselje (središte Splita je u pješačkoj staroj jezgri, a središte gotovo svakog sela na cesti kroz selo), pa se za svako naselje računa pojas za **svaku adresu DGU-a** u njemu (1.683.411 adresa, `ingest/settlement_traffic.py`). Od 9. 11. 2026. bodovi naselja su medijan bodova adresa (100, 60 ili 25), a ne prosjek, i uz prijedlog piše medijan udaljenosti s rasponom (kod polovice adresa između 25. i 75. percentila) te koliki udio adresa je do 300 m i koliki dalje od 500 m od velike prometnice. Udaljenosti se za naselja mjere do 5 km. Naselja bez adresa (17) zadržavaju vrijednost u središtu. Izvještaj za adresu i dalje računa za tu adresu.
 - **Ograničenje:** prometnija županijska cesta kroz središte grada (npr. Ž4290 u Vinkovcima) ne broji se kao prometnica; buku i broj vozila ne mjerimo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
@@ -221,7 +223,7 @@ Jedna točka (središte) ne opisuje naselje: središte sela je njegov najizgrađ
 - **Vremena hoda:** jedan poziv matrice `sources_to_targets` po izvještaju. Kandidati su sve ustanove unutar 1.300 m zračne udaljenosti, a izvan toga tri najbliže unutar 15 km. 15 minuta pri 4,5 km/h je 1.125 m mrežom, što nikad nije kraće od zračne udaljenosti, pa krug od 1.300 m sadrži sve ustanove unutar 15 minuta.
 - **Mjesta na karti** (`nearby_places` u izvještaju): sva mjesta do 15 minuta hoda i tri najbliža svake vrste, s vremenom hoda iz iste matrice. Iz njih su brojevi „unutar 15 min” i najbliže vrijeme u legendi karte.
 - **Pješački put do mjesta** (`GET /api/route`) računa se samo kad ga korisnik zatraži, istim usmjerivačem, profilom i brzinom kao izokrone i matrica. Duljina je duljina puta po mreži, a minute su vrijeme usmjerivača, ne duljina podijeljena brzinom (vidi tablicu ispod). Uz put se prikazuje vrijeme mjesta iz izvještaja, isti broj kao u popisu „Svakodnevni život”. Točke udaljene više od 20 km zračno se ne usmjeravaju. Ako put nije moguće izračunati, prikazuje se poruka i zračna udaljenost; ravna crta se ne crta.
-- Ako usmjerivač ne odgovara, prikazuje se zračna udaljenost s oznakom „procjena”, a kategorije koje ovise o hodu prikazuju „Nema podataka”.
+- Ako usmjerivač ne odgovara, prikazuje se zračna udaljenost s oznakom „gruba procjena”, a kategorije koje ovise o hodu prikazuju „Nema podataka”.
 
 Valhalla na pojedinim mjestima mreže dodaje vrijeme hoda, pa je duljina puta podijeljena brzinom kraća od vremena u izvještaju. Mjereno na 435 mjesta oko šest demo adresa (6. 11. 2026.):
 
@@ -261,11 +263,11 @@ Valhalla na pojedinim mjestima mreže dodaje vrijeme hoda, pa je duljina puta po
 - Prikazuje se najveći broj polazaka na sat od svih stajališta unutar 10 minuta hoda.
 - **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
 
-## Skor za život
+## Ocjena mjesta (ranije „ocjena mjesta”)
 
-Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je svjesno odstupanje od načela „bez skupne ocjene”, dopušteno jer su težine vidljive i podesive (vidi [ODLUKE.md](ODLUKE.md)). Vrijednosti i statusi kategorija se ne mijenjaju.
+Od 4. 11. 2026. izvještaj ima i skupnu ocjenu (0–100), koja se od 9. 11. 2026. zove „Ocjena mjesta” umjesto „Skor za život” (anglizam). Na kartici piše „Ocjena mjesta 60 od 100 – koliko odgovara vašim potrebama (profil: …)”, jedna rečenica objašnjenja, najbolja i najslabija kategorija riječima (npr. „Najbolje: nema opasnosti od riječnih poplava. Najslabije: javni prijevoz vozi rijetko ili ga nema.”), a važnost kategorija mijenja se klizačima pod „Prilagodi važnost” (nije važno, malo važno, važno, vrlo važno). Bodovi kategorija 0–100 prikazuju se samo ondje, uz riječ (dobro od 75, osrednje od 40, slabo ispod 40). To je svjesno odstupanje od načela „bez skupne ocjene”, dopušteno jer su težine vidljive i podesive (vidi [ODLUKE.md](ODLUKE.md)). Vrijednosti i statusi kategorija se ne mijenjaju.
 
-- **Podskor kategorije (0–100), `backend/analysis/score.py`:**
+- **Bodovi kategorije (0–100), `backend/analysis/score.py`:**
 
 | Kategorija | Pravilo | Osnova |
 |---|---|---|
@@ -276,21 +278,21 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 | Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
 | Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
 | Život bez auta | broj potreba od 7 × 100 / 7 | — |
-| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema podskora | naša normalizacija |
+| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema bodovia | naša normalizacija |
 | Svakodnevni život | udio vrsta ustanova unutar 15 minuta hoda | — |
 
-- **Skor:** ponderirani prosjek podskorova; kategorije bez podskora (nema podataka ili nepoznat vozni red) se preskaču. Težine 0–3 po profilu nalaze se u `config/profiles.json` (jedan izvor za backend i frontend) i mogu se mijenjati klizačima; prilagođene težine spremaju se u URL.
-- **Objašnjenje:** „najviše podiže” i „najviše spušta” su kategorije s najvećim pozitivnim, odnosno negativnim doprinosom: težina × (podskor − skor).
-- **Ograničenje:** skor je pomoć pri usporedbi, a ne ocjena kvalitete života. Normalizacije označene kao „naše” nisu službeni pragovi.
+- **Ocjena:** ponderirani prosjek bodova; kategorije bez bodova (nema podataka ili nepoznat vozni red) se preskaču. Težine 0–3 po profilu nalaze se u `config/profiles.json` (jedan izvor za backend i frontend) i mogu se mijenjati klizačima; prilagođene težine spremaju se u URL.
+- **Objašnjenje:** „najviše podiže” i „najviše spušta” su kategorije s najvećim pozitivnim, odnosno negativnim doprinosom: težina × (bodovi − ocjena). Na kartici se prikazuju riječima kao „Najbolje” i „Najslabije”.
+- **Ograničenje:** ocjena je pomoć pri usporedbi, a ne ocjena kvalitete života. Normalizacije označene kao „naše” nisu službeni pragovi.
 
 ## Predloži mjesto za život (ranije „Pronađi mjesto”)
 
 - **Obuhvat:** profili se računaju za svih 6.759 naselja (za kartu), a tražilica rangira naselja s najmanje 200 stanovnika (2.347 naselja, 92 % stanovništva Hrvatske prema Popisu 2021.). Manja naselja rijetko imaju ikakve usluge, a s čistim zrakom i bez poplava inače bi zauzela vrh popisa.
-- **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, priroda, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi podskorovi. Priroda i hlad, zrak i udaljenost od prometnica zatim se zamjenjuju medijanom adresa naselja (`ingest/settlement_landcover.py`, `ingest/settlement_traffic.py`, vidi „Vrijednosti naselja: medijan adresa”). Sunce na krovu se izostavlja jer je PVGIS servis uživo.
+- **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, priroda, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi bodovi. Priroda i hlad, zrak i udaljenost od prometnica zatim se zamjenjuju medijanom adresa naselja (`ingest/settlement_landcover.py`, `ingest/settlement_traffic.py`, vidi „Vrijednosti naselja: medijan adresa”). Sunce na krovu se izostavlja jer je PVGIS servis uživo.
 - **Rang** (`app/finder.py`, `app/finder_rules.py`):
   1. filtri: županija, veličina (do 2.000, 2.000–20.000, više od 20.000 stanovnika), što mora biti do 15 minuta hoda od središta, najviša dopuštena razina zraka, izvan modeliranih poplavnih područja;
   2. **obavezni uvjeti profila** (vidi „Pravila profila u Predloži mjesto”): naselje koje ih ne ispunjava ne ulazi u prijedloge;
-  3. rang za profil: ponderirani prosjek podskorova Skora za život s težinama profila i **važnih kriterija profila** s težinama iz `config/finder_rules.json`;
+  3. rang za profil: ponderirani prosjek bodova ocjene mjesta s težinama profila i **važnih kriterija profila** s težinama iz `config/finder_rules.json`;
   4. pri jednakom rangu prednost ima veće naselje.
 
   Izračun je deterministički: isti upit uvijek daje isti poredak. Jezični model ne sudjeluje u rangu.
@@ -302,17 +304,17 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 
 Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovjek („Osijek je studentski grad jer ima studije”) i važne kriterije koji podižu rang. Sva pravila, pragovi i obrazloženja su u jednoj datoteci, `config/finder_rules.json`; čarobnjak iz nje prikazuje što profil zahtijeva.
 
-| Profil | Obavezno | Važno (uz težine Skora za život profila) |
+| Profil | Obavezno | Važno (uz težine ocjene mjesta profila) |
 |---|---|---|
-| Općenito | trgovina namirnicama do 15 min hoda | ljekarna (1) i liječnik (1) pješice; uravnoteženo, sve kategorije Skora za život |
+| Općenito | trgovina namirnicama do 15 min hoda | ljekarna (1) i liječnik (1) pješice; uravnoteženo, sve kategorije ocjene mjesta |
 | Obitelj s djecom | vrtić i osnovna škola do 15 min hoda | pedijatar (2), igralište (1) i park (1) pješice; zrak, poplave i zelenilo s pojačanim težinama |
 | Umirovljenik | trgovina, ljekarna i obiteljski liječnik do 15 min hoda | opća ili klinička bolnica u blizini (2), park pješice (1); zelenilo i hlad, javni prijevoz s pojačanim težinama |
 | Student | studiji u naselju, ili veće studijsko središte (barem 20 studijskih programa) do 15 km zračne linije uz stajalište javnog prijevoza do 10 min hoda | izbor studija (8); javni prijevoz i život bez auta s pojačanim težinama |
 | Rad od kuće | trgovina namirnicama do 15 min hoda | park (1), ljekarna (1) i liječnik (1) pješice; mir (udaljenost od prometnica) i zelenilo s pojačanim težinama |
 
-- **Pješice (15 min):** isti prag i ista mreža hoda kao „Život bez auta” (vidi „Mreža hoda”). Važni kriteriji pješice boduju se po minutama do najbližeg mjesta: 100 do 5 minuta, linearno do 0 na 30 minuta (naša prozirna normalizacija, kao kod ostalih podskorova).
-- **Izbor studija:** broj preddiplomskih, diplomskih, integriranih, kratkih i specijalističkih diplomskih stručnih programa koji se izvode u naselju (MZOM, „Studijski programi visokih učilišta”; poslijediplomski se ne broje). Podskor je 60 + 40 · ln(1 + n) / ln(1 + 200), najviše 100: svaki studij daje čvrstu osnovu, a veći izbor podiže rang sve do 200 programa (Osijek, Rijeka i Split su blizu, Zagreb iznad). Mjesta s jednim programom (60–65) tako su ispod sveučilišnih gradova (90–100).
-- **Predgrađe za studenta:** ulazi samo ako je do 15 km zračne linije od središta naselja s barem 20 programa i ima stajalište javnog prijevoza do 10 minuta hoda. Podskor mu je podskor tog središta × 0,75 × (1 − 0,5 · km / 15), pa je predgrađe uvijek ispod svojeg grada i pada s udaljenošću. Vrijeme vožnje se ne računa: otvoreni vozni redovi postoje samo za ZET, Autotrolej i HŽPP, pa za ostala mjesta pišemo udaljenost i postoji li stajalište, a ne izmišljamo minute.
+- **Pješice (15 min):** isti prag i ista mreža hoda kao „Život bez auta” (vidi „Mreža hoda”). Važni kriteriji pješice boduju se po minutama do najbližeg mjesta: 100 do 5 minuta, linearno do 0 na 30 minuta (naša prozirna normalizacija, kao kod ostalih bodova).
+- **Izbor studija:** broj preddiplomskih, diplomskih, integriranih, kratkih i specijalističkih diplomskih stručnih programa koji se izvode u naselju (MZOM, „Studijski programi visokih učilišta”; poslijediplomski se ne broje). Bodovi je 60 + 40 · ln(1 + n) / ln(1 + 200), najviše 100: svaki studij daje čvrstu osnovu, a veći izbor podiže rang sve do 200 programa (Osijek, Rijeka i Split su blizu, Zagreb iznad). Mjesta s jednim programom (60–65) tako su ispod sveučilišnih gradova (90–100).
+- **Predgrađe za studenta:** ulazi samo ako je do 15 km zračne linije od središta naselja s barem 20 programa i ima stajalište javnog prijevoza do 10 minuta hoda. Bodovi mu je bodovi tog središta × 0,75 × (1 − 0,5 · km / 15), pa je predgrađe uvijek ispod svojeg grada i pada s udaljenošću. Vrijeme vožnje se ne računa: otvoreni vozni redovi postoje samo za ZET, Autotrolej i HŽPP, pa za ostala mjesta pišemo udaljenost i postoji li stajalište, a ne izmišljamo minute.
 - **Bolnica za umirovljenika:** najbliža opća ili klinička bolnica iz OSM-a (`amenity=hospital`, bez specijalnih, psihijatrijskih, lječilišta i bolnica preko granice), zračna linija od središta naselja: 100 do 10 km, linearno do 0 na 40 km (prozirna normalizacija).
 - **Studentski dom i menza** (OSM, prema nazivu) prikazuju se kao činjenica uz prijedlog, ali se ne boduju: OSM ih ne bilježi potpuno, pa bi bodovanje kažnjavalo gradove u kojima ih nitko nije ucrtao.
 - **Premalo rezultata:** ako na odabranom području obavezne uvjete ispunjava manje od 5 naselja, ispod njih se prikazuju naselja kojima nedostaje točno jedan uvjet, uz napomenu na vrhu i oznaku „Ne ispunjava jedan uvjet profila” s opisom što nedostaje.
@@ -324,7 +326,7 @@ Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovj
 ### Pretpostavke bez vanjskog izvora
 
 Izvori iz ovog dokumenta određuju granice razreda (WHO, EU, HEI, 3-30-300, scenariji poplava). Bodovi unutar razreda i nekoliko udaljenosti naša su prozirna normalizacija, zapisana i u [ODLUKE.md](ODLUKE.md):
-- bodovi podskorova: poplave 100/50/0, zrak 100/80/50/10, prometnice 100/60/25, priroda i hlad u gradu 60 + 40 i 20 bodova za park do 600 m, a izvan grada 2 boda po postotku prirode;
+- bodovi bodova: poplave 100/50/0, zrak 100/80/50/10, prometnice 100/60/25, priroda i hlad u gradu 60 + 40 i 20 bodova za park do 600 m, a izvan grada 2 boda po postotku prirode;
 - prag gusto izgrađenog (gradskog) područja: više od 50 % izgrađenog kopna u krugu od 300 m; park se prikazuje do 2 km zračne udaljenosti;
 - krug od 2 km za požare, 10 minuta hoda do stajališta, razdoblje polazaka od 6 do 20 sati radnim danom, 30 godina kao trajanje stambenog kredita;
 - udaljenosti za spajanje duplikata točaka (100, 60 i 30 m) i faktor predgrađa za studenta 0,75 · (1 − 0,5 · km / 15).
@@ -336,14 +338,14 @@ Izvori iz ovog dokumenta određuju granice razreda (WHO, EU, HEI, 3-30-300, scen
 
 | Sloj | Razredi | Osnova |
 |---|---|---|
-| Skor za život | 0–19, 20–39, 40–59, 60–79, 80–100 za odabrani profil | skor kao u izvještaju; koraci od 20 služe samo prikazu |
+| ocjena mjesta | 0–19, 20–39, 40–59, 60–79, 80–100 za odabrani profil | ocjena kao u izvještaju; koraci od 20 služe samo prikazu |
 | Kvaliteta zraka | loš, umjeren, dobar, vrlo dobar | isti pragovi kao u izvještaju (WHO 2021, EU 2030., EU danas) |
 | Poplave | u modeliranom području (10 ili 100 godina); područje od 500 godina ili do 100 m; izvan modeliranih područja | statusi iz izvještaja (scenariji Hrvatskih voda) |
 | Usluge pješice | 0–1, 2–3, 4–5, 6–7 od 7 svakodnevnih potreba do 15 min | brojanje iz Života bez auta; parovi služe samo prikazu |
-| Javni prijevoz | nema stajališta do 10 min; stajališta bez voznog reda; manje od 1 polaska na sat; 1 do 6; 6 i više | 1 na sat iz Života bez auta, 6 na sat iz Skora za život |
+| Javni prijevoz | nema stajališta do 10 min; stajališta bez voznog reda; manje od 1 polaska na sat; 1 do 6; 6 i više | 1 na sat iz Života bez auta, 6 na sat iz ocjene mjesta |
 
 - **Popis ispod karte:** pet najbolje ocijenjenih naselja s najmanje 200 stanovnika za odabrani sloj (kao u „Predloži mjesto”), ili prvih pet rezultata pretrage. Pretraga postoji da se do svakog naselja može doći i bez karte (pristupačnost).
-- **Skor na Karti i u izvještaju:** Karta i kartica naselja daju Skor za naselje (udaljenost od prometnica za sve adrese naselja, ostalo za središte, bez sunca na krovu jer je PVGIS servis uživo). Izvještaj računa za jednu točku i uključuje sunce, pa se brojevi razlikuju (npr. Split); kartica i izvještaj to pišu.
+- **Ocjena na Karti i u izvještaju:** Karta i kartica naselja daju ocjenu za naselje (udaljenost od prometnica za sve adrese naselja, ostalo za središte, bez sunca na krovu jer je PVGIS servis uživo). Izvještaj računa za jednu točku i uključuje sunce, pa se brojevi razlikuju (npr. Split); kartica i izvještaj to pišu.
 - **Boje:** zelena ljestvica u pet koraka, od livadne žute do šumske zelene (u svijetloj temi tamnija je bolja, u tamnoj svjetlija) i siva za „nema podataka”. Boja nije jedini nositelj informacije: legenda ima nazive, a tablica ispod karte daje iste vrijednosti riječima.
 - **Klik na kartu** (`GET /api/map/point`):
   - točka u naselju, a u njezinoj ili susjednoj ćeliji od 150 m postoji kućni broj (DGU ili OSM): kartica naselja;

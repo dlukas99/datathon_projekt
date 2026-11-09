@@ -2,7 +2,7 @@
 
 Each profile has mandatory requirements (a settlement that misses one is not proposed,
 or only with a clear note when too few settlements qualify) and extra criteria that
-join the Skor za život sub-scores in the ranking. Every check returns a sentence with
+join the rating (Ocjena mjesta) sub-scores in the ranking. Every check returns a sentence with
 the concrete value behind it, so each proposal explains why it was proposed and what
 it lacks. Deterministic: no language model is involved.
 """
