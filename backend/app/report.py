@@ -100,7 +100,9 @@ def summary(categories: dict[str, Category]) -> list[str]:
     if level in AIR_PHRASES:
         withs.append(AIR_PHRASES[level])
     if green.status == "good":
-        withs.append("puno zelenila")
+        # A town with tree shade and a park, or a village among fields and woods.
+        urban = _value(green, "urban_area") == 1.0
+        withs.append("puno drveća i hlada" if urban else "puno prirode okolo")
     no_flood = flood.status == "good"
     # Safety from floods is named in the opening sentence only next to other good news;
     # alone it gets a short sentence at the end, so it never leads by default.

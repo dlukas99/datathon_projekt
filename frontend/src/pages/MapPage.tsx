@@ -244,7 +244,7 @@ export function MapPage() {
               .map((s) => `${s.title}${s.retrieved_at ? ` (preuzeto ${formatDate(s.retrieved_at) ?? ''})` : ''}`)
               .join(' · ')}
             {date && `. Izračun za naselja: ${date}`} Granice naselja: DGU. Detalji na stranici{' '}
-            <Link to="/o-alatu">Kako računamo</Link>.
+            <Link to="/o-alatu#kako-racunamo">Kako računamo</Link>.
           </p>
         </section>
       </div>

@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svakodnevnog života, isključivo iz otvorenih podataka. Okolišni pregled obuhvaća poplave, zrak, zelenilo i hlad, udaljenost od prometnica, požare raslinja i sunce na krovu. Svakodnevni život obuhvaća život bez auta (izokrone hoda, javni prijevoz) i svakodnevne potrebe (vrtić, škola, liječnik, ljekarna, trgovina, park).
+Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svakodnevnog života, isključivo iz otvorenih podataka. Okolišni pregled obuhvaća poplave, zrak, prirodu i hlad, udaljenost od prometnica, požare raslinja i sunce na krovu. Svakodnevni život obuhvaća život bez auta (izokrone hoda, javni prijevoz) i svakodnevne potrebe (vrtić, škola, liječnik, ljekarna, trgovina, park).
 
 Ti podaci postoje, ali su rasuti po institucijama i formatima i običnom čovjeku nisu ni razumljivi ni usporedivi. Ljudi okolišne rizike i ovisnost o autu najčešće otkriju tek kad usele.
 
@@ -38,7 +38,7 @@ Uspjeh: korisnik razumije kako je živjeti na adresi i koje mu mjesto odgovara, 
 - Točka se bira upisom adrese ili povlačenjem oznake na karti.
 - „Pogledaj oglase” samo slaže poveznicu na vanjsku pretragu oglasa; aplikacija ne prikazuje oglase.
 - Asistent odgovara na pitanja o lokaciji; brojke dolaze iz predložaka nad rezultatima alata, ne iz jezičnog modela.
-- Ostale stranice: Izvori (datumi osvježavanja uživo preko CKAN API-ja data.gov.hr), O alatu, ispis i dijeljenje stanja preko URL-a.
+- Ostale stranice: O alatu (Ukratko, Kako računamo, Izvori podataka s datumima osvježavanja uživo preko CKAN API-ja data.gov.hr, Kvaliteta podataka, Privatnost, Tim; `/izvori` vodi na dio „Izvori podataka”), ispis i dijeljenje stanja preko URL-a.
 
 ## Capabilities and Constraints
 

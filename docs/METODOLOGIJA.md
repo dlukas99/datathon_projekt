@@ -114,21 +114,55 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Požega** nema službenu postaju. Najbliža je Slavonski Brod-1 na 31 km, pa je usporedba samo okvirna.
 - **Ograničenje provjere:** EEA karte izrađene su i uz pomoć istih postaja, pa ovo nije potpuno neovisna provjera. Pokazuje ipak kako se karta ponaša uz pozadinske, a kako uz prometne postaje.
 
-## Zelenilo i hlad (ranije „Toplina i zelenilo”)
+## Priroda i hlad (ranije „Zelenilo i hlad” i „Toplina i zelenilo”)
 
 - **Podaci:** ESA WorldCover 2021 v200 (10 m) i parkovi iz OpenStreetMapa (`leisure=park`).
-- **Izračun:** udio piksela unutar 300 m od točke, bez vodenih površina (razred 80):
+- **Krug od 300 m je metrički.** WorldCover je u stupnjevima (EPSG:4326), pa se za svaki piksel računa udaljenost njegova središta od točke u metrima, s duljinom stupnja geografske širine i dužine na elipsoidu WGS 84 na toj širini. Piksel ulazi u krug ako mu je središte unutar 300 m. Provjera: u krugu oko deset kontrolnih lokacija ima 281.900 do 282.500 m² piksela, a π · 300² = 282.743 m²; razlika je samo zaokruživanje rubnih piksela (`tests/test_landcover.py`).
+- **Rub pločice:** WorldCover dolazi u pločicama od 3 × 3 stupnja. Kad krug prelazi rub pločice (npr. 45° N ili 18° E), pikseli se čitaju i iz susjedne pločice, pa krug nikad nije odrezan. Do 9. 11. 2026. čitala se samo jedna pločica.
+- **Razredi** (WorldCover Product User Manual v2.0, tablica 3), udjeli kopna bez vode (razred 80) i bez piksela bez podataka:
+  - priroda: drveće (10), grmlje (20), travnjaci (30), oranice (40), močvare (90), mangrove (95), mahovine i lišajevi (100);
   - drveće: razred 10;
-  - zelene površine: razredi 10, 20, 30 i 90 (drveće, grmlje, travnjaci, močvare);
-  - izgrađeno: razred 50.
-- Najbliži park je najbliža točka ruba poligona parka (ili sama točka ako je unutar parka), s vremenom hoda po mreži i zračnom udaljenošću.
-- **Pravilo 3-30-300:** Konijnendijk, C. C. (2023.). Evidence-based guidelines for greener, healthier, more resilient neighbourhoods: Introducing the 3–30–300 rule. *Journal of Forestry Research* 34(3), 821–830. https://doi.org/10.1007/s11676-022-01523-z. Iz pravila koristimo:
+  - livade i grmlje: razredi 20, 30, 90 i 100;
+  - polja: razred 40;
+  - izgrađeno: razred 50 (zgrade, ceste, pruge; gradsko zelenilo poput parkova nije u ovom razredu);
+  - golo tlo i stijene (60) nisu ni priroda ni izgrađeno;
+  - voda se prikazuje zasebno, kao udio cijelog kruga.
+- **Gusto izgrađeno (gradsko) područje:** izgrađeno je više od 50 % kopna u krugu od 300 m. Prag je naša pretpostavka ([ODLUKE.md](ODLUKE.md)): tada zgrade i ceste prevladavaju oko adrese, pa je hlad drveća bitan, a otvorenog prostora malo. Na kontrolnim lokacijama središta Vinkovaca, Osijeka, Splita, Zagreba i Makarske imaju 66–94 % izgrađenog, a središta Čaglina, Lokava i Nijemaca 33–47 %.
+- **Gradsko područje: pravilo 3-30-300.** Konijnendijk, C. C. (2023.). Evidence-based guidelines for greener, healthier, more resilient neighbourhoods: Introducing the 3–30–300 rule. *Journal of Forestry Research* 34(3), 821–830. https://doi.org/10.1007/s11676-022-01523-z. Pravilo je napisano za gradska susjedstva; iz njega koristimo:
   - „no less than a 30% tree canopy in every neighbourhood”;
   - „no more than 300 m to the nearest public green space from every residence”.
-- **Status:** dobro ako su ispunjena oba uvjeta (drveće ≥ 30 % u krugu od 300 m i park na zračnoj udaljenosti ≤ 300 m), upozorenje ako je ispunjen jedan, loše ako nije nijedan.
-- **Temperatura se ne mjeri.** Drveće i park su pokazatelj hlada i ublažavanja vrućina; zato se kategorija od 6. 11. 2026. zove „Zelenilo i hlad”, a ne „Toplina i zelenilo”.
-- **Provjera (6. 11. 2026.):** za pet središta naselja (Split, Osijek, Požega, Nijemci, Hvar) udio drveća iz WorldCovera (11–33 %) uspoređen je s ortofotom DGU-a iz 2023. i s kartom gustoće krošanja Copernicus HRL 2018 (EEA). Brojke su ispravno izračunate i odgovaraju ortofotu; HRL daje još manje vrijednosti (1–11 %). Detalji su u [NALAZI_TESTIRANJA.md](NALAZI_TESTIRANJA.md).
-- **Ograničenja:** WorldCover mjeri pokrov tla iz satelita i ne razlikuje javne od privatnih vrtova. U rezoluciji 10 m ne razlikuje pojedinačna stabla u dvorištima i uz ulice kad je oko njih izgrađeno, pa je udio drveća u gusto izgrađenim središtima vjerojatno nešto veći. OSM parkovi su izvan gradova nepotpuni. Dio pravila „3 stabla vidljiva s prozora” ne može se izračunati iz otvorenih podataka.
+
+  Status je dobro ako su ispunjena oba uvjeta (drveće ≥ 30 % i park na zračnoj udaljenosti ≤ 300 m), upozorenje ako je ispunjen jedan, loše ako nije nijedan. Najbliži park je najbliža točka ruba poligona parka; prikazuje se s vremenom hoda samo ako je do 2 km zračne udaljenosti, a inače piše da do 2 km nema parka u OpenStreetMapu.
+- **Ostala područja: priroda oko adrese.** Pravilo za gradove ne primjenjuje se: selo okruženo poljima ne ocjenjuje se po krošnjama i parku. Status je dobro kad je barem pola kopna priroda (to vrijedi gotovo uvijek kad nije gusto izgrađeno), a inače informacija. Park se ne traži, jer u selima obično nema uređenih parkova, a udaljenost do parka u drugom mjestu („park 11,9 km”) ništa ne govori o selu.
+- **Primjer Čaglin (središte sela):** drveće 9 %, travnjaci 45 %, oranice 12 %, izgrađeno 33 %. Do 9. 11. 2026. kartica je pisala „Loše: 9 % drveća … najbliži park više od sat hoda, zračno 11,9 km”, jer su se brojali samo drveće i park. Sada piše „Okruženo prirodom: livade, polja i drveće čine 67 % površine u krugu od 300 m.”
+- **Temperatura se ne mjeri.** Drveće je pokazatelj hlada u gradu; izvan gusto izgrađenih područja urbani toplinski otok nije izražen, pa ondje pokazujemo prirodu oko kuće.
+- **Što znači „drveće” u WorldCoveru:** piksel od 10 m je drveće kad drveće pokriva barem 10 % njegove površine („any geographic area dominated by trees with a cover of 10% or more”, Product User Manual v2.0, tablica 3). Udio drveća zato nije gustoća krošnji, nego udio površine na kojoj drveće prevladava. Pravilo 3-30-300 govori o krošnjama, pa je usporedba s 30 % orijentacijska.
+- **Točnost karte:** za Europu je ukupna točnost WorldCovera 2021 v200 76,7 ± 0,5 %, a korisnička točnost razreda drveća 79,1 % (Product Validation Report v2.0, tablica 3 i tablica A2.2). Na globalnoj razini izvještaj navodi blago precjenjivanje drveća.
+- **Provjera (9. 11. 2026., izvan aplikacije):** na deset kontrolnih lokacija (Čaglin, Nijemci, središta Vinkovaca, Osijeka, Splita i Zagreba, Lokve uz šumu, Osijek uz Perivoj kralja Tomislava, polje između Vinkovaca i Nijemaca, Makarska uz more):
+  - neovisan izračun u ekvivalentnoj projekciji EPSG:3035 daje iste udjele kao aplikacija (razlika do 0,4 postotna boda);
+  - WorldCover se dobro poklapa s ortofotom DGU-a 2021./22. (rijeka, šuma, perivoj, polja);
+  - Copernicus HRL Tree Cover Density 2018 (10 m, EEA) daje znatno niže vrijednosti (npr. središte Osijeka 3,6 % prema 30,7 %), jer mjeri gustoću krošnji, a ne udio površine na kojoj drveće prevladava, i propušta mnoga gradska stabla. Zato HRL ne koristimo, nego ga navodimo kao drugu procjenu.
+
+  Slike i tablica su u mapi izvan repozitorija; vidi [NALAZI_TESTIRANJA.md](NALAZI_TESTIRANJA.md).
+- **Naselja (karta i „Predloži mjesto”):** medijan po adresama naselja, ne vrijednost u središtu (vidi „Vrijednosti naselja: medijan adresa”).
+- **Ograničenja:** WorldCover ne razlikuje javne od privatnih vrtova i u rezoluciji od 10 m ne vidi pojedinačna stabla u dvorištima i uz ulice kad je oko njih izgrađeno. OSM parkovi su izvan gradova nepotpuni. Dio pravila „3 stabla vidljiva s prozora” ne može se izračunati iz otvorenih podataka.
+
+## Vrijednosti naselja: medijan adresa
+
+Jedna točka (središte) ne opisuje naselje: središte sela je njegov najizgrađeniji dio, a središte Splita je pješačka stara jezgra. Zato se za kartu i „Predloži mjesto” vrijednosti koje ovise o mjestu kuće računaju po adresama DGU-a i sažimaju **medijanom**, uz **raspon od 25. do 75. percentila** („kod polovice adresa između X i Y”):
+
+| Vrijednost | Adrese | Sažetak |
+|---|---|---|
+| priroda, drveće i izgrađeno u krugu od 300 m | sve adrese naselja, a u naseljima s više od 100 adresa slučajni uzorak od 100 (sjeme 2026) | medijan i kvartili; udio adresa u gusto izgrađenom području |
+| podskor „Priroda i hlad” | isto | medijan podskorova adresa |
+| PM2,5 i NO2 (EEA, 1 km) | isto | medijan i kvartili; ocjena zraka iz medijana; medijan podskorova |
+| udaljenost od velike ceste | sve adrese (1.683.411) | medijan i kvartili; udjeli adresa do 300 m, 300–500 m i dalje od 500 m; medijan podskorova |
+
+- **Zašto medijan:** nekoliko adresa uz šumu ili veliku cestu pomaknulo bi prosjek, a medijan je vrijednost tipične adrese. Raspon pokazuje koliko se adrese razlikuju.
+- **Skor za život naselja** je ponderirani prosjek medijana podskorova po kategorijama: za svaku kategoriju najprije medijan adresa, a zatim težine profila kao u izvještaju. Tako skor naselja odgovara izvještaju za tipičnu adresu.
+- **Uzorak:** pola naselja ima 96 adresa ili manje i ulazi cijelo. Uzorak od 100 adresa (ukupno 494.166 točaka sa središtima naselja bez adresa) računa se oko 21 minutu na 8 jezgri. Provjera na naseljima Čaglin (253 adrese), Nijemci (729) i Vinkovci (9.385): medijani uzorka razlikuju se od medijana svih adresa najviše 2,1 postotna boda (priroda u Vinkovcima 42,0 % prema 39,9 %).
+- **Samo iz središta naselja** (uz oznaku u sučelju) ostaju: poplave, požari raslinja, minute hoda do usluga, „X od 7” i javni prijevoz. Hod se računa usmjerivačem (Valhalla) za svaku točku, pa bi uzorak adresa za 6.759 naselja trajao satima; vrijednosti su zato za središte naselja.
+- **Prosjek** ostaje samo za udjele (udio adresa u pojasu uz cestu, udio gradskih adresa), jer je to prosjek oznaka da/ne, i za broj polazaka na sat, koji je sam prosjek po satu.
 
 ## Udaljenost od prometnica (procjena; ranije „Promet u blizini” i „Buka”)
 
@@ -158,7 +192,7 @@ Vrijednosti iz aplikacije (EEA karta za 2024.) usporedili smo s godišnjim prosj
 - **Pruga:** navodi se opisno ako je do 500 m. Pregled HEI-ja odnosi se na cestovni promet, pa pruga ne mijenja status.
 - **Kontekst:** smjernice WHO-a za buku okoliša (2018.) preporučuju cestovni promet ispod 53 dB Lden i 45 dB Lnight (https://iris.who.int/handle/10665/279952). Strateške karte buke EEA-e nemaju otvorenu licencu, pa ih samo povezujemo.
 - **Smjer podskora:** veći broj znači manje prometa. 100 je dalje od 500 m od takve ceste, 60 od 300 do 500 m, a 25 do 300 m. Naziv kategorije od 6. 11. 2026. je „Udaljenost od prometnica”, da „100/100” ne zvuči kao „mnogo prometa”.
-- **Naselje (karta i „Predloži mjesto”):** jedna točka ne opisuje naselje (središte Splita je u pješačkoj staroj jezgri, a središte gotovo svakog sela na cesti kroz selo), pa se za svako naselje računa pojas za **svaku adresu DGU-a** u njemu (1.683.411 adresa, `ingest/settlement_traffic.py`). Podskor naselja je prosjek podskorova adresa (100, 60 ili 25), a uz prijedlog piše koliki udio adresa je do 300 m i koliki dalje od 500 m od velike prometnice. Naselja bez adresa (17) zadržavaju vrijednost u središtu. Izvještaj za adresu i dalje računa za tu adresu.
+- **Naselje (karta i „Predloži mjesto”):** jedna točka ne opisuje naselje (središte Splita je u pješačkoj staroj jezgri, a središte gotovo svakog sela na cesti kroz selo), pa se za svako naselje računa pojas za **svaku adresu DGU-a** u njemu (1.683.411 adresa, `ingest/settlement_traffic.py`). Od 9. 11. 2026. podskor naselja je medijan podskorova adresa (100, 60 ili 25), a ne prosjek, i uz prijedlog piše medijan udaljenosti s rasponom (kod polovice adresa između 25. i 75. percentila) te koliki udio adresa je do 300 m i koliki dalje od 500 m od velike prometnice. Udaljenosti se za naselja mjere do 5 km. Naselja bez adresa (17) zadržavaju vrijednost u središtu. Izvještaj za adresu i dalje računa za tu adresu.
 - **Ograničenje:** prometnija županijska cesta kroz središte grada (npr. Ž4290 u Vinkovcima) ne broji se kao prometnica; buku i broj vozila ne mjerimo.
 - Zašto i `secondary`: vidi [ODLUKE.md](ODLUKE.md).
 
@@ -236,7 +270,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 |---|---|---|
 | Poplave | dobro 100, upozorenje 50, loše 0 | scenariji Hrvatskih voda i Direktive 2007/60/EZ |
 | Kvaliteta zraka | vrlo niska 100, niska 80, umjerena 50, visoka 10 (viša od razina PM2,5 i NO2) | WHO 2021 i granice EU-a |
-| Zelenilo i hlad | do 60 bodova za udio drveća (30 % = puni bodovi) i 40 bodova za park do 300 m (20 do 600 m) | pravilo 3-30-300 |
+| Priroda i hlad | gusto izgrađeno područje: do 60 bodova za udio drveća (30 % = puni bodovi) i 40 bodova za park do 300 m (20 do 600 m); drugdje 2 boda za svaki postotak prirode, najviše 100 (pola kopna priroda = puni bodovi) | pravilo 3-30-300 za gradove; izvan gradova naša normalizacija |
 | Udaljenost od prometnica | podalje 100, rub zone 60, blizu 25 (veći broj znači manje prometa) | HEI 2010 (300/500 m) |
 | Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
 | Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
@@ -251,7 +285,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 ## Predloži mjesto za život (ranije „Pronađi mjesto”)
 
 - **Obuhvat:** profili se računaju za svih 6.759 naselja (za kartu), a tražilica rangira naselja s najmanje 200 stanovnika (2.347 naselja, 92 % stanovništva Hrvatske prema Popisu 2021.). Manja naselja rijetko imaju ikakve usluge, a s čistim zrakom i bez poplava inače bi zauzela vrh popisa.
-- **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, zelenilo, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi podskorovi. Sunce na krovu se izostavlja jer je PVGIS servis uživo.
+- **Priprema** (`ingest/settlement_profiles.py`, dio `make data`): za središte svakog naselja (OSM čvor `place`, vidi „Lokacija”) računaju se iste kategorije kao u izvještaju (poplave, zrak, priroda, promet, požari, hod, javni prijevoz, svakodnevne potrebe) i njihovi podskorovi. Priroda i hlad, zrak i udaljenost od prometnica zatim se zamjenjuju medijanom adresa naselja (`ingest/settlement_landcover.py`, `ingest/settlement_traffic.py`, vidi „Vrijednosti naselja: medijan adresa”). Sunce na krovu se izostavlja jer je PVGIS servis uživo.
 - **Rang** (`app/finder.py`, `app/finder_rules.py`):
   1. filtri: županija, veličina (do 2.000, 2.000–20.000, više od 20.000 stanovnika), što mora biti do 15 minuta hoda od središta, najviša dopuštena razina zraka, izvan modeliranih poplavnih područja;
   2. **obavezni uvjeti profila** (vidi „Pravila profila u Predloži mjesto”): naselje koje ih ne ispunjava ne ulazi u prijedloge;
@@ -289,7 +323,8 @@ Profil više nije samo skup težina: ima obavezne uvjete kakve bi postavio čovj
 ### Pretpostavke bez vanjskog izvora
 
 Izvori iz ovog dokumenta određuju granice razreda (WHO, EU, HEI, 3-30-300, scenariji poplava). Bodovi unutar razreda i nekoliko udaljenosti naša su prozirna normalizacija, zapisana i u [ODLUKE.md](ODLUKE.md):
-- bodovi podskorova: poplave 100/50/0, zrak 100/80/50/10, prometnice 100/60/25, zelenilo 60 + 40 i 20 bodova za park do 600 m;
+- bodovi podskorova: poplave 100/50/0, zrak 100/80/50/10, prometnice 100/60/25, priroda i hlad u gradu 60 + 40 i 20 bodova za park do 600 m, a izvan grada 2 boda po postotku prirode;
+- prag gusto izgrađenog (gradskog) područja: više od 50 % izgrađenog kopna u krugu od 300 m; park se prikazuje do 2 km zračne udaljenosti;
 - krug od 2 km za požare, 10 minuta hoda do stajališta, razdoblje polazaka od 6 do 20 sati radnim danom, 30 godina kao trajanje stambenog kredita;
 - udaljenosti za spajanje duplikata točaka (100, 60 i 30 m) i faktor predgrađa za studenta 0,75 · (1 − 0,5 · km / 15).
 

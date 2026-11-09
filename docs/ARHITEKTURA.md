@@ -154,7 +154,7 @@ Isti izvještaj dostupan je kao JSON za aplikacije i kao GeoJSON za GIS alate (Q
 
 ### Pravni
 
-- **Licence izvora** poštuju se i navode na stranici „Izvori” i u [IZVORI_PODATAKA.md](IZVORI_PODATAKA.md):
+- **Licence izvora** poštuju se i navode na stranici „O alatu” (dio „Izvori podataka”) i u [IZVORI_PODATAKA.md](IZVORI_PODATAKA.md):
   - Otvorena dozvola RH;
   - CC BY 4.0 (EEA, ESA, JRC);
   - ODbL 1.0 (OpenStreetMap, JRC poplave): izvedene baze podataka iz OSM-a moraju ostati pod ODbL-om.

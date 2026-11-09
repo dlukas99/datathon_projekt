@@ -47,7 +47,11 @@ export function boardTags(report: Report): BoardTag[] {
   }
   add('flood', 'Poplave', (c) => c.status_label.toLowerCase())
   add('air', 'Zrak', (c) => c.status_label.toLowerCase())
-  add('green', 'Drveće', (c) => display(c, 'tree_share_300m'))
+  // In a densely built-up area the tree cover counts (3-30-300); elsewhere the nature around.
+  const green = byId.green
+  const urban = green?.values.some((v) => v.key === 'urban_area' && v.value === 1) ?? false
+  if (urban) add('green', 'Drveće', (c) => display(c, 'tree_share_300m'))
+  else add('green', 'Priroda', (c) => display(c, 'nature_share_300m'))
   add('noise', 'Prometnica', (c) => display(c, 'distance_road')?.split(' (')[0] ?? null)
   add('car_free', 'Pješice', (c) => {
     const n = display(c, 'needs_within_15min')
@@ -92,7 +96,13 @@ export function BoardTags({ tags }: { tags: BoardTag[] }) {
  * "Ovdje ste": the report's sections as a short trail that stays at the top while reading
  * and marks the section in view.
  */
-export function ReportGuide({ sections }: { sections: { id: string; label: string }[] }) {
+export function ReportGuide({
+  sections,
+  label = 'Dijelovi izvještaja',
+}: {
+  sections: { id: string; label: string }[]
+  label?: string
+}) {
   const [current, setCurrent] = useState<string | null>(null)
 
   useEffect(() => {
@@ -120,7 +130,7 @@ export function ReportGuide({ sections }: { sections: { id: string; label: strin
   }, [sections])
 
   return (
-    <nav className="report-guide no-print" aria-label="Dijelovi izvještaja">
+    <nav className="report-guide no-print" aria-label={label}>
       <ol>
         {sections.map((s) => (
           <li key={s.id}>

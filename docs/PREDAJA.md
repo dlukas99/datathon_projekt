@@ -17,7 +17,7 @@ Pravila natjecanja traže:
 | Izvorni kod | `backend/`, `frontend/`, `deploy/`, `scripts/` (licenca EUPL-1.2, `LICENSE`) |
 | Opis rješenja | `README.md` |
 | Arhitektura, standardi, tehnički, organizacijski i pravni preduvjeti | `docs/ARHITEKTURA.md` |
-| Popis skupova podataka s izvorima i licencama | `docs/IZVORI_PODATAKA.md` (i stranica „Izvori” u aplikaciji) |
+| Popis skupova podataka s izvorima i licencama | `docs/IZVORI_PODATAKA.md` (i dio „Izvori podataka” na stranici „O alatu” u aplikaciji) |
 | Metodologija i pragovi | `docs/METODOLOGIJA.md` |
 | Kvaliteta podataka na Portalu | `docs/KVALITETA_PODATAKA.md` |
 | Pristupačnost | `docs/PRISTUPACNOST.md` |

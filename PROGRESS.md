@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-08 21:40
+Zadnje ažurirano: 2026-11-09 14:30
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -7,7 +7,7 @@ Zadnje ažurirano: 2026-11-08 21:40
 - [x] **Geokodiranje:** vlastiti geokoder nad 1.683.411 DGU adresa (`GET /api/geocode`), naselje, grad ili općina i županija iz DGU upravnih jedinica (`/api/reverse`); šest demo adresa javnih ustanova (Vinkovci ×2, Osijek, Zagreb, Split, Nijemci) u `scripts/demo_addresses.json`.
 - [x] **Poplave:** JRC v3.1.1 za 10, 100 i 500 godina, na točki i u krugu od 100 m; status prema scenarijima Hrvatskih voda i Direktive 2007/60/EZ; poveznica na `preglednik.voda.hr`.
 - [x] **Zrak:** EEA karte PM2,5 i NO2 za 2024. (validirane, lipanj 2026.), usporedba s WHO 2021 (5/10 µg/m³) i EU 2030 (10/20 µg/m³).
-- [x] **Toplina i zelenilo:** ESA WorldCover u krugu od 300 m (drveće, zelenilo, izgrađeno) i najbliži OSM park u minutama hoda; status prema pravilu 3-30-300.
+- [x] **Toplina i zelenilo:** ESA WorldCover u krugu od 300 m (drveće, zelenilo, izgrađeno) i najbliži OSM park u minutama hoda; status prema pravilu 3-30-300. Od 9. 11. „Priroda i hlad”: priroda (i polja) svugdje, 3-30-300 s parkom samo u gusto izgrađenom području; krug provjeren kao metrički (282.000 m² prema π·300²), čitanje preko ruba pločice; naselja kao medijan adresa s rasponom (494.166 točaka, 21 min).
 - [x] **Mreža hoda:** Valhalla 3.9.1 u Dockeru (pločice za Hrvatsku za oko 3 min, imenovani volumen); izokrone od 5, 10 i 15 min i jedna matrica vremena hoda po izvještaju, pri 4,5 km/h.
 - [x] **Svakodnevne potrebe:** vrtići (MZOM + Zagreb + OSM), škole (MZOM + Zagreb + OSM), liječnici i pedijatri (HZZO), ljekarne (HZZO + OSM), trgovine, igrališta i reciklaža; registri geokodirani s 86–95 % uspjeha; najbliže i broj unutar 15 min.
 - [x] **Javni prijevoz:** ZET i HŽPP GTFS i Autotrolej JSON (4.047 stajališta s polascima na sat od 6 do 20 h radnim danom), drugdje OSM stajališta „bez voznog reda”.
@@ -26,7 +26,7 @@ Zadnje ažurirano: 2026-11-08 21:40
 - [x] **Reciklaža:** CKAN pretraga 33 općinska skupa, 11 s koordinatama (45 točaka), spojeno s 2.071 OSM točkom; nalazi u `docs/KVALITETA_PODATAKA.md`.
 - [x] **Profili:** obitelj s djecom, umirovljenik, student, rad od kuće i vlastiti; mijenjaju samo redoslijed i naglasak (provjereno e2e testom).
 - [x] **Ispis i dijeljenje:** CSS za ispis, stanje izvještaja (koordinate, adresa, profil) u URL-u, kopiranje poveznice, preuzimanje GeoJSON-a.
-- [x] **Stranica „Izvori”:** datumi zadnje izmjene uživo preko CKAN API-ja (`/api/sources/live`, jedan upit, predmemorija i zadnji dobar odgovor), svi izvori s licencama i nalazi o kvaliteti.
+- [x] **Stranica „Izvori”:** datumi zadnje izmjene uživo preko CKAN API-ja (`/api/sources/live`, jedan upit, predmemorija i zadnji dobar odgovor), svi izvori s licencama i nalazi o kvaliteti. Od 9. 11. dio stranice „O alatu” (`/izvori` preusmjerava): izvori po temama, oznaka „Portal” i zadnja izmjena uživo za 22 skupa u istom retku, 11 općinskih skupova o reciklaži u jednom redu, ispravljeni datumi preuzimanja (reciklaža 2. 11. 2026., izvedeni skupovi „izračunato”); metodologija kao redovi po kategoriji umjesto tablice.
 - [x] **Postavljanje:** `deploy/docker-compose.yml` (Caddy s frontendom, API, Valhalla), `docs/DEPLOY.md`, `scripts/upload_data.sh`; lokalno provjereno na `https://localhost`.
 - [x] **Dokumentacija:** `docs/ARHITEKTURA.md`, `docs/METODOLOGIJA.md`, `docs/PRISTUPACNOST.md`, `docs/KVALITETA_PODATAKA.md`, `docs/VIDEO_SCENARIJ.md`, `docs/PREDAJA.md`, uz `docs/IZVORI_PODATAKA.md`, `docs/ASISTENT.md` i `docs/ODLUKE.md`.
 - [x] **Snimke zaslona:** `make screenshots` snima 7 slika u `docs/images/` (naslovnica, izvještaj, život bez auta, mobitel u tamnoj temi, usporedba, asistent, izvori); uključene u README.

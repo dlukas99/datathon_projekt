@@ -17,6 +17,7 @@ from ingest import (
     rasters,
     recycling,
     registries,
+    settlement_landcover,
     settlement_profiles,
     settlement_traffic,
     stations,
@@ -38,6 +39,7 @@ STEPS: list[tuple[str, Callable[[], None]]] = [
     ("Profili naselja (treba pokrenutu Valhallu)", settlement_profiles.run),
     ("Visoka učilišta, bolnice i studentski domovi (MZOM, OSM)", facilities.run),
     ("Udaljenost adresa naselja od prometnica (DGU, OSM)", settlement_traffic.run),
+    ("Priroda, drveće i zrak po adresama naselja (WorldCover, EEA)", settlement_landcover.run),
 ]
 
 

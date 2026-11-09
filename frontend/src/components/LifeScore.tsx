@@ -99,7 +99,7 @@ export function LifeScore({
         )}
       </fieldset>
       <p className="hint">
-        Kako se računaju podskorovi i zašto: <a href="/o-alatu">Kako računamo</a>.
+        Kako se računaju podskorovi i zašto: <a href="/o-alatu#kako-racunamo">Kako računamo</a>.
       </p>
     </section>
   )

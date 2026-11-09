@@ -178,10 +178,11 @@ EXPLANATIONS: dict[str, str] = {
         "zdravstvene organizacije iz 2021. i s graničnom vrijednošću EU-a koja vrijedi od 2030."
     ),
     "green": (
-        "Udio drveća i zelenih površina u krugu od 300 m računamo iz satelitske karte ESA "
-        "WorldCover. Uspoređujemo ga s pravilom 3-30-300: najmanje 30 % krošnji u susjedstvu i "
-        "javna zelena površina do 300 m od kuće. Drveće ljeti daje hlad i ublažava vrućine; "
-        "samu temperaturu ne mjerimo."
+        "Iz satelitske karte ESA WorldCover računamo koliko površine u krugu od 300 m čini "
+        "priroda (drveće, grmlje, travnjaci, polja i močvare), a koliko drveće i zgrade. Ako "
+        "je izgrađeno više od pola kopna, to je gradsko područje i vrijedi pravilo 3-30-300: "
+        "najmanje 30 % površine pod drvećem i park do 300 m od kuće. Drveće ljeti daje hlad i "
+        "ublažava vrućine; samu temperaturu ne mjerimo."
     ),
     "noise": (
         "Buku ne mjerimo: otvorene karte buke za cijelu Hrvatsku ne postoje. Prikazujemo "
@@ -381,7 +382,7 @@ def _comparison(reports: list[Report], cat_id: str) -> str | None:
     """A neutral sentence saying where a numeric value is lower or higher."""
     keys = {
         "air": ("pm25_annual", "nižu", "godišnju koncentraciju PM2,5"),
-        "green": ("tree_share_300m", "veći", "udio drveća u krugu od 300 m"),
+        "green": ("nature_share_300m", "veći", "udio prirode u krugu od 300 m"),
         "solar": ("pv_kwh_per_kwp", "veću", "procijenjenu proizvodnju sunčane elektrane"),
     }
     if len(reports) != 2:

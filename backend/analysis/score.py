@@ -2,7 +2,7 @@
 
 The sub-scores translate each category's own result into 0–100 with fixed,
 documented rules (docs/METODOLOGIJA.md, "Skor za život"). Where a sourced
-threshold exists it sets the steps (WHO/EU for air, 3-30-300 for greenery,
+threshold exists it sets the steps (WHO/EU for air, 3-30-300 for urban greenery,
 HEI 300/500 m for traffic, flood scenarios); elsewhere the scale is our
 transparent normalisation. Weights are visible and adjustable in the UI.
 """
@@ -44,18 +44,30 @@ def _air(cat: Category) -> float | None:
     return min((AIR_POINTS[s.band] for s in cat.scales if s.band in AIR_POINTS), default=None)
 
 
-def _green(cat: Category) -> float | None:
-    tree = _value(cat, "tree_share_300m")
-    if tree is None:
-        return None
+def green_points(tree: float, nature: float, urban: bool, park_distance_m: float | None) -> float:
+    """Urban places: up to 60 points for tree cover (30 % = full) and 40 for a park within
+    300 m (20 within 600 m), the 3-30-300 rule. Elsewhere the share of nature: 50 % or more
+    of the land around is full score, so a village among fields is not judged by a rule
+    made for cities."""
+    if not urban:
+        return _clip(nature * 2.0)
     score = min(tree / 30.0, 1.0) * 60.0
-    park = next((p for p in cat.places if p.category == "park"), None)
-    if park is not None and park.distance_m is not None:
-        if park.distance_m <= 300:
+    if park_distance_m is not None:
+        if park_distance_m <= 300:
             score += 40.0
-        elif park.distance_m <= 600:
+        elif park_distance_m <= 600:
             score += 20.0
     return _clip(score)
+
+
+def _green(cat: Category) -> float | None:
+    tree = _value(cat, "tree_share_300m")
+    nature = _value(cat, "nature_share_300m")
+    if tree is None or nature is None:
+        return None
+    urban = _value(cat, "urban_area") == 1.0
+    park = next((p for p in cat.places if p.category == "park"), None)
+    return green_points(tree, nature, urban, park.distance_m if park else None)
 
 
 def _traffic(cat: Category) -> float | None:

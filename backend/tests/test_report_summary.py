@@ -64,7 +64,7 @@ def test_no_flood_does_not_lead_and_a_flood_area_does() -> None:
         }
     )
     assert calm[0] == (
-        "Mirno mjesto s dobrim zrakom, puno zelenila i bez opasnosti od riječnih poplava."
+        "Mirno mjesto s dobrim zrakom, puno prirode okolo i bez opasnosti od riječnih poplava."
     )
     assert calm[1] == "Sve što trebate svaki dan imate pješice unutar 15 minuta."
     wet = summary(

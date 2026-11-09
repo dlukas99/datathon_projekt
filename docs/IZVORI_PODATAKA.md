@@ -35,12 +35,12 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)` (tehnički
 | Javni prijevoz, Rijeka | Autotrolej, vozni red radnim danom (JSON) | radi | CC BY 4.0 | polasci po satu |
 | Javni prijevoz, ostalo | OpenStreetMap stajališta | radi | ODbL 1.0 | stajališta bez voznog reda |
 | Reciklaža | općinski skupovi na data.gov.hr + OSM | djelomično | Otvorena dozvola RH / CC BY 4.0 / ODbL | reciklažna dvorišta i spremnici |
-| Datumi osvježavanja | CKAN API data.gov.hr | radi | — | stranica „Izvori” uživo |
+| Datumi osvježavanja | CKAN API data.gov.hr | radi | — | „O alatu”, dio „Izvori podataka”: zadnja izmjena na Portalu uživo za svih 22 skupa s Portala |
 | Podloga karte | OpenFreeMap | radi | MIT (softver), ODbL (podaci) | kartografska podloga |
 
 ## Svi skupovi podataka
 
-Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade puni pri preuzimanju (stanje 8. 11. 2026.). Ukupno 33 skupa podataka; uz njih aplikacija uživo koristi JRC PVGIS API (sunce na krovu) i CKAN API Portala (datumi osvježavanja). Karte opasnosti od poplava Hrvatskih voda i strateške karte buke EEA-e samo se povezuju, a podloga karte je OpenFreeMap (© OpenMapTiles, podaci © suradnici OpenStreetMapa). Oglasnici su vanjske poveznice, ne izvori podataka. Izvedeni skupovi (profili naselja, udaljenost adresa od prometnica) nisu u popisu jer ih računa aplikacija. „Preuzeto” je datum preuzimanja, a za općinske skupove s Portala datum zadnje izmjene na Portalu.
+Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade puni pri preuzimanju (stanje 8. 11. 2026.). Ukupno 33 skupa podataka; uz njih aplikacija uživo koristi JRC PVGIS API (sunce na krovu) i CKAN API Portala (datumi osvježavanja). Karte opasnosti od poplava Hrvatskih voda i strateške karte buke EEA-e samo se povezuju, a podloga karte je OpenFreeMap (© OpenMapTiles, podaci © suradnici OpenStreetMapa). Oglasnici su vanjske poveznice, ne izvori podataka. Izvedeni skupovi (profili naselja, udaljenost adresa od prometnica, priroda, drveće i zrak kao medijan adresa naselja) nisu u popisu jer ih računa aplikacija. „Preuzeto” je datum preuzimanja za sve skupove (za općinske skupove o reciklaži do 9. 11. 2026. ovdje je greškom stajao datum zadnje izmjene na Portalu, 15. 4. 2026.). Zadnju izmjenu na Portalu aplikacija za svih 22 skupa s Portala provjerava uživo, na stranici „O alatu”, u dijelu „Izvori podataka”.
 
 | # | Skup podataka | Izdavač | Licenca | Preuzeto | Podaci |
 |---|---|---|---|---|---|
@@ -61,22 +61,22 @@ Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade pu
 | 15 | [Ugovoreni timovi zdravstvene zaštite predškolske djece (pedijatrija)](https://hzzo.hr/zdravstvena-zastita/zdravstvena-zastita-pokrivena-obveznim-zdravstvenim-osiguranjem/ugovoreni) | Hrvatski zavod za zdravstveno osiguranje (HZZO) | nije navedena; javno objavljen popis tijela javne vlasti | 2. 11. 2026. | rujan 2026. |
 | 16 | [Popis ugovorenih ljekarni](https://hzzo.hr/zdravstvena-zastita/zdravstvena-zastita-pokrivena-obveznim-zdravstvenim-osiguranjem/ugovoreni) | Hrvatski zavod za zdravstveno osiguranje (HZZO) | nije navedena; javno objavljen popis tijela javne vlasti | 2. 11. 2026. | rujan 2023. (zadnja izmjena datoteke) |
 | 17 | [Karte opasnosti od riječnih poplava za Europu (CEMS-EFAS), v3.1.1](https://data.jrc.ec.europa.eu/dataset/1d128b6c-a4ee-4858-9e34-6210707f3c81) | Europska komisija, Zajednički istraživački centar (JRC) | ODbL 1.0 prema katalogu JRC-a; CC BY 4.0 prema copyright.txt u mapi preuzimanja | 2. 11. 2026. | verzija 3.1.1 od 5. 3. 2026. |
-| 18 | [Reciklažno dvorište, Općina Cernik](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste) | Općina Cernik | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 19 | [Reciklažno dvorište Općine Dugopolje](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-opcine-dugopolje) | Općina Dugopolje | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 20 | [Reciklažno dvorište Općine Kloštar Podravski](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-opcine-klostar-podravski) | Općina Kloštar Podravski | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 21 | [Reciklažno dvorište na području Grada Hvara](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-na-podrucju-grada-hvara) | Grad Hvar | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 22 | [Reciklažno dvorište na području općine Bistra](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-na-podrucju-opcine-bistra) | Općina Bistra | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 23 | [Reciklažna dvorišta i zeleni otoci](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-i-zeleni-otoci) | Općina Mikleuš | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 24 | [Reciklažna dvorišta i zeleni otoci](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-i-zeleni-otoci-ovl) | Općina Velika Ludina | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 25 | [Geoportal Reciklažna dvorišta grada Zagreba](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-grada-zagreba1) | Grad Zagreb | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 26 | [Zeleni otoci i reciklažna dvorišta na području Općine Kalinovac](https://data.gov.hr/ckan/dataset/zeleni-otoci-i-reciklazna-dvorista-na-podrucju-opcine-kalinovac) | Općina Kalinovac | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 27 | [Zeleni otoci](https://data.gov.hr/ckan/dataset/zeleni-otoci-op) | Općina Posedarje | Otvorena dozvola (OD) | 15. 4. 2026. | – |
-| 28 | [Zeleni otoci na području Općine Sopje](https://data.gov.hr/ckan/dataset/zeleni-otoci-na-podrucju-opcine-sopje) | Općina Sopje | Otvorena dozvola (OD) | 15. 4. 2026. | – |
+| 18 | [Reciklažno dvorište, Općina Cernik](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste) | Općina Cernik | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 19 | [Reciklažno dvorište Općine Dugopolje](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-opcine-dugopolje) | Općina Dugopolje | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 20 | [Reciklažno dvorište Općine Kloštar Podravski](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-opcine-klostar-podravski) | Općina Kloštar Podravski | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 21 | [Reciklažno dvorište na području Grada Hvara](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-na-podrucju-grada-hvara) | Grad Hvar | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 22 | [Reciklažno dvorište na području općine Bistra](https://data.gov.hr/ckan/dataset/reciklazno-dvoriste-na-podrucju-opcine-bistra) | Općina Bistra | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 23 | [Reciklažna dvorišta i zeleni otoci](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-i-zeleni-otoci) | Općina Mikleuš | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 24 | [Reciklažna dvorišta i zeleni otoci](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-i-zeleni-otoci-ovl) | Općina Velika Ludina | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 25 | [Geoportal Reciklažna dvorišta grada Zagreba](https://data.gov.hr/ckan/dataset/reciklazna-dvorista-grada-zagreba1) | Grad Zagreb | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 26 | [Zeleni otoci i reciklažna dvorišta na području Općine Kalinovac](https://data.gov.hr/ckan/dataset/zeleni-otoci-i-reciklazna-dvorista-na-podrucju-opcine-kalinovac) | Općina Kalinovac | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 27 | [Zeleni otoci](https://data.gov.hr/ckan/dataset/zeleni-otoci-op) | Općina Posedarje | Otvorena dozvola (OD) | 2. 11. 2026. | – |
+| 28 | [Zeleni otoci na području Općine Sopje](https://data.gov.hr/ckan/dataset/zeleni-otoci-na-podrucju-opcine-sopje) | Općina Sopje | Otvorena dozvola (OD) | 2. 11. 2026. | – |
 | 29 | [Popis stanovništva, kućanstava i stanova 2021., stanovništvo po naseljima](https://data.gov.hr/ckan/dataset/statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021) | Državni zavod za statistiku | Otvorena dozvola RH | 3. 11. 2026. | Popis 2021. |
 | 30 | [EFFIS, opožarene površine (MODIS), Hrvatska](https://forest-fire.emergency.copernicus.eu/applications/data-and-services) | Europska komisija, Copernicus EFFIS (JRC) | CC BY 4.0 | 3. 11. 2026. | 2016.–2026. |
 | 31 | [Službene mjerne postaje kvalitete zraka u Hrvatskoj, mjerenja 2024. (E1a)](https://eeadmz1-downloads-webapp.azurewebsites.net/) | Ministarstvo zaštite okoliša i zelene tranzicije, preko EEA Air Quality Download Service | CC BY 4.0 (pravna obavijest EEA-e, https://www.eea.europa.eu/en/legal-notice) | 4. 11. 2026. | 2024 |
-| 32 | [Ustanove iz sustava visokog obrazovanja](https://data.gov.hr/ckan/dataset/ustanove-iz-sustava-visokog-obrazovanja) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena na Portalu) |
-| 33 | [Studijski programi visokih učilišta](https://data.gov.hr/ckan/dataset/studijski-programi-visokih-ucilista) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena na Portalu) |
+| 32 | [Ustanove iz sustava visokog obrazovanja](https://data.gov.hr/ckan/dataset/ustanove-iz-sustava-visokog-obrazovanja) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena datoteke na Portalu) |
+| 33 | [Studijski programi visokih učilišta](https://data.gov.hr/ckan/dataset/studijski-programi-visokih-ucilista) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena datoteke na Portalu) |
 
 ## Detalji po izvorima
 

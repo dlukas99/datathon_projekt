@@ -423,7 +423,7 @@ export function SourcesList({ report }: { report: Report }) {
           <Download size={16} aria-hidden="true" /> Preuzmi ovaj pregled kao GeoJSON
         </a>
         {' · '}
-        <Link to="/o-alatu">Kako računamo</Link>
+        <Link to="/o-alatu#kako-racunamo">Kako računamo</Link>
       </p>
     </details>
   )

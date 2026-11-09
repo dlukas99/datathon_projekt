@@ -269,9 +269,14 @@ def _highlight(key: str, row: pd.Series) -> str | None:
         # Most of Croatia has "good" air; only "very good" is worth naming as a reason.
         return "Čist zrak" if air == "vrlo niska" else None
     if key == "green":
-        # The 3-30-300 rule: at least 30 % tree cover, as on the map card.
+        # Medians over the addresses: in a town the 3-30-300 rule (30 % tree cover), in
+        # a village the nature around the houses, as on the report card.
+        urban = _num(row, "urban_share")
         tree = _num(row, "tree_share")
-        return "Puno zelenila i hlada" if tree is not None and tree >= 30 else None
+        nature = _num(row, "nature_med")
+        if urban is not None and urban >= 0.5:
+            return "Puno drveća i hlada" if tree is not None and tree >= 30 else None
+        return "Okruženo prirodom" if nature is not None and nature >= 70 else None
     if key == "quiet":
         s = _num(row, "score_noise")
         return (
