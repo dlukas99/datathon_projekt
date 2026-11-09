@@ -2,6 +2,7 @@ import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from 
 import type { Category, Value } from '../lib/api'
 import { MoreDetails, type SourceMap, StatusBadge } from './CategoryCard'
 import { CategoryIcon } from './Icons'
+import { KindTag } from './KindTag'
 
 /**
  * The environment overview as a rack of instruments: one drawn gauge per category, each
@@ -64,9 +65,11 @@ interface ReadoutProps {
   unit?: string | null
   label: ReactNode
   extra?: ReactNode
+  /** The kind of the main number, shown once beside it. */
+  kind?: Value['kind']
 }
 
-function Readout({ big, unit, label, extra }: ReadoutProps) {
+function Readout({ big, unit, label, extra, kind }: ReadoutProps) {
   return (
     <div className="readout">
       <p className="readout-main">
@@ -74,6 +77,11 @@ function Readout({ big, unit, label, extra }: ReadoutProps) {
         {unit && <span className="readout-unit">{unit}</span>}
       </p>
       <p className="readout-label">{label}</p>
+      {kind && (
+        <p className="readout-kind">
+          <KindTag kind={kind} />
+        </p>
+      )}
       {extra}
     </div>
   )
@@ -105,7 +113,7 @@ function AirInstrument({ c }: { c: Category }) {
   if (at === -1) return <Readout big="Nema podataka" label="za kvalitetu zraka" />
   return (
     <>
-      <Readout big={c.status_label} label={c.headline} />
+      <Readout big={c.status_label} label={c.headline} kind={valueOf(c, 'pm25_annual')?.kind} />
       <ol className="air-steps" aria-label="Ljestvica kvalitete zraka">
         {AIR_STEPS.map((step, i) => (
           <li key={step} className={`air-step step-${String(i)}`} aria-current={i === at ? 'true' : undefined}>
@@ -145,6 +153,7 @@ function GreenInstrument({ c }: { c: Category }) {
       {urban ? (
         <Readout
           big={shown('tree_share_300m')}
+          kind="modelled"
           unit="%"
           label="površine u krugu od 300 m pod drvećem"
           extra={
@@ -157,6 +166,7 @@ function GreenInstrument({ c }: { c: Category }) {
       ) : (
         <Readout
           big={shown('nature_share_300m')}
+          kind="modelled"
           unit="%"
           label="površine u krugu od 300 m je priroda: polja, livade i drveće"
           extra={
@@ -216,6 +226,7 @@ function NoiseInstrument({ c }: { c: Category }) {
       <Readout
         big={big}
         unit={unit}
+        kind={road.kind}
         label={what ? `do najbliže velike prometnice: ${what}` : 'do najbliže velike prometnice'}
         extra={
           rail && (
@@ -261,6 +272,7 @@ function SolarInstrument({ c }: { c: Category }) {
       <Readout
         big={big}
         unit="kWh"
+        kind={kwh.kind}
         label="godišnje po kW snage panela"
         extra={
           slope !== null && (

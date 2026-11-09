@@ -265,7 +265,7 @@ Hladna, prigušena paleta prirodnih materijala (vapnenac, šuma, jezero, drvo) u
 - **Headline** (750, `clamp(2rem, 5vw, 3.1rem)`, 1,15): naslov stranice. Na ploči mjesta naslov je manji (`clamp(1.7rem, 4.4vw, 2.7rem)`) i bijel na smeđoj traci.
 - **Title** (700, `clamp(1.35rem, 3vw, 1.7rem)`; naslovi odjeljaka izvještaja do `2rem`): naslovi odjeljaka i pitanja vodiča.
 - **Title small** (650, 1,12–1,2 rem): naslovi kartica, postaja i dasaka.
-- **Key number** (Bricolage 750, 1,9 rem): glavna brojka kategorije; skor u znački (800, 2 rem) i skor za život (800, 2,6 rem).
+- **Key number** (Bricolage 750, 1,9 rem): glavna brojka kategorije; ocjena u znački (800, 2 rem) i ocjena mjesta (800, 2,6 rem).
 - **Body** (400, 1 rem, 1,6): sav tekst; uvodi i sažetak ploče najviše 62–65ch.
 - **Label** (600, 0,92 rem): oznake polja, postaja, poveznice vodiča, oznake ključnih činjenica.
 - **Status** (650, 0,8 rem): tekst statusne oznake.
@@ -334,7 +334,7 @@ Brend je znak putokaza (stup, smeđa i žad daska) i naziv u Bricolageu 750. Pov
 Potpisni element naslovnice. Stup od 9 px u `sign-edge` lijevo, na njemu daske sa šiljkom strelice. Smeđa daska nosi polje adrese (oznaka u Bricolageu 700, 1,2 rem, bijela); daska „Pronađi mjesto za mene” je u žadu jer vodi na stazu, visine najmanje 64 px, i na hover se pomakne 4 px udesno u 220 ms.
 
 ### Ploča mjesta (place board)
-Vrh svakog izvještaja. Smeđa traka s nazivom mjesta i skorom u žad znački obrubljenoj sa 3 px `sign-edge`, ispod nje sažetak od dvije do tri rečenice (najviše 62ch) i šest ključnih činjenica. Kad izvještaj stigne, sažetak i činjenice se popune pokretom (`translateY(10px) scale(0.97)`, 440–520 ms, činjenice s odmakom od 55 ms); prozirnost se ne animira, pa je tekst čitljiv u svakom trenutku.
+Vrh svakog izvještaja. Smeđa traka s nazivom mjesta i ocjenom mjesta u žad znački obrubljenoj sa 3 px `sign-edge`, ispod nje sažetak od dvije do tri rečenice (najviše 62ch) i šest ključnih činjenica. Kad izvještaj stigne, sažetak i činjenice se popune pokretom (`translateY(10px) scale(0.97)`, 440–520 ms, činjenice s odmakom od 55 ms); prozirnost se ne animira, pa je tekst čitljiv u svakom trenutku.
 
 ### Statusne oznake i ključne činjenice
 Statusna oznaka: podloga statusa, tekst u boji statusa (650, 0,8 rem), ikona od 15 px. Ključna činjenica ploče: oznaka (sporedni tekst), vrijednost (700) i ikona statusa od 16 px u boji statusa, na podlozi statusa; „nema podataka” uvijek se prikazuje.
@@ -355,7 +355,7 @@ Svaki crtež je `aria-hidden`, a brojke i rečenice uz njega nose značenje. Pop
 Sve što se može pritisnuti ima glatku povratnu informaciju (200–260 ms, eksponencijalno usporavanje): gumbi se podignu za 1 px, ploče instrumenata i kartice mjerenja za 3 px uz mekanu sjenu i rub u boji mjerenja, ključne činjenice za 2 px, čipovi i izbori u vodiču također. Crta staze ispod poveznice u navigaciji raste s lijeva (pola na hover, cijela za trenutnu stranicu). Sve poveznice navigacije imaju istu težinu i stranica uvijek čuva mjesto za traku pomicanja (`scrollbar-gutter: stable`), pa se ništa ne pomiče pri prelasku između stranica. Uz smanjene animacije nema pomaka, samo promjena boje.
 
 ### Mozaik naselja
-Svih 6.759 naselja na platnu, obojenih žad-ljestvicom po Skoru za život, s tekstnim opisom i poveznicom na kartu. Pojavljuje se od istoka prema zapadu u 1,6 s (eksponencijalno usporavanje); uz smanjene animacije odmah je cijel.
+Svih 6.759 naselja na platnu, obojenih žad-ljestvicom po ocjeni mjesta, s tekstnim opisom i poveznicom na kartu. Pojavljuje se od istoka prema zapadu u 1,6 s (eksponencijalno usporavanje); uz smanjene animacije odmah je cijel.
 
 ## Do's and Don'ts
 

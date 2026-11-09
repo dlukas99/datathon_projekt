@@ -1323,10 +1323,61 @@ details.more[open] .chevron {
   margin-top: 0.15rem;
 }
 
+/* The kind of a value: a small tag with a plain explanation on hover, tap or focus. */
+.kind-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
 .kind {
-  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  border: 1px solid var(--control-border);
   border-radius: 6px;
-  padding: 0 0.35rem;
+  padding: 0 0.4rem;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: help;
+}
+
+.kind-tip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  z-index: 30;
+  width: max-content;
+  max-width: min(18rem, 80vw);
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: var(--shadow);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 150ms var(--ease-out);
+  pointer-events: none;
+}
+
+.kind-wrap:hover .kind-tip,
+.kind:focus-visible + .kind-tip,
+.kind:focus + .kind-tip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.readout-kind,
+.value-meta.kinds {
+  margin: 0.35rem 0 0;
+}
+
+.key-value .kind-wrap {
+  margin-top: 0.3rem;
 }
 
 .shared-source {
@@ -1441,10 +1492,27 @@ details summary {
   font-weight: 600;
 }
 
+.life-score-sub {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+}
+
+.life-score-why {
+  max-width: 62ch;
+}
+
+.weights-fold {
+  margin-top: 0.25rem;
+}
+
+.weight-num {
+  white-space: nowrap;
+}
+
 .weights {
   border: 0;
   padding: 0;
-  margin: 1rem 0 0;
+  margin: 0.5rem 0 0;
   display: grid;
   gap: 0.35rem;
 }
@@ -2856,7 +2924,7 @@ section[aria-labelledby='carfree-title'] .grid.two {
 }
 
 section[aria-labelledby] > h2[id],
-#skor,
+#ocjena,
 #izvori {
   scroll-margin-top: 130px;
 }
@@ -4685,4 +4753,21 @@ html:has(.about-section) {
 section.about-section[aria-labelledby] > h2[id],
 .about-section > #izvori {
   scroll-margin-top: 0;
+}
+
+/* Assistant answers: the answer, one source line, details on request, one disclaimer. */
+.reply-source {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.reply-more {
+  margin-top: 0.25rem;
+}
+
+.assistant-disclaimer {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
 }

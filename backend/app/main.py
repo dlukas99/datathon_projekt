@@ -191,7 +191,7 @@ def find_options() -> FindOptions:
 
 @app.post("/api/find", tags=["predloži mjesto"], response_model=FindResponse)
 def find_places(request: FindRequest) -> FindResponse:
-    """Najbolja naselja prema filtrima i Skoru za život; deterministički izračun."""
+    """Najbolja naselja prema filtrima i ocjeni mjesta; deterministički izračun."""
     return find(request)
 
 

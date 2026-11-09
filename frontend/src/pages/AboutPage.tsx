@@ -180,8 +180,10 @@ export function AboutPage() {
         </p>
         <ul className="about-principles">
           <li>
-            Svaka vrijednost ima izvor, datum i vrstu: <strong>izmjereno</strong>,{' '}
-            <strong>modelirano</strong> ili <strong>procjena</strong>.
+            Svaka vrijednost ima izvor, datum i vrstu: <strong>izmjereno</strong> (mjerenje, vozni
+            red ili službeni registar), <strong>procjena modela</strong> (izračunato iz karata i
+            modela, a ne izmjereno na adresi) ili <strong>gruba procjena</strong> (zamjenski
+            podatak, npr. udaljenost od ceste umjesto buke).
           </li>
           <li>„Nema podataka” uvijek se prikazuje; kategorija se nikad tiho ne izostavlja.</li>
           <li>
@@ -212,15 +214,16 @@ export function AboutPage() {
           ))}
         </ul>
 
-        <h3 className="about-subtitle">Skor, profili i prijedlozi mjesta</h3>
+        <h3 className="about-subtitle">Ocjena mjesta, profili i prijedlozi</h3>
         <ul className="method-list">
           <li className="method-row">
-            <h4 className="method-name">Skor za život</h4>
+            <h4 className="method-name">Ocjena mjesta</h4>
             <div className="method-body">
               <p>
-                Broj od 0 do 100 koji sažima kategorije. Svaka kategorija dobiva podskor (na primjer
-                poplave: dobro 100, upozorenje 50, loše 0), a skor je njihov ponderirani prosjek.
-                Težine su vidljive i možete ih mijenjati; kategorije bez podataka se preskaču.
+                Broj od 0 do 100 koji spaja sve kategorije prema tome koliko vam je koja važna.
+                Svaka kategorija dobiva bodove (na primjer poplave: dobro 100, upozorenje 50, loše
+                0), a ocjena je njihov prosjek u kojem važnije kategorije vrijede više. Važnost
+                možete mijenjati; kategorije bez podataka se preskaču.
               </p>
               <details className="more">
                 <summary>
@@ -228,7 +231,7 @@ export function AboutPage() {
                   <ChevronDown size={16} className="chevron" aria-hidden="true" />
                 </summary>
                 <p className="more-body">
-                  Skor je pomoć pri usporedbi, a ne ocjena kvalitete života. Granice razreda dolaze
+                  Ocjena mjesta je pomoć pri usporedbi, a ne sud o kvaliteti života. Granice razreda dolaze
                   iz izvora navedenih gore, a bodovi unutar razreda (na primjer 100, 80, 50 i 10 za
                   zrak) naša su prozirna normalizacija, opisana u metodologiji u repozitoriju.
                 </p>
@@ -240,7 +243,7 @@ export function AboutPage() {
             <div className="method-body">
               <p>
                 Obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti profil mijenjaju
-                redoslijed, naglasak i težine u skoru, a nikad same vrijednosti.
+                redoslijed, naglasak i važnost u ocjeni mjesta, a nikad same vrijednosti.
               </p>
             </div>
           </li>

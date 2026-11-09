@@ -90,19 +90,19 @@ Rješenje ima dva dijela:
 | `GET /api/find/options`, `POST /api/find` | Predloži mjesto za život (stranica `/predlozi`): filtri i deterministički rang naselja |
 | `POST /api/find/parse` | slobodno pitanje u filtre (samo uz jezični model) |
 | `GET /api/map/geometry/{overview,detail}` | granice svih 6.759 naselja (DGU) pojednostavljene kao pokrivenost (300 m ili 80 m), u sažetom JSON-u (cijeli brojevi kao razlike); gzip 0,28 MB ili 0,8 MB, predmemorija 1 h |
-| `GET /api/map/settlements` | pokazatelji za središta svih 6.759 naselja (zrak, poplave, drveće, usluge, prijevoz, skor za pet profila) po stupcima (jedan popis po polju) te izvori s datumima; gzip 0,18 MB |
+| `GET /api/map/settlements` | pokazatelji za središta svih 6.759 naselja (zrak, poplave, drveće, usluge, prijevoz, ocjena mjesta za pet profila) po stupcima (jedan popis po polju) te izvori s datumima; gzip 0,18 MB |
 | `GET /api/map/point?lat=&lon=` | što je na točki karte: naselje (i je li točka u naseljenom dijelu), more ili inozemstvo; točka se ne sprema |
 | `GET /api/sources` | svi izvori s licencom i datumom |
 | `GET /api/sources/live` | datumi zadnje izmjene skupova uživo s Portala (CKAN) |
 
 ### Zajednička konfiguracija (`config/`)
 
-- `profiles.json`: profili i težine za Skor za život; čitaju ga i backend (`app/profiles.py`) i frontend.
+- `profiles.json`: profili i težine za Ocjena mjesta; čitaju ga i backend (`app/profiles.py`) i frontend.
 - `finder_rules.json`: obavezni uvjeti, važni kriteriji i obrazloženja profila za „Predloži mjesto” (`app/finder_rules.py`, čarobnjak).
 - `listings.json`: slaganje poveznica na oglasnike (samo URL, bez dohvaćanja): kategorije, parametri filtara i iznimke oblika naziva mjesta u URL-u (slug) po oglasniku.
 - `listing_locations.json`: UUID-ovi mjesta za Index Oglasi i imena gradova i općina koja postoje u više županija; puni ga `backend/ingest/listing_locations.py`, a aplikacija ga samo čita.
 
-Podskorovi kategorija računaju se u backendu (`analysis/score.py`), pa isti skor koriste izvještaj i tražilica mjesta.
+Bodovi kategorija računaju se u backendu (`analysis/score.py`), pa istu ocjenu koriste izvještaj i tražilica mjesta.
 
 ### Frontend (`frontend/`)
 

@@ -1,7 +1,7 @@
-"""Skor za život: a 0–100 sub-score per category and a weighted average.
+"""Ocjena mjesta (rating of a place): a 0–100 sub-score per category and a weighted average.
 
 The sub-scores translate each category's own result into 0–100 with fixed,
-documented rules (docs/METODOLOGIJA.md, "Skor za život"). Where a sourced
+documented rules (docs/METODOLOGIJA.md, "Ocjena mjesta"). Where a sourced
 threshold exists it sets the steps (WHO/EU for air, 3-30-300 for urban greenery,
 HEI 300/500 m for traffic, flood scenarios); elsewhere the scale is our
 transparent normalisation. Weights are visible and adjustable in the UI.

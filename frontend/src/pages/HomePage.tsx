@@ -102,7 +102,7 @@ export function HomePage() {
         </div>
 
         <figure className="trailhead-map">
-          <Link to="/karta" className="mosaic-link" aria-label="Istraži kartu Hrvatske: sva naselja prema Skoru za život">
+          <Link to="/karta" className="mosaic-link" aria-label="Istraži kartu Hrvatske: sva naselja prema ocjeni mjesta">
             <CroatiaMosaic />
           </Link>
           <figcaption>
@@ -112,7 +112,7 @@ export function HomePage() {
               ))}
             </span>
             <span>
-              Sva naselja Hrvatske prema Skoru za život:{' '}
+              Sva naselja Hrvatske prema ocjeni mjesta:{' '}
               {theme === 'dark' ? 'svjetlije' : 'tamnije'} je bolje.{' '}
               <Link to="/karta">Istraži kartu Hrvatske</Link>
             </span>

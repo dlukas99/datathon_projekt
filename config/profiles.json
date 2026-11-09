@@ -1,9 +1,9 @@
 {
-  "_note": "Profili i težine za Skor za život. Jedan izvor za frontend (src/lib/profiles.ts) i backend (app/profiles.py). Težine 0–3; 0 znači da se kategorija ne računa.",
+  "_note": "Profili i važnost kategorija za ocjenu mjesta. Jedan izvor za frontend (src/lib/profiles.ts) i backend (app/profiles.py). Težine 0–3; 0 znači da se kategorija ne računa.",
   "categories": [
     { "id": "flood", "label": "Poplave" },
     { "id": "air", "label": "Kvaliteta zraka" },
-    { "id": "green", "label": "Zelenilo i hlad" },
+    { "id": "green", "label": "Priroda i hlad" },
     { "id": "noise", "label": "Udaljenost od prometnica" },
     { "id": "fire", "label": "Požari raslinja" },
     { "id": "solar", "label": "Sunce na krovu" },

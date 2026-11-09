@@ -1,6 +1,8 @@
 import { useId, useState } from 'react'
 import { askAssistant, type AssistantReply } from '../lib/api'
-import { formatDate, KIND_LABELS } from '../lib/format'
+import { ChevronDown } from 'lucide-react'
+import { formatDate } from '../lib/format'
+import { KindTag } from './KindTag'
 import type { Point } from '../lib/urls'
 
 const SUGGESTED_ONE = [
@@ -49,7 +51,7 @@ export function Assistant({ points }: { points: Point[] }) {
       <h2 id={`${id}-title`}>Pitajte asistenta</h2>
       <p className="hint">
         Odgovara samo iz izračuna za {points.length > 1 ? 'ove adrese' : 'ovu adresu'}, bez savjeta
-        o kupnji. Prepoznaje teme pitanja (npr. poplave, zrak, zelenilo, promet, vrtić, škola,
+        o kupnji. Prepoznaje teme pitanja (npr. poplave, zrak, priroda, promet, vrtić, škola,
         prijevoz); kad nešto ne zna, to i kaže. Pitanja se ne spremaju.
       </p>
       <div className="assistant-log" aria-live="polite">
@@ -62,35 +64,16 @@ export function Assistant({ points }: { points: Point[] }) {
             <div className="bubble" style={{ marginTop: '0.5rem' }}>
               <span className="visually-hidden">Odgovor: </span>
               {t.error ?? t.reply?.answer}
-              {t.reply && t.reply.facts.length > 0 && (
-                <ul className="notes">
-                  {t.reply.facts.map((f) => (
-                    <li key={f.text}>
-                      {f.text}{' '}
-                      <span className="value-meta" style={{ display: 'inline-flex' }}>
-                        <span className="kind">{KIND_LABELS[f.kind]}</span>
-                        <span>izvor: {f.source}</span>
-                        {formatDate(f.retrieved_at) && <span>{formatDate(f.retrieved_at)}</span>}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {t.reply && t.reply.links.length > 0 && (
-                <ul className="notes">
-                  {t.reply.links.map((l) => (
-                    <li key={l.url}>
-                      <a href={l.url} target="_blank" rel="noreferrer">
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {t.reply && <ReplyDetails reply={t.reply} />}
             </div>
           </div>
         ))}
       </div>
+      {turns.length > 0 && (
+        <p className="assistant-disclaimer">
+          Ovo je informativni pregled iz otvorenih podataka, a ne službena procjena ni savjet.
+        </p>
+      )}
       <form
         className="assistant-form"
         onSubmit={(e) => {
@@ -129,5 +112,61 @@ export function Assistant({ points }: { points: Point[] }) {
         ))}
       </div>
     </section>
+  )
+}
+
+/** "Izvor: …" in one line, then every value and link folded under "Prikaži detalje". */
+function ReplyDetails({ reply }: { reply: AssistantReply }) {
+  const sources = reply.sources ?? []
+  const kinds = [...new Set(reply.facts.map((f) => f.kind))]
+  return (
+    <>
+      {sources.length > 0 && (
+        <p className="reply-source">
+          Izvor:{' '}
+          {sources
+            .map((s) => {
+              const date = formatDate(s.retrieved_at)
+              return date ? `${s.title} (${date})` : s.title
+            })
+            .join('; ')}
+        </p>
+      )}
+      {(reply.facts.length > 0 || reply.links.length > 0) && (
+        <details className="more reply-more">
+          <summary>
+            Prikaži detalje <ChevronDown size={16} aria-hidden="true" className="chevron" />
+          </summary>
+          <div className="more-body">
+            {kinds.length > 0 && (
+              <p className="value-meta kinds">
+                {kinds.map((k) => (
+                  <KindTag key={k} kind={k} />
+                ))}
+              </p>
+            )}
+            {reply.facts.length > 0 && (
+              <ul className="notes">
+                {reply.facts.map((f) => (
+                  <li key={f.text}>{f.text}</li>
+                ))}
+              </ul>
+            )}
+            {reply.links.length > 0 && (
+              <ul className="notes">
+                {reply.links.map((l) => (
+                  <li key={l.url}>
+                    <a href={l.url} target="_blank" rel="noreferrer">
+                      {l.label}
+                      <span className="visually-hidden"> (otvara se u novoj kartici)</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </details>
+      )}
+    </>
   )
 }

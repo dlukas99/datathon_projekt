@@ -129,7 +129,11 @@ export interface LiveSources {
 }
 
 export interface AssistantReply {
+  /** One or two plain sentences that answer the question. */
   answer: string
+  /** Sources of the answer, for one "Izvor: …" line. */
+  sources?: { title: string; retrieved_at: string | null }[]
+  /** Every value behind the answer, for "Prikaži detalje". */
   facts: { text: string; source: string; retrieved_at: string | null; kind: Kind }[]
   links: Link[]
   mode: 'rules' | 'llm'

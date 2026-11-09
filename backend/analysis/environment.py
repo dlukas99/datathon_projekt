@@ -967,7 +967,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
             "Pojasevi slijede pregled istraživanja Health Effects Institutea (2010.): "
             "onečišćenje od prometa najveće je unutar približno 300 do 500 m od velike "
             "prometnice, a dalje pada na pozadinsku razinu.",
-            "U Skoru za život veći broj znači manje prometa: 100 je dalje od 500 m od velike "
+            "U ocjeni mjesta više bodova znači manje prometa: 100 je dalje od 500 m od velike "
             "prometnice, 60 od 300 do 500 m, a 25 do 300 m.",
             "Strateške karte buke za veće gradove mogu se pogledati u pregledniku EEA-e. "
             "Svjetska zdravstvena organizacija preporučuje da buka cestovnog prometa bude "

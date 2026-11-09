@@ -1,4 +1,4 @@
-// A profile changes the order, emphasis and Skor za život weights, never the values.
+// A profile changes the order, emphasis and rating (Ocjena mjesta) weights, never the values.
 import shared from '../../../config/profiles.json'
 
 
@@ -10,11 +10,11 @@ export interface Profile {
   description: string
   // Category ids and daily item keys, most important first.
   focus: string[]
-  // Skor za život weights per category, 0–3.
+  // Rating weights per category, 0–3.
   weights: Record<string, number>
 }
 
-// Profiles and their Skor za život weights live in config/profiles.json (shared with the backend).
+// Profiles and their rating weights live in config/profiles.json (shared with the backend).
 export const PROFILES: Profile[] = shared.profiles.map((p) => ({ ...p, id: p.id as ProfileId }))
 
 export const SCORE_CATEGORIES: { id: string; label: string }[] = shared.categories

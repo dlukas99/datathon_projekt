@@ -62,7 +62,7 @@ function tags(row: MapRow, profile: string): Tag[] {
     { id: 'transit', title: 'Prijevoz', text: transitText(row) },
     {
       id: 'score',
-      title: 'Skor za život',
+      title: 'Ocjena mjesta',
       text: score === null ? 'nema podataka' : `${String(score)} od 100`,
     },
   ]
@@ -202,9 +202,9 @@ export function SettlementCard({
           </ul>
           <p className="fine-print">
             Zrak, priroda i prometnice su medijan adresa naselja (vrijednost tipične adrese);
-            poplave, pješice i prijevoz vrijede za središte naselja. Skor za profil „
+            poplave, pješice i prijevoz vrijede za središte naselja. Ocjena mjesta za profil „
             {getProfile(profile).label}” računa se iz njih, bez sunca na krovu. Puni izvještaj
-            računa za jednu točku, pa mu Skor može biti drukčiji.
+            računa za jednu točku, pa mu ocjena može biti drukčija.
             {date && ` Izračun ${date}`}, izvori na stranici <Link to="/o-alatu#izvori">Izvori podataka</Link>.
           </p>
         </>

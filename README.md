@@ -24,7 +24,7 @@ Naslovnica postavlja jedno pitanje, „Kako je živjeti ovdje?”, i nudi dva pu
 1. **Provjeri adresu:** jedno polje, odmah do izvještaja za tu adresu.
 2. **Pronađi mjesto za mene:** vođeni tok u tri pitanja (tko traži, gdje, što je važno), s prijedlogom naselja i razlozima.
 
-Na naslovnici su i sva naselja Hrvatske obojena prema Skoru za život (poveznica na **kartu Hrvatske** sa slojevima Skor za život, zrak, poplave, usluge pješice i javni prijevoz), šest okolišnih mjerenja u bojama izvještaja i kratko objašnjenje kako aplikacija radi. **Usporedba dviju lokacija** dostupna je iz izbornika i iz izvještaja.
+Na naslovnici su i sva naselja Hrvatske obojena prema ocjeni mjesta (poveznica na **kartu Hrvatske** sa slojevima ocjena mjesta, zrak, poplave, usluge pješice i javni prijevoz), šest okolišnih mjerenja u bojama izvještaja i kratko objašnjenje kako aplikacija radi. **Usporedba dviju lokacija** dostupna je iz izbornika i iz izvještaja.
 
 Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenice sažetka iz predložaka i šest ključnih očitanja sa statusom (poplave, zrak, drveće, prometnica, pješice, prijevoz), od kojih svako vodi na svoj instrument. Okolišni pregled je niz kartica: poplave i požari jednom jasnom rečenicom, zrak ocjenom riječju i jednostavnom ljestvicom, traka prirode i drveća u krugu od 300 m, ravnalo do prometnice i luk sunca, svaki iz stvarnih vrijednosti za adresu; brojke, pragovi i izvori su pod „Detalji i izvor”. Ispod naslovnog dijela izvještaj ima tri dijela:
 
@@ -41,7 +41,7 @@ Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenic
    - koliko od sedam svakodnevnih potreba lokacija pokriva bez auta.
 3. **Svakodnevni život:** najbliži vrtić, škola, liječnik, pedijatar, ljekarna, trgovina, igralište i mjesto za reciklažu, s minutama hoda.
 
-**Skor za život** (0–100) sažima sve kategorije s težinama odabranog profila (općenito, obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti). Težine su vidljive i podesive, a uz skor piše što ga najviše podiže i spušta.
+**Ocjena mjesta** (npr. „60 od 100 – koliko odgovara vašim potrebama”) spaja sve kategorije prema tome koliko je koja važna za odabrani profil (općenito, obitelj s djecom, umirovljenik, student, rad od kuće ili vlastiti). Uz nju riječima piše što je najbolje, a što najslabije (npr. „Najbolje: nema opasnosti od riječnih poplava. Najslabije: javni prijevoz vozi rijetko ili ga nema.”), a važnost se mijenja pod „Prilagodi važnost” (nije važno, malo važno, važno, vrlo važno). Svaka vrijednost nosi vrstu riječima: izmjereno, procjena modela ili gruba procjena, s kratkim objašnjenjem.
 
 **Ostalo:**
 - Točka se može odabrati i povlačenjem oznake na karti. Klik na kartu izvan točaka ne mijenja lokaciju, pa se izvještaj ne izgubi slučajnim klikom ili dvostrukim klikom za uvećanje.
@@ -53,7 +53,7 @@ Svaka brojka ima izvor, datum i vrstu (izmjereno, modelirano ili procjena). Broj
 
 ## Primjer
 
-Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izračunato 8. 11. 2026. (priroda i hlad te Skor 9. 11. 2026.) iz podataka preuzetih 1.–8. 11. 2026.:
+Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izračunato 8. 11. 2026. (priroda i hlad te ocjena mjesta 9. 11. 2026.) iz podataka preuzetih 1.–8. 11. 2026.:
 - kvaliteta zraka: EEA karta za 2024.;
 - pokrov tla: ESA WorldCover 2021.;
 - poplave: JRC v3.1.1;
@@ -69,7 +69,7 @@ Usporedba dviju adresa javnih ustanova u Vukovarsko-srijemskoj županiji. Izrač
 | Sunce na krovu | oko 1.251 kWh po kWp godišnje, nagib 37° | oko 1.245 kWh po kWp godišnje, nagib 36° |
 | Život bez auta | 6 od 7 potreba unutar 15 minuta; stajalište s polascima nije provjereno (nema otvorenog voznog reda) | 5 od 7; nedostaje park; stajalište nije provjereno |
 | Najbliži vrtić / škola / liječnik | 7 / 4 / 5 minuta hoda | 12 / 3 / 4 minute hoda |
-| Skor za život (profil „Općenito”) | 77 | 69 |
+| Ocjena mjesta (profil „Općenito”) | 77 | 69 |
 
 Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (Vinkovci) i `GET /api/report?lat=45.140273&lon=19.034942` (Nijemci). Svih šest demo adresa nalazi se u [scripts/demo_addresses.json](scripts/demo_addresses.json), a njihovi rezultati provjeravaju se zlatnim testovima.
 
@@ -87,11 +87,11 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - odabir točke povlačenjem oznake na karti
 - **Predloži mjesto za život:** 2.347 naselja s najmanje 200 stanovnika; svaki profil ima obavezne uvjete (npr. Student: studiji u mjestu ili veće studijsko središte do 15 km uz stajalište; Umirovljenik: trgovina, ljekarna i liječnik do 15 minuta hoda) i važne kriterije, a uz svaki prijedlog piše koje uvjete ispunjava, dva do tri jednostavna razloga i jedna napomena na što obratiti pažnju
 - **Karta Hrvatske** (`/karta`):
-  - naselja obojena prema odabranom sloju (Skor za život za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;
+  - naselja obojena prema odabranom sloju (ocjena mjesta za profil, zrak, poplave, usluge pješice, javni prijevoz), s legendom, izvorima i datumom;
   - klik daje kratku karticu naselja (na mobitelu kao donji list) s oznakama i gumbima „Otvori puni izvještaj” i „Pogledaj oglase”;
   - za šumu ili polje, more i inozemstvo kartica ima vlastitu poruku;
   - ispod karte je pet najbolje ocijenjenih naselja za odabrani sloj i pretraga svih naselja (pristupačno i bez karte).
-- **Skor za život** s vidljivim i podesivim težinama po profilu
+- **Ocjena mjesta** s vidljivim i podesivim težinama po profilu
 - poveznice na pretrage oglasa (Njuškalo, Index Oglasi, Nekretnine.hr); aplikacija ne dohvaća ni ne prikazuje oglase
 - okolišni pregled: poplave (i vjerojatnost u 30 godina), zrak s jednom ocjenom, priroda i hlad, udaljenost od prometnica, požari raslinja, sunčev potencijal
 - izokrone hoda od 5, 10 i 15 minuta po mreži ulica i pješačkih staza
@@ -99,7 +99,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - svakodnevne potrebe i javni prijevoz s minutama hoda
 - profili korisnika koji mijenjaju redoslijed, naglasak i težine, a u „Predloži mjesto” i obavezne uvjete (`config/finder_rules.json`)
 - usporedba dviju lokacija
-- asistent na hrvatskom koji odgovara samo iz rezultata izračuna (s jezičnim modelom ili bez njega)
+- asistent na hrvatskom koji odgovara samo iz rezultata izračuna (s jezičnim modelom ili bez njega): jedna do dvije rečenice koje izravno odgovaraju („Ne. Nije u području riječnih poplava …”, „Najbliža ljekarna je 5 minuta pješice …”), redak „Izvor” i detalji na klik
 - ispis, dijeljenje poveznicom (stanje izvještaja je u URL-u) i preuzimanje GeoJSON-a
 - stranica „O alatu” s izbornikom dijelova (Ukratko, Kako računamo, Izvori podataka, Kvaliteta podataka, Privatnost, Tim): metodologija po kategorijama, izvori grupirani po temama s oznakom „Portal” i datumom zadnje izmjene uživo preko CKAN API-ja Portala otvorenih podataka, te nalazi o kvaliteti podataka; stara adresa `/izvori` vodi na dio „Izvori podataka”
 - pristupačnost: WCAG 2.2 razine AA (axe bez nalaza na svim stranicama u svijetloj i tamnoj temi), mobilni prikaz od 320 px, tamna tema; sve što je na karti dostupno je i u tekstu
@@ -108,7 +108,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 | Naslovnica | Naslovnica na mobitelu | Iskaznica mjesta na mobitelu, tamna tema |
 |---|---|---|
-| ![Naslovnica: pitanje, polje za adresu i vođeni tok, naselja Hrvatske prema Skoru za život](docs/images/naslovnica.png) | ![Naslovnica na mobitelu](docs/images/naslovnica-mobitel.png) | ![Iskaznica mjesta na vrhu izvještaja na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) |
+| ![Naslovnica: pitanje, polje za adresu i vođeni tok, naselja Hrvatske prema ocjeni mjesta](docs/images/naslovnica.png) | ![Naslovnica na mobitelu](docs/images/naslovnica-mobitel.png) | ![Iskaznica mjesta na vrhu izvještaja na mobitelu u tamnoj temi](docs/images/izvjestaj-mobitel-tamno.png) |
 
 | Pronađi mjesto za mene: treći korak | Prijedlozi s razlozima | Asistent |
 |---|---|---|
@@ -257,7 +257,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 | Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Predloži mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
 | Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |
 | Tehnička arhitektura i integracijski potencijal | REST i OpenAPI, GeoJSON, INSPIRE i GTFS na ulazu, opisani tehnički, organizacijski i pravni preduvjeti za uvođenje, Docker Compose |
-| Dojam rješenja | dva ulaza na naslovnici (Provjeri adresu, Pronađi mjesto za mene) i karta Hrvatske; izbornik Provjeri adresu · Predloži mjesto · Usporedi · Karta · O alatu; jednostavan jezik (minute riječima, jedna rečenica za poplave i požare); okolišni pregled na prvom ekranu; Skor za život s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
+| Dojam rješenja | dva ulaza na naslovnici (Provjeri adresu, Pronađi mjesto za mene) i karta Hrvatske; izbornik Provjeri adresu · Predloži mjesto · Usporedi · Karta · O alatu; jednostavan jezik (minute riječima, jedna rečenica za poplave i požare); okolišni pregled na prvom ekranu; Ocjena mjesta s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
 | Prezentacija rješenja | video u trajanju do 3 minute: TODO(ljudi) (scenarij: [docs/VIDEO_SCENARIJ.md](docs/VIDEO_SCENARIJ.md)) |
 
 ## Privatnost i sigurnost
@@ -277,7 +277,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - „Predloži mjesto za život” i Karta Hrvatske za zrak, prirodu i hlad te udaljenost od prometnica koriste medijan adresa naselja (s rasponom od 25. do 75. percentila), a poplave, minute hoda i javni prijevoz računaju za središte naselja; naselja s više od 100 adresa ulaze sa slučajnim uzorkom od 100 adresa. Sunce na krovu se ne računa. Za konkretnu adresu treba otvoriti izvještaj.
 - Karta Hrvatske boji svih 6.759 naselja prema vrijednosti naselja (medijan adresa ili središte, vidi gore), a ne za svaku kuću u njemu; za konkretnu adresu kartica nudi puni izvještaj.
 - Udio drveća iz WorldCovera je udio površine na kojoj drveće prevladava (piksel od 10 m s barem 10 % drveća), a ne gustoća krošnji; karta ne vidi pojedinačna stabla uz ulice. Prag gusto izgrađenog područja (više od pola izgrađenog kopna u krugu od 300 m) naša je pretpostavka.
-- Skor za život koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
+- Ocjena mjesta koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
 - Poveznice na oglasnike slažu se prema formatima ručno provjerenima u pregledniku (`config/listings.json`). Njuškalo blokira automatske provjere, pa kategorije najma na Njuškalu nisu provjerene. Index Oglasi traži UUID mjesta, a on je zasad upisan za manji dio mjesta (`config/listing_locations.json`); za ostala poveznica na Index traži ručni odabir mjesta ili otvara županiju.
 - Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
 - Registri bez koordinata geokodirani su s 86–95 % uspjeha. Neuspjeli zapisi se ne prikazuju, a za vrtiće, škole i ljekarne dopunjuju se OpenStreetMapom.
