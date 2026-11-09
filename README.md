@@ -5,7 +5,7 @@
 Datathon Portala otvorenih podataka 2026. · izazov B: Okoliš i održivi prostor
 Tim „Požega”: Domagoj Lukas i Fabio Mandić, studenti diplomskog studija Računarstvo, smjer Podatkovna znanost · Mentor i voditelj tima: dr. sc. Matej Džijan · Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek (FERIT), Sveučilište J. J. Strossmayera u Osijeku
 
-**Demo:** TODO(ljudi): javni URL nakon postavljanja na poslužitelj (vidi [docs/DEPLOY.md](docs/DEPLOY.md))
+**Demo:** https://dobromjesto.domagojlukas.online/ · **Video (do 3 minute):** https://www.youtube.com/watch?v=_rQu2LJActU
 
 ![Izvještaj za adresu: okolišni pregled, život bez auta i svakodnevni život](docs/images/izvjestaj.png)
 
@@ -37,7 +37,7 @@ Izvještaj počinje **iskaznicom mjesta**: naziv i adresa, dvije do tri rečenic
    - **sunce na krovu:** procijenjena godišnja proizvodnja solarne elektrane po kilovatu (JRC PVGIS).
 2. **Život bez auta:**
    - što je na 5, 10 i 15 minuta hoda po stvarnoj mreži ulica;
-   - stajališta s brojem polazaka na sat iz voznih redova ZET-a, HŽPP-a i Autotroleja;
+   - stajališta s brojem polazaka na sat iz voznih redova ZET-a, HŽPP-a, Autotroleja i Gradskog parkinga Šibenik; drugdje stajališta i linije iz OpenStreetMapa, bez broja polazaka;
    - koliko od sedam svakodnevnih potreba lokacija pokriva bez auta.
 3. **Svakodnevni život:** najbliži vrtić, škola, liječnik, pedijatar, ljekarna, trgovina, igralište i mjesto za reciklažu, s minutama hoda.
 
@@ -255,10 +255,10 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 | Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i hlad, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
 | Inovativnost i primjena tehnologija | izokrone hoda po stvarnoj mreži, spajanje satelitskih i registarskih podataka za jednu adresu, vlastito geokodiranje registara, rangiranje 2.347 naselja (Predloži mjesto za život), provjera karte zraka uz službene postaje i ML evaluacija (Random Forest, leave-one-station-out, [docs/ML.md](docs/ML.md)), asistent čije brojke dolaze iz predložaka |
-| Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: TODO(ljudi) |
+| Izvedivost rješenja | radni prototip, cijela obrada pokreće se jednom naredbom, produkcija jednom Docker Compose naredbom; javni demo: https://dobromjesto.domagojlukas.online/ |
 | Tehnička arhitektura i integracijski potencijal | REST i OpenAPI, GeoJSON, INSPIRE i GTFS na ulazu, opisani tehnički, organizacijski i pravni preduvjeti za uvođenje, Docker Compose |
 | Dojam rješenja | dva ulaza na naslovnici (Provjeri adresu, Pronađi mjesto za mene) i karta Hrvatske; izbornik Provjeri adresu · Predloži mjesto · Usporedi · Karta · O alatu; jednostavan jezik (minute riječima, jedna rečenica za poplave i požare); okolišni pregled na prvom ekranu; Ocjena mjesta s podesivim težinama; WCAG 2.2 AA provjeren axe-om u svijetloj i tamnoj temi |
-| Prezentacija rješenja | video u trajanju do 3 minute: TODO(ljudi) (scenarij: [docs/VIDEO_SCENARIJ.md](docs/VIDEO_SCENARIJ.md)) |
+| Prezentacija rješenja | video u trajanju do 3 minute: https://www.youtube.com/watch?v=_rQu2LJActU (scenarij: [docs/VIDEO_SCENARIJ.md](docs/VIDEO_SCENARIJ.md)) |
 
 ## Privatnost i sigurnost
 
