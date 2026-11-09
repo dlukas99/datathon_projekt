@@ -36,7 +36,7 @@ Iz axe provjere izuzet je samo `canvas` karte (MapLibre), jer je karta slika bez
 | Pješački put | do puta se dolazi tipkovnicom bez karte: gumbi vrsta mjesta (pravi `<button>` s `aria-pressed`; uključeni ima kvačicu i deblji rub, ne samo boju) i retci popisa „Svakodnevni život”. Rezultat („Pješački put do odredišta …: 31 minuta, 2,4 kilometra.”) najavljuje područje `role="status"`. Esc uklanja put. Nakon „Ukloni put” fokus ostaje na gumbu vrste, a nakon klika u popisu prelazi na podatke o putu. Vrsta bez podataka je onemogućen gumb s tekstom „nema podataka u blizini” |
 | „Pogledaj oglase” | pravi gumb s `aria-expanded` i `aria-controls`; ploča se zatvara tipkom Esc (fokus se vraća na gumb), klikom izvan ploče (s praznog mjesta fokus se vraća na gumb) i kad fokus tipkovnicom izađe iz nje, da ne pokrije element s fokusom (WCAG 2.4.11); dok je padajući popis otvoren, klik izvan zatvara samo popis |
 | Tablice | `<caption>`, zaglavlja s `scope` |
-| Tamna tema | gumb „Tamna tema” (`aria-pressed`); početno prema postavci sustava (`prefers-color-scheme`); izbor se pamti u pregledniku |
+| Tamna tema | uvijek prema postavci uređaja (`prefers-color-scheme`), i kad se ona promijeni dok je stranica otvorena; gumb „Tamna tema” (`aria-pressed`) mijenja temu samo za tu karticu, a promjena postavke uređaja ga poništava; tema se postavlja prije učitavanja aplikacije, bez bljeska |
 | Smanjene animacije | `prefers-reduced-motion` gasi animacije |
 | Mobitel | prikaz od 320 px bez vodoravnog pomicanja; tablice se pomiču unutar vlastitog okvira |
 | Ispis | stil za ispis skriva navigaciju i gumbe te ispisuje adrese poveznica |

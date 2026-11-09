@@ -2,7 +2,7 @@
 
 Each profile has mandatory requirements and extra criteria (config/finder_rules.json,
 app/finder_rules.py). Settlements that meet the requirements are ranked by the
-weighted Skor za život sub-scores plus the profile's criteria, all over precomputed
+weighted rating (Ocjena mjesta) sub-scores plus the profile's criteria, all over precomputed
 settlement profiles (ingest/settlement_profiles.py, ingest/facilities.py). A language
 model, when configured, may only turn a free-text question into these filters; it
 never sees or produces numbers.
@@ -131,6 +131,21 @@ def profiles() -> pd.DataFrame:
         df = df.merge(t, on="code", how="left")
         df["score_noise"] = df["score_noise_addr"].fillna(df["score_noise"])
         df = df.drop(columns="score_noise_addr")
+    landcover = d / "settlement_landcover.parquet"
+    if landcover.exists():
+        # Nature, trees and air as medians over the addresses of the settlement replace
+        # the values at its centre (ingest/settlement_landcover.py).
+        lc = pd.read_parquet(landcover)
+        lc["code"] = lc["code"].astype(str)
+        df["code"] = df["code"].astype(str)
+        df = df.merge(lc, on="code", how="left", suffixes=("", "_addr"))
+        for col in ("score_green", "score_air"):
+            df[col] = df[f"{col}_addr"].fillna(df[col])
+            df = df.drop(columns=f"{col}_addr")
+        df["tree_share"] = df["tree_med"].fillna(df["tree_share"])
+        df["air_band"] = df["air_band_med"].fillna(df["air_band"])
+        df["pm25"] = df["pm25_med"].fillna(df["pm25"])
+        df["no2"] = df["no2_med"].fillna(df["no2"])
     return df
 
 
@@ -180,7 +195,7 @@ def _facts(row: pd.Series) -> list[str]:
     if pd.notna(row["pm25"]):
         facts.append(
             f"Zrak: {AIR_RATINGS.get(row['air_band'], row['air_band']).lower()} "
-            f"(PM2,5 {fmt.num(float(row['pm25']), 1)} µg/m³)."
+            f"(PM2,5 {fmt.num(float(row['pm25']), 1)} µg/m³, medijan adresa naselja)."
         )
     near, far = row.get("near_share"), row.get("far_share")
     if near is not None and far is not None and pd.notna(near) and pd.notna(far):
@@ -189,16 +204,57 @@ def _facts(row: pd.Series) -> list[str]:
             f"{fmt.num(100 * float(far))} % dalje od 500 m od autoceste, brze, državne ili "
             "glavne gradske ceste."
         )
-    if pd.notna(row["needs_15min"]):
-        facts.append(f"Pješice do 15 minuta: {int(row['needs_15min'])} od 7 svakodnevnih potreba.")
-    if pd.notna(row["max_departures"]):
-        facts.append(f"Javni prijevoz: do {departures(float(row['max_departures']))} na sat.")
-    if pd.notna(row["tree_share"]):
+    med, p25, p75 = row.get("dist_med"), row.get("dist_p25"), row.get("dist_p75")
+    if all(x is not None and pd.notna(x) for x in (med, p25, p75)):
         facts.append(
+            f"Udaljenost od velike ceste, medijan adresa: {_metres(med)} "
+            f"(kod polovice adresa između {_metres(p25)} i {_metres(p75)})."
+        )
+    if pd.notna(row["needs_15min"]):
+        facts.append(
+            f"Pješice do 15 minuta od središta naselja: {int(row['needs_15min'])} od 7 "
+            "svakodnevnih potreba."
+        )
+    if pd.notna(row["max_departures"]):
+        facts.append(
+            f"Javni prijevoz uz središte naselja: do {departures(float(row['max_departures']))} "
+            "na sat."
+        )
+    facts.extend(_nature_facts(row))
+    return facts
+
+
+def _metres(x: object) -> str:
+    m = float(x)  # type: ignore[arg-type]
+    return "više od 5 km" if m >= 5000 else fmt.metres(m)
+
+
+def _pct_range(row: pd.Series, col: str) -> str | None:
+    vals = [row.get(f"{col}_{q}") for q in ("med", "p25", "p75")]
+    if not all(v is not None and pd.notna(v) for v in vals):
+        return None
+    med, p25, p75 = (float(v) for v in vals)  # type: ignore[arg-type]
+    return f"{fmt.num(med)} % (kod polovice adresa između {fmt.num(p25)} i {fmt.num(p75)} %)"
+
+
+def _nature_facts(row: pd.Series) -> list[str]:
+    """Nature and tree shade as medians over the addresses of the settlement."""
+    nature, tree = _pct_range(row, "nature"), _pct_range(row, "tree")
+    urban = row.get("urban_share")
+    out = []
+    if nature:
+        out.append(f"Priroda u krugu od 300 m oko adrese, medijan adresa naselja: {nature}.")
+    if tree and urban is not None and pd.notna(urban) and float(urban) >= 0.5:
+        out.append(
+            f"Drveće u krugu od 300 m, medijan adresa: {tree}; većina adresa je u gusto "
+            "izgrađenom dijelu, gdje se preporučuje najmanje 30 %."
+        )
+    if not out and pd.notna(row.get("tree_share")):
+        out.append(
             f"Drveće pokriva {fmt.num(float(row['tree_share']))} % kopna u krugu od 300 m "
             "od središta naselja."
         )
-    return facts
+    return out
 
 
 def _requirement_label(req: str) -> str:

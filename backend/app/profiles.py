@@ -1,4 +1,4 @@
-"""Profiles and Skor za život weights, shared with the frontend (config/profiles.json)."""
+"""Profiles and rating (Ocjena mjesta) weights, shared with the frontend (config/profiles.json)."""
 
 from __future__ import annotations
 

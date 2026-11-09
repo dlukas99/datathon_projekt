@@ -25,8 +25,8 @@ const MEASURES: { id: string; title: string; text: string; source: string }[] = 
   },
   {
     id: 'green',
-    title: 'Zelenilo i hlad',
-    text: 'Drveće, zelene i izgrađene površine u krugu od 300 m te najbliži park.',
+    title: 'Priroda i hlad',
+    text: 'Koliko je oko adrese prirode, a u gradu i koliko drveća i hlada te gdje je najbliži park.',
     source: 'ESA WorldCover',
   },
   {
@@ -102,7 +102,7 @@ export function HomePage() {
         </div>
 
         <figure className="trailhead-map">
-          <Link to="/karta" className="mosaic-link" aria-label="Istraži kartu Hrvatske: sva naselja prema Skoru za život">
+          <Link to="/karta" className="mosaic-link" aria-label="Istraži kartu Hrvatske: sva naselja prema ocjeni mjesta">
             <CroatiaMosaic />
           </Link>
           <figcaption>
@@ -112,7 +112,7 @@ export function HomePage() {
               ))}
             </span>
             <span>
-              Sva naselja Hrvatske prema Skoru za život:{' '}
+              Sva naselja Hrvatske prema ocjeni mjesta:{' '}
               {theme === 'dark' ? 'svjetlije' : 'tamnije'} je bolje.{' '}
               <Link to="/karta">Istraži kartu Hrvatske</Link>
             </span>

@@ -58,7 +58,7 @@ const GUIDE = [
   { id: 'env-title', label: 'Okoliš' },
   { id: 'carfree-title', label: 'Bez auta' },
   { id: 'daily-title', label: 'Svakodnevica' },
-  { id: 'skor', label: 'Skor' },
+  { id: 'ocjena', label: 'Ocjena' },
   { id: 'izvori', label: 'Izvori' },
 ]
 
@@ -423,7 +423,7 @@ export function SourcesList({ report }: { report: Report }) {
           <Download size={16} aria-hidden="true" /> Preuzmi ovaj pregled kao GeoJSON
         </a>
         {' · '}
-        <Link to="/o-alatu">Kako računamo</Link>
+        <Link to="/o-alatu#kako-racunamo">Kako računamo</Link>
       </p>
     </details>
   )
@@ -527,8 +527,8 @@ export function ReportPage() {
             <p className="notice">
               Prikazano je {pointKind === 'naselje' ? 'središte naselja' : 'sredina ulice'}.
               Vrijednosti na vašoj adresi mogu se razlikovati: za točan izvještaj upišite ulicu i
-              kućni broj ili povucite oznaku na karti. Skor ovdje vrijedi za tu jednu točku, pa
-              se može razlikovati od Skora na Karti, koji vrijedi za cijelo naselje.{' '}
+              kućni broj ili povucite oznaku na karti. Ocjena mjesta ovdje vrijedi za tu jednu točku,
+              pa se može razlikovati od ocjene na Karti, koja vrijedi za cijelo naselje.{' '}
               <Link to="/">Nova pretraga</Link>
             </p>
           )}

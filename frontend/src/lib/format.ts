@@ -21,16 +21,18 @@ export function walkText(minutes: number): string {
   return minutes > 60 ? 'više od sat hoda' : minutesText(minutes)
 }
 
+// Plain words for the API's kind (measured / modelled / estimate), which stays as it is.
 export const KIND_LABELS: Record<Kind, string> = {
   measured: 'izmjereno',
-  modelled: 'modelirano',
-  estimate: 'procjena',
+  modelled: 'procjena modela',
+  estimate: 'gruba procjena',
 }
 
 export const KIND_HELP: Record<Kind, string> = {
-  measured: 'Vrijednost potječe iz mjerenja, voznog reda ili službenog registra.',
-  modelled: 'Vrijednost je izračunata modelom iz otvorenih podataka.',
-  estimate: 'Gruba procjena iz zamjenskih podataka; tumačite je s oprezom.',
+  measured: 'Iz mjerenja, voznog reda ili službenog registra.',
+  modelled:
+    'Izračunato iz karata i modela (npr. satelitske karte ili karte poplava), a ne izmjereno na samoj adresi.',
+  estimate: 'Približno, iz zamjenskih podataka (npr. udaljenost od ceste umjesto buke); tumačite s oprezom.',
 }
 
 /** Walking time in words, everywhere in the interface: "manje od minute", "1 minuta",

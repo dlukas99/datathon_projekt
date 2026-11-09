@@ -13,6 +13,7 @@ Tester je 6. 11. 2026. prijavio osam problema. Za svaki je prvo istraženo gdje 
 | 5 | „Promet u blizini” je nelogičan | popis mjeri od središta naselja, kartica od adrese; naziv „Promet u blizini (100/100)” zvuči kao mnogo prometa; nejasne vrste cesta | srednje | napravljeno |
 | 6 | Prikaz kvalitete zraka je prekompliciran | dvije ljestvice s oznakama i ocjena „Niska” koja zvuči kao loša kvaliteta | lako | napravljeno |
 | 7 | Sumnja na netočne podatke o zelenilu | podaci su u redu, ali nije objašnjeno što se broji; „toplina” se ne mjeri | lako; bolji izvori ovise o vanjskim podacima | napravljeno (bez novih izvora) |
+| 7a | Brojke za drveće sumnjive; selo među poljima „Loše” (9. 11.) | izračun točan, ali pravilo za gradove primijenjeno svugdje i oranice nisu bile priroda | srednje | napravljeno |
 | 8 | Asistent uvijek daje isti odgovor | bez ključa za jezični model pitanje bez prepoznate teme dobiva uvijek isti sažetak | srednje; jezični model ovisi o ključu | napravljeno bez modela; model je prijedlog |
 
 Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
@@ -259,6 +260,54 @@ Redoslijed rada: 6, 7, 1, 8, 3, 5, 2. Točka 4 ostaje izvještaj.
   - Popis „Predloži mjesto” kaže „od središta naselja”.
   - Vrijednosti, statusi i podskorovi su isti.
   - Bolja karta krošanja i toplinski podaci čekaju odobrenje.
+
+## 7a. Priroda i hlad: ponovna provjera nakon primjedbe mentora (9. 11. 2026.)
+
+Mentor je posumnjao u brojke za drveće („možda je loš izvor”) i predložio medijan umjesto aritmetičke sredine. Kartica je za selo Čaglin, okruženo poljima, pisala „Loše: 9 % drveća … najbliži park više od sat hoda, zračno 11,9 km”.
+
+- **Je li izračun bio pogrešan?** Uglavnom ne:
+  - **Krug je metrički.** Udaljenost piksela računa se u metrima. Površina kruga iz broja piksela je 281.900–282.500 m², a π · 300² = 282.743 m².
+  - **Neovisna provjera se poklapa.** Izračun u ekvivalentnoj projekciji EPSG:3035 daje iste udjele, uz razliku do 0,4 postotna boda.
+  - **WorldCover odgovara ortofotu.** Poklapa se s ortofotom DGU-a 2021./22. na deset kontrolnih lokacija.
+- **Ispravljene sitnije pogreške:**
+  - **Duljina stupnja:** računala se približnim faktorima za ekvator. Sada se računa na elipsoidu WGS 84 (oko 0,5 % u polumjeru).
+  - **Rub pločice:** krug uz rub pločice WorldCovera bio bi odrezan. Sada se čitaju i susjedne pločice.
+- **Pravi uzrok besmislenog rezultata bio je izbor pokazatelja:**
+  - Pravilo 3-30-300 namijenjeno je gradovima, a primjenjivalo se svugdje.
+  - Brojalo se samo drveće; oranice i livade nisu bile zelenilo.
+  - Park se tražio i u selima, pa je selo dobivalo „park 11,9 km”.
+- **Copernicus HRL Tree Cover Density 2018** daje znatno niže vrijednosti (Čaglin 0,7 %, središte Osijeka 3,6 % prema 30,7 % u WorldCoveru). To nije znak da je WorldCover pogrešan:
+  - HRL mjeri gustoću krošnji, a WorldCover označava piksel kao drveće kad drveće pokriva barem 10 % njegove površine (Product User Manual v2.0, tablica 3).
+  - HRL propušta mnoga gradska stabla.
+- **Promjena:** kartica „Priroda i hlad”:
+  - svugdje udio prirode (drveće, grmlje, travnjaci, polja, močvare);
+  - pravilo 3-30-300 sa statusom i parkom samo u gusto izgrađenom području (izgrađeno više od pola kopna u krugu od 300 m);
+  - selo okruženo poljima dobiva „Okruženo prirodom” (dobro);
+  - park se prikazuje samo do 2 km.
+- **Naselja:** priroda, drveće, zrak i udaljenost od prometnica računaju se kao medijan adresa naselja, uz raspon od 25. do 75. percentila; ranije su bili vrijednost u središtu, odnosno prosjek.
+- **Tablica prije i poslije:**
+
+| Lokacija | Drveće | Priroda | Izgrađeno | HRL krošnje | Prije | Poslije |
+|---|---|---|---|---|---|---|
+| Čaglin, središte | 9 % | 67 % | 33 % | 0,7 % | Loše | Dobro |
+| Nijemci, općina | 18 % | 53 % | 47 % | 3,1 % | Loše | Dobro |
+| Vinkovci, središte | 7 % | 9 % | 91 % | 1,6 % | Upozorenje | Upozorenje |
+| Osijek, središte | 31 % | 34 % | 66 % | 3,6 % | Dobro | Dobro |
+| Split, središte | 11 % | 11 % | 89 % | 1,1 % | Upozorenje | Upozorenje |
+| Zagreb, središte | 6 % | 6 % | 94 % | 1,2 % | Upozorenje | Upozorenje |
+| Lokve, uz šumu | 29 % | 66 % | 34 % | 11,2 % | Loše | Dobro |
+| Osijek, uz Perivoj kralja Tomislava | 62 % | 94 % | 6 % | 15,6 % | Dobro | Dobro |
+| polje između Vinkovaca i Nijemaca | 1 % | 100 % | 0 % | 0,7 % | Loše | Dobro |
+| Makarska, središte uz more | 4 % | 6 % | 93 % | 0,1 % | Upozorenje | Upozorenje |
+
+- **Gradska središta zadržavaju upozorenje.** Imaju malo drveća, ali park blizu. Status „Loše” ostaje samo za gusto izgrađeno područje bez drveća i bez parka.
+- **Slike za vizualnu provjeru** (ortofoto DGU-a i razredi WorldCovera s krugom od 300 m) izrađene su izvan repozitorija i nisu dio aplikacije. Ortofoto se koristio samo za provjeru (WMS, Otvorena dozvola), a HRL samo za usporedbu (EEA ImageServer).
+- **Testovi:** `backend/tests/test_landcover.py` provjerava:
+  - metrički krug;
+  - cijeli krug preko ruba pločice;
+  - udjele kopna;
+  - selo među poljima koje ne dobiva „Loše”;
+  - kontrolne vrijednosti.
 
 ## 8. AI asistent uvijek daje isti odgovor
 

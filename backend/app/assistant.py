@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 
 from app.config import get_settings
 from app.geocode import normalize
-from app.models import Category, Kind, Link, Report
+from app.models import Category, Kind, Link, Report, Value
 from app.sources import source_info
 
 Intent = Literal[
@@ -178,10 +178,11 @@ EXPLANATIONS: dict[str, str] = {
         "zdravstvene organizacije iz 2021. i s graničnom vrijednošću EU-a koja vrijedi od 2030."
     ),
     "green": (
-        "Udio drveća i zelenih površina u krugu od 300 m računamo iz satelitske karte ESA "
-        "WorldCover. Uspoređujemo ga s pravilom 3-30-300: najmanje 30 % krošnji u susjedstvu i "
-        "javna zelena površina do 300 m od kuće. Drveće ljeti daje hlad i ublažava vrućine; "
-        "samu temperaturu ne mjerimo."
+        "Iz satelitske karte ESA WorldCover računamo koliko površine u krugu od 300 m čini "
+        "priroda (drveće, grmlje, travnjaci, polja i močvare), a koliko drveće i zgrade. Ako "
+        "je izgrađeno više od pola kopna, to je gradsko područje i vrijedi pravilo 3-30-300: "
+        "najmanje 30 % površine pod drvećem i park do 300 m od kuće. Drveće ljeti daje hlad i "
+        "ublažava vrućine; samu temperaturu ne mjerimo."
     ),
     "noise": (
         "Buku ne mjerimo: otvorene karte buke za cijelu Hrvatsku ne postoje. Prikazujemo "
@@ -211,7 +212,19 @@ EXPLANATIONS: dict[str, str] = {
     ),
 }
 
+# Shown once under the conversation in the interface, not after every answer.
 DISCLAIMER = "Ovo je informativni pregled iz otvorenih podataka, a ne službena procjena ni savjet."
+
+# "Najbliža ljekarna je 5 minuta pješice": the nearest place of each daily need.
+NEAREST: dict[str, str] = {
+    "kindergarten": "Najbliži vrtić",
+    "school": "Najbliža osnovna škola",
+    "doctor": "Najbliži obiteljski liječnik",
+    "pediatrician": "Najbliži pedijatar",
+    "pharmacy": "Najbliža ljekarna",
+    "grocery": "Najbliža trgovina namirnicama",
+    "playground": "Najbliže igralište",
+}
 
 
 class AssistantLocation(BaseModel):
@@ -232,9 +245,15 @@ class Fact(BaseModel):
     kind: Kind
 
 
+class SourceRef(BaseModel):
+    title: str
+    retrieved_at: str | None
+
+
 class AssistantReply(BaseModel):
-    answer: str
-    facts: list[Fact] = []
+    answer: str = Field(description="Jedna do dvije rečenice koje izravno odgovaraju na pitanje")
+    sources: list[SourceRef] = Field(default=[], description="Izvori odgovora, za redak „Izvor”")
+    facts: list[Fact] = Field(default=[], description="Sve vrijednosti, za „Prikaži detalje”")
     links: list[Link] = []
     mode: Literal["rules", "llm"]
 
@@ -321,52 +340,105 @@ def _category(report: Report, cat_id: str) -> Category | None:
 
 
 def _name(report: Report, index: int, total: int) -> str:
+    """Empty for one address (the answer speaks about it directly), else "Adresa A (…): "."""
     if total == 1:
-        return "Za ovu adresu"
+        return ""
     letter = "A" if index == 0 else "B"
     label = report.location.label
-    return f"Adresa {letter}" + (f" ({label})" if label else "")
+    return f"Adresa {letter}" + (f" ({label})" if label else "") + ": "
+
+
+def _value(cat: Category, key: str) -> Value | None:
+    return next((v for v in cat.values if v.key == key), None)
+
+
+def _nearest_sentence(cat_id: str, value: Value) -> str:
+    """'Najbliža ljekarna je 5 minuta pješice (Ljekarna Centar).' from the report value."""
+    head = NEAREST[cat_id]
+    shown, _, rest = value.display.partition(" (")
+    name = f" ({rest.rstrip(')')})" if rest else ""
+    if value.unit == "min" and isinstance(value.value, int | float):
+        if value.value > 60:
+            return f"{head} je više od sat hoda daleko{name}."
+        return f"{head} je {shown.replace(' hoda', '')} pješice{name}."
+    return f"{head}: {value.display}."
+
+
+def _car_free_sentence(cat: Category) -> str:
+    have = _value(cat, "needs_within_15min")
+    if have is None or not isinstance(have.value, int | float):
+        return cat.headline
+    n = int(have.value)
+    if n >= 7:
+        text = "Da: sve svakodnevne potrebe su do 15 minuta pješice"
+    elif n >= 5:
+        text = f"Uglavnom da: {n} od 7 svakodnevnih potreba je do 15 minuta pješice"
+    elif n >= 3:
+        text = f"Djelomično: {n} od 7 svakodnevnih potreba je do 15 minuta pješice"
+    else:
+        text = f"Teško: samo {n} od 7 svakodnevnih potreba je do 15 minuta pješice"
+    missing = _value(cat, "needs_missing")
+    if missing is not None and missing.display not in ("", "ništa"):
+        text += f"; nedostaje: {missing.display}"
+    unknown = _value(cat, "needs_unknown")
+    if unknown is not None and unknown.display:
+        text += "; javni prijevoz nismo mogli provjeriti, jer vozni red nije otvoren"
+    return text + "."
+
+
+def short_answer(cat_id: str, cat: Category) -> str:
+    """One or two plain sentences that answer the question, from the report only."""
+    if cat_id in DAILY_KEYS:
+        value = _value(cat, f"nearest_{cat_id}")
+        if value is None:
+            return f"{NEAREST[cat_id]} nije pronađen u podacima za ovo područje."
+        return _nearest_sentence(cat_id, value)
+    if cat.status == "no_data":
+        return cat.headline
+    if cat_id == "flood" and cat.status == "good":
+        return "Ne. Nije u području riječnih poplava, čak ni za vrlo rijetke velike poplave."
+    if cat_id == "car_free":
+        return _car_free_sentence(cat)
+    return cat.headline
+
+
+def _sources(values: list[Value]) -> list[SourceRef]:
+    out: list[SourceRef] = []
+    for v in values:
+        ref = SourceRef(title=source_info(v.source).title, retrieved_at=v.retrieved_at)
+        if all(r.title != ref.title for r in out):
+            out.append(ref)
+    return out
 
 
 def _facts_for(
     report: Report, cat_id: str, prefix: str
-) -> tuple[list[str], list[Fact], list[Link]]:
+) -> tuple[list[str], list[Fact], list[Link], list[SourceRef]]:
     cat = _category(report, cat_id)
     if cat is None:
-        return [], [], []
-    sentences: list[str] = []
-    facts: list[Fact] = []
+        return [], [], [], []
     if cat_id in DAILY_KEYS:
-        value = next((v for v in cat.values if v.key == f"nearest_{cat_id}"), None)
-        if value is not None:
-            sentences.append(f"{prefix}: {value.label.lower()}, najbliže {value.display}.")
-            facts.append(
-                Fact(
-                    text=f"{value.label}: {value.display}",
-                    source=source_info(value.source).title,
-                    retrieved_at=value.retrieved_at,
-                    kind=value.kind,
-                )
-            )
-        return sentences, facts, []
-    sentences.append(f"{prefix} ({cat.title.lower()}, {cat.status_label.lower()}): {cat.headline}")
-    for value in cat.values:
-        facts.append(
-            Fact(
-                text=f"{value.label}: {value.display}",
-                source=source_info(value.source).title,
-                retrieved_at=value.retrieved_at,
-                kind=value.kind,
-            )
+        used = [v for v in cat.values if v.key in (f"nearest_{cat_id}", f"count15_{cat_id}")]
+    else:
+        used = list(cat.values)
+    facts = [
+        Fact(
+            text=f"{v.label}: {v.display}",
+            source=source_info(v.source).title,
+            retrieved_at=v.retrieved_at,
+            kind=v.kind,
         )
-    return sentences, facts, list(cat.links)
+        for v in used
+    ]
+    links = [] if cat_id in DAILY_KEYS else list(cat.links)
+    return [prefix + short_answer(cat_id, cat)], facts, links, _sources(used)
 
 
 def _population(report: Report, prefix: str) -> tuple[str, list[Fact]]:
     """Inhabitants of the settlement (census 2021), from the report's location."""
     pop = report.location.population
     if pop is None:
-        return f"{prefix}: broj stanovnika naselja nije poznat.", []
+        return f"{prefix}Broj stanovnika naselja nije poznat.", []
     settlement = report.location.settlement or "naselje"
     fact = Fact(
         text=f"{pop.label}: {pop.display}",
@@ -374,14 +446,14 @@ def _population(report: Report, prefix: str) -> tuple[str, list[Fact]]:
         retrieved_at=pop.retrieved_at,
         kind=pop.kind,
     )
-    return f"{prefix}: naselje {settlement} ima {pop.display}.", [fact]
+    return f"{prefix}Naselje {settlement} ima {pop.display}.", [fact]
 
 
 def _comparison(reports: list[Report], cat_id: str) -> str | None:
     """A neutral sentence saying where a numeric value is lower or higher."""
     keys = {
         "air": ("pm25_annual", "nižu", "godišnju koncentraciju PM2,5"),
-        "green": ("tree_share_300m", "veći", "udio drveća u krugu od 300 m"),
+        "green": ("nature_share_300m", "veći", "udio prirode u krugu od 300 m"),
         "solar": ("pv_kwh_per_kwp", "veću", "procijenjenu proizvodnju sunčane elektrane"),
     }
     if len(reports) != 2:
@@ -451,8 +523,8 @@ def answer(
     if understood.intent == "unknown":
         return AssistantReply(
             answer=(
-                f"Ovo pitanje ne razumijem. Odgovaram samo iz izračuna za {where}, o ovim "
-                f"temama: {TOPICS}. Pitajte npr. „Kakav je zrak?” ili „Koliko je daleko vrtić?”"
+                f"To ne znam: odgovaram samo o okolišu i onome što je pješice za {where}, "
+                "npr. „Kakav je zrak?” ili „Koliko je daleko vrtić?”"
             ),
             mode=mode,
         )
@@ -469,15 +541,21 @@ def answer(
     reports = [build(p.lat, p.lon, p.label) for p in request.locations]
     facts: list[Fact] = []
     links: list[Link] = []
+    sources: list[SourceRef] = []
     if understood.population:
         for i, r in enumerate(reports):
             said, known = _population(r, _name(r, i, len(reports)))
             sentences.append(said)
             facts.extend(known)
+            sources.extend(
+                SourceRef(title=f.source, retrieved_at=f.retrieved_at)
+                for f in known
+                if all(f.source != y.title for y in sources)
+            )
     if not cats and not sentences:
         # A general question (or the model found no category): the report's summary.
         for i, r in enumerate(reports):
-            sentences.append(f"{_name(r, i, len(reports))}: " + " ".join(r.summary))
+            sentences.append(_name(r, i, len(reports)) + " ".join(r.summary))
         return AssistantReply(
             answer=" ".join(sentences)
             + " Pitajte me i konkretnije, npr. o poplavama, zraku ili najbližem vrtiću.",
@@ -486,14 +564,16 @@ def answer(
 
     for cat_id in cats:
         for i, r in enumerate(reports):
-            s, f, links_for = _facts_for(r, cat_id, _name(r, i, len(reports)))
+            s, f, links_for, refs = _facts_for(r, cat_id, _name(r, i, len(reports)))
             sentences.extend(s)
             facts.extend(f)
+            sources.extend(x for x in refs if all(x.title != y.title for y in sources))
             for link in links_for:
                 if link not in links:
                     links.append(link)
         comparison = _comparison(reports, cat_id)
         if comparison:
             sentences.append(comparison)
-    sentences.append(DISCLAIMER)
-    return AssistantReply(answer=" ".join(sentences), facts=facts, links=links, mode=mode)
+    return AssistantReply(
+        answer=" ".join(sentences), sources=sources, facts=facts, links=links, mode=mode
+    )

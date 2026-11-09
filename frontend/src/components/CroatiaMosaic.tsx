@@ -29,7 +29,7 @@ function reducedMotion(): boolean {
 }
 
 /**
- * Every settlement of Croatia drawn on a canvas and coloured by the general Skor za život.
+ * Every settlement of Croatia drawn on a canvas and coloured by the general rating (Ocjena mjesta).
  * The same data (and the same cached requests) as the map page. It fills in from east to
  * west once, like a sunrise; with reduced motion it appears at once. Purely a picture:
  * the text beside it says what it shows and links to the map.
@@ -160,7 +160,7 @@ export function CroatiaMosaic() {
       role="img"
       aria-label={
         shapes
-          ? `Karta Hrvatske: ${shapes.length.toLocaleString('hr-HR')} naselja obojenih prema Skoru za život; ${theme === 'dark' ? 'svjetlija' : 'tamnija'} boja znači viši skor.`
+          ? `Karta Hrvatske: ${shapes.length.toLocaleString('hr-HR')} naselja obojenih prema ocjeni mjesta; ${theme === 'dark' ? 'svjetlija' : 'tamnija'} boja znači višu ocjenu.`
           : 'Karta Hrvatske s naseljima se učitava.'
       }
     >

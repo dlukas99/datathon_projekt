@@ -1,5 +1,5 @@
 {
-  "_note": "Pravila za „Predloži mjesto”: za svaki profil obavezni uvjeti (naselje bez njih ne ulazi u prijedloge), dodatni važni kriteriji s težinama (uz težine Skora za život iz profiles.json) i obrazloženje. Jedan izvor za backend (app/finder.py) i čarobnjak (frontend). Obrazloženja pragova: docs/METODOLOGIJA.md, „Pravila profila u Predloži mjesto”, i docs/ODLUKE.md.",
+  "_note": "Pravila za „Predloži mjesto”: za svaki profil obavezni uvjeti (naselje bez njih ne ulazi u prijedloge), dodatni važni kriteriji s težinama (uz važnost kategorija u ocjeni mjesta iz profiles.json) i obrazloženje. Jedan izvor za backend (app/finder.py) i čarobnjak (frontend). Obrazloženja pragova: docs/METODOLOGIJA.md, „Pravila profila u Predloži mjesto”, i docs/ODLUKE.md.",
   "walk_minutes": 15,
   "min_strict_results": 5,
   "higher_ed": {
@@ -19,7 +19,7 @@
   "profiles": {
     "opci": {
       "summary": "Uravnoteženo; jedini uvjet je trgovina namirnicama do 15 minuta hoda.",
-      "rationale": "Bez trgovine pješice svakodnevni život traži auto za svaku sitnicu. Ljekarna i obiteljski liječnik pješice podižu rang, a sve ostalo boduje Skor za život s uravnoteženim težinama.",
+      "rationale": "Bez trgovine pješice svakodnevni život traži auto za svaku sitnicu. Ljekarna i obiteljski liječnik pješice podižu rang, a sve ostalo ulazi u ocjenu mjesta s uravnoteženim težinama.",
       "requires": ["walk:grocery"],
       "criteria": [
         { "id": "walk:pharmacy", "weight": 1, "why": "ljekarna pješice" },
@@ -28,7 +28,7 @@
     },
     "obitelj": {
       "summary": "Samo mjesta s vrtićem i osnovnom školom do 15 minuta hoda.",
-      "rationale": "Vrtić i osnovna škola su svakodnevni put djeteta, pa bez njih mjesto nije za obitelj bez auta za svaki odlazak. Pedijatar, igralište i park podižu rang; zrak, poplave i mir boduje Skor za život s pojačanim težinama.",
+      "rationale": "Vrtić i osnovna škola su svakodnevni put djeteta, pa bez njih mjesto nije za obitelj bez auta za svaki odlazak. Pedijatar, igralište i park podižu rang; zrak, poplave i mir ulaze u ocjenu mjesta s pojačanim težinama.",
       "requires": ["walk:kindergarten", "walk:school"],
       "criteria": [
         { "id": "walk:pediatrician", "weight": 2, "why": "pedijatar blizu doma" },
@@ -38,7 +38,7 @@
     },
     "umirovljenik": {
       "summary": "Samo mjesta s trgovinom, ljekarnom i obiteljskim liječnikom do 15 minuta hoda.",
-      "rationale": "Trgovina, ljekarna i liječnik su potrebe koje umirovljenik ima najčešće; bez njih ovisi o autu ili tuđoj pomoći. Blizina opće ili kliničke bolnice podiže rang; hlad i zelenilo, mir i javni prijevoz boduje Skor za život s pojačanim težinama.",
+      "rationale": "Trgovina, ljekarna i liječnik su potrebe koje umirovljenik ima najčešće; bez njih ovisi o autu ili tuđoj pomoći. Blizina opće ili kliničke bolnice podiže rang; hlad i zelenilo, mir i javni prijevoz ulaze u ocjenu mjesta s pojačanim težinama.",
       "requires": ["walk:grocery", "walk:pharmacy", "walk:doctor"],
       "criteria": [
         { "id": "hospital", "weight": 2, "why": "opća ili klinička bolnica u blizini" },
@@ -47,7 +47,7 @@
     },
     "student": {
       "summary": "Mjesta sa studijima ili do 15 km od većeg studijskog središta, uz stajalište javnog prijevoza.",
-      "rationale": "Student živi ondje gdje studira ili u mjestu s kojeg svaki dan stigne do studija bez auta. Broj preddiplomskih i diplomskih programa u mjestu mjeri izbor studija, pa sveučilišni gradovi prirodno idu na vrh; predgrađe ulazi samo do 15 km zračne linije od mjesta s barem 20 studijskih programa i uz stajalište javnog prijevoza, a rang mu je niži. Javni prijevoz i život bez auta boduje Skor za život s pojačanim težinama.",
+      "rationale": "Student živi ondje gdje studira ili u mjestu s kojeg svaki dan stigne do studija bez auta. Broj preddiplomskih i diplomskih programa u mjestu mjeri izbor studija, pa sveučilišni gradovi prirodno idu na vrh; predgrađe ulazi samo do 15 km zračne linije od mjesta s barem 20 studijskih programa i uz stajalište javnog prijevoza, a rang mu je niži. Javni prijevoz i život bez auta ulaze u ocjenu mjesta s pojačanim težinama.",
       "requires": ["higher_ed"],
       "criteria": [
         { "id": "higher_ed", "weight": 8, "why": "izbor studija u mjestu ili blizu" }
@@ -55,7 +55,7 @@
     },
     "rad-od-kuce": {
       "summary": "Mirna i zelena mjesta s trgovinom do 15 minuta hoda.",
-      "rationale": "Tko radi od kuće, provodi dan u mjestu: trgovina pješice je minimum, ljekarna i liječnik pješice podižu rang, a mir (podalje od prometnica), zelenilo i zrak boduje Skor za život s pojačanim težinama. Optička mreža se ne boduje: otvoreni podaci govore samo o planovima gradnje, a ne o tome ima li adresa optiku danas.",
+      "rationale": "Tko radi od kuće, provodi dan u mjestu: trgovina pješice je minimum, ljekarna i liječnik pješice podižu rang, a mir (podalje od prometnica), zelenilo i zrak ulaze u ocjenu mjesta s pojačanim težinama. Optička mreža se ne boduje: otvoreni podaci govore samo o planovima gradnje, a ne o tome ima li adresa optiku danas.",
       "requires": ["walk:grocery"],
       "criteria": [
         { "id": "walk:park", "weight": 1, "why": "park za stanku blizu doma" },

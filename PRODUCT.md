@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svakodnevnog života, isključivo iz otvorenih podataka. Okolišni pregled obuhvaća poplave, zrak, zelenilo i hlad, udaljenost od prometnica, požare raslinja i sunce na krovu. Svakodnevni život obuhvaća život bez auta (izokrone hoda, javni prijevoz) i svakodnevne potrebe (vrtić, škola, liječnik, ljekarna, trgovina, park).
+Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svakodnevnog života, isključivo iz otvorenih podataka. Okolišni pregled obuhvaća poplave, zrak, prirodu i hlad, udaljenost od prometnica, požare raslinja i sunce na krovu. Svakodnevni život obuhvaća život bez auta (izokrone hoda, javni prijevoz) i svakodnevne potrebe (vrtić, škola, liječnik, ljekarna, trgovina, park).
 
 Ti podaci postoje, ali su rasuti po institucijama i formatima i običnom čovjeku nisu ni razumljivi ni usporedivi. Ljudi okolišne rizike i ovisnost o autu najčešće otkriju tek kad usele.
 
@@ -22,7 +22,7 @@ Uspjeh: korisnik razumije kako je živjeti na adresi i koje mu mjesto odgovara, 
 
 ## Positioning
 
-- Jedno mjesto koje spaja 33 skupa podataka (DGU, EEA, JRC, ESA WorldCover, Copernicus EFFIS, PVGIS, GTFS voznih redova, registri ustanova, OSM) u izvještaj za točnu adresu, a ne za općinu ili prosjek.
+- Jedno mjesto koje spaja 34 skupa podataka (DGU, EEA, JRC, ESA WorldCover, Copernicus EFFIS, PVGIS, GTFS voznih redova, registri ustanova, OSM) u izvještaj za točnu adresu, a ne za općinu ili prosjek.
 - Apsolutno značenje ispred relativnog ranga: „u modeliranom poplavnom području za povratno razdoblje od 100 godina: da” umjesto „rizik iznad prosjeka”.
 - Svaka vrijednost nosi izvor, datum preuzimanja i vrstu (izmjereno, modelirano ili procjena).
 - Okoliš je uvijek prvi i najvažniji (izazov B). Svakodnevne potrebe su dodatak; proizvod ne smije izgledati kao aplikacija za škole i trgovine.
@@ -38,13 +38,13 @@ Uspjeh: korisnik razumije kako je živjeti na adresi i koje mu mjesto odgovara, 
 - Točka se bira upisom adrese ili povlačenjem oznake na karti.
 - „Pogledaj oglase” samo slaže poveznicu na vanjsku pretragu oglasa; aplikacija ne prikazuje oglase.
 - Asistent odgovara na pitanja o lokaciji; brojke dolaze iz predložaka nad rezultatima alata, ne iz jezičnog modela.
-- Ostale stranice: Izvori (datumi osvježavanja uživo preko CKAN API-ja data.gov.hr), O alatu, ispis i dijeljenje stanja preko URL-a.
+- Ostale stranice: O alatu (Ukratko, Kako računamo, Izvori podataka s datumima osvježavanja uživo preko CKAN API-ja data.gov.hr, Kvaliteta podataka, Privatnost, Tim; `/izvori` vodi na dio „Izvori podataka”), ispis i dijeljenje stanja preko URL-a.
 
 ## Capabilities and Constraints
 
 - **Stog:** React 19, TypeScript, Vite, React Router, TanStack Query, MapLibre GL JS s podlogom OpenFreeMap; backend FastAPI. Fontovi Bricolage Grotesque (naslovi) i Figtree (tekst), OFL, s vlastitog poslužitelja.
 - **Kategorije i statusi:** svaka kategorija ima status (dobro, upozorenje, loše ili nema podataka) prema pragu s izvorom. „Nema podataka” se uvijek prikazuje, nikad se kategorija tiho ne izostavlja.
-- **Skor za život (0–100):** sažima kategorije s vidljivim i podesivim težinama profila (obitelj s djecom, umirovljenik, student, rad od kuće, vlastiti). Profil mijenja redoslijed i naglasak, nikad vrijednosti.
+- **Ocjena mjesta (0–100):** sažima kategorije s vidljivim i podesivim težinama profila (obitelj s djecom, umirovljenik, student, rad od kuće, vlastiti). Profil mijenja redoslijed i naglasak, nikad vrijednosti.
 - **Pragovi:** zrak prema WHO 2021 i EU 2030; buka prema smjernicama WHO 2018. Svi pragovi i izvori su u `docs/METODOLOGIJA.md`.
 - **Podaci:** nikad izmišljeni. Testni podaci postoje samo u `backend/tests/fixtures/` i nikad se ne prikazuju u aplikaciji.
 - **Privatnost:** upisane adrese i pitanja se ne spremaju; nema analitike ni kolačića za praćenje.

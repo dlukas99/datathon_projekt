@@ -9,6 +9,7 @@ from typing import Any
 from analysis import score
 from analysis.daily import WALK_LIMIT_MIN, car_free_category, daily_category, transit_category
 from analysis.environment import (
+    GREEN_BUFFER_M,
     air_category,
     air_level,
     fire_category,
@@ -19,6 +20,7 @@ from analysis.environment import (
 from analysis.solar import solar_category
 from analysis.walking import compute_reach
 from app import brand, fmt, valhalla
+from app.address_grid import addresses_within
 from app.admin import get_admin
 from app.layers import get_layers
 from app.models import Category, Location, Report, SourceInfo, Value
@@ -101,7 +103,9 @@ def summary(categories: dict[str, Category]) -> list[str]:
     if level in AIR_PHRASES:
         withs.append(AIR_PHRASES[level])
     if green.status == "good":
-        withs.append("puno zelenila")
+        # A town with tree shade and a park, or a village among fields and woods.
+        urban = _value(green, "urban_area") == 1.0
+        withs.append("puno drveća i hlada" if urban else "puno prirode okolo")
     no_flood = flood.status == "good"
     # Safety from floods is named in the opening sentence only next to other good news;
     # alone it gets a short sentence at the end, so it never leads by default.
@@ -180,7 +184,9 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
     cats = {
         "flood": flood_category(lon, lat),
         "air": air_category(lon, lat),
-        "green": green_category(lon, lat, reach.nearest("park")),
+        "green": green_category(
+            lon, lat, reach.nearest("park"), addresses_within(lon, lat, GREEN_BUFFER_M)
+        ),
         "noise": noise_category(lon, lat, layers),
         "fire": fire_category(lon, lat, layers),
         "solar": solar,

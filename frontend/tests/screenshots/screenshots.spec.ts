@@ -117,15 +117,15 @@ test('assistant', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.goto(reportUrl(byId('zagreb')))
   await page.getByRole('button', { name: 'Mogu li ovdje živjeti bez auta?' }).click()
-  await expect(page.getByText(/Za ovu adresu \(život bez auta/)).toBeVisible()
+  await expect(page.locator('.assistant').getByText(/do 15 minuta pješice/)).toBeVisible()
   const section = page.locator('section', { has: page.getByRole('heading', { name: 'Pitajte asistenta' }) })
   await section.screenshot({ path: `${OUT}/asistent.png` })
 })
 
 test('sources', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 })
-  await page.goto('/izvori')
-  await expect(page.getByText('Svi izvori')).toBeVisible()
+  await page.goto('/o-alatu#izvori')
+  await expect(page.getByRole('heading', { name: 'Adrese i granice' })).toBeVisible()
   await settle(page)
   await page.screenshot({ path: `${OUT}/izvori.png` })
 })

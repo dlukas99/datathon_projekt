@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { TrailMark } from './components/TrailMark'
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
+import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
 import { SiteNav, type Theme } from './components/SiteNav'
 import { ApiError } from './lib/api'
 import { BRAND } from './lib/brand'
@@ -12,7 +12,6 @@ import { HomePage } from './pages/HomePage'
 import { MapPage } from './pages/MapPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ReportPage } from './pages/ReportPage'
-import { SourcesPage } from './pages/SourcesPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,33 +24,68 @@ const queryClient = new QueryClient({
   },
 })
 
-const THEME_KEY = 'prije-potpisa-tema'
+// Until 9. 11. 2026. a pick was kept for good in localStorage under this key and then
+// overrode the device; it is removed so the device setting applies again.
+const OLD_THEME_KEY = 'prije-potpisa-tema'
+// A pick with the moon button lasts for this tab only.
+const THEME_KEY = 'dobro-mjesto-tema'
+const DARK_QUERY = '(prefers-color-scheme: dark)'
 
-function initialTheme(): Theme {
-  try {
-    const saved = localStorage.getItem(THEME_KEY)
-    if (saved === 'light' || saved === 'dark') return saved
-  } catch {
-    // storage unavailable
-  }
-  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
+function deviceTheme(): Theme {
+  return typeof window.matchMedia === 'function' && window.matchMedia(DARK_QUERY).matches
     ? 'dark'
     : 'light'
 }
 
+function savedPick(): Theme | null {
+  try {
+    localStorage.removeItem(OLD_THEME_KEY)
+    const saved = sessionStorage.getItem(THEME_KEY)
+    return saved === 'light' || saved === 'dark' ? saved : null
+  } catch {
+    return null // storage unavailable
+  }
+}
+
+function storePick(pick: Theme | null) {
+  try {
+    if (pick) sessionStorage.setItem(THEME_KEY, pick)
+    else sessionStorage.removeItem(THEME_KEY)
+  } catch {
+    // storage unavailable
+  }
+}
+
+/**
+ * Light or dark follows the device (and changes with it while the page is open). The moon
+ * button overrides it for this tab only; switching back to the device's own theme, or a
+ * change of the device setting, returns to following the device.
+ */
 function useTheme(): [Theme, () => void] {
-  const [theme, setTheme] = useState<Theme>(initialTheme)
+  const [device, setDevice] = useState<Theme>(deviceTheme)
+  const [pick, setPick] = useState<Theme | null>(savedPick)
+  const theme = pick ?? device
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return
+    const query = window.matchMedia(DARK_QUERY)
+    const onChange = () => {
+      setDevice(query.matches ? 'dark' : 'light')
+      setPick(null)
+      storePick(null)
+    }
+    query.addEventListener('change', onChange)
+    return () => {
+      query.removeEventListener('change', onChange)
+    }
+  }, [])
   const toggle = () => {
     const next: Theme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
-    try {
-      localStorage.setItem(THEME_KEY, next)
-    } catch {
-      // storage unavailable
-    }
+    const override = next === device ? null : next
+    setPick(override)
+    storePick(override)
   }
   return [theme, toggle]
 }
@@ -62,17 +96,22 @@ const TITLES: Record<string, string> = {
   '/usporedi': `Usporedba dviju lokacija · ${BRAND.name}`,
   '/predlozi': `Predloži mjesto za život · ${BRAND.name}`,
   '/karta': `Karta Hrvatske · ${BRAND.name}`,
-  '/izvori': `Izvori podataka · ${BRAND.name}`,
   '/o-alatu': `O alatu i metodologiji · ${BRAND.name}`,
 }
 
 function TitleAndFocus() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
     document.title = TITLES[pathname] ?? BRAND.name
+    // A link to a part of a page ("/o-alatu#izvori") opens at that part.
+    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null
+    if (target) {
+      target.scrollIntoView()
+      return
+    }
     document.getElementById('main')?.focus({ preventScroll: true })
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pathname, hash])
   return null
 }
 
@@ -108,7 +147,8 @@ function Layout() {
             <Route path="/predlozi" element={<FindPage />} />
             <Route path="/karta" element={<MapPage />} />
             <Route path="/pronadi" element={<FindRedirect />} />
-            <Route path="/izvori" element={<SourcesPage />} />
+            {/* The sources are a part of "O alatu" since 9. 11. 2026. */}
+            <Route path="/izvori" element={<Navigate to="/o-alatu#izvori" replace />} />
             <Route path="/o-alatu" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
@@ -123,10 +163,10 @@ function Layout() {
           <nav aria-label="Podnožje">
             <ul>
               <li>
-                <NavLink to="/izvori">Izvori podataka</NavLink>
+                <Link to="/o-alatu#izvori">Izvori podataka</Link>
               </li>
               <li>
-                <NavLink to="/o-alatu">Kako računamo</NavLink>
+                <Link to="/o-alatu#kako-racunamo">Kako računamo</Link>
               </li>
               <li>
                 <a href="/api/docs">API</a>

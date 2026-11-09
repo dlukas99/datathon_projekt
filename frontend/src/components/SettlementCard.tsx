@@ -32,6 +32,18 @@ function needsText(needs: number | null): string {
   return 'za većinu potreba treba auto ili prijevoz'
 }
 
+/** Medians over the addresses: a mostly urban settlement by tree cover (3-30-300), any
+ *  other by the nature around its houses. */
+function greenText(row: MapRow): string {
+  const pct = (x: number) => `${Math.round(x).toLocaleString('hr-HR')} %`
+  if (row.urban !== null && row.urban >= 0.5 && row.tree !== null)
+    return row.tree >= TREE_TARGET
+      ? `puno drveća i hlada (drveće ${pct(row.tree)})`
+      : `malo drveća za grad (drveće ${pct(row.tree)}, preporuka 30 %)`
+  if (row.nature !== null) return `okruženo prirodom (${pct(row.nature)} oko kuća)`
+  return 'nema podataka'
+}
+
 function tags(row: MapRow, profile: string): Tag[] {
   const score = row.scores[profile] ?? null
   return [
@@ -45,21 +57,12 @@ function tags(row: MapRow, profile: string): Tag[] {
       title: 'Poplave',
       text: row.flood ? (FLOOD_SHORT[row.flood] ?? row.flood) : 'nema podataka',
     },
-    {
-      id: 'green',
-      title: 'Zelenilo',
-      text:
-        row.tree === null
-          ? 'nema podataka'
-          : row.tree >= TREE_TARGET
-            ? 'puno drveća i hlada'
-            : 'manje drveća nego što se preporučuje',
-    },
+    { id: 'green', title: 'Priroda', text: greenText(row) },
     { id: 'car_free', title: 'Pješice', text: needsText(row.needs) },
     { id: 'transit', title: 'Prijevoz', text: transitText(row) },
     {
       id: 'score',
-      title: 'Skor za život',
+      title: 'Ocjena mjesta',
       text: score === null ? 'nema podataka' : `${String(score)} od 100`,
     },
   ]
@@ -188,7 +191,7 @@ export function SettlementCard({
 
       {row ? (
         <>
-          <ul className="atlas-tags" aria-label="Pokazatelji za središte naselja">
+          <ul className="atlas-tags" aria-label="Pokazatelji naselja">
             {tags(row, profile).map((t) => (
               <li key={t.id}>
                 <CategoryIcon id={t.id === 'score' ? 'compare' : t.id} size={16} />
@@ -198,10 +201,11 @@ export function SettlementCard({
             ))}
           </ul>
           <p className="fine-print">
-            Skor za profil „{getProfile(profile).label}” vrijedi za naselje: prometnice za sve
-            njegove adrese, ostalo za središte, bez sunca na krovu. Puni izvještaj računa za jednu
-            točku, pa mu Skor može biti drukčiji.
-            {date && ` Izračun ${date}`}, izvori na stranici <Link to="/izvori">Izvori</Link>.
+            Zrak, priroda i prometnice su medijan adresa naselja (vrijednost tipične adrese);
+            poplave, pješice i prijevoz vrijede za središte naselja. Ocjena mjesta za profil „
+            {getProfile(profile).label}” računa se iz njih, bez sunca na krovu. Puni izvještaj
+            računa za jednu točku, pa mu ocjena može biti drukčija.
+            {date && ` Izračun ${date}`}, izvori na stranici <Link to="/o-alatu#izvori">Izvori podataka</Link>.
           </p>
         </>
       ) : (

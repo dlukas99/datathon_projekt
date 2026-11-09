@@ -129,7 +129,11 @@ export interface LiveSources {
 }
 
 export interface AssistantReply {
+  /** One or two plain sentences that answer the question. */
   answer: string
+  /** Sources of the answer, for one "Izvor: …" line. */
+  sources?: { title: string; retrieved_at: string | null }[]
+  /** Every value behind the answer, for "Prikaži detalje". */
   facts: { text: string; source: string; retrieved_at: string | null; kind: Kind }[]
   links: Link[]
   mode: 'rules' | 'llm'
@@ -299,6 +303,10 @@ export interface MapRow {
   pm25: number | null
   flood: string | null
   tree: number | null
+  /** Median share of nature within 300 m over the addresses (%). */
+  nature: number | null
+  /** Share of the addresses in densely built-up (urban) areas, 0–1. */
+  urban: number | null
   needs: number | null
   departures: number | null
   stops: boolean
@@ -361,6 +369,8 @@ interface MapColumns {
   pm25: (number | null)[]
   flood: (string | null)[]
   tree: (number | null)[]
+  nature: (number | null)[]
+  urban: (number | null)[]
   needs: (number | null)[]
   departures: (number | null)[]
   stops: boolean[]
@@ -383,6 +393,8 @@ export function columnsToTable(c: MapColumns): MapTable {
     pm25: c.pm25[i] ?? null,
     flood: c.flood[i] ?? null,
     tree: c.tree[i] ?? null,
+    nature: c.nature[i] ?? null,
+    urban: c.urban[i] ?? null,
     needs: c.needs[i] ?? null,
     departures: c.departures[i] ?? null,
     stops: c.stops[i] ?? false,

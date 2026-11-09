@@ -27,7 +27,7 @@ const STEPS = ['Tko traži', 'Gdje', 'Što je važno', 'Prijedlozi'] as const
 const LAST = STEPS.length
 const SIZES: FindRequest['size'][] = ['any', 'village', 'town', 'city']
 const AIRS: FindRequest['max_air'][] = ['any', 'umjerena', 'niska']
-const WEIGHT_WORDS = ['nevažno', 'malo', 'srednje', 'jako']
+const WEIGHT_WORDS = ['nije važno', 'malo važno', 'važno', 'vrlo važno']
 const FIND_PROFILES = PROFILES.filter((p) => p.id !== 'vlastiti')
 
 function oneOf<T extends string>(value: string | null, options: readonly T[], fallback: T): T {
@@ -378,10 +378,10 @@ export function FindPage() {
               </div>
             </fieldset>
             <details className="advanced">
-              <summary>Napredno: težine u Skoru za život</summary>
+              <summary>Napredno: koliko vam je što važno</summary>
               <div className="advanced-body">
                 <fieldset className="find-weights">
-                  <legend>Koliko je što važno u Skoru za život</legend>
+                  <legend>Koliko vam je što važno u ocjeni mjesta</legend>
                   {SCORE_CATEGORIES.map((c) => {
                     const w = weights[c.id] ?? 0
                     return (

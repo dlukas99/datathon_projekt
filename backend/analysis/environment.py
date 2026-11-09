@@ -30,8 +30,14 @@ EU_2030 = {"pm25": 10.0, "no2": 20.0}  # Directive (EU) 2024/2881, Annex I, annu
 FLOOD_RETURN_PERIODS = (10, 100, 500)
 FLOOD_BUFFER_M = 100.0
 GREEN_BUFFER_M = 300.0
-TREE_COVER_TARGET_PCT = 30.0  # 3-30-300 rule (Konijnendijk 2023)
+TREE_COVER_TARGET_PCT = 30.0  # 3-30-300 rule (Konijnendijk 2023), for urban areas
 PARK_DISTANCE_TARGET_M = 300.0  # 3-30-300 rule (Konijnendijk 2023)
+# Our assumption (docs/ODLUKE.md): a place is urban, and the 3-30-300 rule applies, when
+# more than half of the land within 300 m is built up (WorldCover class 50).
+URBAN_BUILT_PCT = 50.0
+# A park further than this in a straight line is not "nearby": the card says so instead
+# of naming a park kilometres away.
+PARK_SHOW_MAX_M = 2000.0
 
 HV_VIEWER = (
     "https://preglednik.voda.hr/?lang=hr&topic=Opasnosti%20od%20poplava"
@@ -42,10 +48,27 @@ EEA_NOISE_VIEWER = "https://noise.discomap.eea.europa.eu/"
 
 POLLUTANT_NAMES = {"pm25": "PM2,5", "no2": "NO2"}
 
+# ESA WorldCover 2021 v200 classes (Product User Manual v2.0, table 3).
+WORLDCOVER_CLASSES = {
+    10: "tree",
+    20: "shrub",
+    30: "grass",
+    40: "crop",
+    50: "built",
+    60: "bare",
+    70: "snow",
+    80: "water",
+    90: "wetland",
+    95: "mangrove",
+    100: "moss",
+}
 WORLDCOVER_TREE = {10}
 WORLDCOVER_GREEN = {10, 20, 30, 90}  # trees, shrubs, grassland, wetland
+# Nature around a place: everything that grows, farmland included (not built, bare or water).
+WORLDCOVER_NATURE = {10, 20, 30, 40, 90, 95, 100}
 WORLDCOVER_BUILT = {50}
 WORLDCOVER_WATER = {80}
+WORLDCOVER_TILE_DEG = 3
 
 
 def _processed(name: str) -> Path:
@@ -76,6 +99,20 @@ def _close_datasets() -> None:
     _DATASETS.clear()
 
 
+_WGS84_A = 6_378_137.0
+_WGS84_E2 = 0.006_694_379_990_14
+
+
+def metres_per_degree(lat: float) -> tuple[float, float]:
+    """Length of one degree of longitude and of latitude in metres on the WGS 84
+    ellipsoid (radii of curvature of the parallel and of the meridian)."""
+    phi = math.radians(lat)
+    w = 1.0 - _WGS84_E2 * math.sin(phi) ** 2
+    lon_m = math.pi / 180.0 * _WGS84_A * math.cos(phi) / math.sqrt(w)
+    lat_m = math.pi / 180.0 * _WGS84_A * (1.0 - _WGS84_E2) / w**1.5
+    return lon_m, lat_m
+
+
 def _window_around(
     ds: rasterio.io.DatasetReader, lon: float, lat: float, radius_m: float
 ) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]] | None:
@@ -90,8 +127,9 @@ def _window_around(
     if not (0 <= row < ds.height and 0 <= col < ds.width):
         return None
     if ds.crs.is_geographic:
-        m_per_px_x = abs(ds.transform.a) * 111_320.0 * math.cos(math.radians(lat))
-        m_per_px_y = abs(ds.transform.e) * 110_574.0
+        per_deg_lon, per_deg_lat = metres_per_degree(lat)
+        m_per_px_x = abs(ds.transform.a) * per_deg_lon
+        m_per_px_y = abs(ds.transform.e) * per_deg_lat
     else:
         m_per_px_x, m_per_px_y = abs(ds.transform.a), abs(ds.transform.e)
     rx = math.ceil(radius_m / m_per_px_x)
@@ -469,86 +507,173 @@ def air_category(lon: float, lat: float) -> Category:
 
 # --- Greenery and shade -------------------------------------------------------------------
 
-# Tree cover and the nearest park stand in for shade; temperature is not measured.
-GREEN_TITLE = "Zelenilo i hlad"
+# Land cover around a place: nature for everyone, tree shade and a park for urban areas.
+# Temperature is not measured.
+GREEN_TITLE = "Priroda i hlad"
 
 
 def _worldcover_path(lon: float, lat: float) -> Path:
-    lat0 = int(math.floor(lat / 3.0) * 3)
-    lon0 = int(math.floor(lon / 3.0) * 3)
+    lat0 = int(math.floor(lat / WORLDCOVER_TILE_DEG) * WORLDCOVER_TILE_DEG)
+    lon0 = int(math.floor(lon / WORLDCOVER_TILE_DEG) * WORLDCOVER_TILE_DEG)
     tile = f"N{lat0:02d}E{lon0:03d}"
     return _processed("worldcover") / f"ESA_WorldCover_10m_2021_v200_{tile}_Map.tif"
 
 
-def read_landcover(lon: float, lat: float) -> dict[str, float] | None:
-    """Share (%) of trees, green and built-up land within 300 m, from WorldCover."""
-    ds = _dataset(_worldcover_path(lon, lat))
-    if ds is None:
+def _disk(
+    ds: rasterio.io.DatasetReader, lon: float, lat: float, radius_m: float
+) -> NDArray[np.float64] | None:
+    """Values of the pixels whose centre lies within radius_m of the point, in a fixed
+    order (rows, then columns of the disk), also for a point just outside the raster:
+    pixels outside it read as nodata (0)."""
+    xs, ys = warp_transform("EPSG:4326", ds.crs, [lon], [lat])
+    row, col = ds.index(xs[0], ys[0])
+    per_deg_lon, per_deg_lat = metres_per_degree(lat)
+    m_per_px_x = abs(ds.transform.a) * per_deg_lon
+    m_per_px_y = abs(ds.transform.e) * per_deg_lat
+    rx = math.ceil(radius_m / m_per_px_x)
+    ry = math.ceil(radius_m / m_per_px_y)
+    if row + ry < 0 or row - ry >= ds.height or col + rx < 0 or col - rx >= ds.width:
         return None
-    found = _window_around(ds, lon, lat, GREEN_BUFFER_M)
-    if found is None:
-        return None
-    values = found[0]
+    window = Window(col - rx, row - ry, 2 * rx + 1, 2 * ry + 1)
+    with _READ_LOCK:
+        data = ds.read(1, window=window, boundless=True, fill_value=0)
+    yy, xx = np.mgrid[-ry : ry + 1, -rx : rx + 1]
+    inside = np.hypot(xx * m_per_px_x, yy * m_per_px_y) <= radius_m
+    out: NDArray[np.float64] = data.astype(np.float64)[inside]
+    return out
+
+
+def landcover_pixels(lon: float, lat: float, radius_m: float) -> NDArray[np.float64] | None:
+    """WorldCover classes of the pixels whose centre lies within radius_m of the point.
+
+    WorldCover comes in 3 x 3 degree tiles on one global grid. Near a tile edge the
+    circle reaches into the neighbouring tile, and its pixels are read there, so the
+    circle is never cut off. Tiles share the grid, so no pixel counts twice.
+    """
+    per_deg_lon, per_deg_lat = metres_per_degree(lat)
+    dlon, dlat = radius_m / per_deg_lon, radius_m / per_deg_lat
+    paths: list[Path] = []
+    for x, y in (
+        (lon, lat),
+        (lon - dlon, lat),
+        (lon + dlon, lat),
+        (lon, lat - dlat),
+        (lon, lat + dlat),
+        (lon - dlon, lat - dlat),
+        (lon + dlon, lat + dlat),
+        (lon - dlon, lat + dlat),
+        (lon + dlon, lat - dlat),
+    ):
+        path = _worldcover_path(x, y)
+        if path not in paths:
+            paths.append(path)
+    values: NDArray[np.float64] | None = None
+    for path in paths:
+        ds = _dataset(path)
+        if ds is None:
+            continue
+        part = _disk(ds, lon, lat, radius_m)
+        if part is None:
+            continue
+        values = (
+            part
+            if values is None or values.shape != part.shape
+            else np.where(values > 0, values, part)
+        )
+    return values
+
+
+def landcover_shares(values: NDArray[np.float64]) -> dict[str, float] | None:
+    """Shares (%) of the land cover classes over land (water and nodata left out),
+    and the share of water in the whole circle."""
     valid = values[values > 0]  # 0 is nodata
-    land = valid[~np.isin(valid, list(WORLDCOVER_WATER))]
+    if valid.size == 0:
+        return None
+    is_water = np.isin(valid, list(WORLDCOVER_WATER))
+    land = valid[~is_water]
     if land.size == 0:
         return None
+    out: dict[str, float] = {"water": 100.0 * float(is_water.sum()) / valid.size}
     total = float(land.size)
-    return {
-        "tree": 100.0 * float(np.isin(land, list(WORLDCOVER_TREE)).sum()) / total,
-        "green": 100.0 * float(np.isin(land, list(WORLDCOVER_GREEN)).sum()) / total,
-        "built": 100.0 * float(np.isin(land, list(WORLDCOVER_BUILT)).sum()) / total,
-    }
+    for code, name in WORLDCOVER_CLASSES.items():
+        if code not in WORLDCOVER_WATER:
+            out[name] = 100.0 * float((land == code).sum()) / total
+    out["green"] = sum(out[WORLDCOVER_CLASSES[c]] for c in WORLDCOVER_GREEN)
+    out["nature"] = sum(out[WORLDCOVER_CLASSES[c]] for c in WORLDCOVER_NATURE)
+    out["meadow"] = out["grass"] + out["shrub"] + out["wetland"] + out["moss"]
+    return out
 
 
-def green_category(lon: float, lat: float, nearest_park: Place | None) -> Category:
+def read_landcover(lon: float, lat: float) -> dict[str, float] | None:
+    """Land cover shares (%) within 300 m from WorldCover: tree, built, nature, crop, ..."""
+    values = landcover_pixels(lon, lat, GREEN_BUFFER_M)
+    return None if values is None else landcover_shares(values)
+
+
+def is_urban(cover: dict[str, float]) -> bool:
+    return cover["built"] > URBAN_BUILT_PCT
+
+
+def nature_parts(cover: dict[str, float]) -> str:
+    """'livade, polja i drveće': the kinds of nature around, largest first."""
+    parts = sorted(
+        ((cover["crop"], "polja"), (cover["meadow"], "livade"), (cover["tree"], "drveće")),
+        reverse=True,
+    )
+    names = [n for share, n in parts if share >= 5.0] or [parts[0][1]]
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " i " + names[-1]
+
+
+def green_status(cover: dict[str, float], park_distance_m: float | None) -> Status:
+    """Urban places: the 3-30-300 rule (trees and a park nearby). Elsewhere most land
+    around is unbuilt, and the status follows the share of nature."""
+    if is_urban(cover):
+        tree_ok = cover["tree"] >= TREE_COVER_TARGET_PCT
+        park_ok = park_distance_m is not None and park_distance_m <= PARK_DISTANCE_TARGET_M
+        if tree_ok and park_ok:
+            return "good"
+        return "warning" if tree_ok or park_ok else "bad"
+    return "good" if cover["nature"] >= 50.0 else "info"
+
+
+def share_text(x: float) -> str:
+    """Whole percent, but never "100 %" for a share that is not all: houses among the
+    trees are often not seen as built up, so "100 % nature" would read as "no houses"."""
+    return "99 %" if 99.0 <= x < 100.0 else f"{fmt.num(x)} %"
+
+
+def houses_text(n: int) -> str:
+    """'1 kućni broj', '3 kućna broja', '14 kućnih brojeva'."""
+    if n % 10 == 1 and n % 100 != 11:
+        word = "kućni broj"
+    elif n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14):
+        word = "kućna broja"
+    else:
+        word = "kućnih brojeva"
+    return f"{fmt.num(n)} {word}"
+
+
+def _share_value(cover: dict[str, float], key: str, title: str, note: str | None = None) -> Value:
+    src = "worldcover"
+    x = cover[key]
+    return Value(
+        key=f"{key}_share_300m",
+        label=title,
+        value=round(x, 1),
+        unit="%",
+        display=share_text(x),
+        source=src,
+        retrieved_at=retrieved_at(src),
+        kind="modelled",
+        note=note,
+    )
+
+
+def green_category(
+    lon: float, lat: float, nearest_park: Place | None, houses: int | None = None
+) -> Category:
     cover = read_landcover(lon, lat)
     src = "worldcover"
-    values: list[Value] = []
-    if cover is not None:
-        for key, title in (
-            ("tree", "Udio drveća u krugu od 300 m"),
-            ("green", "Udio zelenih površina u krugu od 300 m"),
-            ("built", "Udio izgrađenih površina u krugu od 300 m"),
-        ):
-            values.append(
-                Value(
-                    key=f"{key}_share_300m",
-                    label=title,
-                    value=round(cover[key], 1),
-                    unit="%",
-                    display=f"{fmt.num(cover[key])} %",
-                    source=src,
-                    retrieved_at=retrieved_at(src),
-                    kind="modelled",
-                    note="Udio kopna; more i druge vodene površine nisu uračunate."
-                    if key == "tree"
-                    else None,
-                )
-            )
-    park_ok: bool | None = None
-    if nearest_park is not None:
-        dist = nearest_park.distance_m
-        park_ok = dist is not None and dist <= PARK_DISTANCE_TARGET_M
-        if nearest_park.walk_minutes is not None:
-            display = fmt.walk(nearest_park.walk_minutes)
-            value: float | None = nearest_park.walk_minutes
-            unit = "min"
-        else:
-            display = f"{fmt.metres(dist)} zračne udaljenosti"
-            value, unit = dist, "m"
-        values.append(
-            Value(
-                key="nearest_park",
-                label="Najbliži park",
-                value=value,
-                unit=unit,
-                display=f"{display} ({nearest_park.name}), zračno {fmt.metres(dist)}",
-                source="osm",
-                retrieved_at=nearest_park.retrieved_at,
-                kind="modelled",
-            )
-        )
     if cover is None:
         return Category(
             id="green",
@@ -557,46 +682,145 @@ def green_category(lon: float, lat: float, nearest_park: Place | None) -> Catego
             status="no_data",
             status_label=label("no_data"),
             headline="Podaci o pokrovu tla za ovu lokaciju nisu dostupni.",
-            values=values,
+            values=[],
         )
-    tree_ok = cover["tree"] >= TREE_COVER_TARGET_PCT
-    status: Status
-    if tree_ok and park_ok:
-        status = "good"
-    elif tree_ok or park_ok:
-        status = "warning"
-    else:
-        status = "bad"
-    tree_txt = (
-        f"Drveće pokriva {fmt.num(cover['tree'])} % kopna u krugu od 300 m "
-        f"({'na razini ili iznad' if tree_ok else 'ispod'} preporučenih 30 %)"
+    urban = is_urban(cover)
+    values = [
+        _share_value(
+            cover,
+            "nature",
+            "Priroda u krugu od 300 m (drveće, grmlje, travnjaci, polja i močvare)",
+            "Udio kopna; more i druge vodene površine nisu uračunate.",
+        ),
+        _share_value(cover, "tree", "Drveće u krugu od 300 m"),
+        _share_value(cover, "meadow", "Travnjaci, livade i grmlje u krugu od 300 m"),
+        _share_value(cover, "crop", "Polja (oranice) u krugu od 300 m"),
+        _share_value(cover, "built", "Izgrađeno u krugu od 300 m"),
+    ]
+    if cover["water"] >= 1.0:
+        values.append(
+            _share_value(
+                cover,
+                "water",
+                "Voda u krugu od 300 m (more, rijeke, jezera)",
+                "Udio cijelog kruga; ne ulazi u udjele kopna.",
+            )
+        )
+    if houses is not None:
+        values.append(
+            Value(
+                key="houses_300m",
+                label="Kućni brojevi u krugu od 300 m",
+                value=houses,
+                display=houses_text(houses),
+                source="dgu_ad",
+                retrieved_at=retrieved_at("dgu_ad"),
+                kind="measured",
+                note="Iz registra adresa Državne geodetske uprave. Satelitska karta pojedinačne "
+                "kuće među vrtovima i drvećem često ne prepoznaje kao izgrađeno.",
+            )
+        )
+    values.append(
+        Value(
+            key="urban_area",
+            label="Gusto izgrađeno (gradsko) područje",
+            value=1.0 if urban else 0.0,
+            display="da" if urban else "ne",
+            source=src,
+            retrieved_at=retrieved_at(src),
+            kind="modelled",
+            note=f"Da, ako je izgrađeno više od {fmt.num(URBAN_BUILT_PCT)} % kopna u krugu "
+            "od 300 m; samo tada vrijedi pravilo 3-30-300 za drveće i park.",
+        )
     )
-    if park_ok is None:
-        park_txt = "park nije pronađen u OpenStreetMapu u blizini"
-    elif park_ok:
-        park_txt = "park je unutar 300 m"
+    park_distance: float | None = None
+    park_place: Place | None = None
+    park_txt = ""
+    if urban:
+        dist = nearest_park.distance_m if nearest_park is not None else None
+        if nearest_park is not None and dist is not None and dist <= PARK_SHOW_MAX_M:
+            park_distance, park_place = dist, nearest_park
+            if nearest_park.walk_minutes is not None:
+                walk_txt = fmt.walk(nearest_park.walk_minutes)
+                value: float | None = nearest_park.walk_minutes
+                unit = "min"
+                park_txt = f" Najbliži park je {walk_txt}."
+            else:
+                walk_txt = f"{fmt.metres(dist)} zračne udaljenosti"
+                value, unit = dist, "m"
+                park_txt = f" Najbliži park je {walk_txt}."
+            values.append(
+                Value(
+                    key="nearest_park",
+                    label="Najbliži park",
+                    value=value,
+                    unit=unit,
+                    display=f"{walk_txt} ({nearest_park.name}), zračno {fmt.metres(dist)}",
+                    source="osm",
+                    retrieved_at=nearest_park.retrieved_at,
+                    kind="modelled",
+                )
+            )
+        else:
+            park_txt = (
+                f" Do {fmt.metres(PARK_SHOW_MAX_M)} zračne udaljenosti nema parka u OpenStreetMapu."
+            )
+    status = green_status(cover, park_distance)
+    if urban:
+        lead = "Dosta hlada" if cover["tree"] >= TREE_COVER_TARGET_PCT else "Malo hlada"
+        headline = (
+            f"{lead}: drveće pokriva {fmt.num(cover['tree'])} % površine u krugu od 300 m "
+            f"(preporuka za gradove je najmanje {fmt.num(TREE_COVER_TARGET_PCT)} %)."
+            f"{park_txt}"
+        )
+    elif status == "good" and houses:
+        # Say that there are houses: the satellite map counts single village houses
+        # among gardens and trees as nature.
+        headline = (
+            f"Okruženo prirodom: oko kuća su {nature_parts(cover)} "
+            f"({share_text(cover['nature'])} površine u krugu od 300 m)."
+        )
+    elif status == "good":
+        headline = (
+            f"Okruženo prirodom: {nature_parts(cover)} čine {share_text(cover['nature'])} "
+            "površine u krugu od 300 m."
+        )
     else:
-        park_txt = "najbliži park udaljen je više od 300 m"
+        headline = (
+            f"Djelomično izgrađeno: priroda čini {fmt.num(cover['nature'])} % površine u "
+            f"krugu od 300 m, a izgrađeno {fmt.num(cover['built'])} %."
+        )
+    built = fmt.num(cover["built"])
+    if urban:
+        lead_note = (
+            f"Ovo je gusto izgrađeno područje (izgrađeno je {built} % kopna u krugu od "
+            "300 m), pa vrijedi pravilo 3-30-300 za gradove (Konijnendijk, 2023.): najmanje "
+            "30 % površine pod drvećem i park do 300 m. Drveće ljeti daje hlad i ublažava "
+            "vrućine; temperaturu ne mjerimo."
+        )
+    else:
+        lead_note = (
+            f"Ovo nije gusto izgrađeno područje (izgrađeno je {built} % kopna u krugu od "
+            "300 m), pa ne primjenjujemo pravilo 3-30-300 za gradove: polja, livade i drveće "
+            "oko kuće broje se kao priroda, a park ne tražimo."
+        )
     return Category(
         id="green",
         group="environment",
         title=GREEN_TITLE,
         status=status,
         status_label=label(status),
-        headline=f"{tree_txt}; {park_txt}.",
+        headline=headline,
         values=values,
-        places=[nearest_park] if nearest_park else [],
+        places=[park_place] if park_place else [],
         notes=[
-            "Drveće ljeti daje hlad i ublažava vrućine. Temperaturu ne mjerimo; usporedba se "
-            "temelji na pravilu 3-30-300 (najmanje 30 % krošnji u susjedstvu i javna zelena "
-            "površina do 300 m od kuće).",
-            "Udjeli su iz satelitske karte ESA WorldCover za 2021. u rezoluciji 10 m, za kopno "
-            "u krugu od 300 m od lokacije; more i druge vodene površine nisu uračunate. Drveće "
-            "su krošnje koje karta prepoznaje kao drveće; zelene površine uključuju i grmlje, "
-            "travnjake i močvare.",
-            "Karta u rezoluciji 10 m ne razlikuje pojedinačna stabla u dvorištima i uz ulice kad "
-            "je oko njih izgrađeno, pa je udio drveća u gusto izgrađenim središtima i selima s "
-            "vrtovima vjerojatno nešto veći.",
+            lead_note,
+            "Udjeli su iz satelitske karte ESA WorldCover za 2021. (10 m), za kopno u krugu "
+            "od 300 m; more i druge vodene površine nisu uračunate. Piksel je „drveće” kad "
+            "drveće pokriva barem 10 % njegove površine, pa udio drveća nije isto što i "
+            "gustoća krošnji. Karta ne vidi pojedinačna stabla u dvorištima i uz ulice kad je "
+            "oko njih izgrađeno, a pojedinačne kuće među vrtovima i drvećem često broji kao "
+            "prirodu; zato navodimo i broj kućnih brojeva iz registra adresa DGU-a.",
         ],
     )
 
@@ -743,7 +967,7 @@ def noise_category(lon: float, lat: float, layers: Layers) -> Category:
             "Pojasevi slijede pregled istraživanja Health Effects Institutea (2010.): "
             "onečišćenje od prometa najveće je unutar približno 300 do 500 m od velike "
             "prometnice, a dalje pada na pozadinsku razinu.",
-            "U Skoru za život veći broj znači manje prometa: 100 je dalje od 500 m od velike "
+            "U ocjeni mjesta više bodova znači manje prometa: 100 je dalje od 500 m od velike "
             "prometnice, 60 od 300 do 500 m, a 25 do 300 m.",
             "Strateške karte buke za veće gradove mogu se pogledati u pregledniku EEA-e. "
             "Svjetska zdravstvena organizacija preporučuje da buka cestovnog prometa bude "

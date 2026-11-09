@@ -24,12 +24,16 @@
       }
     },
     "green": {
-      "status": "bad",
+      "status": "good",
       "values": {
-        "tree_share_300m": 20.5,
-        "green_share_300m": 44.1,
-        "built_share_300m": 47.7,
-        "nearest_park": 104.1
+        "nature_share_300m": 52.1,
+        "tree_share_300m": 20.4,
+        "meadow_share_300m": 23.6,
+        "crop_share_300m": 8.1,
+        "built_share_300m": 47.8,
+        "water_share_300m": 8.3,
+        "houses_300m": 113,
+        "urban_area": 0.0
       }
     },
     "noise": {

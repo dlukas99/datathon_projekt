@@ -95,8 +95,8 @@ export function transitText(row: MapRow): string {
 export const LAYERS: MapLayer[] = [
   {
     id: 'score',
-    title: 'Skor za život',
-    explain: 'Prosjek podskorova kategorija s težinama odabranog profila (0–100).',
+    title: 'Ocjena mjesta',
+    explain: 'Sve kategorije zajedno, prema tome koliko su važne za odabrani profil (0–100).',
     classes: [
       { label: '0–19', step: 0 },
       { label: '20–39', step: 1 },

@@ -1,6 +1,7 @@
 import { ChevronDown, CircleCheck, CircleHelp, Info, OctagonAlert, TriangleAlert } from 'lucide-react'
 import type { Category, SourceInfo, Status, Value } from '../lib/api'
-import { formatDate, KIND_HELP, KIND_LABELS } from '../lib/format'
+import { formatDate } from '../lib/format'
+import { KindTag } from './KindTag'
 import { CategoryIcon } from './Icons'
 import { ScaleBar } from './ScaleBar'
 
@@ -33,16 +34,15 @@ export function SourceMeta({
 }: {
   source: string
   retrievedAt: string | null
-  kind: Value['kind']
+  /** Shown once per card (with the key number and in the details), not on every row. */
+  kind?: Value['kind']
   sources: SourceMap
 }) {
   const info = sources[source]
   const date = formatDate(retrievedAt ?? info?.retrieved_at)
   return (
     <span className="value-meta">
-      <span className="kind" title={KIND_HELP[kind]}>
-        {KIND_LABELS[kind]}
-      </span>
+      {kind && <KindTag kind={kind} />}
       <span>
         Izvor: {info ? info.title : source}
         {info?.data_date ? ` (${info.data_date})` : ''}
@@ -67,12 +67,7 @@ export function ValueItem({
       <span className="value-display">{value.display}</span>
       {value.note && <span className="value-note">{value.note}</span>}
       {showSource && (
-        <SourceMeta
-          source={value.source}
-          retrievedAt={value.retrieved_at}
-          kind={value.kind}
-          sources={sources}
-        />
+        <SourceMeta source={value.source} retrievedAt={value.retrieved_at} sources={sources} />
       )}
     </li>
   )
@@ -142,12 +137,20 @@ export function MoreDetails({
 }) {
   const shared =
     category.id === 'flood' ? (category.values[0] ?? null) : sharedSource(category.values)
+  const kinds = [...new Set(category.values.map((v) => v.kind))]
   return (
     <details className="more">
       <summary>
         Detalji i izvor <ChevronDown size={16} aria-hidden="true" className="chevron" />
       </summary>
       <div className="more-body">
+        {!shared && kinds.length > 0 && (
+          <p className="value-meta kinds">
+            {kinds.map((k) => (
+              <KindTag key={k} kind={k} />
+            ))}
+          </p>
+        )}
         {children}
         {SCALES_IN_DETAILS.has(category.id) &&
           category.scales?.map((s) => <ScaleBar key={s.key} scale={s} />)}
@@ -206,7 +209,12 @@ export function CategoryCard({
   focused?: boolean
 }) {
   const titleId = `cat-${category.id}`
-  const key = category.values.find((v) => v.key === KEY_VALUE[category.id])
+  const keyName =
+    category.id === 'green' &&
+    !category.values.some((v) => v.key === 'urban_area' && v.value === 1)
+      ? 'nature_share_300m'
+      : KEY_VALUE[category.id]
+  const key = category.values.find((v) => v.key === keyName)
   return (
     <article
       className={`card category${focused ? ' focused' : ''}`}
@@ -227,6 +235,7 @@ export function CategoryCard({
           <p className="key-value">
             <span className="key-number">{key.display}</span>
             <span className="key-label">{key.label}</span>
+            <KindTag kind={key.kind} />
           </p>
         )}
       </div>

@@ -4,6 +4,7 @@ import pytest
 
 from app.assistant import (
     AssistantLocation,
+    AssistantReply,
     AssistantRequest,
     _comparison,
     answer,
@@ -145,8 +146,8 @@ def _ask(question: str) -> tuple[str, int]:
 
 def test_unknown_question_says_so_and_lists_topics() -> None:
     text, built = _ask("Što mislite o ovome?")
-    assert text.startswith("Ovo pitanje ne razumijem.")
-    assert "poplave" in text and "Sažetak." not in text
+    assert text.startswith("To ne znam:")
+    assert "Kakav je zrak?" in text and "Sažetak." not in text
     assert built == 0
 
 
@@ -163,7 +164,7 @@ def test_general_question_gets_the_summary() -> None:
 
 def test_population_comes_from_the_report() -> None:
     text, _ = _ask("Koliko ima stanovnika?")
-    assert "naselje Split ima 149.830 stanovnika (Popis 2021.)" in text
+    assert "Naselje Split ima 149.830 stanovnika (Popis 2021.)" in text
 
 
 def test_different_questions_get_different_answers() -> None:
@@ -176,3 +177,93 @@ def test_different_questions_get_different_answers() -> None:
     ]
     answers = {_ask(q)[0] for q in questions}
     assert len(answers) == len(questions)
+
+
+def _value(
+    key: str, label: str, display: str, value: float | str, unit: str | None = None
+) -> Value:
+    return Value(
+        key=key,
+        label=label,
+        value=value,
+        unit=unit,
+        display=display,
+        source="hzzo_ljekarne",
+        retrieved_at="2026-11-02T20:18:51+00:00",
+        kind="modelled",
+    )
+
+
+def _one(cat: Category) -> Report:
+    return Report(
+        location=Location(lat=45.0, lon=16.0),
+        generated_at="2026-11-02T00:00:00+00:00",
+        summary=["Sažetak."],
+        categories=[cat],
+        sources=[],
+        disclaimer="",
+    )
+
+
+def _reply(question: str, cat: Category) -> AssistantReply:
+    request = AssistantRequest(question=question, locations=[AssistantLocation(lat=45.0, lon=16.0)])
+    return answer(request, lambda lat, lon, label: _one(cat))
+
+
+def test_answers_are_short_with_one_source_line_and_details_apart() -> None:
+    flood = Category(
+        id="flood",
+        group="environment",
+        title="Poplave",
+        status="good",
+        status_label="Dobro",
+        headline="Nije u području riječnih poplava.",
+        values=[
+            _value("flood_rp10_point", "U modeliranom poplavnom području, 10 godina", "ne", "ne"),
+            _value("flood_rp100_point", "U modeliranom poplavnom području, 100 godina", "ne", "ne"),
+        ],
+    )
+    reply = _reply("Je li ova kuća u poplavnom području?", flood)
+    assert reply.answer == (
+        "Ne. Nije u području riječnih poplava, čak ni za vrlo rijetke velike poplave."
+    )
+    assert "Za ovu adresu" not in reply.answer
+    assert "službena procjena" not in reply.answer  # the disclaimer is shown once in the UI
+    assert len(reply.sources) == 1  # one "Izvor" line, however many values
+    assert len(reply.facts) == 2  # every value stays in the details
+
+
+def test_nearest_place_is_one_plain_sentence() -> None:
+    daily = Category(
+        id="daily",
+        group="daily",
+        title="Svakodnevni život",
+        status="info",
+        status_label="Informacija",
+        headline="",
+        values=[
+            _value("nearest_pharmacy", "Ljekarna", "5 minuta hoda (Ljekarna Centar)", 5.2, "min"),
+            _value("count15_pharmacy", "Ljekarna: broj unutar 15 minuta hoda", "3", 3),
+        ],
+    )
+    reply = _reply("Koliko je daleko najbliža ljekarna?", daily)
+    assert reply.answer == "Najbliža ljekarna je 5 minuta pješice (Ljekarna Centar)."
+
+
+def test_living_without_a_car_answers_yes_mostly_or_no() -> None:
+    car_free = Category(
+        id="car_free",
+        group="daily",
+        title="Život bez auta",
+        status="info",
+        status_label="Informacija",
+        headline="",
+        values=[
+            _value("needs_within_15min", "Potrebe", "6 od 7", 6),
+            _value("needs_missing", "Nedostaje", "park", "park"),
+        ],
+    )
+    reply = _reply("Mogu li ovdje živjeti bez auta?", car_free)
+    assert reply.answer == (
+        "Uglavnom da: 6 od 7 svakodnevnih potreba je do 15 minuta pješice; nedostaje: park."
+    )
