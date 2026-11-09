@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from analysis.score import FREQUENT_DEPARTURES
 from analysis.status import label
 from analysis.walking import Reach
@@ -154,7 +156,30 @@ def _stops_phrase(n: int) -> str:
     return f"{verb} {n} {noun}"
 
 
-def transit_category(reach: Reach, has_timetables: bool) -> Category:
+# Names the lines that stop at the given stops (app/stop_lines.py), or None.
+LinesFor = Callable[[list[Place]], str | None]
+
+
+def _lines_value(lines: str) -> Value:
+    return Value(
+        key="lines_without_timetable",
+        label="Linije na stajalištima bez voznog reda (OpenStreetMap)",
+        value=lines,
+        display=lines,
+        source="osm",
+        retrieved_at=None,
+        kind="modelled",
+        note="Koje linije staju, prema OpenStreetMapu; koliko često voze, nije javno objavljeno.",
+    )
+
+
+def _lines_sentence(lines: str) -> str:
+    return f" Prema OpenStreetMapu ondje staju: {lines}; koliko često voze, nije javno objavljeno."
+
+
+def transit_category(
+    reach: Reach, has_timetables: bool, lines_for: LinesFor | None = None
+) -> Category:
     stops = reach.within("stop", TRANSIT_LIMIT_MIN)
     with_tt = [p for p in stops if _departures(p) >= 0]
     without_tt = len(stops) - len(with_tt)
@@ -228,6 +253,13 @@ def transit_category(reach: Reach, has_timetables: bool) -> Category:
             f"Unutar 10 minuta hoda {_stops_phrase(len(stops))}, "
             f"s najviše {departures(best)} na sat radnim danom."
         )
+    # Where the frequency is unknown, at least the lines stopping nearby are a fact.
+    unknown_frequency = without_tt and (best is None or best < FREQUENT_DEPARTURES)
+    if lines_for is not None and reach.router_ok and unknown_frequency:
+        lines = lines_for([p for p in stops if _departures(p) < 0])
+        if lines:
+            headline += _lines_sentence(lines)
+            values.append(_lines_value(lines))
     notes = []
     if stops and not with_tt:
         notes.append("Stajališta su iz OpenStreetMapa, bez voznog reda.")
@@ -251,7 +283,7 @@ def transit_category(reach: Reach, has_timetables: bool) -> Category:
     )
 
 
-def car_free_category(reach: Reach) -> Category:
+def car_free_category(reach: Reach, lines_for: LinesFor | None = None) -> Category:
     have: list[str] = []
     missing: list[str] = []
     unknown: list[str] = []
@@ -285,11 +317,16 @@ def car_free_category(reach: Reach) -> Category:
     headline = f"{n} od {total} svakodnevnih potreba dostupno je unutar 15 minuta hoda."
     if missing:
         headline += " Nedostaje: " + ", ".join(missing) + "."
+    lines = None
     if unknown:
         headline += (
             " Nije provjereno: " + ", ".join(unknown) + " (stajališta postoje, ali vozni red "
             "nije dostupan u otvorenom obliku)."
         )
+        if lines_for is not None:
+            lines = lines_for([p for p in stops if _departures(p) < 0])
+        if lines:
+            headline += _lines_sentence(lines)
     values = [
         Value(
             key="needs_within_15min",
@@ -323,6 +360,8 @@ def car_free_category(reach: Reach) -> Category:
                 kind="modelled",
             )
         )
+    if lines:
+        values.append(_lines_value(lines))
     return Category(
         id="car_free",
         group="car_free",
