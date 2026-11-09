@@ -24,33 +24,68 @@ const queryClient = new QueryClient({
   },
 })
 
-const THEME_KEY = 'prije-potpisa-tema'
+// Until 9. 11. 2026. a pick was kept for good in localStorage under this key and then
+// overrode the device; it is removed so the device setting applies again.
+const OLD_THEME_KEY = 'prije-potpisa-tema'
+// A pick with the moon button lasts for this tab only.
+const THEME_KEY = 'dobro-mjesto-tema'
+const DARK_QUERY = '(prefers-color-scheme: dark)'
 
-function initialTheme(): Theme {
-  try {
-    const saved = localStorage.getItem(THEME_KEY)
-    if (saved === 'light' || saved === 'dark') return saved
-  } catch {
-    // storage unavailable
-  }
-  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
+function deviceTheme(): Theme {
+  return typeof window.matchMedia === 'function' && window.matchMedia(DARK_QUERY).matches
     ? 'dark'
     : 'light'
 }
 
+function savedPick(): Theme | null {
+  try {
+    localStorage.removeItem(OLD_THEME_KEY)
+    const saved = sessionStorage.getItem(THEME_KEY)
+    return saved === 'light' || saved === 'dark' ? saved : null
+  } catch {
+    return null // storage unavailable
+  }
+}
+
+function storePick(pick: Theme | null) {
+  try {
+    if (pick) sessionStorage.setItem(THEME_KEY, pick)
+    else sessionStorage.removeItem(THEME_KEY)
+  } catch {
+    // storage unavailable
+  }
+}
+
+/**
+ * Light or dark follows the device (and changes with it while the page is open). The moon
+ * button overrides it for this tab only; switching back to the device's own theme, or a
+ * change of the device setting, returns to following the device.
+ */
 function useTheme(): [Theme, () => void] {
-  const [theme, setTheme] = useState<Theme>(initialTheme)
+  const [device, setDevice] = useState<Theme>(deviceTheme)
+  const [pick, setPick] = useState<Theme | null>(savedPick)
+  const theme = pick ?? device
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return
+    const query = window.matchMedia(DARK_QUERY)
+    const onChange = () => {
+      setDevice(query.matches ? 'dark' : 'light')
+      setPick(null)
+      storePick(null)
+    }
+    query.addEventListener('change', onChange)
+    return () => {
+      query.removeEventListener('change', onChange)
+    }
+  }, [])
   const toggle = () => {
     const next: Theme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
-    try {
-      localStorage.setItem(THEME_KEY, next)
-    } catch {
-      // storage unavailable
-    }
+    const override = next === device ? null : next
+    setPick(override)
+    storePick(override)
   }
   return [theme, toggle]
 }

@@ -467,3 +467,29 @@ test('no horizontal scrolling at 320 px', async ({ page }) => {
     expect(overflow, url).toBeLessThanOrEqual(0)
   }
 })
+
+test('light or dark follows the device, also when it changes, and the button only for this tab', async ({
+  page,
+}) => {
+  const html = page.locator('html')
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await page.goto('/')
+  await expect(html).toHaveAttribute('data-theme', 'dark')
+  // The device switches to light while the page is open.
+  await page.emulateMedia({ colorScheme: 'light' })
+  await expect(html).toHaveAttribute('data-theme', 'light')
+  // The button overrides it for this tab...
+  await page.getByRole('button', { name: 'Tamna tema' }).click()
+  await expect(html).toHaveAttribute('data-theme', 'dark')
+  await page.reload()
+  await expect(html).toHaveAttribute('data-theme', 'dark')
+  // ...until the device setting changes again.
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await page.emulateMedia({ colorScheme: 'light' })
+  await expect(html).toHaveAttribute('data-theme', 'light')
+  // A pick is never kept for good: a new tab follows the device.
+  const other = await page.context().newPage()
+  await other.emulateMedia({ colorScheme: 'light' })
+  await other.goto('/')
+  await expect(other.locator('html')).toHaveAttribute('data-theme', 'light')
+})
