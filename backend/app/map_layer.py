@@ -198,7 +198,7 @@ LAYER_SOURCES: dict[str, list[str]] = {
     "air": ["eea_pm25", "eea_no2"],
     "flood": ["jrc_flood"],
     "needs": ["osm", "mzom_vrtici", "mzom_skole", "hzzo_doctor", "hzzo_ljekarne"],
-    "transit": ["gtfs_zet", "gtfs_hzpp", "autotrolej", "osm"],
+    "transit": ["gtfs_zet", "gtfs_hzpp", "gtfs_sibenik", "autotrolej", "osm"],
 }
 SOURCE_SHORT: dict[str, str] = {
     "eea_pm25": "EEA, karta PM2,5 za 2024.",
@@ -208,6 +208,7 @@ SOURCE_SHORT: dict[str, str] = {
     "osm": "OpenStreetMap",
     "gtfs_zet": "ZET, vozni red",
     "gtfs_hzpp": "HŽPP, vozni red",
+    "gtfs_sibenik": "Gradski parking Šibenik, vozni red",
     "autotrolej": "Autotrolej, vozni red",
     "dzs_popis": "DZS, Popis 2021.",
     "mzom_vrtici": "Registar dječjih vrtića",

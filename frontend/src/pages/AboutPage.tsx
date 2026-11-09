@@ -132,7 +132,7 @@ export function AboutPage() {
                 <th scope="row">Javni prijevoz</th>
                 <td>
                   Stajališta unutar 10 minuta hoda; prosječan broj polazaka na sat od 6 do 20 sati
-                  radnim danom iz voznih redova ZET-a, HŽPP-a i Autotroleja.
+                  radnim danom iz voznih redova ZET-a, HŽPP-a, Gradskog parkinga Šibenik i Autotroleja.
                 </td>
                 <td>Informacija. Drugdje stajališta iz OpenStreetMapa „bez voznog reda”.</td>
               </tr>

@@ -31,7 +31,7 @@ DISCLAIMER = (
     "metodologiji."
 )
 
-TIMETABLE_SOURCES = ("gtfs_zet", "gtfs_hzpp", "autotrolej")
+TIMETABLE_SOURCES = ("gtfs_zet", "gtfs_hzpp", "gtfs_sibenik", "autotrolej")
 
 
 class OutsideCroatia(ValueError):

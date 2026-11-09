@@ -9,7 +9,7 @@ flowchart LR
     REG[MZOM, HZZO, Grad Zagreb<br/>CSV, XLSX, GeoJSON]
     RAS[JRC, EEA, ESA WorldCover<br/>GeoTIFF]
     OSM[OpenStreetMap<br/>Geofabrik PBF]
-    TT[ZET, HŽPP GTFS<br/>Autotrolej JSON]
+    TT[ZET, HŽPP, Šibenik GTFS<br/>Autotrolej JSON]
     CK[Portal otvorenih podataka<br/>CKAN API]
     EU[DZS, EFFIS WFS,<br/>EEA mjerne postaje]
   end

@@ -225,7 +225,7 @@ Valhalla na pojedinim mjestima mreže dodaje vrijeme hoda, pa je duljina puta po
   - Radni dan je prva srijeda od dana obrade za koju postoji promet (`calendar.txt` i `calendar_dates.txt`).
 - Prikazuje se najveći broj polazaka na sat od svih stajališta unutar 10 minuta hoda.
 - **Stajališta s voznim redom i bez njega zajedno** (npr. željeznička postaja HŽPP-a među gradskim autobusnim i tramvajskim stajalištima u Osijeku, Bjelovaru ili Šibeniku): najveći broj polazaka odnosi se samo na stajališta s voznim redom i to piše u kartici. Za stajališta bez voznog reda broj polazaka nije poznat, pa potreba „stajalište s barem jednim polaskom na sat” tada nije „nedostaje”, nego „nije provjereno”, osim ako neko stajalište s voznim redom ima barem jedan polazak na sat. Polasci se broje samo od 6 do 20 sati jednog radnog dana, pa noćna stanka u prometu ne utječe na rezultat.
-- **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
+- **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS), Gradski parking Šibenik (GTFS, gradske i prigradske linije) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
 
 ## Skor za život
 

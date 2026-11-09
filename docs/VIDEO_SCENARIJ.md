@@ -24,7 +24,7 @@
 | 1:50–2:05 | „Pogledaj oglase”, zatim usporedba Vinkovci i Nijemci | „Za odabrano mjesto otvaram pretragu oglasa; mi samo slažemo poveznicu. Dvije lokacije usporedim jednu uz drugu.” |
 | 2:05–2:15 | Karta: sloj „Kvaliteta zraka”, klik na Vinkovce, kartica naselja | „Na karti vidim cijelu Hrvatsku, naselje po naselje: zrak, poplave, usluge ili prijevoz. Klik daje kratak pregled i put do punog izvještaja.” |
 | 2:15–2:28 | asistent: „Gdje je bliže do vrtića?” | „Asistent odgovara samo iz izračuna i ne daje savjete o kupnji.” |
-| 2:28–2:40 | stranica „Izvori”, metodologija (provjera zraka) | „Koristimo 33 otvorena skupa podataka: Portal otvorenih podataka, DGU, DZS, ministarstva, HZZO, gradove, prijevoznike, JRC, EEA, ESA, Copernicus i OpenStreetMap. Kartu zraka provjerili smo uz službene postaje.” |
+| 2:28–2:40 | stranica „Izvori”, metodologija (provjera zraka) | „Koristimo 34 otvorena skupa podataka: Portal otvorenih podataka, DGU, DZS, ministarstva, HZZO, gradove, prijevoznike, JRC, EEA, ESA, Copernicus i OpenStreetMap. Kartu zraka provjerili smo uz službene postaje.” |
 | 2:40–2:55 | dijagram arhitekture iz `docs/ARHITEKTURA.md`, `/api/docs`, zatim naslovnica | „Ispod su FastAPI, Valhalla i Docker Compose, uz otvoreni REST API i kod pod licencom EUPL. Dalje: buka i internet čim postanu otvoreni, vozni redovi ostalih gradova i ugradnja u gradske portale.” |
 
 **Napomene za snimanje:**

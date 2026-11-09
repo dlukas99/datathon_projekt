@@ -120,7 +120,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 
 ## Izvori otvorenih podataka
 
-Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 33 skupa podataka (DGU 2, DZS 1, MZOM 4, Grad Zagreb 3, ostali gradovi i općine 10, HZZO 3, JRC 1, EEA 3, ESA 1, EFFIS 1, ZET 1, HŽPP 1, Autotrolej 1, OpenStreetMap 1) i PVGIS API; popis svih s izdavačem, poveznicom, licencom i datumom je u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md#svi-skupovi-podataka). Oglasnici nisu izvori podataka, nego samo vanjske poveznice.
+Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi se u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md). Ukupno se koristi 34 skupa podataka (DGU 2, DZS 1, MZOM 4, Grad Zagreb 3, ostali gradovi i općine 10, HZZO 3, JRC 1, EEA 3, ESA 1, EFFIS 1, ZET 1, HŽPP 1, Autotrolej 1, Gradski parking Šibenik 1, OpenStreetMap 1) i PVGIS API; popis svih s izdavačem, poveznicom, licencom i datumom je u [docs/IZVORI_PODATAKA.md](docs/IZVORI_PODATAKA.md#svi-skupovi-podataka). Oglasnici nisu izvori podataka, nego samo vanjske poveznice.
 
 | Izvor | Podaci | Primjena |
 |---|---|---|
@@ -138,7 +138,7 @@ Potpun popis s poveznicama, licencama, datumima i statusom svakog izvora nalazi 
 | EEA (direktiva o buci okoliša) | strateške karte buke | samo poveznica (licenca nije otvorena) |
 | JRC PVGIS | sunčev potencijal (API) | sunce na krovu |
 | Copernicus EFFIS | opožarene površine (WFS) | požari raslinja |
-| ZET, HŽPP (GTFS), Autotrolej (JSON, data.gov.hr) | vozni redovi | polasci na sat |
+| ZET, HŽPP, Gradski parking Šibenik (GTFS), Autotrolej (JSON, data.gov.hr) | vozni redovi | polasci na sat |
 | OpenStreetMap | mreža ulica, trgovine, igrališta, parkovi, stajališta, prometnice, reciklaža, središta naselja, bolnice, studentski domovi i menze | mreža hoda, svakodnevne potrebe, udaljenost od prometnica, središte naselja; bolnica za profil Umirovljenik, dom i menza kao činjenica za Studenta |
 | Općine i gradovi (data.gov.hr) | reciklažna dvorišta i zeleni otoci (11 skupova s koordinatama) | reciklaža |
 | Portal otvorenih podataka | CKAN API | pretraga skupova i datumi osvježavanja uživo |
@@ -250,7 +250,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 
 | Kriterij | Kako ga rješenje ispunjava |
 |---|---|
-| Upotreba otvorenih podataka | 33 skupa podataka i PVGIS API ([popis](docs/IZVORI_PODATAKA.md#svi-skupovi-podataka)); izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
+| Upotreba otvorenih podataka | 34 skupa podataka i PVGIS API ([popis](docs/IZVORI_PODATAKA.md#svi-skupovi-podataka)); izvori se preuzimaju automatski (CKAN Portala, ATOM DGU-a, PVGIS, GTFS) i pripremaju jednom naredbom, uz zapis licence i datuma; prednost imaju skupovi s data.gov.hr |
 | Povezivanje javno dostupnih podataka | adresa se povezuje s upravnim jedinicama, popisom stanovništva, rasterskim okolišnim slojevima, mrežom ulica, registrima ustanova (geokodiranim nad adresama DGU-a) i voznim redovima |
 | Relevantnost rješenja | poplave, kvaliteta zraka, promet, zelenilo i hlad, požari raslinja, okolišno prihvatljiv prijevoz, reciklaža i sunčeva energija, sve teme izazova B |
 | Utjecaj i korist za zajednicu | okolišni rizici i ovisnost o autu vidljivi su prije najveće financijske odluke, a ne nakon useljenja; nalazi o kvaliteti podataka vraćaju se izdavačima |
@@ -278,7 +278,7 @@ Cijeli popis vodi se u [docs/KVALITETA_PODATAKA.md](docs/KVALITETA_PODATAKA.md).
 - Karta Hrvatske boji svih 6.759 naselja prema vrijednosti u središtu naselja, a ne za svaku kuću u njemu; za konkretnu adresu kartica nudi puni izvještaj.
 - Skor za život koristi i naše normalizacije (sunce, prijevoz, požari) koje nisu službeni pragovi; opisane su u metodologiji.
 - Poveznice na oglasnike slažu se prema formatima ručno provjerenima u pregledniku (`config/listings.json`). Njuškalo blokira automatske provjere, pa kategorije najma na Njuškalu nisu provjerene. Index Oglasi traži UUID mjesta, a on je zasad upisan za manji dio mjesta (`config/listing_locations.json`); za ostala poveznica na Index traži ručni odabir mjesta ili otvara županiju.
-- Vozni redovi u otvorenom obliku postoje za ZET, HŽPP i Autotrolej. Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
+- Vozni redovi u otvorenom obliku postoje za ZET, HŽPP, Autotrolej i gradske linije u Šibeniku (Gradski parking). Drugdje, npr. u Splitu i Osijeku, prikazuju se samo stajališta, a potreba „stajalište s polascima” označava se kao „nije provjereno”. Vozni red HŽPP-a vrijedi do 13. 12. 2026.
 - Registri bez koordinata geokodirani su s 86–95 % uspjeha. Neuspjeli zapisi se ne prikazuju, a za vrtiće, škole i ljekarne dopunjuju se OpenStreetMapom.
 - HZZO-ovi popisi i vozni red HŽPP-a nemaju navedenu licencu; koriste se uz obrazloženje u [docs/ODLUKE.md](docs/ODLUKE.md).
 - Požari: EFFIS bilježi uglavnom požare od otprilike 30 ha naviše (od 2018. i neke manje); manji požari nisu vidljivi.
