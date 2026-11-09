@@ -48,6 +48,7 @@ const GROUP_OF: Record<string, SourceGroupId> = {
   autotrolej: 'transport',
   settlement_profiles: 'derived',
   settlement_traffic: 'derived',
+  settlement_landcover: 'derived',
 }
 
 /** Services and software (PVGIS, Valhalla) are listed apart: they are not datasets. */

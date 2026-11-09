@@ -58,13 +58,19 @@ const METHODS: Method[] = [
   },
   {
     id: 'green',
-    name: 'Zelenilo i hlad',
-    how: 'Udio drveća, zelenih i izgrađenih površina u krugu od 300 m iz satelitske karte ESA WorldCover 2021. (10 m) i najbliži park iz OpenStreetMapa.',
+    name: 'Priroda i hlad',
+    how: 'Udio prirode (drveće, grmlje, travnjaci, polja i močvare), drveća i izgrađenog u krugu od 300 m iz satelitske karte ESA WorldCover 2021. (10 m); u gradu i najbliži park iz OpenStreetMapa.',
     threshold:
-      'Pravilo 3-30-300 (Konijnendijk, 2023.): najmanje 30 % krošnji i javna zelena površina do 300 m. Dobro ako vrijede oba uvjeta, upozorenje ako vrijedi jedan, loše ako nijedan.',
+      'U gusto izgrađenom području (izgrađeno više od pola kopna u krugu od 300 m) vrijedi pravilo 3-30-300 za gradove (Konijnendijk, 2023.): najmanje 30 % površine pod drvećem i park do 300 m; drugdje je dobro kad je barem pola površine priroda.',
     more: (
       <>
-        More se ne broji u udio površina. Temperaturu ne mjerimo: drveće je pokazatelj hlada.
+        Pravilo 3-30-300 namijenjeno je gradovima, pa selo okruženo poljima ne ocjenjujemo po
+        njemu: oranice i livade oko kuće broje se kao priroda, a park ne tražimo. Prag od pola
+        izgrađenog kopna naša je pretpostavka. Piksel karte je „drveće” kad drveće pokriva barem
+        10 % njegove površine, pa udio drveća nije gustoća krošnji, a pojedinačna stabla uz
+        ulice karta često ne vidi. Za naselja na karti i u prijedlozima uzimamo medijan svih
+        adresa naselja (najviše 100 po naselju). More se ne broji u udio, a temperaturu ne
+        mjerimo.
       </>
     ),
   },

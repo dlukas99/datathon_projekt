@@ -206,7 +206,12 @@ export function CategoryCard({
   focused?: boolean
 }) {
   const titleId = `cat-${category.id}`
-  const key = category.values.find((v) => v.key === KEY_VALUE[category.id])
+  const keyName =
+    category.id === 'green' &&
+    !category.values.some((v) => v.key === 'urban_area' && v.value === 1)
+      ? 'nature_share_300m'
+      : KEY_VALUE[category.id]
+  const key = category.values.find((v) => v.key === keyName)
   return (
     <article
       className={`card category${focused ? ' focused' : ''}`}

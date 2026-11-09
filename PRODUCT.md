@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svakodnevnog života, isključivo iz otvorenih podataka. Okolišni pregled obuhvaća poplave, zrak, zelenilo i hlad, udaljenost od prometnica, požare raslinja i sunce na krovu. Svakodnevni život obuhvaća život bez auta (izokrone hoda, javni prijevoz) i svakodnevne potrebe (vrtić, škola, liječnik, ljekarna, trgovina, park).
+Za bilo koju adresu u Hrvatskoj aplikacija daje okolišni pregled i pregled svakodnevnog života, isključivo iz otvorenih podataka. Okolišni pregled obuhvaća poplave, zrak, prirodu i hlad, udaljenost od prometnica, požare raslinja i sunce na krovu. Svakodnevni život obuhvaća život bez auta (izokrone hoda, javni prijevoz) i svakodnevne potrebe (vrtić, škola, liječnik, ljekarna, trgovina, park).
 
 Ti podaci postoje, ali su rasuti po institucijama i formatima i običnom čovjeku nisu ni razumljivi ni usporedivi. Ljudi okolišne rizike i ovisnost o autu najčešće otkriju tek kad usele.
 

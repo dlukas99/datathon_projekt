@@ -175,7 +175,12 @@ class MapRow(BaseModel):
     air: str | None
     pm25: float | None
     flood: str | None
+    # Medians over the addresses of the settlement (ingest/settlement_landcover.py):
+    # tree cover and nature within 300 m (%), and the share of addresses in densely
+    # built-up (urban) areas, 0-1.
     tree: float | None
+    nature: float | None
+    urban: float | None
     needs: int | None
     departures: float | None
     stops: bool
@@ -250,6 +255,8 @@ def table() -> MapTable:
                 if rec.get("flood_status") in ("good", "warning", "bad")
                 else None,
                 tree=_num(rec.get("tree_share")),
+                nature=_num(rec.get("nature_med")),
+                urban=_num(rec.get("urban_share")),
                 needs=None if needs is None or not router_ok else int(needs),
                 departures=_num(rec.get("max_departures")) if router_ok else None,
                 stops=bool(rec.get("has_stops")) and router_ok,
@@ -290,6 +297,8 @@ class MapColumns(BaseModel):
     pm25: list[float | None]
     flood: list[str | None]
     tree: list[float | None]
+    nature: list[float | None]
+    urban: list[float | None]
     needs: list[int | None]
     departures: list[float | None]
     stops: list[bool]
@@ -313,6 +322,8 @@ def columns() -> MapColumns:
         pm25=[r.pm25 for r in rows],
         flood=[r.flood for r in rows],
         tree=[r.tree for r in rows],
+        nature=[r.nature for r in rows],
+        urban=[r.urban for r in rows],
         needs=[r.needs for r in rows],
         departures=[r.departures for r in rows],
         stops=[r.stops for r in rows],

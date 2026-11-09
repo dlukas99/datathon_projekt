@@ -19,7 +19,7 @@ Namjere:
 |---|---|
 | `report` | činjenice iz izvještaja za tražene kategorije, a na pitanje o broju stanovnika broj stanovnika naselja (Popis 2021.) |
 | `overview` | opće pitanje („Kakvo je ovo mjesto?”, „ukratko”, „okolina”): sažetak izvještaja i prijedlog konkretnijeg pitanja |
-| `no_data` | tema za koju nemamo podatke (bolnica, sigurnost i kriminal, potres, internet, parkiranje, srednja škola, temperatura): rečenica da podataka nema i, gdje postoji, srodna kategorija (osnovna škola, zelenilo i hlad) |
+| `no_data` | tema za koju nemamo podatke (bolnica, sigurnost i kriminal, potres, internet, parkiranje, srednja škola, temperatura): rečenica da podataka nema i, gdje postoji, srodna kategorija (osnovna škola, priroda i hlad) |
 | `unknown` | pitanje bez prepoznate teme: „Ovo pitanje ne razumijem” i popis tema o kojima asistent može odgovoriti; nikad sažetak koji izgleda kao odgovor |
 | `explain` | objašnjenje pojma (povratno razdoblje, PM2,5, pravilo 3-30-300 …) |
 | `purchase_advice` | odbija savjet o kupnji i nudi činjenice |
@@ -37,8 +37,8 @@ Pitanja su automatski provjerena u `backend/tests/test_assistant.py` (pravila, b
 | 2 | Može li se ovdje izliti rijeka? | report | poplave | isto kao 1 |
 | 3 | Kakav je zrak na ovoj adresi? | report | zrak | PM2,5 i NO2 (µg/m³, 2024.) uz usporedbu sa smjernicom WHO-a i graničnom vrijednošću EU-a za 2030. |
 | 4 | Ima li puno prašine i smoga? | report | zrak | isto kao 3 |
-| 5 | Ima li dovoljno drveća i hlada ljeti? | report | zelenilo i hlad | udio drveća, zelenih i izgrađenih površina u krugu od 300 m; najbliži park |
-| 6 | Koliko je daleko najbliži park? | report | zelenilo i hlad | najbliži park u minutama hoda i zračna udaljenost |
+| 5 | Ima li dovoljno drveća i hlada ljeti? | report | priroda i hlad | udio prirode, drveća i izgrađenog u krugu od 300 m; u gradu najbliži park |
+| 6 | Koliko je daleko najbliži park? | report | priroda i hlad | u gradu najbliži park u minutama hoda i zračna udaljenost (izvan grada park se ne traži) |
 | 7 | Je li bučno zbog prometa? | report | udaljenost od prometnica | udaljenost od najbliže autoceste, brze ili državne ceste ili glavne gradske ulice (s oznakom, npr. D8) i pruge, označena kao procjena |
 | 8 | Isplate li se solarni paneli na krovu? | report | sunce | kWh po kWp godišnje i optimalni nagib iz PVGIS-a (bez savjeta o isplativosti) |
 | 9 | Mogu li ovdje živjeti bez auta? | report | život bez auta | „X od 7” potreba unutar 15 minuta hoda i popis onoga što nedostaje ili nije provjereno |

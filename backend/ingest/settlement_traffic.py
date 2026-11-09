@@ -6,11 +6,14 @@ of almost every village lies on the road through it. So for the map and "PredloÅ
 mjesto" every DGU address in the settlement gets the same band as an address report
 (analysis/environment.py: up to 300 m, 300â€“500 m, beyond 500 m from a motorway,
 expressway, state road or main city street), and the settlement gets the shares of its
-addresses in each band and the mean of their sub-scores. Settlements without addresses
-keep the value at their centre.
+addresses in each band, the median distance with its interquartile range (25th to 75th
+percentile) and the median of their sub-scores: the value of a typical address, which a
+few houses on the main road cannot pull down as they would a mean. Settlements without
+addresses keep the value at their centre.
 
 Output: data/processed/settlement_traffic.parquet
-  code, addresses, near_share, edge_share, far_share, score_noise
+  code, addresses, near_share, edge_share, far_share, dist_p25, dist_med, dist_p75,
+  score_noise
 """
 
 from __future__ import annotations
@@ -31,11 +34,14 @@ from ingest.common import processed_dir, record_source
 
 NEAR_M = float(TRAFFIC_BANDS[0][0] or 300.0)
 EDGE_M = float(TRAFFIC_BANDS[1][0] or 500.0)
+# Distances are measured up to this cap, so the median and quartiles are real distances
+# for nearly every settlement; "more than 5 km" is enough beyond it.
+DIST_CAP_M = 5000.0
 
 
 def address_distances(lon: np.ndarray, lat: np.ndarray) -> np.ndarray:
     """Straight-line distance in metres from each point to the nearest major road
-    (capped at EDGE_M + 1: only the band matters beyond 500 m)."""
+    (capped at DIST_CAP_M)."""
     lines = load_lines(processed_dir() / "osm_noise_lines.parquet")
     if lines is None:
         raise RuntimeError("Nema osm_noise_lines.parquet: pokrenite `make data` (OSM).")
@@ -47,7 +53,7 @@ def address_distances(lon: np.ndarray, lat: np.ndarray) -> np.ndarray:
     tree = STRtree(roads)
     x, y = to_htrs_arrays(lon.astype(np.float64), lat.astype(np.float64))
     pts = points(x, y)
-    cap = EDGE_M + 1.0
+    cap = DIST_CAP_M
     dist = np.full(len(pts), cap)
     idx, d = tree.query_nearest(pts, max_distance=cap, return_distance=True, all_matches=False)
     # query_nearest returns (input index, tree index) pairs; keep the shortest per point.
@@ -82,17 +88,22 @@ def run() -> None:
             "edge": edge,
             "far": far,
             "points": points_by_band,
+            "dist": dist,
             "real": addresses["real"].to_numpy(),
         }
     )
     grouped = frame.groupby("code")
+    quart = grouped["dist"].quantile(np.array([0.25, 0.5, 0.75])).unstack()
     table = pd.DataFrame(
         {
             "addresses": grouped["real"].sum(),
             "near_share": grouped["near"].mean(),
             "edge_share": grouped["edge"].mean(),
             "far_share": grouped["far"].mean(),
-            "score_noise": grouped["points"].mean().round(),
+            "dist_p25": quart[0.25].round(),
+            "dist_med": quart[0.5].round(),
+            "dist_p75": quart[0.75].round(),
+            "score_noise": grouped["points"].median().round(),
         }
     ).reset_index()
     pq.write_table(

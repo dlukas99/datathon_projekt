@@ -26,9 +26,12 @@
     "green": {
       "status": "warning",
       "values": {
+        "nature_share_300m": 33.3,
         "tree_share_300m": 18.0,
-        "green_share_300m": 33.3,
+        "meadow_share_300m": 15.3,
+        "crop_share_300m": 0.0,
         "built_share_300m": 66.1,
+        "urban_area": 1.0,
         "nearest_park": 0.4
       }
     },

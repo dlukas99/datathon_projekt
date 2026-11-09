@@ -47,7 +47,11 @@ export function boardTags(report: Report): BoardTag[] {
   }
   add('flood', 'Poplave', (c) => c.status_label.toLowerCase())
   add('air', 'Zrak', (c) => c.status_label.toLowerCase())
-  add('green', 'Drveće', (c) => display(c, 'tree_share_300m'))
+  // In a densely built-up area the tree cover counts (3-30-300); elsewhere the nature around.
+  const green = byId.green
+  const urban = green?.values.some((v) => v.key === 'urban_area' && v.value === 1) ?? false
+  if (urban) add('green', 'Drveće', (c) => display(c, 'tree_share_300m'))
+  else add('green', 'Priroda', (c) => display(c, 'nature_share_300m'))
   add('noise', 'Prometnica', (c) => display(c, 'distance_road')?.split(' (')[0] ?? null)
   add('car_free', 'Pješice', (c) => {
     const n = display(c, 'needs_within_15min')

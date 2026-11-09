@@ -117,68 +117,68 @@ function AirInstrument({ c }: { c: Category }) {
   )
 }
 
-/* Zelenilo: the 300 m circle as a hundred dots of land, coloured by land cover. */
+/* Priroda i hlad: one bar of land cover within 300 m. In a densely built-up (urban) area
+   the reading is the tree cover against the 3-30-300 rule; elsewhere the share of nature
+   (fields, meadows and trees), so a village among fields is not judged by a city rule. */
 
-const DOTS: { x: number; y: number }[] = (() => {
-  const out: { x: number; y: number }[] = []
-  for (let y = -6; y <= 6; y++)
-    for (let x = -6; x <= 6; x++) if (x * x + y * y <= 5.65 * 5.65 && (x || y)) out.push({ x, y })
-  // A fixed shuffle so cover looks like patches on the ground, not stripes.
-  let seed = 7
-  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
-  return out
-    .map((d) => ({ d, k: rnd() + Math.hypot(d.x - 2, d.y + 1) * 0.05 }))
-    .sort((a, b) => a.k - b.k)
-    .map(({ d }) => d)
-})()
+const COVER = [
+  { key: 'tree_share_300m', cls: 'cv-tree', label: 'Drveće' },
+  { key: 'meadow_share_300m', cls: 'cv-meadow', label: 'Livade i grmlje' },
+  { key: 'crop_share_300m', cls: 'cv-crop', label: 'Polja' },
+  { key: 'built_share_300m', cls: 'cv-built', label: 'Izgrađeno' },
+] as const
 
 function GreenInstrument({ c }: { c: Category }) {
   const tree = numberOf(c, 'tree_share_300m')
-  const green = numberOf(c, 'green_share_300m')
-  const built = numberOf(c, 'built_share_300m')
+  const nature = numberOf(c, 'nature_share_300m')
+  if (tree === null || nature === null)
+    return <Readout big="Nema podataka" label="za pokrov tla u krugu od 300 m" />
+  const urban = numberOf(c, 'urban_area') === 1
   const park = valueOf(c, 'nearest_park')
-  if (tree === null) return <Readout big="Nema podataka" label="za pokrov tla u krugu od 300 m" />
   // The backend's display, so the card shows the same whole percent as the header chip.
   const shown = (key: string) => valueOf(c, key)?.display.replace(/\s*%$/, '') ?? ''
-  const n = DOTS.length
-  const nTree = Math.round((tree / 100) * n)
-  const nGreen = green === null ? nTree : Math.max(nTree, Math.round((green / 100) * n))
-  const nBuilt = built === null ? 0 : Math.min(n - nGreen, Math.round((built / 100) * n))
-  const kind = (i: number) =>
-    i < nTree ? 'tree' : i < nGreen ? 'grass' : i < nGreen + nBuilt ? 'built' : 'other'
+  const parts = COVER.map((p) => ({ ...p, share: numberOf(c, p.key) ?? 0 }))
+  const rest = Math.max(0, 100 - parts.reduce((s, p) => s + p.share, 0))
   return (
     <>
-      <Readout
-        big={shown('tree_share_300m')}
-        unit="%"
-        label="drveća u krugu od 300 m"
-        extra={
-          <ul className="readout-facts">
-            <li>preporuka: najmanje 30 % (pravilo 3-30-300)</li>
-            {park && <li>najbliži park: {park.display}</li>}
-          </ul>
-        }
-      />
-      <div className="green-gauge">
-        <svg viewBox="-7 -7 14 14" className="gauge-svg dots" aria-hidden="true" focusable="false">
-          <circle className="dots-edge" r="6.4" />
-          {DOTS.map((d, i) => (
-            <circle
-              key={`${String(d.x)},${String(d.y)}`}
-              className={`dot d-${kind(i)}`}
-              cx={d.x}
-              cy={d.y}
-              r="0.36"
-              style={{ '--i': i } as CSSProperties}
-            />
+      {urban ? (
+        <Readout
+          big={shown('tree_share_300m')}
+          unit="%"
+          label="površine u krugu od 300 m pod drvećem"
+          extra={
+            <ul className="readout-facts">
+              <li>gusto izgrađeno područje: preporuka je najmanje 30 % (pravilo 3-30-300)</li>
+              <li>{park ? `najbliži park: ${park.display}` : 'nema parka do 2 km u OpenStreetMapu'}</li>
+            </ul>
+          }
+        />
+      ) : (
+        <Readout
+          big={shown('nature_share_300m')}
+          unit="%"
+          label="površine u krugu od 300 m je priroda: polja, livade i drveće"
+        />
+      )}
+      <div className="cover">
+        <div className="cover-bar" aria-hidden="true">
+          {parts.map((p) => (
+            <span key={p.key} className={p.cls} style={{ '--w': `${String(p.share)}%` } as CSSProperties} />
           ))}
-          <circle className="dots-home" r="0.5" />
-        </svg>
-        <ul className="dots-legend">
-          <li className="lg-tree">Drveće {shown('tree_share_300m')} %</li>
-          {green !== null && <li className="lg-grass">Sve zelene površine {shown('green_share_300m')} %</li>}
-          {built !== null && <li className="lg-built">Izgrađeno {shown('built_share_300m')} %</li>}
-          <li className="lg-other">Ostalo (oranice, golo tlo)</li>
+        </div>
+        <ul className="cover-legend">
+          {parts
+            .filter((p) => p.share >= 0.5)
+            .map((p) => (
+              <li key={p.key} className={p.cls}>
+                {p.label} {shown(p.key)} %
+              </li>
+            ))}
+          {rest >= 1 && (
+            <li className="cv-other">
+              Golo tlo i stijene {Math.round(rest).toLocaleString('hr-HR')} %
+            </li>
+          )}
         </ul>
       </div>
     </>
