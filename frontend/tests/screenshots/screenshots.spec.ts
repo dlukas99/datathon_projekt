@@ -124,8 +124,8 @@ test('assistant', async ({ page }) => {
 
 test('sources', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 })
-  await page.goto('/izvori')
-  await expect(page.getByText('Svi izvori')).toBeVisible()
+  await page.goto('/o-alatu#izvori')
+  await expect(page.getByRole('heading', { name: 'Adrese i granice' })).toBeVisible()
   await settle(page)
   await page.screenshot({ path: `${OUT}/izvori.png` })
 })

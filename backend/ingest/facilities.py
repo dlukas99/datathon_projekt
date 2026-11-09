@@ -49,7 +49,8 @@ PROGRAMMES_URL = (
 INSTITUTIONS_PAGE = "https://data.gov.hr/ckan/dataset/ustanove-iz-sustava-visokog-obrazovanja"
 PROGRAMMES_PAGE = "https://data.gov.hr/ckan/dataset/studijski-programi-visokih-ucilista"
 PBF_NAME = "croatia-latest.osm.pbf"
-# Last modification of both resources on data.gov.hr (CKAN package_show, checked 2026-11-08).
+# Last modification of both data files (resources) on data.gov.hr, from CKAN package_show
+# (checked 2026-11-08). The datasets themselves were last edited on the portal on 2026-04-15.
 DATA_DATE = "2025-04-15"
 
 # Programmes a student enrols in after secondary school or continues with (first and

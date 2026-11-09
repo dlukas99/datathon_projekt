@@ -119,7 +119,7 @@ def run(workers: int = 4) -> None:
     record_source(
         "settlement_profiles",
         title="Profili svih naselja, izračun aplikacije",
-        publisher="izvedeno iz izvora navedenih na stranici Izvori",
+        publisher="izvedeno iz izvora navedenih pod „Izvori podataka”",
         url="",
         license="CC BY 4.0 (izvedeni podaci); ulazni izvori zadržavaju svoje licence",
         retrieved_at=pd.Timestamp.now(tz="UTC").isoformat(timespec="seconds"),

@@ -92,7 +92,13 @@ export function BoardTags({ tags }: { tags: BoardTag[] }) {
  * "Ovdje ste": the report's sections as a short trail that stays at the top while reading
  * and marks the section in view.
  */
-export function ReportGuide({ sections }: { sections: { id: string; label: string }[] }) {
+export function ReportGuide({
+  sections,
+  label = 'Dijelovi izvještaja',
+}: {
+  sections: { id: string; label: string }[]
+  label?: string
+}) {
   const [current, setCurrent] = useState<string | null>(null)
 
   useEffect(() => {
@@ -120,7 +126,7 @@ export function ReportGuide({ sections }: { sections: { id: string; label: strin
   }, [sections])
 
   return (
-    <nav className="report-guide no-print" aria-label="Dijelovi izvještaja">
+    <nav className="report-guide no-print" aria-label={label}>
       <ol>
         {sections.map((s) => (
           <li key={s.id}>

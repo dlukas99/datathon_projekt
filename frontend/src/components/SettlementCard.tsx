@@ -201,7 +201,7 @@ export function SettlementCard({
             Skor za profil „{getProfile(profile).label}” vrijedi za naselje: prometnice za sve
             njegove adrese, ostalo za središte, bez sunca na krovu. Puni izvještaj računa za jednu
             točku, pa mu Skor može biti drukčiji.
-            {date && ` Izračun ${date}`}, izvori na stranici <Link to="/izvori">Izvori</Link>.
+            {date && ` Izračun ${date}`}, izvori na stranici <Link to="/o-alatu#izvori">Izvori podataka</Link>.
           </p>
         </>
       ) : (

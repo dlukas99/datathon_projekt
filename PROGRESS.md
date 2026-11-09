@@ -1,5 +1,5 @@
 # Napredak
-Zadnje ažurirano: 2026-11-08 21:40
+Zadnje ažurirano: 2026-11-09 10:00
 
 ## P0
 - [x] **Kostur:** `Makefile`, `backend/` (uv, FastAPI, ruff, mypy strict, pytest), `frontend/` (Vite, React 19, TypeScript, ESLint s typescript-eslint i jsx-a11y), `LICENSE` (EUPL-1.2), `.env.example`, `.gitignore`, `docs/ODLUKE.md`. `make verify` prolazi na praznom projektu. (Lint, testovi, build i e2e s axeom prolaze od prvog dana; provjera README-a prolazi nakon revizije.)
@@ -26,7 +26,7 @@ Zadnje ažurirano: 2026-11-08 21:40
 - [x] **Reciklaža:** CKAN pretraga 33 općinska skupa, 11 s koordinatama (45 točaka), spojeno s 2.071 OSM točkom; nalazi u `docs/KVALITETA_PODATAKA.md`.
 - [x] **Profili:** obitelj s djecom, umirovljenik, student, rad od kuće i vlastiti; mijenjaju samo redoslijed i naglasak (provjereno e2e testom).
 - [x] **Ispis i dijeljenje:** CSS za ispis, stanje izvještaja (koordinate, adresa, profil) u URL-u, kopiranje poveznice, preuzimanje GeoJSON-a.
-- [x] **Stranica „Izvori”:** datumi zadnje izmjene uživo preko CKAN API-ja (`/api/sources/live`, jedan upit, predmemorija i zadnji dobar odgovor), svi izvori s licencama i nalazi o kvaliteti.
+- [x] **Stranica „Izvori”:** datumi zadnje izmjene uživo preko CKAN API-ja (`/api/sources/live`, jedan upit, predmemorija i zadnji dobar odgovor), svi izvori s licencama i nalazi o kvaliteti. Od 9. 11. dio stranice „O alatu” (`/izvori` preusmjerava): izvori po temama, oznaka „Portal” i zadnja izmjena uživo za 22 skupa u istom retku, 11 općinskih skupova o reciklaži u jednom redu, ispravljeni datumi preuzimanja (reciklaža 2. 11. 2026., izvedeni skupovi „izračunato”); metodologija kao redovi po kategoriji umjesto tablice.
 - [x] **Postavljanje:** `deploy/docker-compose.yml` (Caddy s frontendom, API, Valhalla), `docs/DEPLOY.md`, `scripts/upload_data.sh`; lokalno provjereno na `https://localhost`.
 - [x] **Dokumentacija:** `docs/ARHITEKTURA.md`, `docs/METODOLOGIJA.md`, `docs/PRISTUPACNOST.md`, `docs/KVALITETA_PODATAKA.md`, `docs/VIDEO_SCENARIJ.md`, `docs/PREDAJA.md`, uz `docs/IZVORI_PODATAKA.md`, `docs/ASISTENT.md` i `docs/ODLUKE.md`.
 - [x] **Snimke zaslona:** `make screenshots` snima 7 slika u `docs/images/` (naslovnica, izvještaj, život bez auta, mobitel u tamnoj temi, usporedba, asistent, izvori); uključene u README.

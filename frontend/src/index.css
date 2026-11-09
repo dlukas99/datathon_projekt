@@ -4442,3 +4442,270 @@ span.dot {
   min-width: 8rem;
 }
 
+
+/* "O alatu": one page with parts. Method and sources are ruled rows on the limestone,
+   like the report's category rows, never a table of prose. */
+
+.about-section > h2 {
+  margin-bottom: 0.9rem;
+}
+
+.about-lead {
+  font-size: 1.15rem;
+  max-width: 62ch;
+  margin: 0;
+}
+
+.about-principles,
+.about-findings {
+  max-width: 68ch;
+  padding-left: 1.2rem;
+  margin: 1.25rem 0 0;
+}
+
+.about-principles li,
+.about-findings li {
+  margin-bottom: 0.5rem;
+}
+
+.about-text,
+.about-links {
+  max-width: 68ch;
+}
+
+.about-links {
+  color: var(--muted);
+  margin: 1rem 0 0;
+}
+
+.about-subtitle {
+  margin: 2.75rem 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.method-list,
+.source-rows {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border-top: 2px solid var(--text);
+}
+
+.method-row {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: 0.35rem 2rem;
+  padding: 1.15rem 0 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.method-name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow-wrap: normal;
+}
+
+/* The category's own measurement colour, as on the report's instruments. */
+.method-row.measured .method-name::before {
+  content: '';
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--c);
+  transform: translateY(-1px);
+}
+
+.method-body {
+  max-width: 68ch;
+}
+
+.method-body > p {
+  margin: 0 0 0.5rem;
+}
+
+.method-threshold {
+  color: var(--muted);
+}
+
+.method-label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.method-body details.more {
+  padding-top: 0;
+}
+
+.method-body .more-body {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
+.rules {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+}
+
+.rules > div {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: 0 1rem;
+}
+
+.rules dt {
+  font-weight: 600;
+}
+
+.rules dd {
+  margin: 0;
+}
+
+/* Sources: grouped by theme, one compact row each. */
+
+.source-live {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0.5rem 0 0;
+  min-height: 1.4em;
+}
+
+.source-group {
+  margin-top: 2rem;
+}
+
+.source-group > h3 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+
+.source-row {
+  padding: 0.35rem 0 0.65rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.source-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.6rem;
+}
+
+.source-title {
+  font-weight: 650;
+  overflow-wrap: break-word;
+}
+
+a.source-title,
+.source-sublist a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.source-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 1rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  overflow-wrap: break-word;
+}
+
+.source-note {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.portal-tag {
+  display: inline-block;
+  padding: 0 0.4rem;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  background: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.source-fold > summary {
+  display: grid;
+  gap: 0.1rem;
+  min-height: 44px;
+  padding: 0.3rem 0 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.source-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.source-fold > summary .source-title {
+  color: var(--accent);
+}
+
+.source-fold > summary:hover .source-title {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.source-fold .chevron {
+  color: var(--accent);
+  transition: transform 200ms var(--ease-out);
+}
+
+.source-fold[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.source-sublist {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0 0 0 1rem;
+  border-left: 1px solid var(--border);
+}
+
+.source-sublist li {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 0.45rem;
+}
+
+@media (width <= 640px) {
+  .method-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rules > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .source-fold .chevron {
+    transition: none;
+  }
+}
+
+/* "O alatu" has the sticky header and parts guide (about 113 px): keyboard focus and
+   links to parts stop below them (WCAG 2.4.11), instead of under them. */
+html:has(.about-section) {
+  scroll-padding-top: 125px;
+}
+
+section.about-section[aria-labelledby] > h2[id],
+.about-section > #izvori {
+  scroll-margin-top: 0;
+}

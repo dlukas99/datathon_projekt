@@ -101,7 +101,7 @@ Isti izračun dobiva se pozivom `GET /api/report?lat=45.288186&lon=18.805681` (V
 - usporedba dviju lokacija
 - asistent na hrvatskom koji odgovara samo iz rezultata izračuna (s jezičnim modelom ili bez njega)
 - ispis, dijeljenje poveznicom (stanje izvještaja je u URL-u) i preuzimanje GeoJSON-a
-- stranica „Izvori”: datumi osvježavanja uživo preko CKAN API-ja Portala otvorenih podataka i nalazi o kvaliteti podataka
+- stranica „O alatu” s izbornikom dijelova (Ukratko, Kako računamo, Izvori podataka, Kvaliteta podataka, Privatnost, Tim): metodologija po kategorijama, izvori grupirani po temama s oznakom „Portal” i datumom zadnje izmjene uživo preko CKAN API-ja Portala otvorenih podataka, te nalazi o kvaliteti podataka; stara adresa `/izvori` vodi na dio „Izvori podataka”
 - pristupačnost: WCAG 2.2 razine AA (axe bez nalaza na svim stranicama u svijetloj i tamnoj temi), mobilni prikaz od 320 px, tamna tema; sve što je na karti dostupno je i u tekstu
 
 ![Okolišni pregled: poplave i požari jednom rečenicom, zrak ocjenom i ljestvicom, krug zelenila od 300 m, ravnalo do prometnice i luk sunca (Osijek, gradska uprava)](docs/images/okolis.png)

@@ -38,7 +38,7 @@ Uspjeh: korisnik razumije kako je živjeti na adresi i koje mu mjesto odgovara, 
 - Točka se bira upisom adrese ili povlačenjem oznake na karti.
 - „Pogledaj oglase” samo slaže poveznicu na vanjsku pretragu oglasa; aplikacija ne prikazuje oglase.
 - Asistent odgovara na pitanja o lokaciji; brojke dolaze iz predložaka nad rezultatima alata, ne iz jezičnog modela.
-- Ostale stranice: Izvori (datumi osvježavanja uživo preko CKAN API-ja data.gov.hr), O alatu, ispis i dijeljenje stanja preko URL-a.
+- Ostale stranice: O alatu (Ukratko, Kako računamo, Izvori podataka s datumima osvježavanja uživo preko CKAN API-ja data.gov.hr, Kvaliteta podataka, Privatnost, Tim; `/izvori` vodi na dio „Izvori podataka”), ispis i dijeljenje stanja preko URL-a.
 
 ## Capabilities and Constraints
 

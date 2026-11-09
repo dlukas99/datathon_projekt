@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { TrailMark } from './components/TrailMark'
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
+import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation } from 'react-router'
 import { SiteNav, type Theme } from './components/SiteNav'
 import { ApiError } from './lib/api'
 import { BRAND } from './lib/brand'
@@ -12,7 +12,6 @@ import { HomePage } from './pages/HomePage'
 import { MapPage } from './pages/MapPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ReportPage } from './pages/ReportPage'
-import { SourcesPage } from './pages/SourcesPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,17 +61,22 @@ const TITLES: Record<string, string> = {
   '/usporedi': `Usporedba dviju lokacija · ${BRAND.name}`,
   '/predlozi': `Predloži mjesto za život · ${BRAND.name}`,
   '/karta': `Karta Hrvatske · ${BRAND.name}`,
-  '/izvori': `Izvori podataka · ${BRAND.name}`,
   '/o-alatu': `O alatu i metodologiji · ${BRAND.name}`,
 }
 
 function TitleAndFocus() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
     document.title = TITLES[pathname] ?? BRAND.name
+    // A link to a part of a page ("/o-alatu#izvori") opens at that part.
+    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null
+    if (target) {
+      target.scrollIntoView()
+      return
+    }
     document.getElementById('main')?.focus({ preventScroll: true })
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pathname, hash])
   return null
 }
 
@@ -108,7 +112,8 @@ function Layout() {
             <Route path="/predlozi" element={<FindPage />} />
             <Route path="/karta" element={<MapPage />} />
             <Route path="/pronadi" element={<FindRedirect />} />
-            <Route path="/izvori" element={<SourcesPage />} />
+            {/* The sources are a part of "O alatu" since 9. 11. 2026. */}
+            <Route path="/izvori" element={<Navigate to="/o-alatu#izvori" replace />} />
             <Route path="/o-alatu" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
@@ -123,10 +128,10 @@ function Layout() {
           <nav aria-label="Podnožje">
             <ul>
               <li>
-                <NavLink to="/izvori">Izvori podataka</NavLink>
+                <Link to="/o-alatu#izvori">Izvori podataka</Link>
               </li>
               <li>
-                <NavLink to="/o-alatu">Kako računamo</NavLink>
+                <Link to="/o-alatu#kako-racunamo">Kako računamo</Link>
               </li>
               <li>
                 <a href="/api/docs">API</a>

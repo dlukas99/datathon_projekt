@@ -404,9 +404,9 @@ for (const theme of ['light', 'dark'] as const) {
       ['home', '/', 'Kako je živjeti ovdje'],
       ['report', reportUrl, first.address],
       ['compare', compareUrl, 'Usporedba dviju adresa'],
-      ['sources', '/izvori', 'Izvori podataka'],
       ['find', '/predlozi', 'Gdje bih mogao živjeti'],
       ['about', '/o-alatu', 'O alatu i metodologiji'],
+      ['sources', '/izvori', 'O alatu i metodologiji'],
       ['map', '/karta', 'Istraži kartu Hrvatske'],
     ]
     for (const [name, url, heading] of pages) {
@@ -415,7 +415,19 @@ for (const theme of ['light', 'dark'] as const) {
         await expect(page.getByRole('heading', { level: 1 })).toContainText(heading)
         if (name === 'report') await expect(page.getByText('Okolišni pregled')).toBeVisible()
         if (name === 'compare') await expect(page.getByRole('table')).toBeVisible()
-        if (name === 'sources') await expect(page.getByText('Svi izvori')).toBeVisible()
+        if (name === 'about' || name === 'sources') {
+          await expect(page.getByRole('heading', { name: 'Adrese i granice' })).toBeVisible()
+          await page.locator('.source-fold > summary').click()
+          await expect(page.getByRole('link', { name: /Općina Cernik/ })).toBeVisible()
+        }
+        if (name === 'sources') await expect(page).toHaveURL(/\/o-alatu#izvori$/)
+        // Scan from the top, as on the other pages: a link scrolled under the sticky header
+        // and the parts guide would count as an obscured target.
+        if (name === 'about' || name === 'sources') {
+          await page.evaluate(() => {
+            window.scrollTo(0, 0)
+          })
+        }
         if (name === 'map') {
           await expect(page.locator('.atlas-map-wrap')).toHaveAttribute('data-ready', 'true')
           await clickOnMap(page, VINKOVCI)

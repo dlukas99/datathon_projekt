@@ -28,6 +28,8 @@ CKAN_DATASETS: dict[str, str] = {
     "dzs_popis": "statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021",
     "mzom_vrtici": "djecji-vrtici",
     "mzom_skole": "osnovne-skole",
+    "mzom_visoka_ucilista": "ustanove-iz-sustava-visokog-obrazovanja",
+    "mzom_studijski_programi": "studijski-programi-visokih-ucilista",
     "zg_vrtici": "geoportal-djecji-vrtici",
     "zg_skole": "geoportal-osnovne-skole",
     "autotrolej": "at-vozni-redovi",

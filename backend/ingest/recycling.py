@@ -16,6 +16,7 @@ from __future__ import annotations
 import io
 import json
 import re
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -24,7 +25,14 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from app.geo import CROATIA_BBOX
-from ingest.common import download, get_json, processed_dir, raw_dir, record_source
+from ingest.common import (
+    download,
+    file_date,
+    get_json,
+    processed_dir,
+    raw_dir,
+    record_source,
+)
 from ingest.pois import _far_from
 
 CKAN_SEARCH = "https://data.gov.hr/ckan/api/3/action/package_search"
@@ -115,6 +123,8 @@ def run() -> None:
     findings: list[dict[str, Any]] = []
     frames: list[pd.DataFrame] = []
     used: list[str] = []
+    # The file each used dataset was read from: its download time is the retrieval date.
+    used_files: dict[str, Path] = {}
     cache = raw_dir("recycling")
     for pkg in packages:
         org = (pkg.get("organization") or {}).get("title", "")
@@ -168,6 +178,7 @@ def run() -> None:
                 frame["source"] = f"ckan:{pkg['name']}"
                 frames.append(frame)
                 used.append(pkg["name"])
+                used_files[pkg["name"]] = path
                 record["status"] = "koordinate"
                 record["points"] = len(points)
                 break
@@ -200,7 +211,9 @@ def run() -> None:
             publisher=(pkg.get("organization") or {}).get("title", ""),
             url=f"https://data.gov.hr/ckan/dataset/{name}",
             license=pkg.get("license_title") or "nije navedena",
-            retrieved_at=pkg.get("metadata_modified"),
+            # Download time of the file, not the portal's metadata_modified: that one is the
+            # last change on the portal and is shown separately (live, /api/sources/live).
+            retrieved_at=file_date(used_files[name]),
         )
     with_coords = sum(1 for f in findings if f["status"] == "koordinate")
     print(
