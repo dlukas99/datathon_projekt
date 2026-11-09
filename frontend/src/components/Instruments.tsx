@@ -135,6 +135,7 @@ function GreenInstrument({ c }: { c: Category }) {
     return <Readout big="Nema podataka" label="za pokrov tla u krugu od 300 m" />
   const urban = numberOf(c, 'urban_area') === 1
   const park = valueOf(c, 'nearest_park')
+  const houses = valueOf(c, 'houses_300m')
   // The backend's display, so the card shows the same whole percent as the header chip.
   const shown = (key: string) => valueOf(c, key)?.display.replace(/\s*%$/, '') ?? ''
   const parts = COVER.map((p) => ({ ...p, share: numberOf(c, p.key) ?? 0 }))
@@ -158,6 +159,19 @@ function GreenInstrument({ c }: { c: Category }) {
           big={shown('nature_share_300m')}
           unit="%"
           label="površine u krugu od 300 m je priroda: polja, livade i drveće"
+          extra={
+            houses && (
+              <ul className="readout-facts">
+                <li>
+                  {houses.value === 0
+                    ? 'u krugu od 300 m nema kućnih brojeva'
+                    : (numberOf(c, 'built_share_300m') ?? 0) < 5
+                      ? `u krugu od 300 m: ${houses.display} (kuće među drvećem i vrtovima karta broji kao prirodu)`
+                      : `u krugu od 300 m: ${houses.display}`}
+                </li>
+              </ul>
+            )
+          }
         />
       )}
       <div className="cover">

@@ -32,6 +32,7 @@
         "crop_share_300m": 0.5,
         "built_share_300m": 79.3,
         "water_share_300m": 11.3,
+        "houses_300m": 207,
         "urban_area": 1.0,
         "nearest_park": 0.2
       }

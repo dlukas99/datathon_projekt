@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 
 from app import brand, map_layer, pvgis, valhalla
+from app.address_grid import get_address_grid
 from app.assistant import AssistantReply, AssistantRequest, answer
 from app.config import REPO_ROOT
 from app.finder import (
@@ -63,6 +64,7 @@ def warm_up() -> None:
     # Load in-memory indexes once so the first report is fast.
     get_geocoder()
     get_layers()
+    get_address_grid()  # house numbers around a point, for the greenery card
     demo = REPO_ROOT / "scripts" / "demo_addresses.json"
     if demo.exists():
         points = json.loads(demo.read_text(encoding="utf-8"))["addresses"]
