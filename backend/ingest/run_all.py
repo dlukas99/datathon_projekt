@@ -22,6 +22,7 @@ from ingest import (
     settlement_traffic,
     stations,
     transit,
+    transit_lines,
 )
 
 STEPS: list[tuple[str, Callable[[], None]]] = [
@@ -33,6 +34,7 @@ STEPS: list[tuple[str, Callable[[], None]]] = [
     ("EFFIS opožarene površine", effis.run),
     ("Službene mjerne postaje zraka (EEA)", stations.run),
     ("Vozni redovi", transit.run),
+    ("Linije javnog prijevoza na stajalištima (OSM)", transit_lines.run),
     ("Registri (MZOM, HZZO, Grad Zagreb)", registries.run),
     ("Reciklaža (općinski skupovi s Portala i OSM)", recycling.run),
     ("Spajanje točaka", pois.run),

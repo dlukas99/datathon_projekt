@@ -48,6 +48,11 @@ def test_subscores_follow_documented_rules() -> None:
     assert score.subscore(cat("solar", values=[val("pv_kwh_per_kwp", 1250)])) == 50
     assert score.subscore(cat("transit", values=[val("max_departures_per_hour", 3)])) == 50
     assert score.subscore(cat("transit", values=[val("stops_10min", 2)])) is None
+    # A rare train among city stops without a timetable: the frequency is unknown.
+    mixed = [val("max_departures_per_hour", 0.6), val("stops_without_timetable_10min", 5)]
+    assert score.subscore(cat("transit", values=mixed)) is None
+    busy = [val("max_departures_per_hour", 9), val("stops_without_timetable_10min", 5)]
+    assert score.subscore(cat("transit", values=busy)) == 100
     assert score.subscore(cat("air", "no_data")) is None
 
 

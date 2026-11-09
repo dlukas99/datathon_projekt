@@ -3,6 +3,8 @@
 Feeds:
   ZET (Zagreb) GTFS, Otvorena dozvola
   HŽPP (railways) GTFS, published on data.gov.hr for building applications
+  Gradski parking d.o.o. (Šibenik city and suburban buses) GTFS, Otvorena dozvola,
+      published on the operator's open data page; the company is owned by Grad Šibenik
   Autotrolej (Rijeka) weekday timetable JSON, CC BY 4.0
 
 Output: data/processed/transit_stops.parquet with
@@ -42,6 +44,13 @@ GTFS_FEEDS = {
         "publisher": "HŽ Putnički prijevoz d.o.o.",
         "page": "https://data.gov.hr/ckan/dataset/vozni-red-h-putni-kog-prijevoza-u-gtfs-obliku",
         "license": "nije navedena; skup je objavljen na data.gov.hr radi izrade aplikacija",
+    },
+    "gtfs_sibenik": {
+        "url": "https://www.gradski-parking.hr/upload/stranice/2022/08/2022-08-30/89/gtfs.zip",
+        "title": "Gradski parking Šibenik, vozni red gradskih i prigradskih linija u obliku GTFS",
+        "publisher": "Gradski parking d.o.o. Šibenik (u vlasništvu Grada Šibenika)",
+        "page": "https://www.gradski-parking.hr/stranice/datoteke-u-gtfs-formatu/105.html",
+        "license": "Otvorena dozvola Republike Hrvatske",
     },
 }
 

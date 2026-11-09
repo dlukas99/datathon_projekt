@@ -22,7 +22,7 @@ Uspjeh: korisnik razumije kako je živjeti na adresi i koje mu mjesto odgovara, 
 
 ## Positioning
 
-- Jedno mjesto koje spaja 33 skupa podataka (DGU, EEA, JRC, ESA WorldCover, Copernicus EFFIS, PVGIS, GTFS voznih redova, registri ustanova, OSM) u izvještaj za točnu adresu, a ne za općinu ili prosjek.
+- Jedno mjesto koje spaja 34 skupa podataka (DGU, EEA, JRC, ESA WorldCover, Copernicus EFFIS, PVGIS, GTFS voznih redova, registri ustanova, OSM) u izvještaj za točnu adresu, a ne za općinu ili prosjek.
 - Apsolutno značenje ispred relativnog ranga: „u modeliranom poplavnom području za povratno razdoblje od 100 godina: da” umjesto „rizik iznad prosjeka”.
 - Svaka vrijednost nosi izvor, datum preuzimanja i vrstu (izmjereno, modelirano ili procjena).
 - Okoliš je uvijek prvi i najvažniji (izazov B). Svakodnevne potrebe su dodatak; proizvod ne smije izgledati kao aplikacija za škole i trgovine.

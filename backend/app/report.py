@@ -25,6 +25,7 @@ from app.admin import get_admin
 from app.layers import get_layers
 from app.models import Category, Location, Report, SourceInfo, Value
 from app.sources import retrieved_at, source_info
+from app.stop_lines import lines_at
 
 DISCLAIMER = (
     f"{brand.NAME} informativni je alat izrađen iz otvorenih podataka i modela. Nije službena "
@@ -33,7 +34,7 @@ DISCLAIMER = (
     "metodologiji."
 )
 
-TIMETABLE_SOURCES = ("gtfs_zet", "gtfs_hzpp", "autotrolej")
+TIMETABLE_SOURCES = ("gtfs_zet", "gtfs_hzpp", "gtfs_sibenik", "autotrolej")
 
 
 class OutsideCroatia(ValueError):
@@ -189,8 +190,8 @@ def build_report(lat: float, lon: float, label: str | None = None) -> Report:
         "noise": noise_category(lon, lat, layers),
         "fire": fire_category(lon, lat, layers),
         "solar": solar,
-        "car_free": car_free_category(reach),
-        "transit": transit_category(reach, has_timetables),
+        "car_free": car_free_category(reach, lines_at),
+        "transit": transit_category(reach, has_timetables, lines_at),
         "daily": daily_category(reach),
     }
     score.attach(cats.values())

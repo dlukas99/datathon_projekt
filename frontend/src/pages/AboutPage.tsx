@@ -128,12 +128,13 @@ const METHODS: Method[] = [
   {
     id: 'transit',
     name: 'Javni prijevoz',
-    how: 'Stajališta do 10 minuta hoda i prosječan broj polazaka na sat od 6 do 20 sati radnim danom, iz voznih redova ZET-a, HŽPP-a i Autotroleja.',
+    how: 'Stajališta do 10 minuta hoda i prosječan broj polazaka na sat od 6 do 20 sati radnim danom, iz voznih redova ZET-a, HŽPP-a, Autotroleja i Gradskog parkinga Šibenik.',
     threshold: 'Informacija; službeni prag ne postoji.',
     more: (
       <>
-        Otvoreni vozni redovi postoje samo za ta tri prijevoznika. Drugdje prikazujemo stajališta
-        iz OpenStreetMapa s oznakom „bez voznog reda”.
+        Otvoreni vozni redovi postoje samo za ta četiri prijevoznika. Drugdje prikazujemo
+        stajališta iz OpenStreetMapa s oznakom „bez voznog reda” i linije koje ondje staju prema
+        OpenStreetMapu, bez broja polazaka.
       </>
     ),
   },

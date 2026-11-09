@@ -261,7 +261,9 @@ Valhalla na pojedinim mjestima mreže dodaje vrijeme hoda, pa je duljina puta po
   - Polazak je svaki `stop_times` zapis putovanja aktivnog tog dana, osim dolaska na zadnje stajalište putovanja.
   - Radni dan je prva srijeda od dana obrade za koju postoji promet (`calendar.txt` i `calendar_dates.txt`).
 - Prikazuje se najveći broj polazaka na sat od svih stajališta unutar 10 minuta hoda.
-- **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
+- **Stajališta s voznim redom i bez njega zajedno** (npr. željeznička postaja HŽPP-a među gradskim autobusnim i tramvajskim stajalištima u Osijeku, Bjelovaru ili Šibeniku): najveći broj polazaka odnosi se samo na stajališta s voznim redom i to piše u kartici. Za stajališta bez voznog reda broj polazaka nije poznat, pa potreba „stajalište s barem jednim polaskom na sat” tada nije „nedostaje”, nego „nije provjereno”, osim ako neko stajalište s voznim redom ima barem jedan polazak na sat. Polasci se broje samo od 6 do 20 sati jednog radnog dana, pa noćna stanka u prometu ne utječe na rezultat.
+- **Linije na stajalištima bez voznog reda:** gdje broj polazaka nije poznat (stajališta bez otvorenog voznog reda, a nijedno stajalište s voznim redom nema 6 polazaka na sat), kartice „Javni prijevoz” i „Život bez auta” navode koje linije ondje staju prema relacijama linija u OpenStreetMapu (npr. „tramvaj 1 i 2, autobus 3, 4, 5, 7 i 8 (GPP Osijek)”). Linija se pridružuje stajalištu ako je njezino stajalište u OSM-u do 30 m daleko. Izostavljene su međugradske linije: relacija čija su stajališta više od 30 km udaljena ili koja ima manje od 5 ucrtanih stajališta. To je podatak o linijama, ne o učestalosti: ne ulazi u broj ispunjenih potreba ni u Skor za život.
+- **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS), Gradski parking Šibenik (GTFS, gradske i prigradske linije) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
 
 ## Ocjena mjesta (ranije „ocjena mjesta”)
 
@@ -278,7 +280,7 @@ Od 4. 11. 2026. izvještaj ima i skupnu ocjenu (0–100), koja se od 9. 11. 2026
 | Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
 | Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
 | Život bez auta | broj potreba od 7 × 100 / 7 | — |
-| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema bodovia | naša normalizacija |
+| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema bodova, a ni kad uz stajališta s manje od 6 polazaka na sat postoje i stajališta bez voznog reda | naša normalizacija |
 | Svakodnevni život | udio vrsta ustanova unutar 15 minuta hoda | — |
 
 - **Ocjena:** ponderirani prosjek bodova; kategorije bez bodova (nema podataka ili nepoznat vozni red) se preskaču. Težine 0–3 po profilu nalaze se u `config/profiles.json` (jedan izvor za backend i frontend) i mogu se mijenjati klizačima; prilagođene težine spremaju se u URL.

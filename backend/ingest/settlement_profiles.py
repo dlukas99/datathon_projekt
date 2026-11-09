@@ -45,6 +45,18 @@ def _value(cat: Category, key: str) -> Any:
     return next((v.value for v in cat.values if v.key == key), None)
 
 
+def _known_departures(transit: Category) -> Any:
+    """Most departures an hour, or None when it says too little to be shown as a fact.
+
+    Below one an hour next to stops without an open timetable (a rare train among city
+    buses), the frequency of the place is unknown: the map then shows "no timetable".
+    """
+    best = _value(transit, "max_departures_per_hour")
+    if best is not None and best < 1 and _value(transit, "stops_without_timetable_10min"):
+        return None
+    return best
+
+
 def profile(row: dict[str, Any]) -> dict[str, Any]:
     lat, lon = float(row["lat"]), float(row["lon"])
     layers = get_layers()
@@ -77,7 +89,7 @@ def profile(row: dict[str, Any]) -> dict[str, Any]:
         "traffic_band": cats["noise"].status_label,
         "burnt_areas": _value(cats["fire"], "burnt_areas_2km"),
         "needs_15min": _value(cats["car_free"], "needs_within_15min"),
-        "max_departures": _value(cats["transit"], "max_departures_per_hour"),
+        "max_departures": _known_departures(cats["transit"]),
         "has_stops": bool(_value(cats["transit"], "stops_10min")),
     }
     for need in DAILY_NEEDS:

@@ -33,6 +33,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)` (tehnički
 | Javni prijevoz, Zagreb | ZET GTFS | radi | Otvorena dozvola RH | polasci po satu |
 | Javni prijevoz, vlak | HŽPP GTFS | radi | nije navedena (vidi napomenu) | polasci po satu |
 | Javni prijevoz, Rijeka | Autotrolej, vozni red radnim danom (JSON) | radi | CC BY 4.0 | polasci po satu |
+| Javni prijevoz, Šibenik | Gradski parking d.o.o. (Grad Šibenik), GTFS | radi | Otvorena dozvola RH | polasci po satu |
 | Javni prijevoz, ostalo | OpenStreetMap stajališta | radi | ODbL 1.0 | stajališta bez voznog reda |
 | Reciklaža | općinski skupovi na data.gov.hr + OSM | djelomično | Otvorena dozvola RH / CC BY 4.0 / ODbL | reciklažna dvorišta i spremnici |
 | Datumi osvježavanja | CKAN API data.gov.hr | radi | — | „O alatu”, dio „Izvori podataka”: zadnja izmjena na Portalu uživo za svih 22 skupa s Portala |
@@ -40,7 +41,7 @@ Sva preuzimanja šalju User-Agent `PrijePotpisa/0.1 (+CONTACT_EMAIL)` (tehnički
 
 ## Svi skupovi podataka
 
-Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade puni pri preuzimanju (stanje 8. 11. 2026.). Ukupno 33 skupa podataka; uz njih aplikacija uživo koristi JRC PVGIS API (sunce na krovu) i CKAN API Portala (datumi osvježavanja). Karte opasnosti od poplava Hrvatskih voda i strateške karte buke EEA-e samo se povezuju, a podloga karte je OpenFreeMap (© OpenMapTiles, podaci © suradnici OpenStreetMapa). Oglasnici su vanjske poveznice, ne izvori podataka. Izvedeni skupovi (profili naselja, udaljenost adresa od prometnica, priroda, drveće i zrak kao medijan adresa naselja) nisu u popisu jer ih računa aplikacija. „Preuzeto” je datum preuzimanja za sve skupove (za općinske skupove o reciklaži do 9. 11. 2026. ovdje je greškom stajao datum zadnje izmjene na Portalu, 15. 4. 2026.). Zadnju izmjenu na Portalu aplikacija za svih 22 skupa s Portala provjerava uživo, na stranici „O alatu”, u dijelu „Izvori podataka”.
+Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade puni pri preuzimanju (stanje 8. 11. 2026.). Ukupno 34 skupa podataka; uz njih aplikacija uživo koristi JRC PVGIS API (sunce na krovu) i CKAN API Portala (datumi osvježavanja). Karte opasnosti od poplava Hrvatskih voda i strateške karte buke EEA-e samo se povezuju, a podloga karte je OpenFreeMap (© OpenMapTiles, podaci © suradnici OpenStreetMapa). Oglasnici su vanjske poveznice, ne izvori podataka. Izvedeni skupovi (profili naselja, udaljenost adresa od prometnica, priroda, drveće i zrak kao medijan adresa naselja) nisu u popisu jer ih računa aplikacija. „Preuzeto” je datum preuzimanja za sve skupove (za općinske skupove o reciklaži do 9. 11. 2026. ovdje je greškom stajao datum zadnje izmjene na Portalu, 15. 4. 2026.). Zadnju izmjenu na Portalu aplikacija za svih 22 skupa s Portala provjerava uživo, na stranici „O alatu”, u dijelu „Izvori podataka”.
 
 | # | Skup podataka | Izdavač | Licenca | Preuzeto | Podaci |
 |---|---|---|---|---|---|
@@ -77,6 +78,7 @@ Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade pu
 | 31 | [Službene mjerne postaje kvalitete zraka u Hrvatskoj, mjerenja 2024. (E1a)](https://eeadmz1-downloads-webapp.azurewebsites.net/) | Ministarstvo zaštite okoliša i zelene tranzicije, preko EEA Air Quality Download Service | CC BY 4.0 (pravna obavijest EEA-e, https://www.eea.europa.eu/en/legal-notice) | 4. 11. 2026. | 2024 |
 | 32 | [Ustanove iz sustava visokog obrazovanja](https://data.gov.hr/ckan/dataset/ustanove-iz-sustava-visokog-obrazovanja) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena datoteke na Portalu) |
 | 33 | [Studijski programi visokih učilišta](https://data.gov.hr/ckan/dataset/studijski-programi-visokih-ucilista) | Ministarstvo znanosti, obrazovanja i mladih | Otvorena dozvola (OD) | 8. 11. 2026. | 15. 4. 2025. (zadnja izmjena datoteke na Portalu) |
+| 34 | [Gradski parking Šibenik, vozni red gradskih i prigradskih linija u obliku GTFS](https://www.gradski-parking.hr/stranice/datoteke-u-gtfs-formatu/105.html) | Gradski parking d.o.o. Šibenik (u vlasništvu Grada Šibenika) | Otvorena dozvola RH | 9. 11. 2026. | radni dan 2026-11-11 (vrijedi do 7. 6. 2027.) |
 
 ## Detalji po izvorima
 
@@ -191,8 +193,8 @@ Popis se izrađuje iz `data/processed/manifest.json`, koji svaki korak obrade pu
 - ZET GTFS: https://zet.hr/gtfs-scheduled/latest; licenca: Otvorena dozvola RH (https://www.zet.hr/odredbe/datoteke-u-gtfs-formatu/669). Dani prometa samo u `calendar_dates.txt`.
 - HŽPP GTFS: https://www.hzpp.hr/GTFS_files.zip (skup na Portalu: https://data.gov.hr/ckan/dataset/vozni-red-h-putni-kog-prijevoza-u-gtfs-obliku; poveznica na datoteku na Portalu, `…/Media/Default/GTFS/GTFS_files.zip`, vraća 404). Licenca nije navedena; opis skupa na Portalu kaže da se podaci objavljuju kako bi ih javnost mogla „koristiti za izradu aplikacija ili ostala istraživanja”. Vozni red vrijedi do 13. 12. 2026.
 - Autotrolej: https://data.gov.hr/ckan/dataset/at-vozni-redovi, vozni red radnim danom `http://e-usluge2.rijeka.hr/OpenData/ATvoznired-tjedan.json`; licenca CC BY 4.0. GTFS na `gt.autotrolej.hr` ima istekao TLS certifikat i ne koristi se.
-- Šibenik (Gradski parking) objavljuje GTFS bez navedene licence; ne koristi se.
-- Split, Osijek, Zadar, Pula i Dubrovnik nemaju javno dostupan GTFS: prikazuju se stajališta iz OSM-a s oznakom „bez voznog reda”.
+- Šibenik: Gradski parking d.o.o. (osnivač i vlasnik Grad Šibenik) vozi gradske i prigradske linije i objavljuje GTFS na stranici „Datoteke u GTFS formatu” (https://www.gradski-parking.hr/stranice/datoteke-u-gtfs-formatu/105.html), u izborniku „Otvoreni podaci”. Stranica kaže da su podaci (GTFS Static i GTFS Realtime), čiji je autor Gradski parking d.o.o., „ustupljeni pod Otvorenom dozvolom/Open licence – The Republic of Croatia” (poveznica na https://data.gov.hr/otvorena-dozvola); provjereno 9. 11. 2026. Raniji zapis da licenca nije navedena bio je pogrešan. Koristi se statični GTFS `https://www.gradski-parking.hr/upload/stranice/2022/08/2022-08-30/89/gtfs.zip` (227 stajališta, vozni red vrijedi od 7. 9. 2026. do 7. 6. 2027.). Na Portalu otvorenih podataka skup nije objavljen; feed je pronađen preko Mobility Databasea (mdb-2910), a izdavač i dozvola provjereni su na samom izvoru.
+- Split, Osijek, Zadar, Pula, Dubrovnik i Bjelovar nemaju javno dostupan vozni red u otvorenom obliku (provjereno 9. 11. 2026.: Portal otvorenih podataka, portali gradova, data.europa.eu, Transitland i Mobility Database; GPP Osijek ima organizaciju na Portalu bez ijednog skupa, a Nacionalna pristupna točka promet-info.hr prema opisu sadrži samo cestovne podatke). Prikazuju se stajališta iz OSM-a s oznakom „bez voznog reda”.
 
 ### Reciklaža
 - CKAN pretraga Portala („reciklažno dvorište”, „zeleni otok” …) vraća 33 skupa; samo 11 ima upotrebljive koordinate. Detaljni nalazi su u `docs/KVALITETA_PODATAKA.md`.

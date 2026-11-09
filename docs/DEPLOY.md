@@ -62,7 +62,9 @@ docker volume rm prijepotpisa_valhalla_tiles
 docker compose -f deploy/docker-compose.yml up -d
 ```
 
-Vozni red HŽPP-a vrijedi do 13. 12. 2026.; nakon toga treba ponoviti `make data`.
+Vozni red HŽPP-a vrijedi do 13. 12. 2026.; nakon toga treba ponoviti `make data`. Vozni red Gradskog parkinga Šibenik vrijedi do 7. 6. 2027.
+
+`make data` uz vozne redove izrađuje i `osm_stop_lines.parquet` (linije na stajalištima iz OSM izvatka, nekoliko sekundi). Pri prijenosu prenesite cijelu mapu `data/processed/`.
 
 ## Privatnost i sigurnost
 

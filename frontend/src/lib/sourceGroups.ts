@@ -45,6 +45,7 @@ const GROUP_OF: Record<string, SourceGroupId> = {
   osm_facilities: 'services',
   gtfs_zet: 'transport',
   gtfs_hzpp: 'transport',
+  gtfs_sibenik: 'transport',
   autotrolej: 'transport',
   settlement_profiles: 'derived',
   settlement_traffic: 'derived',

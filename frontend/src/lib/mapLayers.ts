@@ -162,7 +162,7 @@ export const LAYERS: MapLayer[] = [
     id: 'transit',
     title: 'Javni prijevoz',
     explain:
-      'Najviše polazaka na sat radnim danom sa stajališta do 10 minuta hoda (vozni redovi ZET-a, HŽPP-a i Autotroleja).',
+      'Najviše polazaka na sat radnim danom sa stajališta do 10 minuta hoda (vozni redovi ZET-a, HŽPP-a, Gradskog parkinga Šibenik i Autotroleja).',
     classes: [
       { label: 'Nema stajališta do 10 minuta hoda', step: 0 },
       { label: 'Stajališta bez voznog reda', step: 1 },
