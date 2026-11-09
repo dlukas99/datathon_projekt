@@ -224,6 +224,7 @@ Valhalla na pojedinim mjestima mreže dodaje vrijeme hoda, pa je duljina puta po
   - Polazak je svaki `stop_times` zapis putovanja aktivnog tog dana, osim dolaska na zadnje stajalište putovanja.
   - Radni dan je prva srijeda od dana obrade za koju postoji promet (`calendar.txt` i `calendar_dates.txt`).
 - Prikazuje se najveći broj polazaka na sat od svih stajališta unutar 10 minuta hoda.
+- **Stajališta s voznim redom i bez njega zajedno** (npr. željeznička postaja HŽPP-a među gradskim autobusnim i tramvajskim stajalištima u Osijeku, Bjelovaru ili Šibeniku): najveći broj polazaka odnosi se samo na stajališta s voznim redom i to piše u kartici. Za stajališta bez voznog reda broj polazaka nije poznat, pa potreba „stajalište s barem jednim polaskom na sat” tada nije „nedostaje”, nego „nije provjereno”, osim ako neko stajalište s voznim redom ima barem jedan polazak na sat. Polasci se broje samo od 6 do 20 sati jednog radnog dana, pa noćna stanka u prometu ne utječe na rezultat.
 - **Izvori voznih redova:** ZET (GTFS), HŽPP (GTFS) i Autotrolej (vozni red radnim danom, JSON). Drugdje se prikazuju stajališta iz OpenStreetMapa s oznakom „bez voznog reda”. OSM stajališta unutar 60 m od stajališta s voznim redom smatraju se istim stajalištem.
 
 ## Skor za život
@@ -241,7 +242,7 @@ Od 4. 11. 2026. izvještaj ima i skupni „Skor za život” (0–100). To je sv
 | Požari raslinja | 0 požara 100, 1 požar 60, 2 i više 30 | naša normalizacija |
 | Sunce na krovu | linearno od 1.000 (0) do 1.500 kWh/kWp (100) | naša normalizacija; Hrvatska je u tom rasponu |
 | Život bez auta | broj potreba od 7 × 100 / 7 | — |
-| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema podskora | naša normalizacija |
+| Javni prijevoz | najviše polazaka na sat / 6 × 100 (polazak svakih 10 min = 100); bez voznog reda nema podskora, a ni kad uz stajališta s manje od 6 polazaka na sat postoje i stajališta bez voznog reda | naša normalizacija |
 | Svakodnevni život | udio vrsta ustanova unutar 15 minuta hoda | — |
 
 - **Skor:** ponderirani prosjek podskorova; kategorije bez podskora (nema podataka ili nepoznat vozni red) se preskaču. Težine 0–3 po profilu nalaze se u `config/profiles.json` (jedan izvor za backend i frontend) i mogu se mijenjati klizačima; prilagođene težine spremaju se u URL.

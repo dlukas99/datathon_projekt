@@ -84,6 +84,10 @@ def _car_free(cat: Category) -> float | None:
 def _transit(cat: Category) -> float | None:
     best = _value(cat, "max_departures_per_hour")
     if best is not None:
+        # Stops without an open timetable nearby may run more often: below full score the
+        # timetabled best is only a lower bound, so the frequency is unknown.
+        if best < FREQUENT_DEPARTURES and _value(cat, "stops_without_timetable_10min"):
+            return None
         return _clip(best / FREQUENT_DEPARTURES * 100.0)
     stops = _value(cat, "stops_10min")
     if stops is None:

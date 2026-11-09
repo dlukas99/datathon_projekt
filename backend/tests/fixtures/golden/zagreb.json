@@ -56,6 +56,7 @@
       "status": "info",
       "values": {
         "stops_10min": 30,
+        "stops_without_timetable_10min": 3,
         "max_departures_per_hour": 32.2
       }
     },
