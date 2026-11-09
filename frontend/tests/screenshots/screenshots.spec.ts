@@ -117,7 +117,7 @@ test('assistant', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.goto(reportUrl(byId('zagreb')))
   await page.getByRole('button', { name: 'Mogu li ovdje živjeti bez auta?' }).click()
-  await expect(page.getByText(/svakodnevnih potreba je do 15 minuta pješice/)).toBeVisible()
+  await expect(page.locator('.assistant').getByText(/do 15 minuta pješice/)).toBeVisible()
   const section = page.locator('section', { has: page.getByRole('heading', { name: 'Pitajte asistenta' }) })
   await section.screenshot({ path: `${OUT}/asistent.png` })
 })
